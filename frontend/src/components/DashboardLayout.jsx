@@ -1,0 +1,184 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Film,
+  Users,
+  FileText,
+  Wallet,
+  Calendar,
+  Library,
+  Settings,
+  LogOut,
+  Bell,
+  User as UserIcon,
+  ShieldCheck,
+  Search,
+  ChevronDown,
+  Receipt
+} from 'lucide-react';
+import axios from 'axios';
+
+import logoImg from '../assets/images/12.png';
+
+const SidebarLink = ({ to, icon: Icon, label, active }) => (
+  <Link
+    to={to}
+    className={`flex items-center gap-4 px-6 py-2.5 transition-all duration-200 relative group ${active
+      ? 'text-[#e5a00d]'
+      : 'text-white/60 hover:text-white'
+      }`}
+  >
+    {active && <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#e5a00d]" />}
+    <Icon size={20} className={active ? 'text-[#e5a00d]' : 'group-hover:text-white transition-colors'} />
+    <span className="font-normal text-sm">{label}</span>
+  </Link>
+);
+
+const DashboardLayout = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const res = await axios.get('http://localhost:5000/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser(res.data.user);
+        setLoading(false);
+      } catch (err) {
+        console.error('Session error', err);
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
+    };
+
+    fetchSession();
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center">
+        <div className="text-sm font-medium text-white/40 animate-pulse">
+          Initializing Ishya...
+        </div>
+      </div>
+    );
+  }
+
+  const menuItems = [
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
+    { to: '/dashboard/productions', icon: Film, label: 'Productions' },
+    { to: '/dashboard/media', icon: Library, label: 'Your Media' },
+    { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
+    { to: '/dashboard/scripts', icon: FileText, label: 'Script Vault' },
+    { to: '/dashboard/sales', icon: Wallet, label: 'Revenue' },
+    { to: '/dashboard/expenses', icon: Receipt, label: 'Expenses' },
+    { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
+    { to: '/dashboard/events', icon: Calendar, label: 'Events' },
+    { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
+  ];
+
+  if (user?.role === 'Admin') {
+    menuItems.push({ to: '/dashboard/users', icon: ShieldCheck, label: 'Users' });
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
+      {/* Top Navigation - Exact Plex Clone */}
+      <header className="h-20 bg-[#121212] border-b border-white/5 flex items-center px-4 fixed top-0 w-full z-40">
+        <div className="flex items-center gap-4 w-72">
+          <Link to="/dashboard" className="flex items-center gap-1">
+            <img src={logoImg} alt="Ishya" className="h-16 w-auto object-contain" />
+          </Link>
+        </div>
+
+        <div className="flex-1 flex justify-center px-10">
+          <div className="relative w-full max-w-xl">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={16} />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full bg-[#333333] border-none rounded-full pl-12 pr-4 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 pr-4">
+          <div className="flex items-center gap-1 ml-4 pl-4 relative">
+            <button className="p-2 text-white/40 hover:text-white transition-colors"><Bell size={18} /></button>
+
+            <div className="relative ml-2 group">
+              <button
+                className="flex items-center gap-2 py-1 px-2 hover:bg-white/5 rounded-sm transition-all"
+              >
+                <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center bg-[#1a1a1a] relative">
+                  <div className="w-6 h-6 rounded-full border border-white/10 flex items-center justify-center">
+                    <UserIcon size={14} className="text-white/40" />
+                  </div>
+                </div>
+                <ChevronDown size={14} className="text-white/40 group-hover:text-white transition-colors" />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 top-full mt-2 w-64 bg-[#1a1a1a] border border-white/10 shadow-2xl rounded-sm py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <div className="px-4 py-3">
+                  <div className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</div>
+                  <div className="text-[11px] text-white/40 font-medium truncate">{user?.email}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex flex-1 pt-20">
+        {/* Sidebar */}
+        <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30">
+          <div className="flex-1 space-y-1">
+            {menuItems.map((item) => (
+              <SidebarLink
+                key={item.to}
+                {...item}
+                active={location.pathname === item.to}
+              />
+            ))}
+          </div>
+
+          <div className="p-4 border-t border-white/5">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-6 py-2.5 text-white/40 hover:text-white hover:bg-white/5 transition-all group"
+            >
+              <LogOut size={18} />
+              <span className="font-medium text-sm">Sign Out</span>
+            </button>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="flex-1 ml-72">
+          <div className="p-8 max-w-[1600px]">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardLayout;

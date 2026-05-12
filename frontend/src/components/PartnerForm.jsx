@@ -1,0 +1,179 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Save, AlertCircle } from 'lucide-react';
+
+const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
+  const [formData, setFormData] = useState({
+    name: initialData?.name || '',
+    type: initialData?.type || 'TV Channel',
+    contactPerson: initialData?.contactPerson || '',
+    email: initialData?.email || '',
+    phone: initialData?.phone || '',
+    address: initialData?.address || ''
+  });
+  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const partnerTypes = [
+    'TV Channel',
+    'Radio Station',
+    'Streaming Platform',
+    'Individual',
+    'Production Company'
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      if (initialData) {
+        await axios.put(`http://localhost:5000/api/sales/buyers/${initialData.id}`, formData, { headers });
+      } else {
+        await axios.post('http://localhost:5000/api/sales/buyers', formData, { headers });
+      }
+      onSuccess();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to register partner');
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl">
+      {error && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
+          <AlertCircle className="text-red-400 shrink-0" size={18} />
+          <p className="text-xs text-red-400 leading-relaxed">{error}</p>
+        </div>
+      )}
+
+      {/* Name Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Partner name</label>
+          <p className="text-[11px] text-white/20 mt-1">Official business or individual name</p>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input 
+            required
+            type="text"
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            placeholder="e.g. Netflix, Rwanda TV"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Type Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Partner type</label>
+          <p className="text-[11px] text-white/20 mt-1">Classification for licensing</p>
+        </div>
+        <div className="w-full md:w-2/3">
+          <select 
+            required
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+          >
+            {partnerTypes.map(type => (
+              <option key={type} value={type} className="bg-[#111111]">{type}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Contact Person Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Contact person</label>
+          <p className="text-[11px] text-white/20 mt-1">Primary point of contact</p>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input 
+            type="text"
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            placeholder="Name of representative"
+            value={formData.contactPerson}
+            onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Email Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Email address</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input 
+            type="email"
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            placeholder="partner@example.com"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Phone Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Phone number</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input 
+            type="text"
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            placeholder="+250..."
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Address Field */}
+      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Business address</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <textarea 
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[100px] resize-none text-white placeholder:text-white/10"
+            placeholder="Physical or office location..."
+            value={formData.address}
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Form Actions */}
+      <div className="pt-10 flex items-center justify-start gap-4 px-4">
+        <button 
+          type="submit"
+          disabled={loading || !formData.name}
+          className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
+        </button>
+        <button 
+          type="button"
+          onClick={onCancel}
+          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
+export default PartnerForm;

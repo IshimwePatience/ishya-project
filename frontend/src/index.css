@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter", sans-serif;
+  --color-primary: #e5a00d; /* Plex Yellow */
+  --color-primary-dark: #cc8e0b;
+  --color-secondary: #ffffff;
+  --color-accent: #e5a00d; 
+  --color-background: #1a1a1a; 
+  --color-surface: #121212; 
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.4);
+}
+
+@utility plex-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.1rem;
+}
+
+@utility plex-sublabel {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+@utility plex-card-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@utility plex-card-info {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #1a1a1a;
+}
+
+@layer base {
+  body {
+    @apply bg-[#1a1a1a] text-white font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 px-6 py-2.5 bg-[#e5a00d] hover:bg-[#cc8e0b] text-black rounded-sm transition-all duration-200 font-bold text-sm;
+  }
+  
+  .glass-card {
+    @apply bg-transparent hover:bg-white/5 transition-all duration-300 rounded-sm overflow-hidden border-none shadow-none;
+  }
+
+  .nav-link {
+    @apply text-white/60 hover:text-white transition-all duration-200 flex items-center gap-4 py-2.5 px-6 font-medium text-sm;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-[#333333] border-none rounded-full focus:outline-none text-white placeholder-white/40 transition-all text-sm;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1.1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
