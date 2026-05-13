@@ -40,7 +40,23 @@ exports.updateMedia = async (req, res) => {
   try {
     const media = await MediaFile.findByPk(req.params.id);
     if (!media) return res.status(404).json({ message: 'Media asset not found' });
+    
     await media.update(req.body);
+
+    // If description is updated, sync it across all assets AND the Production itself
+    if (req.body.description && media.productionId) {
+      // Update all associated media assets
+      await MediaFile.update(
+        { description: req.body.description },
+        { where: { productionId: media.productionId } }
+      );
+      // Update the parent Production record
+      await Production.update(
+        { description: req.body.description },
+        { where: { id: media.productionId } }
+      );
+    }
+
     res.json(media);
   } catch (error) {
     res.status(400).json({ message: error.message });

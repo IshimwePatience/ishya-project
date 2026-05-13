@@ -1,4 +1,4 @@
-const { User, Role } = require('../models');
+const { User, Role, PendingUser } = require('../models');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { sendEmail } = require('../utils/mailer');
@@ -24,10 +24,14 @@ exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
     
+    // Check main User table
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
+
+    // Check PendingUser table - if exists, remove old one to allow re-registration
+    await PendingUser.destroy({ where: { email } });
 
     const roleRecord = await Role.findOne({ where: { name: role || 'Public Visitor' } });
     if (!roleRecord) {
@@ -36,28 +40,26 @@ exports.register = async (req, res) => {
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const user = await User.create({
+    const pendingUser = await PendingUser.create({
       firstName,
       lastName,
       email,
-      password,
+      password, // Will be hashed by hook in PendingUser
       roleId: roleRecord.id,
-      isTwoFactorEnabled: true,
-      isVerified: false,
-      emailVerifyCode: verifyCode,
-      emailVerifyExpires: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
+      verifyCode,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
     });
 
     await sendEmail(
-      user.email,
+      pendingUser.email,
       'Verify Your ISHYA Account',
       `Your verification code is: ${verifyCode}`,
       `<h2>Welcome to ISHYA</h2><p>Your verification code is: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
     );
 
     res.status(201).json({
-      message: 'Account created. Check your email for the verification code.',
-      email: user.email
+      message: 'Registration initiated. Check your email for the verification code.',
+      email: pendingUser.email
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -67,32 +69,64 @@ exports.register = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     const { email, code } = req.body;
-    const user = await User.findOne({
+    
+    // Check PendingUser first
+    const pending = await PendingUser.findOne({
       where: {
         email,
-        emailVerifyCode: code,
-        emailVerifyExpires: { [Op.gt]: new Date() }
+        verifyCode: code,
+        expiresAt: { [Op.gt]: new Date() }
       }
     });
 
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired verification code' });
+    if (!pending) {
+      // Fallback: check if it's an existing unverified user (for backward compatibility if needed)
+      const user = await User.findOne({
+        where: {
+          email,
+          emailVerifyCode: code,
+          emailVerifyExpires: { [Op.gt]: new Date() }
+        }
+      });
+
+      if (!user) {
+        return res.status(400).json({ message: 'Invalid or expired verification code' });
+      }
+
+      user.isVerified = true;
+      user.emailVerifyCode = null;
+      user.emailVerifyExpires = null;
+      await user.save();
+      
+      const fullUser = await User.findByPk(user.id, {
+        include: [{ model: Role, as: 'role' }]
+      });
+      const tokens = generateTokens(fullUser);
+      return res.json({ message: 'Email verified successfully.', user: { id: fullUser.id, firstName: fullUser.firstName, lastName: fullUser.lastName, email: fullUser.email, role: fullUser.role?.name }, ...tokens });
     }
 
-    user.isVerified = true;
-    user.emailVerifyCode = null;
-    user.emailVerifyExpires = null;
-    await user.save();
+    // Move from PendingUser to User
+    const newUser = await User.create({
+      firstName: pending.firstName,
+      lastName: pending.lastName,
+      email: pending.email,
+      password: pending.password, // Keep the hashed password
+      roleId: pending.roleId,
+      isVerified: true,
+      status: 'active'
+    });
 
-    // Fetch user with role for the response
-    const fullUser = await User.findByPk(user.id, {
+    // Delete pending record
+    await pending.destroy();
+
+    const fullUser = await User.findByPk(newUser.id, {
       include: [{ model: Role, as: 'role' }]
     });
 
     const tokens = generateTokens(fullUser);
 
     res.json({ 
-      message: 'Email verified successfully.',
+      message: 'Email verified successfully. Account is now active.',
       user: {
         id: fullUser.id,
         firstName: fullUser.firstName,
@@ -110,18 +144,41 @@ exports.verifyEmail = async (req, res) => {
 exports.resendVerify = async (req, res) => {
   try {
     const { email } = req.body;
+    
+    // Check main User table first
     const user = await User.findOne({ where: { email } });
+    if (user && user.isVerified) {
+      return res.status(400).json({ message: 'Account already verified' });
+    }
 
-    if (!user) return res.status(404).json({ message: 'No account with this email' });
-    if (user.isVerified) return res.status(400).json({ message: 'Account already verified' });
+    if (user) {
+      const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+      user.emailVerifyCode = verifyCode;
+      user.emailVerifyExpires = new Date(Date.now() + 10 * 60 * 1000);
+      await user.save();
+
+      await sendEmail(
+        user.email,
+        'Your New ISHYA Verification Code',
+        `Your new code is: ${verifyCode}`,
+        `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
+      );
+      return res.json({ message: 'New code sent to your email' });
+    }
+
+    // Check PendingUser table
+    const pending = await PendingUser.findOne({ where: { email } });
+    if (!pending) {
+      return res.status(404).json({ message: 'No registration found with this email' });
+    }
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
-    user.emailVerifyCode = verifyCode;
-    user.emailVerifyExpires = new Date(Date.now() + 10 * 60 * 1000);
-    await user.save();
+    pending.verifyCode = verifyCode;
+    pending.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    await pending.save();
 
     await sendEmail(
-      user.email,
+      pending.email,
       'Your New ISHYA Verification Code',
       `Your new code is: ${verifyCode}`,
       `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`

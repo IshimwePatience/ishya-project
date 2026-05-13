@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     season: DataTypes.INTEGER,
     episodeNumber: DataTypes.INTEGER,
+    description: DataTypes.TEXT,
     metaData: DataTypes.JSONB
   }, {
     sequelize,

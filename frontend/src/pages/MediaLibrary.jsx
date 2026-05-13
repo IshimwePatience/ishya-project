@@ -179,12 +179,12 @@ const MediaLibrary = () => {
     <div className="space-y-6 pb-20">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center mb-10 pb-6 border-b border-white/5">
+          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
             <div>
               <h2 className="text-2xl font-semibold text-white">
                 {editingAsset ? "Edit Asset" : "Add to Library"}
               </h2>
-              <p className="text-sm text-white/40 mt-1">Fill in the details below to manage your media.</p>
+              <p className="text-sm text-white/40 mt-1">Manage asset details and visibility settings.</p>
             </div>
           </div>
 
@@ -204,17 +204,17 @@ const MediaLibrary = () => {
       ) : (
         <>
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-white tracking-tight">Media Library</h1>
-              <p className="text-white/40 mt-2 text-sm">Organize and distribute your digital assets</p>
+              <h2 className="text-2xl font-bold text-white tracking-tight">Media Library</h2>
+              <p className="text-sm text-white/40 mt-1">Organize and distribute your digital assets</p>
             </div>
 
             <button
               onClick={() => setIsFormOpen(true)}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all shadow-lg shadow-[#e5a00d]/10"
+              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
             >
-              <Plus size={18} />
+              <Plus size={16} />
               <span>Add to Library</span>
             </button>
           </div>
@@ -226,13 +226,13 @@ const MediaLibrary = () => {
           )}
 
           {/* Search Explorer */}
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-12">
             <div className="relative w-full max-w-md">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
               <input
                 type="text"
                 placeholder="Search assets..."
-                className="w-full bg-white/5 border border-white/10 rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
+                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
