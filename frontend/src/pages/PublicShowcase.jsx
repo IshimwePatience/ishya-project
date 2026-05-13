@@ -237,109 +237,110 @@ const PublicShowcase = () => {
             exit={{ opacity: 0 }}
             className="relative px-6 md:px-20 pt-32 pb-20 z-30 min-h-screen bg-[#050505] text-white"
           >
-            <div className="max-w-5xl mx-auto space-y-4 text-center">
-              <button
-                onClick={() => navigate('/showcase')}
-                className="text-[10px] font-bold text-white/40 hover:text-white transition-all flex items-center justify-center gap-2 mx-auto mb-2"
-              >
-                <ArrowLeft size={14} /> Back to Catalog
-              </button>
+            {(() => {
+              const prodMedia = media.filter(m => m.productionId == selectedProduction.id);
+              const mainMovie = prodMedia.find(m => m.fileType === 'Full Movie' || m.fileType === 'Episode');
+              const displayTitle = mainMovie ? mainMovie.fileName.replace(' - Poster', '').replace(' - Trailer', '') : selectedProduction.title;
 
-              <div className="text-[10px] md:text-xs font-medium text-white/40 flex items-center justify-center gap-2">
-                <span>Home</span>
-                <span className="text-[8px]">»</span>
-                <span>{selectedProduction.title} ({new Date(selectedProduction.releaseDate).getFullYear()}) {selectedProduction.type}</span>
-              </div>
-
-              <h2 className="text-3xl md:text-5xl font-black text-white">
-                {selectedProduction.title} ({new Date(selectedProduction.releaseDate).getFullYear()}) Movie
-              </h2>
-
-              <div className="relative max-w-sm mx-auto  border border-white/5">
-                <img
-                  src={getPoster(selectedProduction.id)}
-                  alt={selectedProduction.title}
-                  className="w-full h-auto"
-                />
-              </div>
-
-              <div className="max-w-4xl mx-auto space-y-6 py-6">
-                <p className="text-base md:text-lg text-white/60 leading-relaxed">
-                  {selectedProduction.description}
-                </p>
-
-                <div className="space-y-3">
-                  <div className="text-sm md:text-base font-bold text-white/80">
-                    Genre: {selectedProduction.genre}
+              return (
+                <div className="max-w-5xl mx-auto mb-12 text-left">
+                  <div className="flex items-center gap-2 text-sm font-medium text-white/40">
+                    <span className="cursor-pointer hover:text-white transition-all" onClick={() => navigate('/showcase')}>Catalog</span>
+                    <span className="text-[10px] opacity-20">/</span>
+                    <span className="text-white/60">{displayTitle}</span>
                   </div>
+                  
+                  <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter mt-4">
+                    {displayTitle}
+                  </h2>
+                </div>
+              );
+            })()}
 
-                  <div className="flex flex-col items-center gap-6 pt-4">
-                    {getTrailer(selectedProduction.id) && (
-                      <button
-                        onClick={() => navigate(`/watch/${getTrailer(selectedProduction.id).id}`)}
-                        className="px-8 py-3 border-2 border-white/20 text-white font-black text-xs hover:bg-white hover:text-black transition-all mb-4"
-                      >
-                        Watch Trailer
-                      </button>
-                    )}
+            <div className="mt-12 relative max-w-sm mx-auto  border border-white/5">
+              <img
+                src={getPoster(selectedProduction.id)}
+                alt={selectedProduction.title}
+                className="w-full h-auto"
+              />
+            </div>
 
-                    {selectedProduction.type === 'Series' ? (
-                      /* EPISODE LIST FOR SERIES */
-                      <div className="w-full max-w-2xl mx-auto space-y-4">
-                        <h3 className="text-xl font-bold text-white border-b border-white/10 pb-2 mb-6 text-left">Episodes</h3>
-                        <div className="grid gap-3">
-                          {media
-                            .filter(m => m.productionId == selectedProduction.id && (m.fileType === 'Full Movie' || m.fileType === 'Episode'))
-                            .sort((a, b) => (a.season || 1) - (b.season || 1) || (a.episodeNumber || 0) - (b.episodeNumber || 0))
-                            .map((episode, idx) => (
-                              <div
-                                key={episode.id}
-                                className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all group border border-white/5"
-                              >
-                                <div className="flex items-center gap-4">
-                                  <span className="text-white/20 font-black italic">{String(idx + 1).padStart(2, '0')}</span>
-                                  <div className="text-left">
-                                    <div className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
-                                      {episode.fileName}
-                                    </div>
-                                    <div className="text-[11px] text-white/40 font-medium">
-                                      Season {episode.season || 1} • Episode {episode.episodeNumber || idx + 1}
-                                    </div>
+            <div className="max-w-4xl mx-auto space-y-6 py-6">
+              <p className="text-base md:text-lg text-white/60 leading-relaxed">
+                {selectedProduction.description}
+              </p>
+
+              <div className="space-y-3">
+                <div className="text-sm md:text-base font-bold text-white/80">
+                  Genre: {selectedProduction.genre}
+                </div>
+
+                <div className="flex flex-col items-center gap-6 pt-4">
+                  {getTrailer(selectedProduction.id) && (
+                    <button
+                      onClick={() => navigate(`/watch/${getTrailer(selectedProduction.id).id}`)}
+                      className="px-8 py-3 border-2 border-white/20 text-white font-black text-xs hover:bg-white hover:text-black transition-all mb-4"
+                    >
+                      Watch Trailer
+                    </button>
+                  )}
+
+                  {selectedProduction.type === 'Series' ? (
+                    /* EPISODE LIST FOR SERIES */
+                    <div className="w-full max-w-2xl mx-auto space-y-4">
+                      <h3 className="text-xl font-bold text-white border-b border-white/10 pb-2 mb-6 text-left">Episodes</h3>
+                      <div className="grid gap-3">
+                        {media
+                          .filter(m => m.productionId == selectedProduction.id && (m.fileType === 'Full Movie' || m.fileType === 'Episode'))
+                          .sort((a, b) => (a.season || 1) - (b.season || 1) || (a.episodeNumber || 0) - (b.episodeNumber || 0))
+                          .map((episode, idx) => (
+                            <div
+                              key={episode.id}
+                              className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all group border border-white/5"
+                            >
+                              <div className="flex items-center gap-4">
+                                <span className="text-white/20 font-black italic">{String(idx + 1).padStart(2, '0')}</span>
+                                <div className="text-left">
+                                  <div className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
+                                    {episode.fileName}
+                                  </div>
+                                  <div className="text-[11px] text-white/40 font-medium">
+                                    Season {episode.season || 1} • Episode {episode.episodeNumber || idx + 1}
                                   </div>
                                 </div>
-                                <button
-                                  onClick={() => {
-                                    if (isLoggedIn) {
-                                      navigate(`/watch/${episode.id}`);
-                                    } else {
-                                      window.location.href = '/login';
-                                    }
-                                  }}
-                                  className="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-all shadow-lg shadow-blue-900/20"
-                                >
-                                  <Play size={16} fill="currentColor" />
-                                </button>
                               </div>
-                            ))}
-                        </div>
+                              <button
+                                onClick={() => {
+                                  if (isLoggedIn) {
+                                    navigate(`/watch/${episode.id}`);
+                                  } else {
+                                    window.location.href = '/login';
+                                  }
+                                }}
+                                className="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-all shadow-lg shadow-blue-900/20"
+                              >
+                                <Play size={16} fill="currentColor" />
+                              </button>
+                            </div>
+                          ))}
                       </div>
-                    ) : (
-                      /* SINGLE WATCH BUTTON FOR MOVIES */
-                      <button
-                        onClick={() => {
-                          if (isLoggedIn) {
-                            const movie = getFullMovie(selectedProduction.id);
-                            if (movie) navigate(`/watch/${movie.id}`);
-                          } else {
-                            window.location.href = '/login';
-                          }
-                        }}
-                        className="text-xl md:text-2xl font-black text-[#3498db] hover:text-[#2980b9] transition-all"
-                      >
-                        {isLoggedIn ? 'Watch Movie' : 'Login to Watch Movie'}
-                      </button>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    /* SINGLE WATCH BUTTON FOR MOVIES */
+                    <button
+                      onClick={() => {
+                        if (isLoggedIn) {
+                          const movie = getFullMovie(selectedProduction.id);
+                          if (movie) navigate(`/watch/${movie.id}`);
+                        } else {
+                          window.location.href = '/login';
+                        }
+                      }}
+                      className="text-xl md:text-2xl font-black text-[#3498db] hover:text-[#2980b9] transition-all"
+                    >
+                      {isLoggedIn ? 'Watch Movie' : 'Login to Watch Movie'}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

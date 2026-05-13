@@ -86,16 +86,19 @@ const MediaLibrary = () => {
     const content = prodAssets.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
     const poster = prodAssets.find(a => a.fileType === 'Poster');
 
+    const mainMovie = prodAssets.find(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
+    const displayTitle = mainMovie ? mainMovie.fileName.replace(' - Poster', '').replace(' - Trailer', '') : selectedProduction.title;
+
     return (
       <div className="space-y-12 pb-20">
         <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
           <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
             <button onClick={() => setSelectedProduction(null)} className="hover:text-white transition-colors">Library</button>
             <ChevronRight size={12} className="text-white/20" />
-            <span>{selectedProduction.title}</span>
+            <span>{displayTitle}</span>
           </nav>
           <div>
-            <h2 className="text-2xl font-semibold text-white">{selectedProduction.title}</h2>
+            <h2 className="text-3xl font-bold text-white tracking-tight">{displayTitle}</h2>
             <p className="text-sm text-white/40 mt-1">Production Showcase • {new Date(selectedProduction.releaseDate).getFullYear()}</p>
           </div>
         </div>
@@ -250,7 +253,8 @@ const MediaLibrary = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
               {posters.map((a) => {
                 const prod = productions.find(p => p.id === a.productionId);
-                const cardTitle = prod ? prod.title : a.fileName;
+                const cleanName = a.fileName.replace(' - Poster', '').replace(' - Trailer', '');
+                const cardTitle = cleanName || (prod ? prod.title : 'Untitled');
 
                 return (
                   <motion.div
