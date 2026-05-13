@@ -81,7 +81,7 @@ const PublicEvents = () => {
 
           <div className="relative min-h-[500px] md:min-h-[600px] w-full">
             <AnimatePresence mode="wait">
-              {currentShow && (
+              {currentShow ? (
                 <motion.div
                   key={currentShow.id}
                   initial={{ opacity: 0, x: 100 }}
@@ -135,6 +135,10 @@ const PublicEvents = () => {
                     </div>
                   </div>
                 </motion.div>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="text-white/20 text-sm font-medium italic">No featured shows at this time.</p>
+                </div>
               )}
             </AnimatePresence>
 

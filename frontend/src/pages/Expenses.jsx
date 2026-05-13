@@ -138,7 +138,7 @@ const Expenses = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="py-20 text-center text-white/10 font-medium italic border-b border-white/5">No expenses recorded</div>
+                  <div className="py-20 text-center text-white/10 font-medium">No expenses recorded</div>
                 )}
              </div>
           </section>

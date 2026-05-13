@@ -315,12 +315,11 @@ const MediaLibrary = () => {
               })}
             </div>
           ) : (
-            <div className="py-32 text-center border border-dashed border-white/10 rounded-sm">
-              <Library className="mx-auto text-white/10 mb-4" size={48} />
-              <p className="text-white/40 font-medium">Your library is empty</p>
+            <div className="py-32 text-center">
+              <p className="text-white/20 text-sm font-medium">Your library is empty</p>
               <button
                 onClick={() => setIsFormOpen(true)}
-                className="mt-6 text-[#e5a00d] text-sm font-semibold hover:underline"
+                className="mt-6 text-[#e5a00d] text-xs font-bold hover:underline"
               >
                 Add your first asset
               </button>

@@ -172,9 +172,8 @@ const Scripts = () => {
               ))}
             </div>
           ) : (
-            <div className="py-20 text-center border border-dashed border-white/10 rounded-sm">
-              <FileText className="mx-auto text-white/10 mb-4" size={48} />
-              <p className="text-white/40 font-medium">No scripts found</p>
+            <div className="py-20 text-center">
+              <p className="text-white/20 text-sm font-medium">No scripts found</p>
             </div>
           )}
         </>

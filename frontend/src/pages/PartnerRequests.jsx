@@ -165,8 +165,8 @@ const PartnerRequests = () => {
             </AnimatePresence>
           </div>
         ) : (
-          <div className="py-20 text-center border border-dashed border-white/5 rounded-sm">
-            <p className="text-white/20 text-sm">No pending requests</p>
+          <div className="py-20 text-center">
+            <p className="text-white/20 text-sm font-medium">No pending requests</p>
           </div>
         )}
       </div>

@@ -138,8 +138,7 @@ const PartnerDashboard = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="py-20 text-center border border-dashed border-white/5 rounded-sm">
-                <Film className="mx-auto text-white/5 mb-4" size={48} />
+              <div className="py-20 text-center">
                 <p className="text-white/20 text-sm">No active licenses found</p>
                 <Link to="/dashboard/media" className="text-[#e5a00d] text-xs font-bold mt-4 block hover:underline">Browse Catalog</Link>
               </div>

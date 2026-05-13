@@ -82,8 +82,7 @@ const ActorDashboard = ({ user }) => {
               ))}
             </div>
           ) : (
-            <div className="py-20 border border-dashed border-white/5 rounded-sm flex flex-col items-center justify-center text-center opacity-40">
-              <FileText size={40} className="mb-4" />
+            <div className="py-20 flex flex-col items-center justify-center text-center opacity-40">
               <p className="text-xs font-semibold leading-relaxed">No scripts assigned yet. <br /> Check back later.</p>
             </div>
           )}

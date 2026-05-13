@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   Search,
   ChevronDown,
-  Receipt
+  Receipt,
+  Briefcase
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -128,7 +129,7 @@ const DashboardLayout = ({ children }) => {
         label: 'People & Network',
         items: [
           { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
-          { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
+          { to: '/dashboard/buyers', icon: Briefcase, label: 'Partners' },
           { to: '/dashboard/partner-requests', icon: Bell, label: 'Partner Requests' },
         ]
       },

@@ -193,32 +193,38 @@ const PublicShowcase = () => {
             <div className="max-w-7xl mx-auto space-y-12">
               <h2 className="text-2xl font-black tracking-tight">Featured Premieres</h2>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-y-24 gap-x-12 pt-10">
-                {releasedProductions.slice(0, 10).map((prod, index) => (
-                  <motion.div
-                    key={prod.id}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => {
-                      navigate(`/showcase/${prod.id}`);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="relative group cursor-pointer"
-                  >
-                    <span className="absolute -left-12 md:-left-20 bottom-[-20px] text-[180px] md:text-[280px] font-black leading-none select-none text-transparent transition-all group-hover:text-white/5"
-                      style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)', fontFamily: 'system-ui' }}>
-                      {index + 1}
-                    </span>
-                    <div className="relative aspect-[2/3] ml-6 md:ml-12 overflow-hidden rounded-md border border-white/5 group-hover:border-white/40 transition-all shadow-2xl">
-                      <img
-                        src={getPoster(prod.id)}
-                        alt={prod.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 rounded-sm text-[10px] font-semibold text-white/80 z-10 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all">
-                        {prod.type}
+                {releasedProductions.length > 0 ? (
+                  releasedProductions.slice(0, 10).map((prod, index) => (
+                    <motion.div
+                      key={prod.id}
+                      whileHover={{ scale: 1.05 }}
+                      onClick={() => {
+                        navigate(`/showcase/${prod.id}`);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="relative group cursor-pointer"
+                    >
+                      <span className="absolute -left-12 md:-left-20 bottom-[-20px] text-[180px] md:text-[280px] font-black leading-none select-none text-transparent transition-all group-hover:text-white/5"
+                        style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)', fontFamily: 'system-ui' }}>
+                        {index + 1}
+                      </span>
+                      <div className="relative aspect-[2/3] ml-6 md:ml-12 overflow-hidden rounded-md border border-white/5 group-hover:border-white/40 transition-all shadow-2xl">
+                        <img
+                          src={getPoster(prod.id)}
+                          alt={prod.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 rounded-sm text-[10px] font-semibold text-white/80 z-10 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all">
+                          {prod.type}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="col-span-full py-40 text-center">
+                    <p className="text-white/20 text-sm font-medium italic">No productions match your search criteria.</p>
+                  </div>
+                )}
               </div>
             </div>
           </motion.section>

@@ -148,7 +148,7 @@ const Sales = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="py-20 text-center text-white/10 font-medium italic border-b border-white/5">Ledger empty</div>
+                  <div className="py-20 text-center text-white/10 font-medium">Ledger empty</div>
                 )}
              </div>
           </section>
