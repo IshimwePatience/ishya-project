@@ -12,8 +12,18 @@ const Scripts = () => {
   const [editingScript, setEditingScript] = useState(null);
   const [error, setError] = useState('');
 
+  const [userRole, setUserRole] = useState('');
+
   useEffect(() => {
     fetchScripts();
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('http://localhost:5000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(res => {
+        setUserRole(res.data.user.role);
+      }).catch(err => console.error('Role fetch failed', err));
+    }
   }, []);
 
   const fetchScripts = async () => {
@@ -44,7 +54,31 @@ const Scripts = () => {
     }
   };
 
+  const handleDownload = async (filePath, fileName) => {
+    try {
+      const fullUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const response = await fetch(fullUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName || 'script-document');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download failed', err);
+      const fallbackUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      window.open(fallbackUrl, '_blank');
+    }
+  };
+
   const handleEdit = (script) => {
+    if (userRole === 'Actor/Talent') {
+      if (script.filePath) handleDownload(script.filePath, script.title);
+      return;
+    }
     setEditingScript(script);
     setIsFormOpen(true);
   };
@@ -52,6 +86,8 @@ const Scripts = () => {
   const filteredScripts = scripts.filter(s => 
     s.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const isManagement = userRole === 'Admin' || userRole === 'Staff';
 
   return (
     <div className="space-y-6">
@@ -84,15 +120,17 @@ const Scripts = () => {
           {/* Action Header */}
           <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Scripts</h2>
-              <p className="text-sm text-white/40 mt-1">Ishya script vault</p>
+              <h2 className="text-2xl font-bold text-white tracking-tight">{isManagement ? "Scripts" : "My Scripts"}</h2>
+              <p className="text-sm text-white/40 mt-1">{isManagement ? "Ishya script vault" : "Your assigned production documents"}</p>
             </div>
-            <button
-              className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <Plus size={16} /> Add script
-            </button>
+            {isManagement && (
+              <button
+                className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
+                onClick={() => setIsFormOpen(true)}
+              >
+                <Plus size={16} /> Add script
+              </button>
+            )}
           </div>
 
           {error && (
@@ -139,29 +177,38 @@ const Scripts = () => {
                       className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
                     />
                     {/* Top Right Actions */}
-                    <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
-                       <button 
-                         onClick={(e) => { e.stopPropagation(); handleEdit(script); }}
-                         className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white"
-                         title="Edit"
-                       >
-                         <Edit2 size={12} />
-                       </button>
-                       <button 
-                         onClick={(e) => { e.stopPropagation(); handleDelete(script.id); }}
-                         className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400"
-                         title="Delete"
-                       >
-                         <Trash2 size={12} />
-                       </button>
-                    </div>
+                    {isManagement && (
+                      <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
+                         <button 
+                           onClick={(e) => { e.stopPropagation(); handleEdit(script); }}
+                           className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white"
+                           title="Edit"
+                         >
+                           <Edit2 size={12} />
+                         </button>
+                         <button 
+                           onClick={(e) => { e.stopPropagation(); handleDelete(script.id); }}
+                           className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400"
+                           title="Delete"
+                         >
+                           <Trash2 size={12} />
+                         </button>
+                      </div>
+                    )}
+                    {!isManagement && (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                         <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
+                            DOWNLOAD
+                         </div>
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{script.title}</div>
                     <div className="text-[11px] text-white/40 font-medium">
                       v{script.version} • {script.fileType}
                     </div>
-                    {script.assignedActors?.length > 0 && (
+                    {isManagement && script.assignedActors?.length > 0 && (
                       <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/[0.03] px-2 py-0.5 rounded-sm border border-white/5">
                         <Users size={10} className="text-[#e5a00d]" />
                         <span className="text-[10px] text-white/50 font-bold">{script.assignedActors.length} assigned</span>

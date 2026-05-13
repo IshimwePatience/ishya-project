@@ -23,6 +23,26 @@ const ActorDashboard = ({ user }) => {
     fetchActorData();
   }, []);
 
+  const handleDownload = async (filePath, fileName) => {
+    try {
+      const fullUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const response = await fetch(fullUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName || 'script-document');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download failed', err);
+      const fallbackUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      window.open(fallbackUrl, '_blank');
+    }
+  };
+
   const fetchActorData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -62,22 +82,21 @@ const ActorDashboard = ({ user }) => {
           {scripts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {scripts.map((script, i) => (
-                <div key={i} className="bg-[#121212] border border-white/5 p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all">
+                <div 
+                  key={i} 
+                  onClick={() => script.filePath && handleDownload(script.filePath, script.title)}
+                  className="bg-[#121212] border border-white/5 p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all cursor-pointer"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-3 bg-black rounded-sm text-white/40 group-hover:text-[#e5a00d] transition-colors">
                       <FileText size={20} />
                     </div>
-                    <a href={script.filePath} target="_blank" rel="noreferrer" className="p-2 text-white/20 hover:text-white transition-colors">
-                      <Download size={16} />
-                    </a>
+                    <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-2 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                      DOWNLOAD
+                    </div>
                   </div>
                   <h4 className="text-sm font-bold text-white mb-1">{script.title}</h4>
                   <p className="text-xs text-white/40">v{script.version} • {script.production?.title || 'Main Production'}</p>
-
-                  <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] text-white/20">Rehearse by June 12</span>
-                    <button className="text-[11px] font-bold text-[#e5a00d] hover:underline">Open web viewer</button>
-                  </div>
                 </div>
               ))}
             </div>
