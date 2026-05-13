@@ -41,7 +41,7 @@ const SidebarGroup = ({ label, items, location }) => {
     <div className="mb-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white uppercase tracking-widest hover:text-white transition-colors group"
+        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white hover:text-white transition-colors group"
       >
         <span>{label}</span>
         <ChevronDown 
@@ -107,50 +107,66 @@ const DashboardLayout = ({ children }) => {
     );
   }
 
-  const menuGroups = [
-    {
-      label: 'Main',
-      items: [
-        { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
-      ]
-    },
-    {
-      label: 'Production',
-      items: [
-        { to: '/dashboard/productions', icon: Film, label: 'Productions' },
-        { to: '/dashboard/media', icon: Library, label: 'Your Media' },
-        { to: '/dashboard/scripts', icon: FileText, label: 'Script Vault' },
-      ]
-    },
-    {
-      label: 'People & Network',
-      items: [
-        { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
-        { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
-      ]
-    },
-    {
-      label: 'Financials',
-      items: [
-        { to: '/dashboard/sales', icon: Wallet, label: 'Revenue' },
-        { to: '/dashboard/expenses', icon: Receipt, label: 'Expenses' },
-      ]
-    },
-    {
-      label: 'Management',
-      items: [
-        { to: '/dashboard/events', icon: Calendar, label: 'Events' },
-        { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
-      ]
-    }
-  ];
+  // Dynamic Menu Logic
+  let menuGroups = [];
 
-  if (user?.role === 'Admin') {
-    menuGroups.find(g => g.label === 'Management').items.push({ to: '/dashboard/users', icon: ShieldCheck, label: 'Users' });
-    menuGroups.find(g => g.label === 'People & Network').items.push({ to: '/dashboard/partner-requests', icon: Bell, label: 'Partner Requests' });
+  if (user?.role === 'Admin' || user?.role === 'Staff') {
+    menuGroups = [
+      {
+        label: 'Main',
+        items: [{ to: '/dashboard', icon: LayoutDashboard, label: 'Home' }]
+      },
+      {
+        label: 'Production',
+        items: [
+          { to: '/dashboard/productions', icon: Film, label: 'Productions' },
+          { to: '/dashboard/media', icon: Library, label: 'Your Media' },
+          { to: '/dashboard/scripts', icon: FileText, label: 'Script Vault' },
+        ]
+      },
+      {
+        label: 'People & Network',
+        items: [
+          { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
+          { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
+          { to: '/dashboard/partner-requests', icon: Bell, label: 'Partner Requests' },
+        ]
+      },
+      {
+        label: 'Financials',
+        items: [
+          { to: '/dashboard/sales', icon: Wallet, label: 'Revenue' },
+          { to: '/dashboard/expenses', icon: Receipt, label: 'Expenses' },
+        ]
+      },
+      {
+        label: 'Management',
+        items: [
+          { to: '/dashboard/events', icon: Calendar, label: 'Events' },
+          { to: '/dashboard/users', icon: ShieldCheck, label: 'Users' },
+          { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
+        ]
+      }
+    ];
+  } else if (user?.role === 'Actor/Talent') {
+    menuGroups = [
+      {
+        label: 'My Production',
+        items: [
+          { to: '/dashboard/scripts', icon: FileText, label: 'My Scripts' },
+          { to: '/dashboard/attendance', icon: Calendar, label: 'My Attendance' },
+        ]
+      },
+      {
+        label: 'Account',
+        items: [
+          { to: '/dashboard/settings', icon: Settings, label: 'My Profile' },
+        ]
+      }
+    ];
   }
 
-  // Partner Specific Menu
+  // Partner remains separate as it's a completely different workflow
   if (user?.role === 'Partner') {
     const partnerMenu = [
       {
@@ -158,7 +174,7 @@ const DashboardLayout = ({ children }) => {
         items: [
           { to: '/dashboard', icon: LayoutDashboard, label: 'Portal Home' },
           { to: '/dashboard/library', icon: Film, label: 'My Library' },
-          { to: '/dashboard/media', icon: Globe, label: 'Browse Catalog' },
+          { to: '/dashboard/media', icon: Library, label: 'Browse Catalog' },
         ]
       },
       {
@@ -174,91 +190,13 @@ const DashboardLayout = ({ children }) => {
           <div className="p-8 pb-12">
             <Link to="/dashboard" className="block group">
               <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto opacity-80 group-hover:opacity-100 transition-opacity" />
-              <div className="mt-2 text-[10px] font-bold text-[#e5a00d] tracking-[0.3em] uppercase">Partner Portal</div>
+              <div className="mt-2 text-[10px] font-bold text-[#e5a00d]">Partner portal</div>
             </Link>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 no-scrollbar space-y-8">
             {partnerMenu.map((group, idx) => (
               <div key={idx} className="space-y-2">
-                <h3 className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-4">
-                  {group.label}
-                </h3>
-                <div className="space-y-1">
-                  {group.items.map((item) => (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      end={item.to === '/dashboard'}
-                      className={({ isActive }) => `
-                        flex items-center gap-4 px-4 py-3 rounded-sm transition-all duration-300 group
-                        ${isActive 
-                          ? 'bg-white/5 text-white border-l-2 border-[#e5a00d]' 
-                          : 'text-white/40 hover:text-white hover:bg-white/[0.02]'}
-                      `}
-                    >
-                      <item.icon size={18} className="group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium tracking-tight">{item.label}</span>
-                    </NavLink>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </nav>
-          <div className="p-6 border-t border-white/5 bg-black/50">
-            <div className="flex items-center gap-4 p-3 rounded-sm bg-white/[0.02] border border-white/5">
-              <div className="w-8 h-8 rounded-sm bg-[#e5a00d] flex items-center justify-center text-black font-bold text-xs uppercase">
-                {user?.firstName?.[0] || 'P'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
-                <p className="text-[10px] text-white/40 truncate uppercase tracking-widest">{user?.role}</p>
-              </div>
-              <button onClick={handleLogout} className="text-white/20 hover:text-red-500 transition-colors">
-                <LogOut size={16} />
-              </button>
-            </div>
-          </div>
-        </aside>
-        <main className="flex-1 overflow-y-auto bg-[#0a0a0a] relative no-scrollbar">
-          <div className="max-w-7xl mx-auto p-12">
-            {children}
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  // Actor / Talent Specific Menu
-  if (user?.role === 'Actor/Talent') {
-    const actorMenu = [
-      {
-        label: 'My Production',
-        items: [
-          { to: '/dashboard', icon: LayoutDashboard, label: 'Actor Home' },
-          { to: '/dashboard/scripts', icon: FileText, label: 'My Scripts' },
-          { to: '/dashboard/attendance', icon: Calendar, label: 'My Attendance' },
-        ]
-      },
-      {
-        label: 'Account',
-        items: [
-          { to: '/dashboard/settings', icon: Settings, label: 'My Profile' },
-        ]
-      }
-    ];
-    return (
-      <div className="flex h-screen bg-[#0a0a0a] text-white overflow-hidden font-sans selection:bg-[#e5a00d] selection:text-black">
-        <aside className="w-72 bg-black border-r border-white/5 flex flex-col z-50">
-          <div className="p-8 pb-12">
-            <Link to="/dashboard" className="block group">
-              <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto opacity-80 group-hover:opacity-100 transition-opacity" />
-              <div className="mt-2 text-[10px] font-bold text-[#e5a00d] tracking-[0.3em] uppercase">Actor Portal</div>
-            </Link>
-          </div>
-          <nav className="flex-1 overflow-y-auto px-4 no-scrollbar space-y-8">
-            {actorMenu.map((group, idx) => (
-              <div key={idx} className="space-y-2">
-                <h3 className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-4">
+                <h3 className="px-4 text-[10px] font-bold text-white/20 mb-4">
                   {group.label}
                 </h3>
                 <div className="space-y-1">
@@ -284,11 +222,11 @@ const DashboardLayout = ({ children }) => {
           <div className="p-6 border-t border-white/5 bg-black/50">
             <div className="flex items-center gap-4 p-3 rounded-sm bg-white/[0.02] border border-white/5">
               <div className="w-8 h-8 rounded-sm bg-[#e5a00d] flex items-center justify-center text-black font-bold text-xs uppercase">
-                {user?.firstName?.[0] || 'A'}
+                {user?.firstName?.[0] || 'P'}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
-                <p className="text-[10px] text-white/40 truncate uppercase tracking-widest">{user?.role}</p>
+                <p className="text-[10px] text-white/40 truncate">{user?.role}</p>
               </div>
               <button onClick={handleLogout} className="text-white/20 hover:text-red-500 transition-colors">
                 <LogOut size={16} />
@@ -307,7 +245,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
-      {/* Top Navigation - Exact Plex Clone */}
+      {/* Top Navigation - Shared between Admin and Talent */}
       <header className="h-20 bg-[#121212] border-b border-white/5 flex items-center px-4 fixed top-0 w-full z-40">
         <div className="flex items-center gap-4 w-72">
           <Link to="/dashboard" className="flex items-center gap-1">
@@ -344,10 +282,17 @@ const DashboardLayout = ({ children }) => {
 
               {/* Dropdown Menu */}
               <div className="absolute right-0 top-full mt-2 w-64 bg-[#1a1a1a] border border-white/10 shadow-2xl rounded-sm py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div className="px-4 py-3">
+                <div className="px-4 py-3 border-b border-white/5 mb-1">
                   <div className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</div>
-                  <div className="text-[11px] text-white/40 font-medium truncate">{user?.email}</div>
+                  <div className="text-[10px] text-white/40 font-medium truncate">{user?.role}</div>
                 </div>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/60 hover:text-red-400 hover:bg-white/5 transition-all"
+                >
+                  <LogOut size={14} />
+                  <span>Sign Out</span>
+                </button>
               </div>
             </div>
           </div>
@@ -355,7 +300,7 @@ const DashboardLayout = ({ children }) => {
       </header>
 
       <div className="flex flex-1 pt-20">
-        {/* Sidebar */}
+        {/* Shared Sidebar */}
         <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30 border-r border-white/5">
           <div className="flex-1 overflow-y-auto no-scrollbar py-2">
             {menuGroups.map((group) => (

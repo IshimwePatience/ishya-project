@@ -16,37 +16,37 @@ const Settings = () => {
         <p className="text-white/40 text-sm mt-1">System Core</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3">
+      <div className="flex flex-col">
         {sections.map((section, i) => (
-          <div key={i} className="flex items-center justify-between p-6 bg-[#121212] border border-white/5 hover:bg-white/5 transition-all group rounded-sm cursor-pointer">
-            <div className="flex items-center gap-6">
-              <div className="p-3 bg-white/5 rounded-sm text-[#e5a00d] group-hover:bg-[#e5a00d] group-hover:text-black transition-all">
-                 <section.icon size={20} />
+          <div key={i} className="flex items-center justify-between py-6 border-b border-white/5 hover:bg-white/[0.02] transition-all group px-4">
+            <div className="flex items-center gap-8">
+              <div className="text-white/20 group-hover:text-[#e5a00d] transition-colors">
+                 <section.icon size={22} />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{section.title}</h3>
+                <h3 className="text-[13px] font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">{section.title}</h3>
                 <p className="text-[11px] text-white/40 font-medium mt-1">{section.desc}</p>
               </div>
             </div>
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-              <button className="btn-primary">Manage</button>
-            </div>
+            <button className="text-[11px] font-bold text-white/20 hover:text-white transition-all">
+              Manage
+            </button>
           </div>
         ))}
       </div>
 
-      <div className="pt-6">
-        <div className="flex items-center gap-4 mb-4">
-           <h3 className="text-sm font-bold text-red-500">Danger Zone</h3>
+      <div className="pt-12">
+        <div className="flex items-center gap-4 mb-4 px-4">
+           <h3 className="text-[10px] font-black text-red-500 tracking-[0.1em]">Danger zone</h3>
            <div className="flex-1 h-px bg-red-500/10" />
         </div>
-        <div className="bg-[#0a0a0a] border border-red-500/20 p-8 rounded-sm flex justify-between items-center group">
+        <div className="flex justify-between items-center px-4 py-6 hover:bg-red-500/[0.02] transition-all group border-b border-red-500/10">
            <div>
-              <div className="font-bold text-white text-sm mb-1">Erase Troubleshooting Logs</div>
-              <div className="text-[11px] text-red-500/60 font-medium">Permanent System Wipe • Irreversible</div>
+              <div className="font-bold text-white text-[13px] tracking-tight">Erase Troubleshooting Logs</div>
+              <div className="text-[11px] text-red-500/60 font-medium mt-1">Permanent System Wipe • Irreversible</div>
            </div>
-           <button className="px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-white/40 hover:text-white rounded-sm border border-red-500/20 text-sm font-bold transition-all">
-              <Trash2 size={14} className="inline mr-2" /> Wipe Cache
+           <button className="text-[11px] font-black text-red-500/40 hover:text-red-500 transition-all">
+              Wipe cache
            </button>
         </div>
       </div>
