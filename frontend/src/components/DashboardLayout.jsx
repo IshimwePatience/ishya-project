@@ -228,6 +228,83 @@ const DashboardLayout = ({ children }) => {
     );
   }
 
+  // Actor / Talent Specific Menu
+  if (user?.role === 'Actor/Talent') {
+    const actorMenu = [
+      {
+        label: 'My Production',
+        items: [
+          { to: '/dashboard', icon: LayoutDashboard, label: 'Actor Home' },
+          { to: '/dashboard/scripts', icon: FileText, label: 'My Scripts' },
+          { to: '/dashboard/attendance', icon: Calendar, label: 'My Attendance' },
+        ]
+      },
+      {
+        label: 'Account',
+        items: [
+          { to: '/dashboard/settings', icon: Settings, label: 'My Profile' },
+        ]
+      }
+    ];
+    return (
+      <div className="flex h-screen bg-[#0a0a0a] text-white overflow-hidden font-sans selection:bg-[#e5a00d] selection:text-black">
+        <aside className="w-72 bg-black border-r border-white/5 flex flex-col z-50">
+          <div className="p-8 pb-12">
+            <Link to="/dashboard" className="block group">
+              <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto opacity-80 group-hover:opacity-100 transition-opacity" />
+              <div className="mt-2 text-[10px] font-bold text-[#e5a00d] tracking-[0.3em] uppercase">Actor Portal</div>
+            </Link>
+          </div>
+          <nav className="flex-1 overflow-y-auto px-4 no-scrollbar space-y-8">
+            {actorMenu.map((group, idx) => (
+              <div key={idx} className="space-y-2">
+                <h3 className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-4">
+                  {group.label}
+                </h3>
+                <div className="space-y-1">
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className={`
+                        flex items-center gap-4 px-4 py-3 rounded-sm transition-all duration-300 group
+                        ${location.pathname === item.to 
+                          ? 'bg-white/5 text-white border-l-2 border-[#e5a00d]' 
+                          : 'text-white/40 hover:text-white hover:bg-white/[0.02]'}
+                      `}
+                    >
+                      <item.icon size={18} className="group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium tracking-tight">{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </nav>
+          <div className="p-6 border-t border-white/5 bg-black/50">
+            <div className="flex items-center gap-4 p-3 rounded-sm bg-white/[0.02] border border-white/5">
+              <div className="w-8 h-8 rounded-sm bg-[#e5a00d] flex items-center justify-center text-black font-bold text-xs uppercase">
+                {user?.firstName?.[0] || 'A'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
+                <p className="text-[10px] text-white/40 truncate uppercase tracking-widest">{user?.role}</p>
+              </div>
+              <button onClick={handleLogout} className="text-white/20 hover:text-red-500 transition-colors">
+                <LogOut size={16} />
+              </button>
+            </div>
+          </div>
+        </aside>
+        <main className="flex-1 overflow-y-auto bg-[#0a0a0a] relative no-scrollbar">
+          <div className="max-w-7xl mx-auto p-12">
+            {children}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation - Exact Plex Clone */}

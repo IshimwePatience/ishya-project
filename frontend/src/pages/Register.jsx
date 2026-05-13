@@ -65,7 +65,7 @@ const Register = ({ isInternal = false }) => {
     email: searchParams.get('email') || '',
     password: '',
     confirmPassword: '',
-    role: isInternal ? 'Production Manager' : 'Public Visitor',
+    role: isInternal ? 'Admin' : 'Public Visitor',
     googleId: searchParams.get('googleId') || ''
   });
   const [loading, setLoading] = useState(false);
@@ -75,16 +75,12 @@ const Register = ({ isInternal = false }) => {
 
   const allRoles = [
     'Admin',
-    'Production Manager',
-    'Finance Officer',
-    'Writer/Director',
-    'Actor/Talent',
     'Partner',
     'Public Visitor'
   ];
 
   const roles = isInternal 
-    ? allRoles.filter(r => ['Admin', 'Production Manager', 'Finance Officer', 'Writer/Director', 'Actor/Talent'].includes(r))
+    ? allRoles.filter(r => r === 'Admin')
     : allRoles.filter(r => ['Public Visitor', 'Partner'].includes(r));
 
   const handleRegister = async (e) => {

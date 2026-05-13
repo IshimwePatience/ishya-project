@@ -2,50 +2,164 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Film, 
-  Users, 
-  Coins, 
-  TrendingUp, 
+  FileText, 
+  Calendar, 
   Clock, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Play,
-  ChevronLeft,
-  ChevronRight
+  CheckCircle2,
+  Download,
+  ExternalLink,
+  Play
 } from 'lucide-react';
 import axios from 'axios';
 import PartnerDashboard from './PartnerDashboard';
 
+const ActorDashboard = ({ user }) => {
+  const [scripts, setScripts] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchActorData();
+  }, []);
+
+  const fetchActorData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      // Fetch scripts assigned to this actor
+      const scriptsRes = await axios.get('http://localhost:5000/api/scripts', { headers });
+      const myScripts = scriptsRes.data.filter(s => 
+        s.assignedActors?.some(actor => actor.email === user.email)
+      );
+
+      // Fetch events
+      const eventsRes = await axios.get('http://localhost:5000/api/events', { headers });
+
+      setScripts(myScripts);
+      setEvents(eventsRes.data.slice(0, 3));
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching actor data', err);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-12">
+      {/* Welcome Header */}
+      <div className="border-b border-white/5 pb-8">
+        <h2 className="text-3xl font-black text-white italic uppercase tracking-tighter">Welcome back, {user.firstName}</h2>
+        <p className="text-[11px] text-[#e5a00d] font-bold uppercase tracking-[0.3em] mt-2">● On Set Availability: ACTIVE</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Left Column: My Scripts */}
+        <div className="lg:col-span-2 space-y-8">
+           <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                <FileText size={14} className="text-[#e5a00d]" /> My Assigned Scripts
+              </h3>
+              <span className="text-[10px] text-white/20 uppercase tracking-widest">{scripts.length} Files</span>
+           </div>
+
+           {scripts.length > 0 ? (
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {scripts.map((script, i) => (
+                  <div key={i} className="bg-[#121212] border border-white/5 p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all">
+                     <div className="flex justify-between items-start mb-4">
+                        <div className="p-3 bg-black rounded-sm text-white/40 group-hover:text-[#e5a00d] transition-colors">
+                           <FileText size={20} />
+                        </div>
+                        <a href={script.filePath} target="_blank" rel="noreferrer" className="p-2 text-white/20 hover:text-white transition-colors">
+                           <Download size={16} />
+                        </a>
+                     </div>
+                     <h4 className="text-sm font-bold text-white mb-1">{script.title}</h4>
+                     <p className="text-[10px] text-white/40 uppercase tracking-widest">v{script.version} • {script.production?.title || 'Main Production'}</p>
+                     
+                     <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span className="text-[9px] font-bold text-white/20 uppercase tracking-tighter italic">Rehearse by June 12</span>
+                        <button className="text-[10px] font-bold text-[#e5a00d] uppercase tracking-widest hover:underline">Open Web Viewer</button>
+                     </div>
+                  </div>
+                ))}
+             </div>
+           ) : (
+             <div className="py-20 border border-dashed border-white/5 rounded-sm flex flex-col items-center justify-center text-center opacity-40">
+                <FileText size={40} className="mb-4" />
+                <p className="text-[10px] font-bold uppercase tracking-widest leading-relaxed">No scripts assigned yet. <br/> Check back later.</p>
+             </div>
+           )}
+        </div>
+
+        {/* Right Column: Schedule & Tasks */}
+        <div className="space-y-10">
+           <section className="space-y-6">
+              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Next Call Time</h3>
+              <div className="bg-[#e5a00d] p-6 rounded-sm text-black">
+                 <div className="flex items-center gap-2 mb-2">
+                    <Clock size={16} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Immediate Call</span>
+                 </div>
+                 <div className="text-2xl font-black italic tracking-tighter">10:00 AM</div>
+                 <p className="text-[11px] font-bold uppercase mt-1 opacity-80">Main Hall • Costume Fitting</p>
+              </div>
+           </section>
+
+           <section className="space-y-6">
+              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Upcoming Events</h3>
+              <div className="space-y-3">
+                 {events.map((event, i) => (
+                    <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4">
+                       <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm">
+                          <span className="text-[8px] font-black uppercase">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
+                          <span className="text-sm font-black">{new Date(event.date).getDate()}</span>
+                       </div>
+                       <div>
+                          <div className="text-[11px] font-bold text-white tracking-tight">{event.title}</div>
+                          <div className="text-[9px] text-white/20 uppercase tracking-widest">{event.time || 'All Day'}</div>
+                       </div>
+                    </div>
+                 ))}
+              </div>
+           </section>
+
+           <section className="space-y-6">
+              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Recent Check-ins</h3>
+              <div className="space-y-2">
+                 {[1, 2].map(i => (
+                    <div key={i} className="flex items-center gap-3">
+                       <CheckCircle2 size={12} className="text-green-500" />
+                       <span className="text-[10px] text-white/40 uppercase tracking-widest">May {22+i} - Call Time Met</span>
+                    </div>
+                 ))}
+              </div>
+           </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const StaffDashboard = ({ stats, loading }) => (
-  <div className="space-y-8">
-    {/* Action Header */}
+  <div className="space-y-8 pb-20">
     <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
       <div>
-        <h2 className="plex-heading">Dashboard</h2>
-        <p className="plex-sublabel">Troupe Overview</p>
+        <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Studio Overview</h2>
+        <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Ishya Production Hub</p>
       </div>
     </div>
 
-    {/* Stats Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <StatCard label="Total Revenue" value="0 RWF" icon={Coins} color="text-green-400" />
-      <StatCard label="Productions" value={stats.productionsCount} icon={Film} trend="up" trendValue="14" color="text-white" />
+      <StatCard label="Total Revenue" value="0 RWF" icon={Film} color="text-green-400" />
+      <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" />
       <StatCard label="Troupe Members" value={stats.talentsCount} icon={Users} color="text-white" />
-      <StatCard label="System Users" value={stats.usersCount || 0} icon={TrendingUp} trend="up" trendValue="8.4" color="text-[#e5a00d]" />
+      <StatCard label="System Users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" />
     </div>
 
-    {/* Recent Activity Section */}
-    <section className="space-y-0">
-       <div className="flex items-end justify-between mb-2">
-          <div>
-            <h2 className="plex-heading">What's On Now</h2>
-            <p className="plex-sublabel">Live TV</p>
-          </div>
-          <div className="flex items-center gap-4 mb-8">
-             <ChevronLeft size={20} className="text-white/20 hover:text-white cursor-pointer transition-colors" />
-             <ChevronRight size={20} className="text-white/20 hover:text-white cursor-pointer transition-colors" />
-          </div>
-       </div>
-
+    <section className="space-y-6 pt-8">
+       <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">What's On Now</h3>
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {loading ? (
             [1,2,3,4,5].map(i => <div key={i} className="aspect-video bg-white/5 animate-pulse rounded-sm" />)
@@ -58,108 +172,27 @@ const StaffDashboard = ({ stats, loading }) => (
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                     <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
-                        <Play size={20} className="text-white fill-white ml-1" />
-                     </div>
+                     <Play size={20} className="text-white fill-white ml-1" />
                   </div>
               </div>
-              <div className="plex-card-title">{prod.title}</div>
-              <div className="plex-card-info">{prod.genre} • {new Date(prod.releaseDate).getFullYear()}</div>
+              <div className="text-xs font-bold text-white mt-3 group-hover:text-[#e5a00d] transition-colors uppercase tracking-tight">{prod.title}</div>
+              <div className="text-[9px] text-white/40 uppercase tracking-widest mt-1">{prod.genre} • {new Date(prod.releaseDate).getFullYear()}</div>
             </div>
           ))}
        </div>
     </section>
-
-    {/* Popular Shows Section */}
-    <section className="space-y-0 pt-12">
-       <div className="flex items-end justify-between mb-2">
-          <div>
-            <h2 className="plex-heading">Tune In Now: Popular Shows</h2>
-            <p className="plex-sublabel">Featured Library</p>
-          </div>
-          <div className="flex items-center gap-4 mb-8">
-             <ChevronLeft size={20} className="text-white/20 hover:text-white cursor-pointer transition-colors" />
-             <ChevronRight size={20} className="text-white/20 hover:text-white cursor-pointer transition-colors" />
-          </div>
-       </div>
-
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {stats.recentProductions.map((prod, i) => (
-            <div key={`${i}-popular`} className="group cursor-pointer">
-              <div className="aspect-video bg-[#121212] border border-white/5 rounded-sm overflow-hidden relative shadow-2xl">
-                  <img
-                    src={prod.posterUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920'}
-                    alt={prod.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                  />
-              </div>
-              <div className="plex-card-title">{prod.title}</div>
-              <div className="plex-card-info">Featured Premiere</div>
-            </div>
-          ))}
-       </div>
-    </section>
-
-    {/* Schedule & Live Info */}
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
-       <div className="lg:col-span-2 space-y-8">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
-            <h3 className="text-lg font-bold text-white tracking-tight">Live Schedule</h3>
-            <div className="text-[11px] font-medium text-[#e5a00d] animate-pulse">● On Air</div>
-          </div>
-          
-          <div className="space-y-4">
-            {[
-              { time: '10:00 AM', event: 'Main Hall Rehearsal', date: 'Today' },
-              { time: '02:30 PM', event: 'Script Reading', date: 'Today' },
-            ].map((event, i) => (
-              <div key={i} className="flex items-center gap-6 p-4 bg-[#121212] border border-white/5 rounded-sm hover:bg-white/5 transition-all group">
-                 <div className="text-[11px] font-medium text-white/40 group-hover:text-[#e5a00d] transition-colors w-20">{event.time}</div>
-                 <div className="flex-1 text-sm font-medium text-white tracking-tight">{event.event}</div>
-                 <div className="text-[11px] font-medium text-white/20">{event.date}</div>
-              </div>
-            ))}
-          </div>
-       </div>
-
-       <div className="space-y-8">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
-            <h3 className="text-lg font-bold text-white tracking-tight">Status</h3>
-          </div>
-          <div className="p-6 bg-[#121212] border border-white/5 rounded-sm">
-             <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-[11px] font-medium text-white/40">CPU Usage</span>
-                  <span className="text-[11px] font-medium text-green-400">Minimal</span>
-                </div>
-                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-green-500 w-[12%]" />
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[11px] font-medium text-white/40">Sync Speed</span>
-                  <span className="text-[11px] font-bold text-[#e5a00d]">1.2 GB/s</span>
-                </div>
-             </div>
-          </div>
-       </div>
-    </div>
   </div>
 );
 
-const StatCard = ({ label, value, icon: Icon, trend, trendValue, color }) => (
+const StatCard = ({ label, value, icon: Icon, color }) => (
   <div className="bg-[#121212] p-6 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
     <div className="flex justify-between items-start mb-6">
       <div className={`p-3 bg-black/40 rounded-sm ${color || 'text-white/40'} group-hover:text-[#e5a00d] transition-colors`}>
         <Icon size={20} />
       </div>
-      {trend && (
-        <div className={`text-[11px] font-medium ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
-          +{trendValue}%
-        </div>
-      )}
     </div>
-    <div className="plex-sublabel mb-1">{label}</div>
-    <div className="text-3xl font-bold text-white">{value}</div>
+    <div className="text-[10px] text-white/20 uppercase tracking-widest mb-1">{label}</div>
+    <div className="text-2xl font-black text-white tabular-nums tracking-tighter">{value}</div>
   </div>
 );
 
@@ -193,7 +226,7 @@ const Dashboard = () => {
         productionsCount: prodRes.data.length,
         talentsCount: talentRes.data.length,
         usersCount: userRes.data.length,
-        recentProductions: prodRes.data.slice(0, 4)
+        recentProductions: prodRes.data.slice(0, 5)
       });
       setLoading(false);
     } catch (err) {
@@ -204,15 +237,14 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-white/20 animate-pulse text-sm font-bold uppercase tracking-widest">Loading Dashboard...</div>
+      <div className="flex items-center justify-center py-40">
+        <div className="text-white/10 animate-pulse text-[10px] font-bold uppercase tracking-[0.5em]">Initializing Dashboard...</div>
       </div>
     );
   }
 
-  if (user?.role === 'Partner') {
-    return <PartnerDashboard />;
-  }
+  if (user?.role === 'Partner') return <PartnerDashboard />;
+  if (user?.role === 'Actor/Talent') return <ActorDashboard user={user} />;
 
   return <StaffDashboard stats={stats} loading={loading} />;
 };
