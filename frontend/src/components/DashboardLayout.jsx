@@ -131,6 +131,7 @@ const DashboardLayout = ({ children }) => {
           { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
           { to: '/dashboard/buyers', icon: Briefcase, label: 'Partners' },
           { to: '/dashboard/partner-requests', icon: Bell, label: 'Partner Requests' },
+          { to: '/dashboard/attendance', icon: Calendar, label: 'Attendance' },
         ]
       },
       {

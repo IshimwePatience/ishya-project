@@ -1,0 +1,306 @@
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight } from 'lucide-react';
+import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const Attendance = () => {
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeAttendance, setActiveAttendance] = useState(null);
+  const [userRole, setUserRole] = useState('');
+  const [isDetecting, setIsDetecting] = useState(false);
+
+  const fetchLogs = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const meRes = await axios.get('http://localhost:5000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const role = meRes.data.user.role;
+      setUserRole(role);
+
+      const endpoint = (role === 'Admin' || role === 'Staff')
+        ? 'http://localhost:5000/api/attendance/all'
+        : 'http://localhost:5000/api/attendance/my';
+
+      const response = await axios.get(endpoint, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLogs(response.data);
+
+      if (role !== 'Admin' && role !== 'Staff') {
+        const active = response.data.find(log => !log.checkOut);
+        setActiveAttendance(active);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to fetch logs');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLogs();
+  }, []);
+
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+      const data = await res.json();
+      const addr = data.address;
+      
+      // Rwandan levels map to these. Let's include everything that isn't a country/code.
+      const ignore = ['country', 'country_code', 'postcode', 'ISO3166-2-lvl4'];
+      const parts = Object.entries(addr)
+        .filter(([key, val]) => !ignore.includes(key) && val)
+        .map(([_, val]) => val);
+      
+      // Put road first if it exists
+      const road = addr.road || addr.pedestrian;
+      const sortedParts = road ? [road, ...parts.filter(p => p !== road)] : parts;
+      
+      const readable = sortedParts.slice(0, 6).join(', ');
+      return `${readable} [${lat},${lng}]`;
+    } catch (err) {
+      return `Unknown location [${lat},${lng}]`;
+    }
+  };
+
+  const handleCheckIn = async () => {
+    setIsDetecting(true);
+    try {
+      const token = localStorage.getItem('token');
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
+          const combinedLocation = await reverseGeocode(latitude, longitude);
+          
+          await axios.post('http://localhost:5000/api/attendance/check-in', {
+            location: combinedLocation
+          }, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          fetchLogs();
+          setIsDetecting(false);
+        }, async (error) => {
+          alert('Location access denied or timed out. Please enable GPS and try again.');
+          setIsDetecting(false);
+        }, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        });
+      } else {
+        alert('Geolocation not supported.');
+        setIsDetecting(false);
+      }
+    } catch (err) {
+      alert('Check-in failed');
+      setIsDetecting(false);
+    }
+  };
+
+  const handleUpdateLocation = async () => {
+    setIsDetecting(true);
+    try {
+      const token = localStorage.getItem('token');
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
+          const combinedLocation = await reverseGeocode(latitude, longitude);
+          
+          await axios.patch('http://localhost:5000/api/attendance/update-location', {
+            location: combinedLocation
+          }, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          fetchLogs();
+          setIsDetecting(false);
+        }, async (error) => {
+          alert('Location update failed. Please enable GPS.');
+          setIsDetecting(false);
+        }, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        });
+      }
+    } catch (err) {
+      console.error('Update failed', err);
+      setIsDetecting(false);
+    }
+  };
+
+  const handleCheckOut = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(`http://localhost:5000/api/attendance/check-out/${id || activeAttendance?.id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchLogs();
+    } catch (err) {
+      alert('Check-out failed');
+    }
+  };
+
+  const formatLocation = (locStr) => {
+    if (!locStr) return 'Not detected';
+    
+    // Check if it has coordinates in brackets [lat,lng]
+    const coordMatch = locStr.match(/\[(.*?),(.*?)\]/);
+    const address = locStr.replace(/\[.*?\]/, '').trim();
+
+    if (coordMatch) {
+      const [_, lat, lng] = coordMatch;
+      return (
+        <div className="flex flex-col items-start gap-1">
+          <span className="text-white font-medium">{address}</span>
+          <a 
+            href={`https://www.google.com/maps?q=${lat},${lng}`} 
+            target="_blank" 
+            rel="noreferrer"
+            className="flex items-center gap-1.5 text-[10px] text-[#e5a00d] hover:underline font-bold uppercase tracking-tighter"
+          >
+            <MapPin size={10} />
+            View exact location on map
+          </a>
+        </div>
+      );
+    }
+    return <span className="text-white font-medium">{locStr}</span>;
+  };
+
+  const isManagement = userRole === 'Admin' || userRole === 'Staff';
+
+  return (
+    <div className="space-y-8 pb-20">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
+        <div>
+          <h2 className="text-2xl font-bold text-white tracking-tight">
+            {isManagement ? "Attendance registry" : "My Attendance"}
+          </h2>
+          <p className="text-sm text-white/40 mt-1">
+            {isManagement ? "Studio-wide performance tracking" : "Performance logs & call times"}
+          </p>
+        </div>
+
+        {!isManagement && (
+          activeAttendance ? (
+            <button
+              onClick={() => handleCheckOut()}
+              className="flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-sm font-bold transition-all text-sm"
+            >
+              <LogOutIcon size={16} />
+              <span>End session</span>
+            </button>
+          ) : (
+            <button
+              onClick={handleCheckIn}
+              className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm font-bold transition-all text-sm shadow-xl"
+            >
+              <CheckCircle2 size={16} />
+              <span>Start session</span>
+            </button>
+          )
+        )}
+      </div>
+
+      {!isManagement && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+            <div className="relative z-10">
+              <div className="text-xs font-medium text-white/20 mb-4">Active status</div>
+              <div className={`text-2xl font-bold ${activeAttendance ? 'text-green-400' : 'text-white/40'}`}>
+                {activeAttendance ? 'Check-in active' : 'Off duty'}
+              </div>
+            </div>
+            <Clock className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+          </div>
+
+          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+            <div className="relative z-10">
+              <div className="text-xs font-medium text-white/20 mb-4 flex justify-between items-center">
+                <span>Live location</span>
+                {activeAttendance && (
+                  <button 
+                    onClick={handleUpdateLocation}
+                    disabled={isDetecting}
+                    className="text-[10px] text-[#e5a00d] hover:underline flex items-center gap-1"
+                  >
+                    <Clock size={10} /> {isDetecting ? 'Refreshing...' : 'Refresh now'}
+                  </button>
+                )}
+              </div>
+              <div className="text-2xl font-bold text-white">
+                {formatLocation(activeAttendance ? activeAttendance.location : logs[0]?.location)}
+              </div>
+            </div>
+            <MapPin className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+          </div>
+
+          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+            <div className="relative z-10">
+              <div className="text-xs font-medium text-white/20 mb-4">Monthly sessions</div>
+              <div className="text-2xl font-bold text-white">{logs.length}</div>
+            </div>
+            <Calendar className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-6 pt-6">
+        <h3 className="text-sm font-semibold text-white/40 flex items-center gap-2">
+          <ArrowRight size={14} /> {isManagement ? "All logs" : "History"}
+        </h3>
+
+        {loading ? (
+          <div className="space-y-3">
+            {[1, 2, 3].map(i => <div key={i} className="h-16 bg-white/5 animate-pulse rounded-sm" />)}
+          </div>
+        ) : logs.length > 0 ? (
+          <div className="space-y-2">
+            {logs.map((log) => (
+              <div key={log.id} className="flex items-center justify-between p-6 bg-[#121212] border border-white/5 rounded-sm group hover:bg-white/[0.02] transition-all">
+                <div className="flex items-center gap-6">
+                  <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-white/10' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
+                  <div>
+                    <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors">
+                      {isManagement ? `${log.user?.firstName} ${log.user?.lastName}` : new Date(log.checkIn).toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                    <div className="text-[11px] text-white/30 font-medium mt-1 flex items-center gap-2">
+                      {isManagement && `${new Date(log.checkIn).toLocaleDateString()} • `} {formatLocation(log.location)} • {log.event?.title || 'Production call'}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-12 text-right">
+                  <div className="space-y-1">
+                    <div className="text-[10px] font-medium text-white/20 mb-1">In / Out</div>
+                    <div className="text-xs font-semibold text-white/60 tabular-nums">
+                      {new Date(log.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {log.checkOut ? ` — ${new Date(log.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ' — Present'}
+                    </div>
+                  </div>
+                  {isManagement && !log.checkOut && (
+                    <button
+                      onClick={() => handleCheckOut(log.id)}
+                      className="text-[10px] font-bold text-red-500 hover:underline"
+                    >
+                      Force end
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-20 text-center">
+            <p className="text-white/20 text-sm font-medium italic">No attendance records found.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Attendance;

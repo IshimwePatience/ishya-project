@@ -61,6 +61,7 @@ app.use('/api/events', require('./routes/event.routes'));
 app.use('/api/media', require('./routes/media.routes'));
 app.use('/api/upload', require('./routes/upload.routes'));
 app.use('/api/partner-requests', require('./routes/buyerRequest.routes'));
+app.use('/api/attendance', require('./routes/attendance.routes'));
 
 // Database connection and server start
 const PORT = process.env.PORT || 5000;

@@ -20,6 +20,7 @@ import Buyers from './pages/Buyers';
 import Events from './pages/Events';
 import MediaLibrary from './pages/MediaLibrary';
 import Settings from './pages/Settings';
+import Attendance from './pages/Attendance';
 import PartnerRegistration from './pages/PartnerRegistration';
 import PartnerRequests from './pages/PartnerRequests';
 import DashboardLayout from './components/DashboardLayout';
@@ -57,6 +58,7 @@ function App() {
         <Route path="/dashboard/events" element={<DashboardLayout><Events /></DashboardLayout>} />
         <Route path="/dashboard/media" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+        <Route path="/dashboard/attendance" element={<DashboardLayout><Attendance /></DashboardLayout>} />
       </Routes>
     </Router>
   );
