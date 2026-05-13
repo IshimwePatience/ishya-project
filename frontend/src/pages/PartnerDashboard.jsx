@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Play, 
-  Download, 
-  FileText, 
-  Clock, 
-  ChevronRight, 
-  Film, 
+import {
+  Play,
+  Download,
+  FileText,
+  Clock,
+  ChevronRight,
+  Film,
   ShieldCheck,
   Calendar
 } from 'lucide-react';
@@ -30,9 +30,9 @@ const PartnerDashboard = () => {
       const response = await axios.get('http://localhost:5000/api/productions', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       // Simulating filtered library for the partner
-      setMyLibrary(response.data.slice(0, 3)); 
+      setMyLibrary(response.data.slice(0, 3));
       setStats({
         activeLicenses: 3,
         expiringSoon: 1,
@@ -99,30 +99,30 @@ const PartnerDashboard = () => {
               [1, 2].map(i => <div key={i} className="h-32 bg-white/5 animate-pulse rounded-sm" />)
             ) : myLibrary.length > 0 ? (
               myLibrary.map((item) => (
-                <motion.div 
+                <motion.div
                   key={item.id}
                   whileHover={{ x: 4 }}
                   className="bg-[#121212] border border-white/5 rounded-sm p-4 flex items-center justify-between group hover:border-white/10 transition-all"
                 >
                   <div className="flex items-center gap-6">
                     <div className="w-20 h-28 bg-white/5 rounded-sm overflow-hidden flex-shrink-0 relative">
-                       {item.posterUrl ? (
-                         <img src={`http://localhost:5000${item.posterUrl}`} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
-                       ) : (
-                         <div className="w-full h-full flex items-center justify-center">
-                           <Film size={24} className="text-white/10" />
-                         </div>
-                       )}
+                      {item.posterUrl ? (
+                        <img src={`http://localhost:5000${item.posterUrl}`} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Film size={24} className="text-white/10" />
+                        </div>
+                      )}
                     </div>
                     <div>
                       <h4 className="font-bold text-white group-hover:text-[#e5a00d] transition-colors">{item.title}</h4>
                       <p className="text-xs text-white/40 mt-1 uppercase tracking-wider">{item.category?.name || 'Production'}</p>
                       <div className="flex items-center gap-4 mt-4">
                         <div className="flex items-center gap-1 text-[10px] text-green-400 font-bold bg-green-400/10 px-2 py-0.5 rounded-full uppercase">
-                           <ShieldCheck size={10} /> Active License
+                          <ShieldCheck size={10} /> Active License
                         </div>
                         <div className="flex items-center gap-1 text-[10px] text-white/20 font-bold uppercase">
-                           <Calendar size={10} /> Expires: Dec 2026
+                          <Calendar size={10} /> Expires: Dec 2026
                         </div>
                       </div>
                     </div>
@@ -148,30 +148,30 @@ const PartnerDashboard = () => {
 
         {/* Sidebar info */}
         <div className="space-y-8">
-           <div className="bg-[#1a1a1a] border border-white/5 rounded-sm p-6 space-y-6">
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest">Partner Support</h3>
-              <p className="text-xs text-white/40 leading-relaxed">
-                Need a specific file format or technical assistance with your broadcast master? Contact our technical team.
-              </p>
-              <button className="w-full py-3 bg-white/5 border border-white/10 text-white text-xs font-bold rounded-sm hover:bg-white/10 transition-all">
-                Contact Distribution Team
-              </button>
-           </div>
+          <div className="bg-[#1a1a1a] border border-white/5 rounded-sm p-6 space-y-6">
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Partner Support</h3>
+            <p className="text-xs text-white/40 leading-relaxed">
+              Need a specific file format or technical assistance with your broadcast master? Contact our technical team.
+            </p>
+            <button className="w-full py-3 bg-white/5 border border-white/10 text-white text-xs font-bold rounded-sm hover:bg-white/10 transition-all">
+              Contact Distribution Team
+            </button>
+          </div>
 
-           <div className="space-y-4">
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest">Recent Updates</h3>
-              <div className="space-y-3">
-                 {[1,2].map(i => (
-                   <div key={i} className="flex gap-4 p-3 bg-white/[0.02] rounded-sm">
-                      <div className="w-1 h-1 bg-[#e5a00d] rounded-full mt-2" />
-                      <div>
-                        <p className="text-xs text-white/80 leading-relaxed">New trailer assets available for <span className="text-white font-bold">Project Alpha</span></p>
-                        <span className="text-[10px] text-white/20">2 hours ago</span>
-                      </div>
-                   </div>
-                 ))}
-              </div>
-           </div>
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Recent Updates</h3>
+            <div className="space-y-3">
+              {[1, 2].map(i => (
+                <div key={i} className="flex gap-4 p-3 bg-white/[0.02] rounded-sm">
+                  <div className="w-1 h-1 bg-[#e5a00d] rounded-full mt-2" />
+                  <div>
+                    <p className="text-xs text-white/80 leading-relaxed">New trailer assets available for <span className="text-white font-bold">Project Alpha</span></p>
+                    <span className="text-[10px] text-white/20">2 hours ago</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -35,7 +35,12 @@ const VerifyEmail = () => {
         
         setSuccess('Account activated! Logging you in...');
         window.dispatchEvent(new Event('storage'));
-        setTimeout(() => navigate('/dashboard'), 1500);
+        
+        if (user.role === 'Actor/Talent') {
+          setTimeout(() => navigate('/dashboard/scripts'), 1500);
+        } else {
+          setTimeout(() => navigate('/dashboard'), 1500);
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid or expired code');

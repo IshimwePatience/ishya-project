@@ -34,7 +34,7 @@ function App() {
         <Route path="/showcase/:prodId" element={<PublicShowcase />} />
         <Route path="/events" element={<PublicEvents />} />
         <Route path="/watch/:mediaId" element={<Cinema />} />
-        
+
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

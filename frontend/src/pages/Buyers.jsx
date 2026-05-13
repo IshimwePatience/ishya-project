@@ -47,11 +47,11 @@ const Buyers = () => {
             <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
               <button onClick={() => setIsFormOpen(false)} className="hover:text-white transition-colors">Partners</button>
               <span className="text-white/20">/</span>
-              <span>{editingPartner ? "Edit Partner" : "Register Partner"}</span>
+              <span>Edit Partner</span>
             </nav>
             <div>
               <h2 className="text-2xl font-bold text-white tracking-tight">
-                {editingPartner ? "Edit Partner" : "Register Partner"}
+                Edit Partner
               </h2>
               <p className="text-white/40 text-sm mt-1">Manage licensing and distribution relationships</p>
             </div>
@@ -77,12 +77,6 @@ const Buyers = () => {
               <h2 className="text-2xl font-bold text-white tracking-tight">Buyers & Partners</h2>
               <p className="text-sm text-white/40 mt-1">Licensing Network</p>
             </div>
-            <button 
-              onClick={() => setIsFormOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            >
-              <Plus size={16} /> Register Partner
-            </button>
           </div>
 
           {/* Search */}

@@ -20,8 +20,17 @@ const TwoFactorAuth = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/verify-2fa', { email, code });
-      localStorage.setItem('token', response.data.accessToken);
-      navigate('/dashboard');
+      const { user, accessToken, refreshToken } = response.data;
+
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      if (user.role === 'Actor/Talent') {
+        navigate('/dashboard/scripts');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid verification code');
     } finally {

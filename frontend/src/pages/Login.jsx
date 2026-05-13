@@ -61,7 +61,13 @@ const Login = () => {
         navigate('/verify-2fa', { state: { email } });
       } else {
         localStorage.setItem('token', response.data.accessToken);
-        navigate('/dashboard');
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        if (response.data.user.role === 'Actor/Talent') {
+          navigate('/dashboard/scripts');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       if (err.response?.data?.requiresVerification) {
