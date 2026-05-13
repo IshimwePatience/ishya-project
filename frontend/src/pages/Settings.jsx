@@ -21,7 +21,7 @@ const Settings = () => {
           <div key={i} className="flex items-center justify-between py-6 border-b border-white/5 hover:bg-white/[0.02] transition-all group px-4">
             <div className="flex items-center gap-8">
               <div className="text-white/20 group-hover:text-[#e5a00d] transition-colors">
-                 <section.icon size={22} />
+                <section.icon size={22} />
               </div>
               <div className="flex-1">
                 <h3 className="text-[13px] font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">{section.title}</h3>
@@ -37,17 +37,17 @@ const Settings = () => {
 
       <div className="pt-12">
         <div className="flex items-center gap-4 mb-4 px-4">
-           <h3 className="text-[10px] font-black text-red-500 tracking-[0.1em]">Danger zone</h3>
-           <div className="flex-1 h-px bg-red-500/10" />
+          <h3 className="text-[10px] font-black text-red-500 tracking-[0.1em]">Danger zone</h3>
+          <div className="flex-1 h-px bg-red-500/10" />
         </div>
         <div className="flex justify-between items-center px-4 py-6 hover:bg-red-500/[0.02] transition-all group border-b border-red-500/10">
-           <div>
-              <div className="font-bold text-white text-[13px] tracking-tight">Erase Troubleshooting Logs</div>
-              <div className="text-[11px] text-red-500/60 font-medium mt-1">Permanent System Wipe • Irreversible</div>
-           </div>
-           <button className="text-[11px] font-black text-red-500/40 hover:text-red-500 transition-all">
-              Wipe cache
-           </button>
+          <div>
+            <div className="font-bold text-white text-[13px] tracking-tight">Erase Troubleshooting Logs</div>
+            <div className="text-[11px] text-red-500/60 font-medium mt-1">Permanent System Wipe • Irreversible</div>
+          </div>
+          <button className="text-[11px] font-black text-red-500/40 hover:text-red-500 transition-all">
+            Wipe cache
+          </button>
         </div>
       </div>
     </div>

@@ -41,7 +41,7 @@ const SidebarGroup = ({ label, items, location }) => {
     <div className="mb-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white hover:text-white transition-colors group"
+        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white uppercase tracking-widest hover:text-white transition-colors group"
       >
         <span>{label}</span>
         <ChevronDown 
@@ -190,13 +190,13 @@ const DashboardLayout = ({ children }) => {
           <div className="p-8 pb-12">
             <Link to="/dashboard" className="block group">
               <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto opacity-80 group-hover:opacity-100 transition-opacity" />
-              <div className="mt-2 text-[10px] font-bold text-[#e5a00d]">Partner portal</div>
+              <div className="mt-2 text-[10px] font-bold text-[#e5a00d] uppercase tracking-widest">Partner Portal</div>
             </Link>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 no-scrollbar space-y-8">
             {partnerMenu.map((group, idx) => (
               <div key={idx} className="space-y-2">
-                <h3 className="px-4 text-[10px] font-bold text-white/20 mb-4">
+                <h3 className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-widest mb-4">
                   {group.label}
                 </h3>
                 <div className="space-y-1">
