@@ -57,7 +57,7 @@ const CustomDropdown = ({ options, selected, onSelect }) => {
   );
 };
 
-const Register = () => {
+const Register = ({ isInternal = false }) => {
   const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     firstName: searchParams.get('firstName') || '',
@@ -65,7 +65,7 @@ const Register = () => {
     email: searchParams.get('email') || '',
     password: '',
     confirmPassword: '',
-    role: 'Public Visitor',
+    role: isInternal ? 'Production Manager' : 'Public Visitor',
     googleId: searchParams.get('googleId') || ''
   });
   const [loading, setLoading] = useState(false);
@@ -73,14 +73,19 @@ const Register = () => {
   const navigate = useNavigate();
   const isGoogleSignup = !!searchParams.get('googleId');
 
-  const roles = [
+  const allRoles = [
     'Admin',
     'Production Manager',
     'Finance Officer',
     'Writer/Director',
     'Actor/Talent',
+    'Partner',
     'Public Visitor'
   ];
+
+  const roles = isInternal 
+    ? allRoles.filter(r => ['Admin', 'Production Manager', 'Finance Officer', 'Writer/Director', 'Actor/Talent'].includes(r))
+    : allRoles.filter(r => ['Public Visitor', 'Partner'].includes(r));
 
   const handleRegister = async (e) => {
     e.preventDefault();

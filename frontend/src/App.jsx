@@ -37,6 +37,7 @@ function App() {
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register-internal" element={<Register isInternal={true} />} />
         <Route path="/verify-2fa" element={<TwoFactorAuth />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
