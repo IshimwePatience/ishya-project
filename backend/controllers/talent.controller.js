@@ -18,7 +18,7 @@ exports.getTalentById = async (req, res) => {
   try {
     const talent = await Talent.findByPk(req.params.id, {
       include: [
-        { model: Production, as: 'productions' },
+        { model: Movie, as: 'productions' },
         { model: User, as: 'user' }
       ]
     });

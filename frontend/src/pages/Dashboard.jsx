@@ -8,7 +8,8 @@ import {
   CheckCircle2,
   Download,
   ExternalLink,
-  Play
+  Play,
+  Users
 } from 'lucide-react';
 import axios from 'axios';
 import PartnerDashboard from './PartnerDashboard';
@@ -27,13 +28,10 @@ const ActorDashboard = ({ user }) => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
-      // Fetch scripts assigned to this actor
       const scriptsRes = await axios.get('http://localhost:5000/api/scripts', { headers });
       const myScripts = scriptsRes.data.filter(s => 
         s.assignedActors?.some(actor => actor.email === user.email)
       );
-
-      // Fetch events
       const eventsRes = await axios.get('http://localhost:5000/api/events', { headers });
 
       setScripts(myScripts);
@@ -47,20 +45,18 @@ const ActorDashboard = ({ user }) => {
 
   return (
     <div className="space-y-12">
-      {/* Welcome Header */}
       <div className="border-b border-white/5 pb-8">
-        <h2 className="text-3xl font-black text-white italic uppercase tracking-tighter">Welcome back, {user.firstName}</h2>
-        <p className="text-[11px] text-[#e5a00d] font-bold uppercase tracking-[0.3em] mt-2">● On Set Availability: ACTIVE</p>
+        <h2 className="text-3xl font-bold text-white">Welcome back, {user.firstName}</h2>
+        <p className="text-xs text-[#e5a00d] font-semibold mt-2">● Availability: Active</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Left Column: My Scripts */}
         <div className="lg:col-span-2 space-y-8">
            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em] flex items-center gap-2">
-                <FileText size={14} className="text-[#e5a00d]" /> My Assigned Scripts
+              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                <FileText size={14} className="text-[#e5a00d]" /> My assigned scripts
               </h3>
-              <span className="text-[10px] text-white/20 uppercase tracking-widest">{scripts.length} Files</span>
+              <span className="text-xs text-white/20">{scripts.length} files</span>
            </div>
 
            {scripts.length > 0 ? (
@@ -76,11 +72,11 @@ const ActorDashboard = ({ user }) => {
                         </a>
                      </div>
                      <h4 className="text-sm font-bold text-white mb-1">{script.title}</h4>
-                     <p className="text-[10px] text-white/40 uppercase tracking-widest">v{script.version} • {script.production?.title || 'Main Production'}</p>
+                     <p className="text-xs text-white/40">v{script.version} • {script.production?.title || 'Main Production'}</p>
                      
                      <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-[9px] font-bold text-white/20 uppercase tracking-tighter italic">Rehearse by June 12</span>
-                        <button className="text-[10px] font-bold text-[#e5a00d] uppercase tracking-widest hover:underline">Open Web Viewer</button>
+                        <span className="text-[10px] text-white/20">Rehearse by June 12</span>
+                        <button className="text-[11px] font-bold text-[#e5a00d] hover:underline">Open web viewer</button>
                      </div>
                   </div>
                 ))}
@@ -88,50 +84,37 @@ const ActorDashboard = ({ user }) => {
            ) : (
              <div className="py-20 border border-dashed border-white/5 rounded-sm flex flex-col items-center justify-center text-center opacity-40">
                 <FileText size={40} className="mb-4" />
-                <p className="text-[10px] font-bold uppercase tracking-widest leading-relaxed">No scripts assigned yet. <br/> Check back later.</p>
+                <p className="text-xs font-semibold leading-relaxed">No scripts assigned yet. <br/> Check back later.</p>
              </div>
            )}
         </div>
 
-        {/* Right Column: Schedule & Tasks */}
         <div className="space-y-10">
            <section className="space-y-6">
-              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Next Call Time</h3>
-              <div className="bg-[#e5a00d] p-6 rounded-sm text-black">
+              <h3 className="text-sm font-semibold text-white">Next call time</h3>
+              <div className="bg-[#e5a00d] p-6 rounded-sm text-black shadow-lg">
                  <div className="flex items-center gap-2 mb-2">
                     <Clock size={16} />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Immediate Call</span>
+                    <span className="text-[10px] font-bold uppercase">Immediate call</span>
                  </div>
-                 <div className="text-2xl font-black italic tracking-tighter">10:00 AM</div>
-                 <p className="text-[11px] font-bold uppercase mt-1 opacity-80">Main Hall • Costume Fitting</p>
+                 <div className="text-3xl font-bold">10:00 AM</div>
+                 <p className="text-xs font-semibold mt-1 opacity-80">Main Hall • Costume Fitting</p>
               </div>
            </section>
 
            <section className="space-y-6">
-              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Upcoming Events</h3>
+              <h3 className="text-sm font-semibold text-white">Upcoming events</h3>
               <div className="space-y-3">
                  {events.map((event, i) => (
-                    <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4">
+                    <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
                        <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm">
-                          <span className="text-[8px] font-black uppercase">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
-                          <span className="text-sm font-black">{new Date(event.date).getDate()}</span>
+                          <span className="text-[9px] font-bold uppercase">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
+                          <span className="text-sm font-bold">{new Date(event.date).getDate()}</span>
                        </div>
                        <div>
-                          <div className="text-[11px] font-bold text-white tracking-tight">{event.title}</div>
-                          <div className="text-[9px] text-white/20 uppercase tracking-widest">{event.time || 'All Day'}</div>
+                          <div className="text-sm font-semibold text-white">{event.title}</div>
+                          <div className="text-[11px] text-white/20 mt-0.5">{event.time || 'All day'}</div>
                        </div>
-                    </div>
-                 ))}
-              </div>
-           </section>
-
-           <section className="space-y-6">
-              <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">Recent Check-ins</h3>
-              <div className="space-y-2">
-                 {[1, 2].map(i => (
-                    <div key={i} className="flex items-center gap-3">
-                       <CheckCircle2 size={12} className="text-green-500" />
-                       <span className="text-[10px] text-white/40 uppercase tracking-widest">May {22+i} - Call Time Met</span>
                     </div>
                  ))}
               </div>
@@ -144,22 +127,22 @@ const ActorDashboard = ({ user }) => {
 
 const StaffDashboard = ({ stats, loading }) => (
   <div className="space-y-8 pb-20">
-    <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
+    <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-6">
       <div>
-        <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Studio Overview</h2>
-        <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Ishya Production Hub</p>
+        <h2 className="text-2xl font-bold text-white">Studio overview</h2>
+        <p className="text-sm text-white/40 mt-1">Ishya production hub</p>
       </div>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <StatCard label="Total Revenue" value="0 RWF" icon={Film} color="text-green-400" />
+      <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" />
       <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" />
-      <StatCard label="Troupe Members" value={stats.talentsCount} icon={Users} color="text-white" />
-      <StatCard label="System Users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" />
+      <StatCard label="Troupe members" value={stats.talentsCount} icon={Users} color="text-white" />
+      <StatCard label="System users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" />
     </div>
 
-    <section className="space-y-6 pt-8">
-       <h3 className="text-xs font-bold text-white uppercase tracking-[0.2em]">What's On Now</h3>
+    <section className="space-y-6 pt-10">
+       <h3 className="text-sm font-semibold text-white">What's on now</h3>
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {loading ? (
             [1,2,3,4,5].map(i => <div key={i} className="aspect-video bg-white/5 animate-pulse rounded-sm" />)
@@ -175,8 +158,8 @@ const StaffDashboard = ({ stats, loading }) => (
                      <Play size={20} className="text-white fill-white ml-1" />
                   </div>
               </div>
-              <div className="text-xs font-bold text-white mt-3 group-hover:text-[#e5a00d] transition-colors uppercase tracking-tight">{prod.title}</div>
-              <div className="text-[9px] text-white/40 uppercase tracking-widest mt-1">{prod.genre} • {new Date(prod.releaseDate).getFullYear()}</div>
+              <div className="text-sm font-semibold text-white mt-3 group-hover:text-[#e5a00d] transition-colors">{prod.title}</div>
+              <div className="text-[11px] text-white/40 mt-1">{prod.genre} • {new Date(prod.releaseDate).getFullYear()}</div>
             </div>
           ))}
        </div>
@@ -191,8 +174,8 @@ const StatCard = ({ label, value, icon: Icon, color }) => (
         <Icon size={20} />
       </div>
     </div>
-    <div className="text-[10px] text-white/20 uppercase tracking-widest mb-1">{label}</div>
-    <div className="text-2xl font-black text-white tabular-nums tracking-tighter">{value}</div>
+    <div className="text-xs font-semibold text-white/20 mb-1">{label}</div>
+    <div className="text-2xl font-bold text-white tabular-nums tracking-tight">{value}</div>
   </div>
 );
 
@@ -238,7 +221,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-40">
-        <div className="text-white/10 animate-pulse text-[10px] font-bold uppercase tracking-[0.5em]">Initializing Dashboard...</div>
+        <div className="text-white/10 animate-pulse text-xs font-bold">Initializing Dashboard...</div>
       </div>
     );
   }
