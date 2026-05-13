@@ -1,4 +1,5 @@
-const { BuyerRequest, Buyer } = require('../models');
+const { BuyerRequest, Buyer, User, Role } = require('../models');
+const crypto = require('crypto');
 
 exports.createRequest = async (req, res) => {
   try {
@@ -28,8 +29,8 @@ exports.approveRequest = async (req, res) => {
     const request = await BuyerRequest.findByPk(req.params.id);
     if (!request) return res.status(404).json({ message: 'Request not found' });
 
-    // 1. Create the actual Buyer (Partner)
-    await Buyer.create({
+    // 1. Create the actual Buyer (Partner) entry
+    const buyer = await Buyer.create({
       name: request.name,
       type: request.type,
       contactPerson: request.contactPerson,
@@ -38,11 +39,31 @@ exports.approveRequest = async (req, res) => {
       address: request.address
     });
 
-    // 2. Update request status
+    // 2. Find the 'Partner' role
+    const partnerRole = await Role.findOne({ where: { name: 'Partner' } });
+    
+    // 3. Create a User Account for the Partner to log in
+    // Note: We generate a random temporary password or send a reset link
+    const tempPassword = crypto.randomBytes(8).toString('hex');
+    
+    await User.create({
+      firstName: request.contactPerson.split(' ')[0] || 'Partner',
+      lastName: request.contactPerson.split(' ')[1] || 'User',
+      email: request.email,
+      password: tempPassword, // In a real app, you'd send a "Set Password" link
+      roleId: partnerRole ? partnerRole.id : null,
+      isVerified: true, // Approved partners are pre-verified
+      status: 'active'
+    });
+
+    // 4. Update request status
     request.status = 'Approved';
     await request.save();
 
-    res.json({ message: 'Request approved and partner registered successfully' });
+    res.json({ 
+      message: 'Request approved. Partner profile and User account created.',
+      temporaryPassword: tempPassword // Shown to admin to share, or handled via email
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -147,6 +147,12 @@ const Scripts = () => {
                     <div className="text-[11px] text-white/40 font-medium">
                       v{script.version} • {script.fileType}
                     </div>
+                    {script.assignedActors?.length > 0 && (
+                      <div className="flex items-center justify-center gap-1 mt-1">
+                        <Users size={10} className="text-[#e5a00d]" />
+                        <span className="text-[10px] text-white/60 font-bold uppercase tracking-wider">{script.assignedActors.length} Assigned</span>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

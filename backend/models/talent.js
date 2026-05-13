@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Talent extends Model {
     static associate(models) {
       Talent.belongsToMany(models.Production, { through: 'ProductionTalents', foreignKey: 'talentId', otherKey: 'productionId', as: 'productions' });
+      Talent.belongsToMany(models.Script, { through: 'ScriptAssignments', foreignKey: 'talentId', otherKey: 'scriptId', as: 'assignedScripts' });
     }
   }
   Talent.init({

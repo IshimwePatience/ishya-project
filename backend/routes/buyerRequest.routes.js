@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const buyerRequestController = require('../controllers/buyerRequest.controller');
-const { protect, admin } = require('../middleware/auth.middleware');
+const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 
 // Public route for partnership request
 router.post('/request', buyerRequestController.createRequest);
 
 // Protected routes (Admin only)
-router.get('/', protect, admin, buyerRequestController.getRequests);
-router.patch('/:id/approve', protect, admin, buyerRequestController.approveRequest);
-router.patch('/:id/reject', protect, admin, buyerRequestController.rejectRequest);
-router.delete('/:id', protect, admin, buyerRequestController.deleteRequest);
+router.get('/', authMiddleware, adminMiddleware, buyerRequestController.getRequests);
+router.patch('/:id/approve', authMiddleware, adminMiddleware, buyerRequestController.approveRequest);
+router.patch('/:id/reject', authMiddleware, adminMiddleware, buyerRequestController.rejectRequest);
+router.delete('/:id', authMiddleware, adminMiddleware, buyerRequestController.deleteRequest);
 
 module.exports = router;
