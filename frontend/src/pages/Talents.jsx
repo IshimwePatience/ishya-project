@@ -132,17 +132,34 @@ const Talents = () => {
                     setIsFormOpen(true);
                   }}
                 >
-                  <div className="relative">
-                    <div className="w-[84px] h-[84px] rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover:border-[#e5a00d]/50 transition-all duration-300">
+                  <div className="relative group/card">
+                    <div className="w-[84px] h-[84px] rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300">
                       {talent.profilePic ? (
                         <img src={talent.profilePic} alt={talent.firstName} className="w-full h-full object-cover" />
                       ) : (
                         <User 
                           size={40} 
                           strokeWidth={1.5} 
-                          className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
+                          className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
                         />
                       )}
+                    </div>
+                    {/* Top Right Actions */}
+                    <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); setEditingTalent(talent); setIsFormOpen(true); }}
+                         className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white shadow-lg"
+                         title="Edit"
+                       >
+                         <Edit2 size={10} />
+                       </button>
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); handleDelete(talent.id); }}
+                         className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400 shadow-lg"
+                         title="Delete"
+                       >
+                         <Trash2 size={10} />
+                       </button>
                     </div>
                   </div>
                   <div className="space-y-1">

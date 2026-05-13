@@ -132,14 +132,28 @@ const Scripts = () => {
                   className="group flex flex-col items-center gap-4 text-center cursor-pointer transition-all"
                   onClick={() => handleEdit(script)}
                 >
-                  <div className="relative">
+                  <div className="relative group/card">
                     <FileText 
                       size={84} 
                       strokeWidth={1} 
-                      className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
+                      className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
                     />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                       <Edit2 size={20} className="text-white" />
+                    {/* Top Right Actions */}
+                    <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); handleEdit(script); }}
+                         className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white"
+                         title="Edit"
+                       >
+                         <Edit2 size={12} />
+                       </button>
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); handleDelete(script.id); }}
+                         className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400"
+                         title="Delete"
+                       >
+                         <Trash2 size={12} />
+                       </button>
                     </div>
                   </div>
                   <div className="space-y-1">
