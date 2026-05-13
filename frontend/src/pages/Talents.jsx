@@ -9,6 +9,7 @@ const Talents = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTalent, setEditingTalent] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -53,17 +54,26 @@ const Talents = () => {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center mb-10 pb-6 border-b border-white/5">
             <div>
-              <h2 className="text-2xl font-semibold text-white">Register new talent</h2>
-              <p className="text-sm text-white/40 mt-1">Add a new performer or crew member.</p>
+              <h2 className="text-2xl font-semibold text-white">
+                {editingTalent ? `Edit ${editingTalent.firstName} ${editingTalent.lastName}` : "Register new talent"}
+              </h2>
+              <p className="text-sm text-white/40 mt-1">
+                {editingTalent ? "Update performer details or specialties." : "Add a new performer or crew member."}
+              </p>
             </div>
           </div>
 
           <TalentForm
+            initialData={editingTalent}
             onSuccess={() => {
               setIsFormOpen(false);
+              setEditingTalent(null);
               fetchTalents();
             }}
-            onCancel={() => setIsFormOpen(false)}
+            onCancel={() => {
+              setIsFormOpen(false);
+              setEditingTalent(null);
+            }}
           />
         </div>
       ) : (
@@ -117,14 +127,23 @@ const Talents = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="group flex flex-col items-center gap-4 text-center cursor-pointer transition-all"
-                  onClick={() => setIsFormOpen(true)}
+                  onClick={() => {
+                    setEditingTalent(talent);
+                    setIsFormOpen(true);
+                  }}
                 >
                   <div className="relative">
-                    <User 
-                      size={84} 
-                      strokeWidth={1.5} 
-                      className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
-                    />
+                    <div className="w-[84px] h-[84px] rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover:border-[#e5a00d]/50 transition-all duration-300">
+                      {talent.profilePic ? (
+                        <img src={talent.profilePic} alt={talent.firstName} className="w-full h-full object-cover" />
+                      ) : (
+                        <User 
+                          size={40} 
+                          strokeWidth={1.5} 
+                          className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
+                        />
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-1">
                     <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{talent.firstName} {talent.lastName}</div>
