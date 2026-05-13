@@ -79,7 +79,7 @@ const Register = ({ isInternal = false }) => {
     'Public Visitor'
   ];
 
-  const roles = isInternal 
+  const roles = isInternal
     ? allRoles.filter(r => r === 'Admin')
     : allRoles.filter(r => ['Public Visitor', 'Partner'].includes(r));
 

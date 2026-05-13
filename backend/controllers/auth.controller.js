@@ -10,20 +10,20 @@ const generateTokens = (user) => {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
-  
+
   const refreshToken = jwt.sign(
     { id: user.id },
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
   );
-  
+
   return { accessToken, refreshToken };
 };
 
 exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
-    
+
     // Check main User table
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -69,7 +69,7 @@ exports.register = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     const { email, code } = req.body;
-    
+
     // Check PendingUser first
     const pending = await PendingUser.findOne({
       where: {
@@ -97,7 +97,7 @@ exports.verifyEmail = async (req, res) => {
       user.emailVerifyCode = null;
       user.emailVerifyExpires = null;
       await user.save();
-      
+
       const fullUser = await User.findByPk(user.id, {
         include: [{ model: Role, as: 'role' }]
       });
@@ -125,7 +125,7 @@ exports.verifyEmail = async (req, res) => {
 
     const tokens = generateTokens(fullUser);
 
-    res.json({ 
+    res.json({
       message: 'Email verified successfully. Account is now active.',
       user: {
         id: fullUser.id,
@@ -144,7 +144,7 @@ exports.verifyEmail = async (req, res) => {
 exports.resendVerify = async (req, res) => {
   try {
     const { email } = req.body;
-    
+
     // Check main User table first
     const user = await User.findOne({ where: { email } });
     if (user && user.isVerified) {
@@ -193,7 +193,7 @@ exports.resendVerify = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     const user = await User.findOne({
       where: { email },
       include: [{ model: Role, as: 'role' }]
@@ -224,10 +224,10 @@ exports.login = async (req, res) => {
         `<h1>Security Verification</h1><p>Your verification code is: <strong>${otp}</strong></p><p>Valid for 10 minutes.</p>`
       );
 
-      return res.json({ 
-        requires2FA: true, 
+      return res.json({
+        requires2FA: true,
         email: user.email,
-        message: 'Verification code sent to email' 
+        message: 'Verification code sent to email'
       });
     }
 
@@ -251,7 +251,7 @@ exports.verify2FA = async (req, res) => {
   try {
     const { email, code } = req.body;
     const user = await User.findOne({
-      where: { 
+      where: {
         email,
         twoFactorCode: code,
         twoFactorExpires: { [Op.gt]: new Date() }
