@@ -7,6 +7,7 @@ router.use(authMiddleware);
 router.use(adminMiddleware);
 
 router.get('/', userController.getAllUsers);
+router.get('/roles', userController.getRoles);
 router.get('/:id', userController.getUserById);
 router.post('/', userController.createUser);
 router.put('/:id', userController.updateUser);

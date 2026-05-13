@@ -55,3 +55,12 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getRoles = async (req, res) => {
+  try {
+    const roles = await Role.findAll();
+    res.json(roles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
