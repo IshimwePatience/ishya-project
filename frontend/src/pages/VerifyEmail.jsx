@@ -20,9 +20,20 @@ const VerifyEmail = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/verify-email', { email, code });
-      setSuccess('Email verified! Redirecting to login...');
-      setTimeout(() => navigate('/login'), 2000);
+      const response = await axios.post('http://localhost:5000/api/auth/verify-email', { email, code });
+      const { user, accessToken, refreshToken } = response.data;
+
+      // Auto-login: Save data to localStorage
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      setSuccess('Email verified! Logging you in...');
+      
+      // Notify other components if needed (custom event)
+      window.dispatchEvent(new Event('storage'));
+      
+      setTimeout(() => navigate('/dashboard'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid or expired code');
     } finally {

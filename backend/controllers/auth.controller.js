@@ -84,7 +84,24 @@ exports.verifyEmail = async (req, res) => {
     user.emailVerifyExpires = null;
     await user.save();
 
-    res.json({ message: 'Email verified successfully. You can now log in.' });
+    // Fetch user with role for the response
+    const fullUser = await User.findByPk(user.id, {
+      include: [{ model: Role, as: 'role' }]
+    });
+
+    const tokens = generateTokens(fullUser);
+
+    res.json({ 
+      message: 'Email verified successfully.',
+      user: {
+        id: fullUser.id,
+        firstName: fullUser.firstName,
+        lastName: fullUser.lastName,
+        email: fullUser.email,
+        role: fullUser.role?.name
+      },
+      ...tokens
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
