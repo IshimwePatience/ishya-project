@@ -112,22 +112,22 @@ const Sales = () => {
                 <div className="text-[11px] font-medium text-white/40">Live Ledger</div>
              </div>
 
-             <div className="space-y-3">
+             <div className="border-t border-white/5">
                 {loading ? (
-                  [1,2,3,4].map(i => <div key={i} className="h-20 bg-white/5 animate-pulse rounded-sm" />)
+                  [1,2,3,4].map(i => <div key={i} className="h-12 border-b border-white/5 animate-pulse" />)
                 ) : sales.length > 0 ? (
                   sales.map((sale) => (
-                    <div key={sale.id} onClick={() => handleEdit(sale)} className="group flex items-center justify-between p-4 bg-[#121212] border border-white/5 rounded-sm hover:bg-white/5 transition-all cursor-pointer">
+                    <div key={sale.id} className="group flex items-center justify-between py-4 border-b border-white/5 transition-all">
                       <div className="flex items-center gap-6">
-                        <div className="p-3 bg-black/40 rounded-sm text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/5">
-                          <Receipt size={20} />
+                        <div className="w-10 h-10 rounded-sm flex items-center justify-center text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/10">
+                          <Receipt size={16} />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">{sale.saleType} • {sale.production?.title || 'Unknown'}</div>
+                          <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{sale.saleType} • {sale.production?.title || 'Unknown'}</div>
                           <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
                             <span>{sale.buyer?.name || 'Partner'}</span>
                             <span className="w-1 h-1 bg-white/10 rounded-full" />
-                            <span className="italic">EXP: {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
+                            <span>Expires {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
                           </div>
                         </div>
                       </div>
@@ -136,15 +136,19 @@ const Sales = () => {
                           <div className="text-sm font-bold text-white tracking-tight">{sale.amount?.toLocaleString()} RWF</div>
                           <div className={`text-[11px] font-medium ${sale.paymentStatus === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{sale.paymentStatus}</div>
                         </div>
-                        <div className="w-px h-8 bg-white/5" />
-                        <button className="p-2 text-white/10 hover:text-white transition-colors">
-                          <ExternalLink size={18} />
-                        </button>
+                        <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                          <button onClick={() => handleEdit(sale)} className="text-white/20 hover:text-white transition-all" title="Edit">
+                            <Edit2 size={14} />
+                          </button>
+                          <button className="text-white/20 hover:text-red-400 transition-all" title="Delete">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="py-40 text-center text-white/10 font-medium italic">Ledger Empty</div>
+                  <div className="py-20 text-center text-white/10 font-medium italic border-b border-white/5">Ledger empty</div>
                 )}
              </div>
           </section>

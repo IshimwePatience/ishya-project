@@ -100,24 +100,24 @@ const Expenses = () => {
                 <div className="text-[11px] font-medium text-white/40">Live Ledger</div>
              </div>
 
-             <div className="space-y-3">
+             <div className="border-t border-white/5">
                 {loading ? (
-                  [1,2,3,4].map(i => <div key={i} className="h-20 bg-white/5 animate-pulse rounded-sm" />)
+                  [1,2,3,4].map(i => <div key={i} className="h-12 border-b border-white/5 animate-pulse" />)
                 ) : expenses.length > 0 ? (
                   expenses.map((expense) => (
-                    <div key={expense.id} className="group flex items-center justify-between p-4 bg-[#121212] border border-white/5 rounded-sm hover:bg-white/5 transition-all">
+                    <div key={expense.id} className="group flex items-center justify-between py-4 border-b border-white/5 transition-all">
                       <div className="flex items-center gap-6">
-                        <div className="p-3 bg-black/40 rounded-sm text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/5">
-                          <DollarSign size={20} />
+                        <div className="w-10 h-10 rounded-sm flex items-center justify-center text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/10">
+                          <DollarSign size={16} />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">
+                          <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">
                             {expense.category} • {expense.production?.title || 'General'}
                           </div>
                           <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
                             <span>{new Date(expense.date).toLocaleDateString()}</span>
                             <span className="w-1 h-1 bg-white/10 rounded-full" />
-                            <span className="italic">{expense.description || 'No description'}</span>
+                            <span>{expense.description || 'No description'}</span>
                           </div>
                         </div>
                       </div>
@@ -126,15 +126,19 @@ const Expenses = () => {
                           <div className="text-sm font-bold text-white tracking-tight">{expense.amount?.toLocaleString()} RWF</div>
                           <div className="text-[11px] font-medium text-white/20"> {expense.status || 'Paid'}</div>
                         </div>
-                        <div className="w-px h-8 bg-white/5" />
-                        <button className="p-2 text-white/10 hover:text-white transition-colors">
-                          <ExternalLink size={18} />
-                        </button>
+                        <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                          <button className="text-white/20 hover:text-white transition-all" title="Edit">
+                            <Edit2 size={14} />
+                          </button>
+                          <button className="text-white/20 hover:text-red-400 transition-all" title="Delete">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="py-40 text-center text-white/10 font-medium italic">No expenses recorded</div>
+                  <div className="py-20 text-center text-white/10 font-medium italic border-b border-white/5">No expenses recorded</div>
                 )}
              </div>
           </section>
