@@ -24,16 +24,43 @@ import logoImg from '../assets/images/12.png';
 const SidebarLink = ({ to, icon: Icon, label, active }) => (
   <Link
     to={to}
-    className={`flex items-center gap-4 px-6 py-2.5 transition-all duration-200 relative group ${active
-      ? 'text-[#e5a00d]'
+    className={`flex items-center gap-3 px-8 py-2 transition-all duration-200 relative group ${active
+      ? 'text-white'
       : 'text-white/60 hover:text-white'
       }`}
   >
-    {active && <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#e5a00d]" />}
-    <Icon size={20} className={active ? 'text-[#e5a00d]' : 'group-hover:text-white transition-colors'} />
-    <span className="font-normal text-sm">{label}</span>
+    <Icon size={18} className={active ? 'text-[#e5a00d]' : 'group-hover:text-white transition-colors'} />
+    <span className={`text-sm ${active ? 'font-medium' : 'font-normal'}`}>{label}</span>
   </Link>
 );
+
+const SidebarGroup = ({ label, items, location }) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="mb-2">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white uppercase tracking-widest hover:text-white transition-colors group"
+      >
+        <span>{label}</span>
+        <ChevronDown 
+          size={12} 
+          className={`transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
+        />
+      </button>
+      <div className={`space-y-0.5 transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        {items.map((item) => (
+          <SidebarLink
+            key={item.to}
+            {...item}
+            active={location.pathname === item.to}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const DashboardLayout = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -80,21 +107,47 @@ const DashboardLayout = ({ children }) => {
     );
   }
 
-  const menuItems = [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
-    { to: '/dashboard/productions', icon: Film, label: 'Productions' },
-    { to: '/dashboard/media', icon: Library, label: 'Your Media' },
-    { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
-    { to: '/dashboard/scripts', icon: FileText, label: 'Script Vault' },
-    { to: '/dashboard/sales', icon: Wallet, label: 'Revenue' },
-    { to: '/dashboard/expenses', icon: Receipt, label: 'Expenses' },
-    { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
-    { to: '/dashboard/events', icon: Calendar, label: 'Events' },
-    { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
+  const menuGroups = [
+    {
+      label: 'Main',
+      items: [
+        { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
+      ]
+    },
+    {
+      label: 'Production',
+      items: [
+        { to: '/dashboard/productions', icon: Film, label: 'Productions' },
+        { to: '/dashboard/media', icon: Library, label: 'Your Media' },
+        { to: '/dashboard/scripts', icon: FileText, label: 'Script Vault' },
+      ]
+    },
+    {
+      label: 'People & Network',
+      items: [
+        { to: '/dashboard/talents', icon: Users, label: 'Talent Roster' },
+        { to: '/dashboard/buyers', icon: Users, label: 'Partners' },
+      ]
+    },
+    {
+      label: 'Financials',
+      items: [
+        { to: '/dashboard/sales', icon: Wallet, label: 'Revenue' },
+        { to: '/dashboard/expenses', icon: Receipt, label: 'Expenses' },
+      ]
+    },
+    {
+      label: 'Management',
+      items: [
+        { to: '/dashboard/events', icon: Calendar, label: 'Events' },
+        { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
+      ]
+    }
   ];
 
   if (user?.role === 'Admin') {
-    menuItems.push({ to: '/dashboard/users', icon: ShieldCheck, label: 'Users' });
+    menuGroups.find(g => g.label === 'Management').items.push({ to: '/dashboard/users', icon: ShieldCheck, label: 'Users' });
+    menuGroups.find(g => g.label === 'People & Network').items.push({ to: '/dashboard/partner-requests', icon: Bell, label: 'Partner Requests' });
   }
 
   return (
@@ -148,13 +201,13 @@ const DashboardLayout = ({ children }) => {
 
       <div className="flex flex-1 pt-20">
         {/* Sidebar */}
-        <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30">
-          <div className="flex-1 space-y-1">
-            {menuItems.map((item) => (
-              <SidebarLink
-                key={item.to}
-                {...item}
-                active={location.pathname === item.to}
+        <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30 border-r border-white/5">
+          <div className="flex-1 overflow-y-auto no-scrollbar py-2">
+            {menuGroups.map((group) => (
+              <SidebarGroup
+                key={group.label}
+                {...group}
+                location={location}
               />
             ))}
           </div>
@@ -162,7 +215,7 @@ const DashboardLayout = ({ children }) => {
           <div className="p-4 border-t border-white/5">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-6 py-2.5 text-white/40 hover:text-white hover:bg-white/5 transition-all group"
+              className="w-full flex items-center gap-3 px-6 py-2.5 text-white/40 hover:text-white hover:bg-white/5 transition-all group rounded-sm"
             >
               <LogOut size={18} />
               <span className="font-medium text-sm">Sign Out</span>

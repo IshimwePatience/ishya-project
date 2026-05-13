@@ -11,6 +11,8 @@
   --color-surface: #121212; 
   --color-text: #ffffff;
   --color-text-muted: rgba(255, 255, 255, 0.4);
+  --color-brown: #121212;
+  --color-brown-light: #222222;
 }
 
 @utility plex-heading {
@@ -107,4 +109,15 @@ html {
 
 .animate-pulse-slow {
   animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

@@ -20,6 +20,8 @@ import Buyers from './pages/Buyers';
 import Events from './pages/Events';
 import MediaLibrary from './pages/MediaLibrary';
 import Settings from './pages/Settings';
+import PartnerRegistration from './pages/PartnerRegistration';
+import PartnerRequests from './pages/PartnerRequests';
 import DashboardLayout from './components/DashboardLayout';
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/partner-join" element={<PartnerRegistration />} />
 
         {/* Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
@@ -49,6 +52,7 @@ function App() {
         <Route path="/dashboard/sales" element={<DashboardLayout><Sales /></DashboardLayout>} />
         <Route path="/dashboard/expenses" element={<DashboardLayout><Expenses /></DashboardLayout>} />
         <Route path="/dashboard/buyers" element={<DashboardLayout><Buyers /></DashboardLayout>} />
+        <Route path="/dashboard/partner-requests" element={<DashboardLayout><PartnerRequests /></DashboardLayout>} />
         <Route path="/dashboard/events" element={<DashboardLayout><Events /></DashboardLayout>} />
         <Route path="/dashboard/media" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />

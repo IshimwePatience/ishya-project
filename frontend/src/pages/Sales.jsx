@@ -2,109 +2,154 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, Search, Plus, ListFilter, TrendingUp, CreditCard, Receipt, ExternalLink } from 'lucide-react';
 import axios from 'axios';
+import SaleForm from '../components/SaleForm';
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
   const [summary, setSummary] = useState({ totalRevenue: 0 });
   const [loading, setLoading] = useState(true);
 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingSale, setEditingSale] = useState(null);
+
+  const fetchSalesData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      const [salesRes, summaryRes] = await Promise.all([
+        axios.get('http://localhost:5000/api/sales', { headers }),
+        axios.get('http://localhost:5000/api/sales/summary', { headers })
+      ]);
+      setSales(salesRes.data);
+      setSummary(summaryRes.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSalesData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const headers = { Authorization: `Bearer ${token}` };
-        const [salesRes, summaryRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/sales', { headers }),
-          axios.get('http://localhost:5000/api/sales/summary', { headers })
-        ]);
-        setSales(salesRes.data);
-        setSummary(summaryRes.data);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setLoading(false);
-      }
-    };
     fetchSalesData();
   }, []);
 
+  const handleEdit = (sale) => {
+    setEditingSale(sale);
+    setIsFormOpen(true);
+  };
+
   return (
     <div className="space-y-6">
-      {/* Action Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Sales & Revenue</h2>
-          <p className="text-white/40 text-sm mt-1">Financial Tracking</p>
-        </div>
-        <button className="btn-primary">
-          <Plus size={16} /> Log New Sale
-        </button>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
-          <div className="text-[11px] font-medium text-white/40 mb-4">Total Gross Revenue</div>
-          <div className="text-3xl font-bold text-white tracking-tight">{summary.totalRevenue?.toLocaleString()} RWF</div>
-          <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-green-400">
-             <TrendingUp size={12} /> +12.5% vs Last Quarter
+      {isFormOpen ? (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
+            <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
+              <button onClick={() => setIsFormOpen(false)} className="hover:text-white transition-colors">Revenue</button>
+              <span className="text-white/20">/</span>
+              <span>{editingSale ? "Edit Agreement" : "Log Agreement"}</span>
+            </nav>
+            <div>
+              <h2 className="text-2xl font-bold text-white tracking-tight">
+                {editingSale ? "Edit Sale Record" : "New Sale Agreement"}
+              </h2>
+              <p className="text-white/40 text-sm mt-1">Record and manage licensing income</p>
+            </div>
           </div>
+          <SaleForm 
+            initialData={editingSale}
+            onSuccess={() => {
+              setIsFormOpen(false);
+              setEditingSale(null);
+              fetchSalesData();
+            }}
+            onCancel={() => {
+              setIsFormOpen(false);
+              setEditingSale(null);
+            }}
+          />
         </div>
-        <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
-          <div className="text-[11px] font-medium text-white/40 mb-4">Active Licenses</div>
-          <div className="text-3xl font-bold text-white tracking-tight">{sales.length}</div>
-          <div className="mt-4 text-[11px] font-medium text-white/20">Across {new Set(sales.map(s => s.productionId)).size} Productions</div>
-        </div>
-        <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
-          <div className="text-[11px] font-medium text-white/40 mb-4">Pending Payouts</div>
-          <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">12,500 RWF</div>
-          <div className="mt-4 text-[11px] font-medium text-white/20">Est. Processing: 2 Days</div>
-        </div>
-      </div>
+      ) : (
+        <>
+          {/* Action Header */}
+          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-white tracking-tight">Sales & Revenue</h2>
+              <p className="text-white/40 text-sm mt-1">Financial Tracking</p>
+            </div>
+            <button 
+              onClick={() => setIsFormOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+            >
+              <Plus size={16} /> Log New Sale
+            </button>
+          </div>
 
-      {/* Transactions List */}
-      <section className="space-y-6">
-         <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white tracking-tight">Recent Transactions</h3>
-            <div className="text-[11px] font-medium text-white/40">Live Ledger</div>
-         </div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
+              <div className="text-[11px] font-medium text-white/40 mb-4">Total Gross Revenue</div>
+              <div className="text-3xl font-bold text-white tracking-tight">{summary.totalRevenue?.toLocaleString()} RWF</div>
+              <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-green-400">
+                 <TrendingUp size={12} /> +12.5% vs Last Quarter
+              </div>
+            </div>
+            <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
+              <div className="text-[11px] font-medium text-white/40 mb-4">Active Licenses</div>
+              <div className="text-3xl font-bold text-white tracking-tight">{sales.length}</div>
+              <div className="mt-4 text-[11px] font-medium text-white/20">Across {new Set(sales.map(s => s.productionId)).size} Productions</div>
+            </div>
+            <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
+              <div className="text-[11px] font-medium text-white/40 mb-4">Top Partner</div>
+              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">RBA</div>
+              <div className="mt-4 text-[11px] font-medium text-white/20">Majority of active licenses</div>
+            </div>
+          </div>
 
-         <div className="space-y-3">
-            {loading ? (
-              [1,2,3,4].map(i => <div key={i} className="h-20 bg-white/5 animate-pulse rounded-sm" />)
-            ) : sales.length > 0 ? (
-              sales.map((sale) => (
-                <div key={sale.id} className="group flex items-center justify-between p-4 bg-[#121212] border border-white/5 rounded-sm hover:bg-white/5 transition-all cursor-pointer">
-                  <div className="flex items-center gap-6">
-                    <div className="p-3 bg-black/40 rounded-sm text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/5">
-                      <Receipt size={20} />
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">License Agreement • {sale.production?.title || 'Unknown Production'}</div>
-                      <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
-                        <span>{sale.buyer?.name || 'Private Client'}</span>
-                        <span className="w-1 h-1 bg-white/10 rounded-full" />
-                        <span className="italic">REF: ISH-{sale.id}</span>
+          {/* Transactions List */}
+          <section className="space-y-6">
+             <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white tracking-tight">Recent Transactions</h3>
+                <div className="text-[11px] font-medium text-white/40">Live Ledger</div>
+             </div>
+
+             <div className="space-y-3">
+                {loading ? (
+                  [1,2,3,4].map(i => <div key={i} className="h-20 bg-white/5 animate-pulse rounded-sm" />)
+                ) : sales.length > 0 ? (
+                  sales.map((sale) => (
+                    <div key={sale.id} onClick={() => handleEdit(sale)} className="group flex items-center justify-between p-4 bg-[#121212] border border-white/5 rounded-sm hover:bg-white/5 transition-all cursor-pointer">
+                      <div className="flex items-center gap-6">
+                        <div className="p-3 bg-black/40 rounded-sm text-white/20 group-hover:text-[#e5a00d] transition-colors border border-white/5">
+                          <Receipt size={20} />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">{sale.saleType} • {sale.production?.title || 'Unknown'}</div>
+                          <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
+                            <span>{sale.buyer?.name || 'Partner'}</span>
+                            <span className="w-1 h-1 bg-white/10 rounded-full" />
+                            <span className="italic">EXP: {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-8">
+                        <div className="text-right">
+                          <div className="text-sm font-bold text-white tracking-tight">{sale.amount?.toLocaleString()} RWF</div>
+                          <div className={`text-[11px] font-medium ${sale.paymentStatus === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{sale.paymentStatus}</div>
+                        </div>
+                        <div className="w-px h-8 bg-white/5" />
+                        <button className="p-2 text-white/10 hover:text-white transition-colors">
+                          <ExternalLink size={18} />
+                        </button>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-8">
-                    <div className="text-right">
-                      <div className="text-sm font-bold text-white tracking-tight">{sale.amount?.toLocaleString()} RWF</div>
-                      <div className="text-[11px] font-medium text-green-400">Completed</div>
-                    </div>
-                    <div className="w-px h-8 bg-white/5" />
-                    <button className="p-2 text-white/10 hover:text-white transition-colors">
-                      <ExternalLink size={18} />
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="py-40 text-center text-white/10 font-medium italic">Ledger Empty</div>
-            )}
-         </div>
-      </section>
+                  ))
+                ) : (
+                  <div className="py-40 text-center text-white/10 font-medium italic">Ledger Empty</div>
+                )}
+             </div>
+          </section>
+        </>
+      )}
     </div>
   );
 };

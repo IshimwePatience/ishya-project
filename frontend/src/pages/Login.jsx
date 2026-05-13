@@ -133,6 +133,11 @@ const Login = () => {
                   Don’t you have an account? <Link to="/register" className="text-primary font-bold">Sign up</Link>
                 </div>
 
+                <div className="pt-2 text-sm text-gray-400">
+                  Are you a TV channel or distributor? <br />
+                  <Link to="/partner-join" className="text-white hover:text-primary font-bold underline underline-offset-4 decoration-gray-700">Partner with us</Link>
+                </div>
+
                 <div className="pt-8">
                   <a href="#" className="text-primary text-sm font-bold block mb-6">Cookies settings</a>
                 </div>
