@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users } from 'lucide-react';
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
 
@@ -59,7 +59,7 @@ const Scripts = () => {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center mb-10 pb-6 border-b border-white/5">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-bold text-white">
                 {editingScript ? "Edit script" : "New script"}
               </h2>
               <p className="text-sm text-white/40 mt-1">Manage script versions and intellectual property.</p>
@@ -88,7 +88,7 @@ const Scripts = () => {
               <p className="text-sm text-white/40 mt-1">Ishya script vault</p>
             </div>
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
               onClick={() => setIsFormOpen(true)}
             >
               <Plus size={16} /> Add script
@@ -107,8 +107,8 @@ const Scripts = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
               <input
                 type="text"
-                placeholder="Search..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
+                placeholder="Search scripts..."
+                className="w-full bg-[#1c1c1c] border border-white/5 rounded-sm pl-12 pr-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none transition-all focus:border-white/10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -118,7 +118,7 @@ const Scripts = () => {
           {/* Scripts Grid */}
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
-              {[1, 2, 3, 4].map(i => (
+              {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-sm" />
               ))}
             </div>
@@ -135,7 +135,7 @@ const Scripts = () => {
                   <div className="relative">
                     <FileText 
                       size={84} 
-                      strokeWidth={1.5} 
+                      strokeWidth={1} 
                       className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -148,9 +148,9 @@ const Scripts = () => {
                       v{script.version} • {script.fileType}
                     </div>
                     {script.assignedActors?.length > 0 && (
-                      <div className="flex items-center justify-center gap-1 mt-1">
+                      <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/[0.03] px-2 py-0.5 rounded-sm border border-white/5">
                         <Users size={10} className="text-[#e5a00d]" />
-                        <span className="text-[10px] text-white/60 font-bold uppercase tracking-wider">{script.assignedActors.length} Assigned</span>
+                        <span className="text-[10px] text-white/50 font-bold">{script.assignedActors.length} assigned</span>
                       </div>
                     )}
                   </div>

@@ -194,9 +194,9 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="submit"
           disabled={loading || !formData.productionId || !formData.buyerId}
-          className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {loading ? 'Processing...' : (initialData ? 'Update Record' : 'Log Sale Agreement')}
+          {loading ? 'Processing...' : (initialData ? 'Update record' : 'Log sale agreement')}
         </button>
         <button 
           type="button"

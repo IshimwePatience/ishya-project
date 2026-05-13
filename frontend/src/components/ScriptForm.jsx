@@ -267,15 +267,14 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="submit"
           disabled={loading || uploading}
-          className="px-10 py-4 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-bold flex items-center justify-center gap-3 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed uppercase tracking-widest text-[11px]"
+          className="px-10 py-4 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-bold flex items-center justify-center gap-3 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {loading ? 'Processing...' : (initialData ? 'Update script' : 'Secure and Store Script')}
-          {!loading && <Save size={16} />}
+          {loading ? 'Processing...' : (initialData ? 'Update script' : 'Upload script')}
         </button>
         <button 
           type="button"
           onClick={onCancel}
-          className="px-8 py-4 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-[11px] font-bold text-white/40 hover:text-white uppercase tracking-widest"
+          className="px-8 py-4 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all font-bold text-white/40 hover:text-white"
         >
           Cancel
         </button>
