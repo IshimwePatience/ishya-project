@@ -125,18 +125,16 @@ const PublicNavbar = () => {
       />
 
       <nav
-        className={`fixed top-0 left-0 right-0 z-[150] h-20 md:h-24 px-6 md:px-20 flex items-center justify-between transition-all duration-700 ${
-          isVisible 
-          ? "bg-black/90 backdrop-blur-xl border-b border-white/5" 
-          : "bg-transparent border-b border-transparent"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-[150] h-20 md:h-24 px-6 md:px-20 flex items-center justify-between transition-all duration-700 ${isVisible
+            ? "bg-black/90 backdrop-blur-xl border-b border-white/5"
+            : "bg-transparent border-b border-transparent"
+          }`}
       >
         <div className="flex items-center gap-10">
           <Link to="/" className="text-lg md:text-xl font-black uppercase tracking-tighter italic cursor-pointer">Ishya <span className="text-white/20">Studios</span></Link>
           <div className="hidden lg:flex items-center gap-8">
             <Link to="/" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Catalog</Link>
             <Link to="/events" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/events' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Events</Link>
-            <a href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">About</a>
           </div>
         </div>
 
