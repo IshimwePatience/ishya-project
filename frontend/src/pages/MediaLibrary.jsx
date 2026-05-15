@@ -210,8 +210,8 @@ const MediaLibrary = () => {
 
             <div className="w-full text-left space-y-8 pt-10 border-t border-white/5">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h3 className="text-xl font-bold text-white tracking-tight">Media Assets</h3>
-                <span className="text-[11px] text-white/40 font-bold uppercase tracking-widest">{content.length} Items</span>
+                <h3 className="text-xl font-medium text-white">Media Assets</h3>
+                <span className="text-xs text-white/40 font-medium">{content.length} Items</span>
               </div>
 
               <div className="grid gap-3">
@@ -221,10 +221,10 @@ const MediaLibrary = () => {
                     className="flex items-center justify-between p-5 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
                   >
                     <div className="flex items-center gap-6">
-                      <span className="text-white/10 font-black text-xl">{String(idx + 1).padStart(2, '0')}</span>
+                      <span className="text-white/10 font-medium text-xl">{String(idx + 1).padStart(2, '0')}</span>
                       <div>
-                        <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
-                        <div className="text-[10px] text-white/40 mt-1 uppercase tracking-[0.2em] font-black">
+                        <div className="text-sm font-medium text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
+                        <div className="text-[11px] text-white/40 mt-1 font-medium">
                           {item.fileType} • {item.isPublic ? 'Public' : 'Protected'}
                         </div>
                       </div>
@@ -260,7 +260,7 @@ const MediaLibrary = () => {
                   Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
                 </p>
                 <button
-                  className="px-12 py-5 bg-[#e5a00d] text-black font-black rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto uppercase text-xs tracking-widest"
+                  className="px-12 py-5 bg-[#e5a00d] text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto text-sm"
                   onClick={() => alert('License request sent to Ishya Team!')}
                 >
                   <Briefcase size={18} /> Request License
