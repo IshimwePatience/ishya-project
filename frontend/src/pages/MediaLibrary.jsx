@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 import MediaForm from '../components/MediaForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const MediaLibrary = () => {
+  const navigate = useNavigate();
+  const { prodId } = useParams();
   const [assets, setAssets] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduction, setSelectedProduction] = useState(null);
@@ -28,9 +31,18 @@ const MediaLibrary = () => {
   useEffect(() => {
     if (user) {
       fetchAssets();
-      if (!isPartner) fetchProductions();
+      fetchProductions();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (productions.length > 0 && prodId) {
+      const prod = productions.find(p => p.id === parseInt(prodId));
+      if (prod) setSelectedProduction(prod);
+    } else if (!prodId) {
+      setSelectedProduction(null);
+    }
+  }, [productions, prodId]);
 
   const fetchSession = async () => {
     try {
@@ -72,7 +84,7 @@ const MediaLibrary = () => {
       if (isPartner) {
         // For partner, the endpoint returns productions with trailers
         setProductions(response.data);
-        
+
         // Flatten all media files from all productions into the assets state
         const allAssets = [];
         response.data.forEach(p => {
@@ -142,21 +154,21 @@ const MediaLibrary = () => {
     const poster = productionAssets.find(a => a.fileType === 'Poster');
     const trailer = productionAssets.find(a => a.fileType === 'Trailer');
     const content = productionAssets.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
-    
+
     const bestTitle = (poster?.fileName || selectedProduction.title)
       .replace(' - Poster', '')
       .replace(' - Trailer', '');
 
     return (
       <div className="space-y-12 pb-20">
-        <PageHeader 
-          title={bestTitle} 
+        <PageHeader
+          title={bestTitle}
           actions={
-            <button 
-              onClick={() => setSelectedProduction(null)}
+            <button
+              onClick={() => navigate('/dashboard/media')}
               className="text-white/40 hover:text-white transition-all text-sm font-medium flex items-center gap-2"
             >
-              Back to Library
+              {isPartner ? "Back to Catalog" : "Back to Library"}
             </button>
           }
         />
@@ -183,11 +195,11 @@ const MediaLibrary = () => {
               <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto font-medium italic">
                 {selectedProduction.description || "No description provided for this production."}
               </p>
-              
+
               {trailer && (
                 <div className="pt-4">
                   <button
-                    onClick={() => window.open(trailer.filePath, '_blank')}
+                    onClick={() => navigate(`/watch/${trailer.id}`)}
                     className="px-10 py-4 border border-white/20 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all"
                   >
                     Watch Trailer
@@ -227,7 +239,7 @@ const MediaLibrary = () => {
                         </button>
                       )}
                       <button
-                        onClick={() => window.open(item.filePath, '_blank')}
+                        onClick={() => navigate(`/watch/${item.id}`)}
                         className="w-12 h-12 bg-[#e5a00d] text-black rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-[#e5a00d]/20"
                       >
                         <Play size={16} fill="currentColor" className="ml-1" />
@@ -335,7 +347,7 @@ const MediaLibrary = () => {
               ))}
             </div>
           ) : posters.length > 0 ? (
-            <div 
+            <div
               className="grid gap-6"
               style={{
                 gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
@@ -354,7 +366,7 @@ const MediaLibrary = () => {
                     className="group cursor-pointer"
                     onClick={() => {
                       if (a.productionId && prod) {
-                        setSelectedProduction(prod);
+                        navigate(`/dashboard/media/${a.productionId}`);
                       } else {
                         handleEdit(a);
                       }

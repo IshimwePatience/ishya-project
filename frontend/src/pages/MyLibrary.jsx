@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Film, 
-  Download, 
-  Clock, 
-  ShieldCheck, 
-  Play, 
-  FileVideo, 
+import {
+  Film,
+  Download,
+  Clock,
+  ShieldCheck,
+  Play,
+  FileVideo,
   Image as ImageIcon,
   ChevronRight,
   ExternalLink
@@ -16,6 +17,7 @@ import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const MyLibrary = () => {
+  const navigate = useNavigate();
   const [productions, setProductions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -53,12 +55,12 @@ const MyLibrary = () => {
   return (
     <div className="space-y-10 pb-20">
       {/* Header Section */}
-      <PageHeader 
-        title="My Library" 
-        zoom={zoom} 
-        setZoom={setZoom} 
-        viewMode={viewMode} 
-        setViewMode={setViewMode} 
+      <PageHeader
+        title="My Library"
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
       />
 
       {productions.length === 0 ? (
@@ -66,11 +68,11 @@ const MyLibrary = () => {
           <p className="text-sm font-medium text-white/20">No active licenses found</p>
         </div>
       ) : (
-        <div 
+        <div
           className="grid gap-6"
           style={{
-            gridTemplateColumns: viewMode === 'grid' 
-              ? `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2}px, 1fr))` 
+            gridTemplateColumns: viewMode === 'grid'
+              ? `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2}px, 1fr))`
               : '1fr'
           }}
         >
@@ -78,20 +80,18 @@ const MyLibrary = () => {
             <motion.div
               key={prod.id}
               whileHover={{ x: viewMode === 'list' ? 4 : 0, scale: viewMode === 'grid' ? 1.02 : 1 }}
-              className={`bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all ${
-                viewMode === 'list' ? 'p-5 flex items-center justify-between' : 'flex flex-col'
-              }`}
+              className={`bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all ${viewMode === 'list' ? 'p-5 flex items-center justify-between' : 'flex flex-col'
+                }`}
             >
               <div className={`flex items-center gap-8 ${viewMode === 'grid' ? 'flex-col items-start gap-0' : ''}`}>
                 {/* Poster Thumbnail */}
-                <div className={`bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl ${
-                  viewMode === 'list' ? 'w-24 h-36 rounded-sm' : 'w-full aspect-[2/3]'
-                }`}>
+                <div className={`bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl ${viewMode === 'list' ? 'w-24 h-36 rounded-sm' : 'w-full aspect-[2/3]'
+                  }`}>
                   {prod.poster ? (
-                    <img 
-                      src={prod.poster} 
-                      alt="" 
-                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" 
+                    <img
+                      src={prod.poster}
+                      alt=""
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -129,14 +129,22 @@ const MyLibrary = () => {
 
               {/* Actions */}
               <div className={`flex flex-col gap-2 ${viewMode === 'list' ? 'min-w-[180px] pr-4' : 'p-5 pt-0'}`}>
-                <button 
+                <button
                   onClick={() => setSelectedProduction(prod)}
                   className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20"
                 >
                   <Download size={14} /> Access Assets
                 </button>
                 {viewMode === 'list' && (
-                  <button className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-white/10 transition-all border border-white/5">
+                  <button
+                    onClick={() => {
+                      const video = prod.mediaFiles?.find(f => f.type === 'Trailer' || f.type === 'Master');
+                      if (video && (video.id || video.url)) {
+                        navigate(`/watch/${video.id || video.url.split('/').pop()}`);
+                      }
+                    }}
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-white/10 transition-all border border-white/5"
+                  >
                     <Play size={14} fill="currentColor" /> Watch Now
                   </button>
                 )}
@@ -149,7 +157,7 @@ const MyLibrary = () => {
       {/* Asset Modal */}
       {selectedProduction && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-[#121212] border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col rounded-sm shadow-2xl"
@@ -168,7 +176,7 @@ const MyLibrary = () => {
                   </p>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setSelectedProduction(null)}
                 className="text-white/20 hover:text-white transition-colors p-2 text-xs font-bold uppercase tracking-widest"
               >
@@ -190,9 +198,15 @@ const MyLibrary = () => {
                     {selectedProduction.mediaFiles?.filter(f => f.type === 'Master').map((file, idx) => (
                       <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center">
-                            <Play size={16} className="text-white/60" />
-                          </div>
+                          <button
+                            onClick={() => {
+                              const id = file.id || (file.url ? file.url.split('/').pop() : null);
+                              if (id) navigate(`/watch/${id}`);
+                            }}
+                            className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all"
+                          >
+                            <Play size={16} fill="currentColor" className="ml-0.5" />
+                          </button>
                           <div className="space-y-0.5">
                             <p className="text-sm font-bold text-white">Full Movie Master</p>
                             <p className="text-[10px] text-white/20 uppercase tracking-widest">Digital Negative • 24.5GB</p>
@@ -246,7 +260,7 @@ const MyLibrary = () => {
                   <h3>License Compliance</h3>
                 </div>
                 <p className="text-white/60 text-sm leading-relaxed max-w-2xl">
-                  This production is licensed for broadcast on your platform until the agreed expiration date. 
+                  This production is licensed for broadcast on your platform until the agreed expiration date.
                   Distribution or sharing of master files with 3rd parties is strictly prohibited under the terms of your contract.
                 </p>
                 <div className="pt-2 flex items-center gap-6">

@@ -11,11 +11,12 @@ import {
   Calendar
 } from 'lucide-react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const PartnerDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     activeLicenses: 0,
     expiringSoon: 0,
@@ -145,7 +146,13 @@ const PartnerDashboard = () => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pr-4">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-[#e5a00d] transition-all">
+                    <button 
+                      onClick={() => navigate('/dashboard/library')}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-[#e5a00d] text-black text-[10px] font-bold rounded-sm hover:bg-white transition-all"
+                    >
+                      <Play size={12} fill="currentColor" /> Watch
+                    </button>
+                    <button className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold rounded-sm hover:bg-white/10 transition-all border border-white/5">
                       <Download size={12} /> Master
                     </button>
                   </div>

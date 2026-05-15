@@ -58,6 +58,7 @@ function App() {
         <Route path="/dashboard/partner-requests" element={<DashboardLayout><PartnerRequests /></DashboardLayout>} />
         <Route path="/dashboard/events" element={<DashboardLayout><Events /></DashboardLayout>} />
         <Route path="/dashboard/media" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
+        <Route path="/dashboard/media/:prodId" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/library" element={<DashboardLayout><MyLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
         <Route path="/dashboard/attendance" element={<DashboardLayout><Attendance /></DashboardLayout>} />
