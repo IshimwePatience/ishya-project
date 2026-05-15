@@ -59,9 +59,6 @@ const Cinema = () => {
       {/* Immersive Header */}
       <div className="h-20 px-10 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-xl fixed top-0 w-full z-50">
         <div className="flex flex-col">
-          <span className="text-sm font-semibold text-white tracking-tight">
-            {media.production?.title || 'Ishya Cinema'}
-          </span>
           <span className="text-[#e5a00d] text-[11px] font-medium uppercase tracking-widest">
             Now Playing • {media.fileName}
           </span>
@@ -70,7 +67,7 @@ const Cinema = () => {
           onClick={() => navigate(-1)}
           className="px-6 py-2 bg-white/5 hover:bg-[#e5a00d] text-white/40 hover:text-black border border-white/10 rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
         >
-          <X size={14} /> Exit Theater
+          <X size={14} /> Exit
         </button>
       </div>
 
