@@ -169,10 +169,6 @@ const DashboardLayout = ({ children }) => {
   } else if (user?.role === 'Partner') {
     menuGroups = [
       {
-        label: 'Partner Portal',
-        items: [{ to: '/dashboard', icon: LayoutDashboard, label: 'Portal Home' }]
-      },
-      {
         label: 'Distribution',
         items: [
           { to: '/dashboard/library', icon: Film, label: 'My Library' },

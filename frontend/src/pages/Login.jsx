@@ -65,6 +65,8 @@ const Login = () => {
         
         if (response.data.user.role === 'Actor/Talent') {
           navigate('/dashboard/scripts');
+        } else if (response.data.user.role === 'Partner') {
+          navigate('/dashboard/library');
         } else {
           navigate('/dashboard');
         }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Film,
@@ -198,6 +199,7 @@ const StatCard = ({ label, value, icon: Icon, color }) => (
 );
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     productionsCount: 0,
@@ -209,6 +211,12 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    if (!loading && user?.role === 'Partner') {
+      navigate('/dashboard/library');
+    }
+  }, [user, loading, navigate]);
 
   const fetchDashboardData = async () => {
     try {
