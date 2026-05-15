@@ -4,6 +4,7 @@ import { Plus, Search, Edit2, Trash2, Mail, User, ChevronRight } from 'lucide-re
 import axios from 'axios';
 import TalentForm from '../components/TalentForm';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const Talents = () => {
   const [talents, setTalents] = useState([]);
@@ -12,6 +13,8 @@ const Talents = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTalent, setEditingTalent] = useState(null);
   const [error, setError] = useState('');
+
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('talents');
 
   useEffect(() => {
     fetchTalents();
@@ -81,6 +84,10 @@ const Talents = () => {
         <>
       <PageHeader 
         title="Talents" 
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
         actions={
           <button
             className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
@@ -119,7 +126,12 @@ const Talents = () => {
               ))}
             </div>
           ) : filteredTalents.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
+            <div 
+              className="grid gap-x-6 gap-y-10"
+              style={{
+                gridTemplateColumns: `repeat(auto-fill, minmax(${80 + (zoom - 50) * 1.2}px, 1fr))`
+              }}
+            >
               {filteredTalents.map((talent) => (
                 <motion.div
                   key={talent.id}
@@ -132,12 +144,18 @@ const Talents = () => {
                   }}
                 >
                   <div className="relative group/card">
-                    <div className="w-[84px] h-[84px] rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300">
+                    <div 
+                      className="rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300"
+                      style={{
+                        width: `${64 + (zoom - 50) * 0.8}px`,
+                        height: `${64 + (zoom - 50) * 0.8}px`
+                      }}
+                    >
                       {talent.profilePic ? (
                         <img src={talent.profilePic} alt={talent.firstName} className="w-full h-full object-cover" />
                       ) : (
                         <User 
-                          size={40} 
+                          size={32 + (zoom - 50) * 0.4} 
                           strokeWidth={1.5} 
                           className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
                         />

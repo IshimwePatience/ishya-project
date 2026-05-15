@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutGrid } from 'lucide-react';
 
-const PageHeader = ({ title, actions }) => {
+const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-white/5 pb-6 mb-10">
       <div className="flex items-center gap-4">
@@ -20,13 +20,21 @@ const PageHeader = ({ title, actions }) => {
         <div className="flex items-center gap-5">
           {/* Zoom Slider */}
           <div className="hidden sm:flex items-center gap-2">
-            <div className="w-20 h-[1.5px] bg-white/10 relative rounded-full">
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white/60 shadow-sm cursor-pointer hover:bg-white transition-colors" />
-            </div>
+            <input 
+              type="range" 
+              min="20" 
+              max="100" 
+              value={zoom || 50} 
+              onChange={(e) => setZoom(parseInt(e.target.value))}
+              className="w-20 h-[2px] bg-white/10 accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
+            />
           </div>
           
           {/* Grid Icon */}
-          <div className="text-white/20 hover:text-white transition-colors cursor-pointer">
+          <div 
+            onClick={() => setViewMode?.(viewMode === 'grid' ? 'list' : 'grid')}
+            className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-white/20 hover:text-white'}`}
+          >
             <LayoutGrid size={18} strokeWidth={2.5} />
           </div>
         </div>

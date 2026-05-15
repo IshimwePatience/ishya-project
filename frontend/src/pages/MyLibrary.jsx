@@ -13,12 +13,15 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const MyLibrary = () => {
   const [productions, setProductions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProduction, setSelectedProduction] = useState(null);
+
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('my-library');
 
   useEffect(() => {
     fetchLibrary();
@@ -50,23 +53,40 @@ const MyLibrary = () => {
   return (
     <div className="space-y-10 pb-20">
       {/* Header Section */}
-      <PageHeader title="My Library" />
+      <PageHeader 
+        title="My Library" 
+        zoom={zoom} 
+        setZoom={setZoom} 
+        viewMode={viewMode} 
+        setViewMode={setViewMode} 
+      />
 
       {productions.length === 0 ? (
         <div className="py-40 text-center">
           <p className="text-sm font-medium text-white/20">No active licenses found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
+        <div 
+          className="grid gap-6"
+          style={{
+            gridTemplateColumns: viewMode === 'grid' 
+              ? `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2}px, 1fr))` 
+              : '1fr'
+          }}
+        >
           {productions.map((prod) => (
             <motion.div
               key={prod.id}
-              whileHover={{ x: 4 }}
-              className="bg-[#121212] border border-white/5 rounded-sm p-5 flex items-center justify-between group hover:border-white/10 transition-all"
+              whileHover={{ x: viewMode === 'list' ? 4 : 0, scale: viewMode === 'grid' ? 1.02 : 1 }}
+              className={`bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all ${
+                viewMode === 'list' ? 'p-5 flex items-center justify-between' : 'flex flex-col'
+              }`}
             >
-              <div className="flex items-center gap-8">
+              <div className={`flex items-center gap-8 ${viewMode === 'grid' ? 'flex-col items-start gap-0' : ''}`}>
                 {/* Poster Thumbnail */}
-                <div className="w-24 h-36 bg-white/5 rounded-sm overflow-hidden flex-shrink-0 relative shadow-2xl">
+                <div className={`bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl ${
+                  viewMode === 'list' ? 'w-24 h-36 rounded-sm' : 'w-full aspect-[2/3]'
+                }`}>
                   {prod.poster ? (
                     <img 
                       src={prod.poster} 
@@ -75,7 +95,7 @@ const MyLibrary = () => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Film size={24} className="text-white/10" />
+                      <Film size={viewMode === 'list' ? 24 : 48} className="text-white/10" />
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -84,7 +104,7 @@ const MyLibrary = () => {
                 </div>
 
                 {/* Details */}
-                <div className="space-y-3">
+                <div className={`space-y-3 ${viewMode === 'grid' ? 'p-5 w-full' : ''}`}>
                   <div>
                     <h4 className="text-xl font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">
                       {prod.title}
@@ -94,28 +114,32 @@ const MyLibrary = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-bold bg-green-400/10 px-3 py-1 rounded-full uppercase tracking-wider">
-                      <ShieldCheck size={12} /> Active License
+                      <ShieldCheck size={12} /> Active
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold uppercase tracking-wider">
-                      <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
-                    </div>
+                    {viewMode === 'list' && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold uppercase tracking-wider">
+                        <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col gap-2 min-w-[180px] pr-4">
+              <div className={`flex flex-col gap-2 ${viewMode === 'list' ? 'min-w-[180px] pr-4' : 'p-5 pt-0'}`}>
                 <button 
                   onClick={() => setSelectedProduction(prod)}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-xs font-bold rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20"
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20"
                 >
                   <Download size={14} /> Access Assets
                 </button>
-                <button className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-xs font-bold rounded-sm hover:bg-white/10 transition-all border border-white/5">
-                  <Play size={14} fill="currentColor" /> Watch Now
-                </button>
+                {viewMode === 'list' && (
+                  <button className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-white/10 transition-all border border-white/5">
+                    <Play size={14} fill="currentColor" /> Watch Now
+                  </button>
+                )}
               </div>
             </motion.div>
           ))}

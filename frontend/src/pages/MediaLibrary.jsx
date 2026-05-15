@@ -4,6 +4,7 @@ import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, 
 import axios from 'axios';
 import MediaForm from '../components/MediaForm';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const MediaLibrary = () => {
   const [assets, setAssets] = useState([]);
@@ -15,6 +16,8 @@ const MediaLibrary = () => {
   const [editingAsset, setEditingAsset] = useState(null);
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
+
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('media-library');
 
   const isPartner = user?.role === 'Partner';
 
@@ -289,6 +292,10 @@ const MediaLibrary = () => {
           {/* Header */}
           <PageHeader
             title={isPartner ? "Browse Catalog" : "Media Library"}
+            zoom={zoom}
+            setZoom={setZoom}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
             actions={!isPartner && (
               <button
                 onClick={() => setIsFormOpen(true)}
@@ -328,7 +335,12 @@ const MediaLibrary = () => {
               ))}
             </div>
           ) : posters.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+            <div 
+              className="grid gap-6"
+              style={{
+                gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
+              }}
+            >
               {posters.map((a) => {
                 const prod = productions.find(p => p.id === a.productionId);
                 const cleanName = a.fileName.replace(' - Poster', '').replace(' - Trailer', '');

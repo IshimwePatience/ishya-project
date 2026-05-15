@@ -4,6 +4,7 @@ import { Plus, Search, ListFilter, Edit2, Trash2, ExternalLink, Calendar, User, 
 import axios from 'axios';
 import ProductionForm from '../components/ProductionForm';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const Productions = () => {
   const [productions, setProductions] = useState([]);
@@ -14,6 +15,8 @@ const Productions = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduction, setEditingProduction] = useState(null);
   const [error, setError] = useState('');
+
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('productions');
 
   useEffect(() => {
     fetchProductions();
@@ -101,6 +104,10 @@ const Productions = () => {
         <>
       <PageHeader 
         title="Productions" 
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
         actions={
           <button
             className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
@@ -158,7 +165,12 @@ const Productions = () => {
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white">Categories</h3>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
+                  <div 
+                    className="grid gap-x-6 gap-y-10"
+                    style={{
+                      gridTemplateColumns: `repeat(auto-fill, minmax(${100 + (zoom - 50) * 1.5}px, 1fr))`
+                    }}
+                  >
                     {Object.keys(groupedProductions).map((catName) => (
                       <button
                         key={catName}
@@ -167,7 +179,7 @@ const Productions = () => {
                       >
                         <div className="relative">
                           <Folder
-                            size={84}
+                            size={64 + (zoom - 50) * 0.8}
                             strokeWidth={1.5}
                             className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300"
                           />
@@ -191,7 +203,12 @@ const Productions = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
+                  <div 
+                    className="grid gap-x-6 gap-y-10"
+                    style={{
+                      gridTemplateColumns: `repeat(auto-fill, minmax(${100 + (zoom - 50) * 1.5}px, 1fr))`
+                    }}
+                  >
                     {displayedProductions
                       .filter(prod => prod.title.toLowerCase().includes(searchTerm.toLowerCase()))
                       .map((prod) => (
@@ -204,7 +221,7 @@ const Productions = () => {
                         >
                           <div className="relative group/card">
                             <FileText
-                              size={84}
+                              size={64 + (zoom - 50) * 0.8}
                               strokeWidth={1}
                               className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300"
                             />

@@ -4,6 +4,7 @@ import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileTe
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const Scripts = () => {
   const [scripts, setScripts] = useState([]);
@@ -14,6 +15,8 @@ const Scripts = () => {
   const [error, setError] = useState('');
 
   const [userRole, setUserRole] = useState('');
+  
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('scripts');
 
   useEffect(() => {
     fetchScripts();
@@ -120,6 +123,10 @@ const Scripts = () => {
         <>
       <PageHeader 
         title={isManagement ? "Scripts" : "My Scripts"} 
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
         actions={isManagement && (
           <button
             className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
@@ -158,7 +165,12 @@ const Scripts = () => {
               ))}
             </div>
           ) : filteredScripts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
+            <div 
+              className="grid gap-x-6 gap-y-10"
+              style={{
+                gridTemplateColumns: `repeat(auto-fill, minmax(${100 + (zoom - 50) * 1.5}px, 1fr))`
+              }}
+            >
               {filteredScripts.map((script) => (
                 <motion.div
                   key={script.id}
@@ -169,7 +181,7 @@ const Scripts = () => {
                 >
                   <div className="relative group/card">
                     <FileText 
-                      size={84} 
+                      size={64 + (zoom - 50) * 0.8} 
                       strokeWidth={1} 
                       className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
                     />
