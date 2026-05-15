@@ -19,24 +19,28 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
         {/* Cinematic Controls (Zoom/Grid) */}
         <div className="flex items-center gap-5">
           {/* Zoom Slider */}
-          <div className="hidden sm:flex items-center gap-2">
-            <input 
-              type="range" 
-              min="20" 
-              max="100" 
-              value={zoom || 50} 
-              onChange={(e) => setZoom(parseInt(e.target.value))}
-              className="w-20 h-[2px] bg-white/10 accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
-            />
-          </div>
+          {setZoom && (
+            <div className="hidden sm:flex items-center gap-2">
+              <input 
+                type="range" 
+                min="20" 
+                max="100" 
+                value={zoom || 50} 
+                onChange={(e) => setZoom?.(parseInt(e.target.value))}
+                className="w-20 h-[2px] bg-white/10 accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
+              />
+            </div>
+          )}
           
           {/* Grid Icon */}
-          <div 
-            onClick={() => setViewMode?.(viewMode === 'grid' ? 'list' : 'grid')}
-            className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-white/20 hover:text-white'}`}
-          >
-            <LayoutGrid size={18} strokeWidth={2.5} />
-          </div>
+          {setViewMode && (
+            <div 
+              onClick={() => setViewMode?.(viewMode === 'grid' ? 'list' : 'grid')}
+              className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-white/20 hover:text-white'}`}
+            >
+              <LayoutGrid size={18} strokeWidth={2.5} />
+            </div>
+          )}
         </div>
       </div>
     </div>

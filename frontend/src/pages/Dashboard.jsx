@@ -14,8 +14,9 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
-const ActorDashboard = ({ user }) => {
+const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,8 +66,14 @@ const ActorDashboard = ({ user }) => {
   };
 
   return (
-    <div className="space-y-12">
-      <PageHeader title={`Welcome back, ${user.firstName}`} />
+    <div className="space-y-12 pb-20">
+      <PageHeader 
+        title={`Welcome back, ${user.firstName}`} 
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
@@ -78,7 +85,12 @@ const ActorDashboard = ({ user }) => {
           </div>
 
           {scripts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div 
+              className="grid gap-4"
+              style={{
+                gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
+              }}
+            >
               {scripts.map((script, i) => (
                 <div 
                   key={i} 
@@ -141,20 +153,36 @@ const ActorDashboard = ({ user }) => {
   );
 };
 
-const StaffDashboard = ({ stats, loading }) => (
+const StaffDashboard = ({ stats, loading, zoom, setZoom, viewMode, setViewMode }) => (
   <div className="space-y-8 pb-20">
-    <PageHeader title="Studio overview" />
+    <PageHeader 
+      title="Studio overview" 
+      zoom={zoom}
+      setZoom={setZoom}
+      viewMode={viewMode}
+      setViewMode={setViewMode}
+    />
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" />
-      <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" />
-      <StatCard label="Troupe members" value={stats.talentsCount} icon={Users} color="text-white" />
-      <StatCard label="System users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" />
+    <div 
+      className="grid gap-6"
+      style={{
+        gridTemplateColumns: `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2.5}px, 1fr))`
+      }}
+    >
+      <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" zoom={zoom} />
+      <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" zoom={zoom} />
+      <StatCard label="Troupe members" value={stats.talentsCount} icon={Users} color="text-white" zoom={zoom} />
+      <StatCard label="System users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" zoom={zoom} />
     </div>
 
     <section className="space-y-6 pt-10">
       <h3 className="text-sm font-semibold text-white">What's on now</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div 
+        className="grid gap-6"
+        style={{
+          gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2.2}px, 1fr))`
+        }}
+      >
         {loading ? (
           [1, 2, 3, 4, 5].map(i => <div key={i} className="aspect-video bg-white/5 animate-pulse rounded-sm" />)
         ) : stats.recentProductions.map((prod, i) => (
@@ -178,8 +206,11 @@ const StaffDashboard = ({ stats, loading }) => (
   </div>
 );
 
-const StatCard = ({ label, value, icon: Icon, color }) => (
-  <div className="bg-[#121212] p-6 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
+const StatCard = ({ label, value, icon: Icon, color, zoom }) => (
+  <div 
+    className="bg-[#121212] rounded-sm border border-white/5 group hover:bg-white/5 transition-all"
+    style={{ padding: `${1.5 * (zoom / 50)}rem` }}
+  >
     <div className="flex justify-between items-start mb-6">
       <div className={`p-3 bg-black/40 rounded-sm ${color || 'text-white/40'} group-hover:text-[#e5a00d] transition-colors`}>
         <Icon size={20} />
@@ -199,6 +230,8 @@ const Dashboard = () => {
     recentProductions: []
   });
   const [loading, setLoading] = useState(true);
+
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('dashboard');
 
   useEffect(() => {
     fetchDashboardData();
@@ -245,9 +278,9 @@ const Dashboard = () => {
   }
 
   if (user?.role === 'Partner') return <PartnerDashboard />;
-  if (user?.role === 'Actor/Talent') return <ActorDashboard user={user} />;
+  if (user?.role === 'Actor/Talent') return <ActorDashboard user={user} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
 
-  return <StaffDashboard stats={stats} loading={loading} />;
+  return <StaffDashboard stats={stats} loading={loading} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
 };
 
 export default Dashboard;

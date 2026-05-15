@@ -13,6 +13,7 @@ import {
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
+import usePreferences from '../hooks/usePreferences';
 
 const PartnerDashboard = () => {
   const [stats, setStats] = useState({
@@ -23,16 +24,15 @@ const PartnerDashboard = () => {
   const [myLibrary, setMyLibrary] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { zoom, setZoom, viewMode, setViewMode } = usePreferences('partner-dashboard');
+
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
-      // In a real app, these would be dedicated Partner endpoints
-      // For now, we simulate fetching the partner's specific library
       const response = await axios.get('http://localhost:5000/api/productions', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Simulating filtered library for the partner
       setMyLibrary(response.data.slice(0, 3));
       setStats({
         activeLicenses: 3,
@@ -54,6 +54,10 @@ const PartnerDashboard = () => {
     <div className="space-y-10">
       <PageHeader 
         title="Partner Portal" 
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
         actions={
           <Link to="/dashboard/media" className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 border border-white/5">
             <Film size={14} /> Browse Catalog
@@ -62,14 +66,26 @@ const PartnerDashboard = () => {
       />
 
       {/* Stats Quick Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div 
+        className="grid gap-6"
+        style={{
+          gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
+        }}
+      >
         {[
           { label: 'Active Licenses', value: stats.activeLicenses, icon: ShieldCheck, color: 'text-green-400' },
           { label: 'Expiring Soon', value: stats.expiringSoon, icon: Clock, color: 'text-[#e5a00d]' },
           { label: 'Total Downloads', value: stats.totalDownloads, icon: Download, color: 'text-blue-400' }
         ].map((stat, i) => (
-          <div key={i} className="bg-[#121212] p-8 rounded-sm border border-white/5 relative overflow-hidden group">
-            <stat.icon className="absolute right-6 top-1/2 -translate-y-1/2 text-white/[0.02] group-hover:text-white/[0.05] transition-all" size={80} />
+          <div 
+            key={i} 
+            className="bg-[#121212] rounded-sm border border-white/5 relative overflow-hidden group"
+            style={{ padding: `${1.5 * (zoom / 50)}rem` }}
+          >
+            <stat.icon 
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/[0.02] group-hover:text-white/[0.05] transition-all" 
+              size={64 + (zoom - 50) * 0.5} 
+            />
             <div className="relative z-10">
               <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">{stat.label}</div>
               <div className={`text-4xl font-bold ${stat.color}`}>{stat.value}</div>
@@ -100,36 +116,37 @@ const PartnerDashboard = () => {
                   key={item.id}
                   whileHover={{ x: 4 }}
                   className="bg-[#121212] border border-white/5 rounded-sm p-4 flex items-center justify-between group hover:border-white/10 transition-all"
+                  style={{ minHeight: `${100 + (zoom - 50) * 1.2}px` }}
                 >
                   <div className="flex items-center gap-6">
-                    <div className="w-20 h-28 bg-white/5 rounded-sm overflow-hidden flex-shrink-0 relative">
+                    <div 
+                      className="bg-white/5 rounded-sm overflow-hidden flex-shrink-0 relative"
+                      style={{ 
+                        width: `${60 + (zoom - 50) * 0.8}px`,
+                        height: `${80 + (zoom - 50) * 1.2}px`
+                      }}
+                    >
                       {item.posterUrl ? (
                         <img src={`http://localhost:5000${item.posterUrl}`} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Film size={24} className="text-white/10" />
+                          <Film size={20 + (zoom - 50) * 0.2} className="text-white/10" />
                         </div>
                       )}
                     </div>
                     <div>
-                      <h4 className="font-bold text-white group-hover:text-[#e5a00d] transition-colors">{item.title}</h4>
-                      <p className="text-xs text-white/40 mt-1 uppercase tracking-wider">{item.category?.name || 'Production'}</p>
+                      <h4 className="font-bold text-white group-hover:text-[#e5a00d] transition-colors" style={{ fontSize: `${0.875 * (zoom / 50)}rem` }}>{item.title}</h4>
+                      <p className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">{item.category?.name || 'Production'}</p>
                       <div className="flex items-center gap-4 mt-4">
-                        <div className="flex items-center gap-1 text-[10px] text-green-400 font-bold bg-green-400/10 px-2 py-0.5 rounded-full uppercase">
-                          <ShieldCheck size={10} /> Active License
-                        </div>
-                        <div className="flex items-center gap-1 text-[10px] text-white/20 font-bold uppercase">
-                          <Calendar size={10} /> Expires: Dec 2026
+                        <div className="flex items-center gap-1 text-[9px] text-green-400 font-bold bg-green-400/10 px-2 py-0.5 rounded-full uppercase">
+                          <ShieldCheck size={9} /> Active License
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pr-4">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white text-black text-[11px] font-bold rounded-sm hover:bg-[#e5a00d] transition-all">
-                      <Download size={14} /> Download Master
-                    </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white/5 text-white/60 text-[11px] font-bold rounded-sm hover:bg-white/10 transition-all">
-                      <FileText size={14} /> Distribution Script
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-[#e5a00d] transition-all">
+                      <Download size={12} /> Master
                     </button>
                   </div>
                 </motion.div>
@@ -146,28 +163,13 @@ const PartnerDashboard = () => {
         {/* Sidebar info */}
         <div className="space-y-8">
           <div className="bg-[#1a1a1a] border border-white/5 rounded-sm p-6 space-y-6">
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Partner Support</h3>
-            <p className="text-xs text-white/40 leading-relaxed">
-              Need a specific file format or technical assistance with your broadcast master? Contact our technical team.
+            <h3 className="text-xs font-bold text-white uppercase tracking-widest">Partner Support</h3>
+            <p className="text-[11px] text-white/40 leading-relaxed">
+              Need technical assistance? Contact our team.
             </p>
-            <button className="w-full py-3 bg-white/5 border border-white/10 text-white text-xs font-bold rounded-sm hover:bg-white/10 transition-all">
-              Contact Distribution Team
+            <button className="w-full py-3 bg-white/5 border border-white/10 text-white text-[11px] font-bold rounded-sm hover:bg-white/10 transition-all">
+              Contact Support
             </button>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest">Recent Updates</h3>
-            <div className="space-y-3">
-              {[1, 2].map(i => (
-                <div key={i} className="flex gap-4 p-3 bg-white/[0.02] rounded-sm">
-                  <div className="w-1 h-1 bg-[#e5a00d] rounded-full mt-2" />
-                  <div>
-                    <p className="text-xs text-white/80 leading-relaxed">New trailer assets available for <span className="text-white font-bold">Project Alpha</span></p>
-                    <span className="text-[10px] text-white/20">2 hours ago</span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
