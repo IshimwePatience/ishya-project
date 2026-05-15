@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Receipt, Search, Plus, TrendingDown, DollarSign, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import ExpenseForm from '../components/ExpenseForm';
+import PageHeader from '../components/PageHeader';
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState([]);
@@ -58,19 +59,17 @@ const Expenses = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Expenses</h2>
-              <p className="text-white/40 text-sm mt-1">Financial Tracking • Production Costs</p>
-            </div>
-            <button 
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <Plus size={16} /> Record Expense
-            </button>
-          </div>
+      <PageHeader 
+        title="Expenses" 
+        actions={
+          <button 
+            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+            onClick={() => setIsFormOpen(true)}
+          >
+            <Plus size={16} /> Record Expense
+          </button>
+        }
+      />
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

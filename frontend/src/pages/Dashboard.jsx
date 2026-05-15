@@ -13,7 +13,7 @@ import {
   Users
 } from 'lucide-react';
 import axios from 'axios';
-import PartnerDashboard from './PartnerDashboard';
+import PageHeader from '../components/PageHeader';
 
 const ActorDashboard = ({ user }) => {
   const [scripts, setScripts] = useState([]);
@@ -66,10 +66,7 @@ const ActorDashboard = ({ user }) => {
 
   return (
     <div className="space-y-12">
-      <div className="border-b border-white/5 pb-8">
-        <h2 className="text-3xl font-bold text-white">Welcome back, {user.firstName}</h2>
-        <p className="text-xs text-[#e5a00d] font-semibold mt-2">● Availability: Active</p>
-      </div>
+      <PageHeader title={`Welcome back, ${user.firstName}`} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
@@ -127,7 +124,7 @@ const ActorDashboard = ({ user }) => {
               {events.map((event, i) => (
                 <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
                   <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm">
-                    <span className="text-[9px] font-bold uppercase">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
+                    <span className="text-[9px] font-bold uppercase">{new Date(event.month).toLocaleString('default', { month: 'short' })}</span>
                     <span className="text-sm font-bold">{new Date(event.date).getDate()}</span>
                   </div>
                   <div>
@@ -146,12 +143,7 @@ const ActorDashboard = ({ user }) => {
 
 const StaffDashboard = ({ stats, loading }) => (
   <div className="space-y-8 pb-20">
-    <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-6">
-      <div>
-        <h2 className="text-2xl font-bold text-white">Studio overview</h2>
-        <p className="text-sm text-white/40 mt-1">Ishya production hub</p>
-      </div>
-    </div>
+    <PageHeader title="Studio overview" />
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" />

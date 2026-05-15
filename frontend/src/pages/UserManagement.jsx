@@ -16,6 +16,7 @@ import {
 import axios from 'axios';
 
 import UserForm from '../components/UserForm';
+import PageHeader from '../components/PageHeader';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -142,13 +143,7 @@ const UserManagement = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">User Management</h2>
-              <p className="text-sm text-white/40 mt-1">Administrative control</p>
-            </div>
-          </div>
+      <PageHeader title="User Management" />
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-sm text-sm font-bold">

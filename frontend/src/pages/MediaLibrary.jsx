@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase } from 'lucide-react';
 import axios from 'axios';
 import MediaForm from '../components/MediaForm';
+import PageHeader from '../components/PageHeader';
 
 const MediaLibrary = () => {
   const [assets, setAssets] = useState([]);
@@ -68,23 +69,27 @@ const MediaLibrary = () => {
       if (isPartner) {
         // For partner, the endpoint returns productions with trailers
         setProductions(response.data);
-        // Create virtual assets from productions for the poster view
-        const virtualAssets = response.data.map(p => {
-          const posterFile = p.mediaFiles?.find(f => f.fileType === 'Poster');
-          const mainMovie = p.mediaFiles?.find(f => f.fileType === 'Full Movie' || f.fileType === 'Episode');
-          const path = posterFile ? posterFile.filePath : p.posterUrl;
-          return {
-            id: `prod-${p.id}`,
-            productionId: p.id,
-            fileName: mainMovie ? mainMovie.fileName.replace(' - Poster', '').replace(' - Trailer', '') : p.title,
-            fileType: 'Poster',
-            filePath: path ? (path.startsWith('http') ? path : `http://localhost:5000${path}`) : null,
-            isVirtual: true
-          };
+        
+        // Flatten all media files from all productions into the assets state
+        const allAssets = [];
+        response.data.forEach(p => {
+          if (p.mediaFiles) {
+            p.mediaFiles.forEach(file => {
+              allAssets.push({
+                ...file,
+                productionId: p.id,
+                filePath: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `http://localhost:5000${file.filePath}`) : null
+              });
+            });
+          }
         });
-        setAssets(virtualAssets);
+        setAssets(allAssets);
       } else {
-        setAssets(response.data);
+        const processedAssets = response.data.map(a => ({
+          ...a,
+          filePath: a.filePath ? (a.filePath.startsWith('http') ? a.filePath : `http://localhost:5000${a.filePath}`) : null
+        }));
+        setAssets(processedAssets);
       }
 
       setLoading(false);
@@ -129,112 +134,124 @@ const MediaLibrary = () => {
   const posters = filteredAssets.filter(a => a.fileType === 'Poster');
 
   if (selectedProduction) {
-    const prodAssets = assets.filter(a => a.productionId === selectedProduction.id);
-    const movieFile = selectedProduction.mediaFiles?.find(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
-    const displayTitle = movieFile ? movieFile.fileName.replace(' - Poster', '').replace(' - Trailer', '') : selectedProduction.title;
-    const trailer = selectedProduction.mediaFiles?.find(a => a.fileType === 'Trailer');
-    const content = selectedProduction.mediaFiles?.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode') || [];
-    const poster = selectedProduction.mediaFiles?.find(a => a.fileType === 'Poster');
+    // Filter assets from the main state to ensure we get everything fetched for admin
+    const productionAssets = assets.filter(a => a.productionId === selectedProduction.id);
+    const poster = productionAssets.find(a => a.fileType === 'Poster');
+    const trailer = productionAssets.find(a => a.fileType === 'Trailer');
+    const content = productionAssets.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
+    
+    const bestTitle = (poster?.fileName || selectedProduction.title)
+      .replace(' - Poster', '')
+      .replace(' - Trailer', '');
 
     return (
       <div className="space-y-12 pb-20">
-        <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
-          <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
-            <button onClick={() => setSelectedProduction(null)} className="hover:text-white transition-colors">Library</button>
-            <ChevronRight size={12} className="text-white/20" />
-            <span>{displayTitle}</span>
-          </nav>
-          <div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">{displayTitle}</h2>
-            <p className="text-sm text-white/40 mt-1">Production Showcase • {new Date(selectedProduction.releaseDate).getFullYear()}</p>
-          </div>
-        </div>
+        <PageHeader 
+          title={bestTitle} 
+          actions={
+            <button 
+              onClick={() => setSelectedProduction(null)}
+              className="text-white/40 hover:text-white transition-all text-sm font-medium flex items-center gap-2"
+            >
+              Back to Library
+            </button>
+          }
+        />
 
-        <div className="max-w-4xl mx-auto space-y-10 text-center">
+        <div className="max-w-4xl mx-auto space-y-12 text-center">
+          {/* Centered Poster */}
           <div className="relative max-w-sm mx-auto shadow-2xl border border-white/5 rounded-sm overflow-hidden">
-            <img
-              src={poster?.filePath || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1000'}
-              alt={selectedProduction.title}
-              className="w-full h-auto"
-            />
+            {poster?.filePath ? (
+              <img
+                src={poster.filePath}
+                alt={bestTitle}
+                className="w-full h-auto"
+              />
+            ) : (
+              <div className="aspect-[2/3] bg-[#121212] flex items-center justify-center text-white/10">
+                <Film size={64} />
+              </div>
+            )}
           </div>
 
-          <div className="space-y-8">
-            <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto font-medium">
-              {selectedProduction.description}
-            </p>
-
-            <div className="flex flex-col items-center gap-8">
+          {/* Centered Info & Assets */}
+          <div className="space-y-12">
+            <div className="space-y-6">
+              <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto font-medium italic">
+                {selectedProduction.description || "No description provided for this production."}
+              </p>
+              
               {trailer && (
-                <div className="space-y-4">
-                  <h3 className="text-xs font-semibold text-white/20">Preview</h3>
+                <div className="pt-4">
                   <button
                     onClick={() => window.open(trailer.filePath, '_blank')}
-                    className="px-10 py-4 border border-white/20 hover:bg-white hover:text-black text-white text-xs font-semibold transition-all"
+                    className="px-10 py-4 border border-white/20 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all"
                   >
                     Watch Trailer
                   </button>
                 </div>
               )}
+            </div>
 
-              {!isPartner && (
-                <div className="w-full max-w-2xl text-left space-y-6">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 className="text-xl font-semibold text-white">Media Assets</h3>
-                    <span className="text-[11px] text-white/40 font-medium">{content.length} Items</span>
-                  </div>
+            <div className="w-full text-left space-y-8 pt-10 border-t border-white/5">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <h3 className="text-xl font-bold text-white tracking-tight">Media Assets</h3>
+                <span className="text-[11px] text-white/40 font-bold uppercase tracking-widest">{content.length} Items</span>
+              </div>
 
-                  <div className="grid gap-3">
-                    {content.length > 0 ? content.map((item, idx) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between p-4 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
-                      >
-                        <div className="flex items-center gap-4">
-                          <span className="text-white/10 font-bold">{String(idx + 1).padStart(2, '0')}</span>
-                          <div>
-                            <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
-                            <div className="text-[11px] text-white/40 mt-1">
-                              {item.fileType === 'Episode' ? `Season ${item.season || 1} • Episode ${item.episodeNumber || 1}` : item.fileType} • {item.isPublic ? 'Public Access' : 'Private Vault'}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => handleEdit(item)}
-                            className="p-2 text-white/20 hover:text-white transition-colors"
-                          >
-                            <Edit2 size={14} />
-                          </button>
-                          <button
-                            onClick={() => window.open(item.filePath, '_blank')}
-                            className="p-2 bg-[#e5a00d] text-black rounded-full hover:scale-110 transition-all shadow-lg shadow-[#e5a00d]/20"
-                          >
-                            <Play size={14} fill="currentColor" />
-                          </button>
+              <div className="grid gap-3">
+                {content.length > 0 ? content.map((item, idx) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-5 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
+                  >
+                    <div className="flex items-center gap-6">
+                      <span className="text-white/10 font-black text-xl">{String(idx + 1).padStart(2, '0')}</span>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
+                        <div className="text-[10px] text-white/40 mt-1 uppercase tracking-[0.2em] font-black">
+                          {item.fileType} • {item.isPublic ? 'Public' : 'Protected'}
                         </div>
                       </div>
-                    )) : (
-                      <div className="py-10 text-center text-white/10 text-sm font-medium">No media assets assigned.</div>
-                    )}
+                    </div>
+                    <div className="flex items-center gap-4">
+                      {!isPartner && (
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="p-2 text-white/20 hover:text-white transition-colors"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => window.open(item.filePath, '_blank')}
+                        className="w-12 h-12 bg-[#e5a00d] text-black rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-[#e5a00d]/20"
+                      >
+                        <Play size={16} fill="currentColor" className="ml-1" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-
-              {isPartner && (
-                <div className="pt-10 border-t border-white/5 w-full max-w-xl text-center space-y-6">
-                  <p className="text-white/40 text-sm italic">
-                    You are currently viewing the public catalog. To download master files and marketing materials, you must have an active license for this production.
-                  </p>
-                  <button
-                    className="px-10 py-5 bg-[#e5a00d] text-black font-bold rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/20 flex items-center justify-center gap-3 mx-auto group"
-                    onClick={() => alert('License request sent to Ishya Team!')}
-                  >
-                    <Briefcase size={18} /> Request License
-                  </button>
-                </div>
-              )}
+                )) : (
+                  <div className="py-20 text-center border border-dashed border-white/5 rounded-sm">
+                    <p className="text-white/20 text-sm font-medium italic">No media assets assigned to this production.</p>
+                  </div>
+                )}
+              </div>
             </div>
+
+            {isPartner && (
+              <div className="pt-12 border-t border-white/5 text-center space-y-6">
+                <p className="text-white/40 text-sm italic max-w-lg mx-auto">
+                  Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
+                </p>
+                <button
+                  className="px-12 py-5 bg-[#e5a00d] text-black font-black rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto uppercase text-xs tracking-widest"
+                  onClick={() => alert('License request sent to Ishya Team!')}
+                >
+                  <Briefcase size={18} /> Request License
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -270,17 +287,9 @@ const MediaLibrary = () => {
       ) : (
         <>
           {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">
-                {isPartner ? "Browse Catalog" : "Media Library"}
-              </h2>
-              <p className="text-sm text-white/40 mt-1">
-                {isPartner ? "Explore our production library and request licenses" : "Organize and distribute your digital assets"}
-              </p>
-            </div>
-
-            {!isPartner && (
+          <PageHeader
+            title={isPartner ? "Browse Catalog" : "Media Library"}
+            actions={!isPartner && (
               <button
                 onClick={() => setIsFormOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
@@ -289,7 +298,7 @@ const MediaLibrary = () => {
                 <span>Add to Library</span>
               </button>
             )}
-          </div>
+          />
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-sm text-sm font-medium">

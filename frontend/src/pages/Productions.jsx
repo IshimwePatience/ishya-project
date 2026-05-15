@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, ListFilter, Edit2, Trash2, ExternalLink, Calendar, User, Folder, FileText, ChevronRight, ChevronDown, ArrowLeft, Film } from 'lucide-react';
 import axios from 'axios';
 import ProductionForm from '../components/ProductionForm';
+import PageHeader from '../components/PageHeader';
 
 const Productions = () => {
   const [productions, setProductions] = useState([]);
@@ -98,19 +99,17 @@ const Productions = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Productions</h2>
-              <p className="text-sm text-white/40 mt-1">Ishya production library</p>
-            </div>
-            <button
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <Plus size={16} /> New project
-            </button>
-          </div>
+      <PageHeader 
+        title="Productions" 
+        actions={
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+            onClick={() => setIsFormOpen(true)}
+          >
+            <Plus size={16} /> New project
+          </button>
+        }
+      />
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-sm text-sm font-semibold mb-6">

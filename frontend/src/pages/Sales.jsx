@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Wallet, Search, Plus, ListFilter, TrendingUp, CreditCard, Receipt, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import SaleForm from '../components/SaleForm';
+import PageHeader from '../components/PageHeader';
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -70,19 +71,17 @@ const Sales = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Sales & Revenue</h2>
-              <p className="text-white/40 text-sm mt-1">Financial Tracking</p>
-            </div>
-            <button 
-              onClick={() => setIsFormOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            >
-              <Plus size={16} /> Log New Sale
-            </button>
-          </div>
+      <PageHeader 
+        title="Sales & Revenue" 
+        actions={
+          <button 
+            onClick={() => setIsFormOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+          >
+            <Plus size={16} /> Log New Sale
+          </button>
+        }
+      />
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

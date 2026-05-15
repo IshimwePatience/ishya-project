@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageHeader from '../components/PageHeader';
 
 const Attendance = () => {
   const [logs, setLogs] = useState([]);
@@ -175,17 +176,9 @@ const Attendance = () => {
 
   return (
     <div className="space-y-8 pb-20">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">
-            {isManagement ? "Attendance registry" : "My Attendance"}
-          </h2>
-          <p className="text-sm text-white/40 mt-1">
-            {isManagement ? "Studio-wide performance tracking" : "Performance logs & call times"}
-          </p>
-        </div>
-
-        {!isManagement && (
+      <PageHeader 
+        title={isManagement ? "Attendance Registry" : "My Attendance"} 
+        actions={!isManagement && (
           activeAttendance ? (
             <button
               onClick={() => handleCheckOut()}
@@ -204,7 +197,7 @@ const Attendance = () => {
             </button>
           )
         )}
-      </div>
+      />
 
       {!isManagement && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

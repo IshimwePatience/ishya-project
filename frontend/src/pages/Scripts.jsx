@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users } from 'lucide-react';
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
+import PageHeader from '../components/PageHeader';
 
 const Scripts = () => {
   const [scripts, setScripts] = useState([]);
@@ -117,21 +118,17 @@ const Scripts = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">{isManagement ? "Scripts" : "My Scripts"}</h2>
-              <p className="text-sm text-white/40 mt-1">{isManagement ? "Ishya script vault" : "Your assigned production documents"}</p>
-            </div>
-            {isManagement && (
-              <button
-                className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
-                onClick={() => setIsFormOpen(true)}
-              >
-                <Plus size={16} /> Add script
-              </button>
-            )}
-          </div>
+      <PageHeader 
+        title={isManagement ? "Scripts" : "My Scripts"} 
+        actions={isManagement && (
+          <button
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
+            onClick={() => setIsFormOpen(true)}
+          >
+            <Plus size={16} /> Add script
+          </button>
+        )}
+      />
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-sm text-sm font-semibold mb-6">

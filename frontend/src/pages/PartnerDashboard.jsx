@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 
 const PartnerDashboard = () => {
   const [stats, setStats] = useState({
@@ -51,18 +52,14 @@ const PartnerDashboard = () => {
 
   return (
     <div className="space-y-10">
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
-        <div>
-          <h2 className="text-3xl font-bold text-white tracking-tight">Partner Portal</h2>
-          <p className="text-white/40 mt-1">Manage your licensed distribution assets</p>
-        </div>
-        <div className="flex gap-3">
+      <PageHeader 
+        title="Partner Portal" 
+        actions={
           <Link to="/dashboard/media" className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 border border-white/5">
             <Film size={14} /> Browse Catalog
           </Link>
-        </div>
-      </div>
+        }
+      />
 
       {/* Stats Quick Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

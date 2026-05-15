@@ -1,5 +1,6 @@
 import React from 'react';
 import { Settings as SettingsIcon, User, Shield, Bell, Database, Globe, Lock, Trash2 } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 const Settings = () => {
   const sections = [
@@ -11,10 +12,7 @@ const Settings = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div className="border-b border-white/5 pb-4">
-        <h2 className="text-2xl font-bold text-white tracking-tight">System Settings</h2>
-        <p className="text-white/40 text-sm mt-1">System Core</p>
-      </div>
+      <PageHeader title="System Settings" />
 
       <div className="flex flex-col">
         {sections.map((section, i) => (

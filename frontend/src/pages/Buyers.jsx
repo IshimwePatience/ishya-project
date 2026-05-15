@@ -4,6 +4,7 @@ import { Building2, Search, Plus, Mail, Phone, ExternalLink, Globe } from 'lucid
 import axios from 'axios';
 
 import PartnerForm from '../components/PartnerForm';
+import PageHeader from '../components/PageHeader';
 
 const Buyers = () => {
   const [buyers, setBuyers] = useState([]);
@@ -71,13 +72,7 @@ const Buyers = () => {
         </div>
       ) : (
         <>
-          {/* Action Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Buyers & Partners</h2>
-              <p className="text-sm text-white/40 mt-1">Licensing Network</p>
-            </div>
-          </div>
+      <PageHeader title="Buyers & Partners" />
 
           {/* Search */}
           <div className="flex items-center justify-between mb-12">

@@ -12,6 +12,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import axios from 'axios';
+import PageHeader from '../components/PageHeader';
 
 const MyLibrary = () => {
   const [productions, setProductions] = useState([]);
@@ -49,30 +50,11 @@ const MyLibrary = () => {
   return (
     <div className="space-y-10 pb-20">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
-        <div>
-          <h2 className="text-2xl font-bold text-white">My Library</h2>
-          <p className="text-sm text-white/40 mt-1">Access and download your licensed high-resolution assets</p>
-        </div>
-        <div className="flex gap-3">
-          <button 
-            onClick={() => window.location.href = '/dashboard/media'}
-            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 border border-white/5"
-          >
-            <Film size={14} /> Browse Catalog
-          </button>
-        </div>
-      </div>
+      <PageHeader title="My Library" />
 
       {productions.length === 0 ? (
         <div className="py-40 text-center">
           <p className="text-sm font-medium text-white/20">No active licenses found</p>
-          <button 
-            onClick={() => window.location.href = '/dashboard/media'}
-            className="text-[#e5a00d] text-xs font-bold mt-4 hover:underline"
-          >
-            Browse Catalog
-          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
