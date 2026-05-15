@@ -1,4 +1,65 @@
-const { MediaFile, Production } = require('../models');
+const { MediaFile, Production, Contract, Buyer } = require('../models');
+const { Op } = require('sequelize');
+
+exports.getPartnerCatalog = async (req, res) => {
+  try {
+    const productions = await Production.findAll({
+      include: [
+        {
+          model: MediaFile,
+          as: 'mediaFiles',
+          model: MediaFile,
+          as: 'mediaFiles',
+          required: false
+        }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(productions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getPartnerLibrary = async (req, res) => {
+  try {
+    const userId = req.user.id; // From auth middleware
+    const user = await req.user.constructor.findByPk(userId); // Get fresh user with buyerId
+
+    if (!user.buyerId) {
+      // Self-healing: Try to link user to buyer by email if not already linked
+      const matchingBuyer = await Buyer.findOne({ where: { email: user.email } });
+      if (matchingBuyer) {
+        user.buyerId = matchingBuyer.id;
+        await user.save();
+      } else {
+        // If still no buyerId, return empty list instead of 403 for better UX
+        return res.json([]);
+      }
+    }
+
+    // Find all active contracts for this buyer
+    const contracts = await Contract.findAll({
+      where: {
+        buyerId: user.buyerId,
+        status: 'Active',
+        expiryDate: { [Op.gt]: new Date() } // Not expired
+      },
+      include: [
+        {
+          model: Production,
+          include: [{ model: MediaFile, as: 'mediaFiles' }] // Full access to all media files for these productions
+        }
+      ]
+    });
+
+    // Extract productions from contracts
+    const productions = contracts.map(c => c.Production);
+    res.json(productions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 exports.getAllMedia = async (req, res) => {
   try {

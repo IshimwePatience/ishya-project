@@ -109,7 +109,7 @@ const Register = ({ isInternal = false }) => {
         <Link to="/" className="hover:opacity-80 transition-opacity">
           <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto mb-2" />
         </Link>
-        <span className="text-sm font-semibold text-gray-500">Production Management</span>
+        <span className="text-sm font-medium text-gray-500">Production management</span>
       </div>
 
       <div className="w-full max-w-sm">
@@ -192,10 +192,10 @@ const Register = ({ isInternal = false }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-white text-black font-bold rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl mt-12 group"
+            className="w-full py-5 bg-white text-black font-medium rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl mt-12 text-sm group"
           >
-            {loading ? 'Creating Account...' : 'Initialize Access'}
-            {!loading && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
+            {loading ? 'Creating account...' : 'Create account'}
+            {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
           </button>
         </form>
 

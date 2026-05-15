@@ -292,21 +292,19 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const token = crypto.randomBytes(20).toString('hex');
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetPasswordToken = resetCode;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 mins
     await user.save();
-
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
     await sendEmail(
       user.email,
-      'ISHYA Password Reset',
-      `Reset your password here: ${resetUrl}`,
-      `<h1>Password Reset</h1><p>You requested a password reset. Click the link below:</p><a href="${resetUrl}">${resetUrl}</a>`
+      'ISHYA Password Reset Code',
+      `Your password reset code is: ${resetCode}`,
+      `<h2>Password Reset</h2><p>You requested a password reset. Use the code below to reset your password:</p><p><strong style="font-size:24px">${resetCode}</strong></p><p>This code is valid for 15 minutes.</p>`
     );
 
-    res.json({ message: 'Reset link sent to email' });
+    res.json({ message: 'Reset code sent to email' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -314,10 +312,11 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   try {
-    const { token, password } = req.body;
+    const { email, code, password } = req.body;
     const user = await User.findOne({
       where: {
-        resetPasswordToken: token,
+        email,
+        resetPasswordToken: code,
         resetPasswordExpires: { [Op.gt]: new Date() }
       }
     });

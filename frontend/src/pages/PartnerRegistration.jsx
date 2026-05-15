@@ -245,13 +245,13 @@ const PartnerRegistration = () => {
               <button 
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full md:w-auto px-10 py-4 bg-[#e5a00d] text-black rounded-sm font-bold text-sm hover:bg-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full md:w-auto px-10 py-4 bg-[#e5a00d] text-black rounded-sm font-medium text-sm hover:bg-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {status === 'loading' ? (
                   <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                 ) : (
                   <>
-                    <Send size={16} /> Submit Application
+                    <Send size={16} /> Submit application
                   </>
                 )}
               </button>

@@ -19,6 +19,7 @@ import Expenses from './pages/Expenses';
 import Buyers from './pages/Buyers';
 import Events from './pages/Events';
 import MediaLibrary from './pages/MediaLibrary';
+import MyLibrary from './pages/MyLibrary';
 import Settings from './pages/Settings';
 import Attendance from './pages/Attendance';
 import PartnerRegistration from './pages/PartnerRegistration';
@@ -42,7 +43,7 @@ function App() {
         <Route path="/verify-2fa" element={<TwoFactorAuth />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/partner-join" element={<PartnerRegistration />} />
 
         {/* Dashboard Routes */}
@@ -57,6 +58,7 @@ function App() {
         <Route path="/dashboard/partner-requests" element={<DashboardLayout><PartnerRequests /></DashboardLayout>} />
         <Route path="/dashboard/events" element={<DashboardLayout><Events /></DashboardLayout>} />
         <Route path="/dashboard/media" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
+        <Route path="/dashboard/library" element={<DashboardLayout><MyLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
         <Route path="/dashboard/attendance" element={<DashboardLayout><Attendance /></DashboardLayout>} />
       </Routes>

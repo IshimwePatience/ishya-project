@@ -66,7 +66,7 @@ const VerifyEmail = () => {
         <Link to="/" className="hover:opacity-80 transition-opacity">
           <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto mb-2" />
         </Link>
-        <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">Production Management</span>
+        <span className="text-sm font-medium text-gray-500">Production management</span>
       </div>
 
       <div className="w-full max-w-sm text-center">
@@ -93,7 +93,7 @@ const VerifyEmail = () => {
 
         <form onSubmit={handleVerify} className="space-y-8">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">6-Digit Code</label>
+            <label className="text-xs font-medium text-gray-500 ml-1">6-digit code</label>
             <input
               className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-white text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
               placeholder="000000"
@@ -107,10 +107,10 @@ const VerifyEmail = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-white text-black font-black rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl uppercase tracking-[0.3em] text-[10px] group"
+            className="w-full py-5 bg-white text-black font-medium rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl text-sm group"
           >
-            {loading ? 'Verifying...' : 'Activate Account'}
-            {!loading && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
+            {loading ? 'Verifying...' : 'Activate account'}
+            {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
           </button>
         </form>
 

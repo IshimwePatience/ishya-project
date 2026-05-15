@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       Production.belongsTo(models.ProductionCategory, { foreignKey: 'categoryId', as: 'category' });
       Production.belongsTo(models.User, { foreignKey: 'directorId', as: 'director' });
       Production.hasMany(models.Script, { foreignKey: 'productionId' });
-      Production.hasMany(models.MediaFile, { foreignKey: 'productionId' });
+      Production.hasMany(models.MediaFile, { foreignKey: 'productionId', as: 'mediaFiles' });
       Production.belongsToMany(models.Talent, { through: 'ProductionTalents', foreignKey: 'productionId', otherKey: 'talentId', as: 'talents' });
     }
   }

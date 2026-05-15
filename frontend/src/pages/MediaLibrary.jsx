@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase } from 'lucide-react';
 import axios from 'axios';
 import MediaForm from '../components/MediaForm';
 
@@ -13,11 +13,33 @@ const MediaLibrary = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingAsset, setEditingAsset] = useState(null);
   const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
+
+  const isPartner = user?.role === 'Partner';
 
   useEffect(() => {
-    fetchAssets();
-    fetchProductions();
+    fetchSession();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchAssets();
+      if (!isPartner) fetchProductions();
+    }
+  }, [user]);
+
+  const fetchSession = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const res = await axios.get('http://localhost:5000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(res.data.user);
+    } catch (err) {
+      console.error('Session fetch failed');
+    }
+  };
 
   const fetchProductions = async () => {
     try {
@@ -35,10 +57,36 @@ const MediaLibrary = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/media', {
+
+      // If partner, fetch from specialized catalog endpoint
+      const endpoint = isPartner ? 'http://localhost:5000/api/media/partner/catalog' : 'http://localhost:5000/api/media';
+
+      const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setAssets(response.data);
+
+      if (isPartner) {
+        // For partner, the endpoint returns productions with trailers
+        setProductions(response.data);
+        // Create virtual assets from productions for the poster view
+        const virtualAssets = response.data.map(p => {
+          const posterFile = p.mediaFiles?.find(f => f.fileType === 'Poster');
+          const mainMovie = p.mediaFiles?.find(f => f.fileType === 'Full Movie' || f.fileType === 'Episode');
+          const path = posterFile ? posterFile.filePath : p.posterUrl;
+          return {
+            id: `prod-${p.id}`,
+            productionId: p.id,
+            fileName: mainMovie ? mainMovie.fileName.replace(' - Poster', '').replace(' - Trailer', '') : p.title,
+            fileType: 'Poster',
+            filePath: path ? (path.startsWith('http') ? path : `http://localhost:5000${path}`) : null,
+            isVirtual: true
+          };
+        });
+        setAssets(virtualAssets);
+      } else {
+        setAssets(response.data);
+      }
+
       setLoading(false);
     } catch (err) {
       setError('Failed to fetch media vault.');
@@ -82,12 +130,11 @@ const MediaLibrary = () => {
 
   if (selectedProduction) {
     const prodAssets = assets.filter(a => a.productionId === selectedProduction.id);
-    const trailer = prodAssets.find(a => a.fileType === 'Trailer');
-    const content = prodAssets.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
-    const poster = prodAssets.find(a => a.fileType === 'Poster');
-
-    const mainMovie = prodAssets.find(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
-    const displayTitle = mainMovie ? mainMovie.fileName.replace(' - Poster', '').replace(' - Trailer', '') : selectedProduction.title;
+    const movieFile = selectedProduction.mediaFiles?.find(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
+    const displayTitle = movieFile ? movieFile.fileName.replace(' - Poster', '').replace(' - Trailer', '') : selectedProduction.title;
+    const trailer = selectedProduction.mediaFiles?.find(a => a.fileType === 'Trailer');
+    const content = selectedProduction.mediaFiles?.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode') || [];
+    const poster = selectedProduction.mediaFiles?.find(a => a.fileType === 'Poster');
 
     return (
       <div className="space-y-12 pb-20">
@@ -130,47 +177,63 @@ const MediaLibrary = () => {
                 </div>
               )}
 
-              <div className="w-full max-w-2xl text-left space-y-6">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <h3 className="text-xl font-semibold text-white">Media Assets</h3>
-                  <span className="text-[11px] text-white/40 font-medium">{content.length} Items</span>
-                </div>
+              {!isPartner && (
+                <div className="w-full max-w-2xl text-left space-y-6">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold text-white">Media Assets</h3>
+                    <span className="text-[11px] text-white/40 font-medium">{content.length} Items</span>
+                  </div>
 
-                <div className="grid gap-3">
-                  {content.length > 0 ? content.map((item, idx) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between p-4 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="text-white/10 font-bold">{String(idx + 1).padStart(2, '0')}</span>
-                        <div>
-                          <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
-                          <div className="text-[11px] text-white/40 mt-1">
-                            {item.fileType === 'Episode' ? `Season ${item.season || 1} • Episode ${item.episodeNumber || 1}` : item.fileType} • {item.isPublic ? 'Public Access' : 'Private Vault'}
+                  <div className="grid gap-3">
+                    {content.length > 0 ? content.map((item, idx) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between p-4 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className="text-white/10 font-bold">{String(idx + 1).padStart(2, '0')}</span>
+                          <div>
+                            <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
+                            <div className="text-[11px] text-white/40 mt-1">
+                              {item.fileType === 'Episode' ? `Season ${item.season || 1} • Episode ${item.episodeNumber || 1}` : item.fileType} • {item.isPublic ? 'Public Access' : 'Private Vault'}
+                            </div>
                           </div>
                         </div>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="p-2 text-white/20 hover:text-white transition-colors"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                          <button
+                            onClick={() => window.open(item.filePath, '_blank')}
+                            className="p-2 bg-[#e5a00d] text-black rounded-full hover:scale-110 transition-all shadow-lg shadow-[#e5a00d]/20"
+                          >
+                            <Play size={14} fill="currentColor" />
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => handleEdit(item)}
-                          className="p-2 text-white/20 hover:text-white transition-colors"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button
-                          onClick={() => window.open(item.filePath, '_blank')}
-                          className="p-2 bg-[#e5a00d] text-black rounded-full hover:scale-110 transition-all shadow-lg shadow-[#e5a00d]/20"
-                        >
-                          <Play size={14} fill="currentColor" />
-                        </button>
-                      </div>
-                    </div>
-                  )) : (
-                    <div className="py-10 text-center text-white/10 text-sm font-medium">No media assets assigned.</div>
-                  )}
+                    )) : (
+                      <div className="py-10 text-center text-white/10 text-sm font-medium">No media assets assigned.</div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {isPartner && (
+                <div className="pt-10 border-t border-white/5 w-full max-w-xl text-center space-y-6">
+                  <p className="text-white/40 text-sm italic">
+                    You are currently viewing the public catalog. To download master files and marketing materials, you must have an active license for this production.
+                  </p>
+                  <button
+                    className="px-10 py-5 bg-[#e5a00d] text-black font-bold rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/20 flex items-center justify-center gap-3 mx-auto group"
+                    onClick={() => alert('License request sent to Ishya Team!')}
+                  >
+                    <Briefcase size={18} /> Request License
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -209,17 +272,23 @@ const MediaLibrary = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-white/5 pb-4 mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">Media Library</h2>
-              <p className="text-sm text-white/40 mt-1">Organize and distribute your digital assets</p>
+              <h2 className="text-2xl font-bold text-white tracking-tight">
+                {isPartner ? "Browse Catalog" : "Media Library"}
+              </h2>
+              <p className="text-sm text-white/40 mt-1">
+                {isPartner ? "Explore our production library and request licenses" : "Organize and distribute your digital assets"}
+              </p>
             </div>
 
-            <button
-              onClick={() => setIsFormOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            >
-              <Plus size={16} />
-              <span>Add to Library</span>
-            </button>
+            {!isPartner && (
+              <button
+                onClick={() => setIsFormOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              >
+                <Plus size={16} />
+                <span>Add to Library</span>
+              </button>
+            )}
           </div>
 
           {error && (
@@ -291,22 +360,24 @@ const MediaLibrary = () => {
                       </div>
 
                       {/* Management Actions */}
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleEdit(a); }}
-                          className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-white rounded-sm transition-all"
-                          title="Edit asset"
-                        >
-                          <Edit2 size={12} />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleDelete(a.id); }}
-                          className="p-1.5 bg-black/60 hover:bg-red-500 text-white rounded-sm transition-all"
-                          title="Delete asset"
-                        >
-                          <Trash2 size={12} />
-                        </button>
-                      </div>
+                      {!isPartner && (
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleEdit(a); }}
+                            className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-white rounded-sm transition-all"
+                            title="Edit asset"
+                          >
+                            <Edit2 size={12} />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDelete(a.id); }}
+                            className="p-1.5 bg-black/60 hover:bg-red-500 text-white rounded-sm transition-all"
+                            title="Delete asset"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-1">
@@ -320,13 +391,17 @@ const MediaLibrary = () => {
             </div>
           ) : (
             <div className="py-32 text-center">
-              <p className="text-white/20 text-sm font-medium">Your library is empty</p>
-              <button
-                onClick={() => setIsFormOpen(true)}
-                className="mt-6 text-[#e5a00d] text-xs font-bold hover:underline"
-              >
-                Add your first asset
-              </button>
+              <p className="text-white/20 text-sm font-medium">
+                {isPartner ? "No productions available in the catalog yet" : "Your library is empty"}
+              </p>
+              {!isPartner && (
+                <button
+                  onClick={() => setIsFormOpen(true)}
+                  className="mt-6 text-[#e5a00d] text-xs font-bold hover:underline"
+                >
+                  Add your first asset
+                </button>
+              )}
             </div>
           )}
         </>

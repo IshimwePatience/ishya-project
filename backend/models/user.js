@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.belongsTo(models.Role, { foreignKey: 'roleId', as: 'role' });
+      User.belongsTo(models.Buyer, { foreignKey: 'buyerId', as: 'buyer' });
       User.hasMany(models.Production, { foreignKey: 'directorId', as: 'directedProductions' });
     }
     
@@ -41,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
     googleId: DataTypes.STRING,
     profilePic: DataTypes.STRING,
     phone: DataTypes.STRING,
+    buyerId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     status: {
       type: DataTypes.ENUM('active', 'inactive', 'suspended'),
       defaultValue: 'active'

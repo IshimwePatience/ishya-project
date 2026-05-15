@@ -83,7 +83,7 @@ const Login = () => {
   const SocialButton = ({ icon: Icon, children, onClick, className = "" }) => (
     <button
       onClick={onClick}
-      className={`w-full py-4 px-6 border border-white/10 rounded-sm flex items-center justify-center gap-3 font-bold hover:bg-white/5 transition-all mb-4 ${className}`}
+      className={`w-full py-4 px-6 border border-white/10 rounded-sm flex items-center justify-center gap-3 font-medium hover:bg-white/5 transition-all mb-4 ${className}`}
     >
       {Icon && <Icon size={20} />}
       <span>{children}</span>
@@ -97,7 +97,7 @@ const Login = () => {
         <Link to="/" className="hover:opacity-80 transition-opacity">
           <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto mb-2" />
         </Link>
-        <span className="text-sm font-semibold text-gray-500">Production Management</span>
+        <span className="text-sm font-medium text-gray-500">Production management</span>
       </div>
 
       <div className="w-full max-w-sm -mt-8">
@@ -114,7 +114,7 @@ const Login = () => {
               {/* Google Button */}
               <button
                 onClick={handleGoogleLogin}
-                className="w-full py-4 px-6 rounded-sm flex items-center justify-center gap-3 font-bold transition-all mb-4 bg-white text-black hover:bg-gray-200"
+                className="w-full py-4 px-6 rounded-sm flex items-center justify-center gap-3 font-medium transition-all mb-4 bg-white text-black hover:bg-gray-200"
               >
                 <GoogleIcon />
                 <span className="text-black">Continue with Google</span>
@@ -211,7 +211,7 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-primary text-black font-bold rounded-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-2xl shadow-primary/20"
+                  className="w-full py-4 bg-primary text-black font-medium rounded-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-2xl shadow-primary/20"
                 >
                   {loading ? 'Logging in...' : 'Log in'}
                   {!loading && <ArrowRight size={18} />}

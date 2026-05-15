@@ -50,9 +50,10 @@ exports.approveRequest = async (req, res) => {
       firstName: request.contactPerson.split(' ')[0] || 'Partner',
       lastName: request.contactPerson.split(' ')[1] || 'User',
       email: request.email,
-      password: tempPassword, // In a real app, you'd send a "Set Password" link
+      password: tempPassword,
       roleId: partnerRole ? partnerRole.id : null,
-      isVerified: true, // Approved partners are pre-verified
+      buyerId: buyer.id,
+      isVerified: true,
       status: 'active'
     });
 
