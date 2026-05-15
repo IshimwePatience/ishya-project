@@ -210,22 +210,28 @@ const MediaLibrary = () => {
 
             <div className="w-full text-left space-y-8 pt-10 border-t border-white/5">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h3 className="text-xl font-medium text-white">Media Assets</h3>
+                <h3 className="text-xl font-medium text-white">
+                  {selectedProduction?.type === 'Series' || selectedProduction?.type === 'TV Show' ? 'Episodes' : 'Media Assets'}
+                </h3>
                 <span className="text-xs text-white/40 font-medium">{content.length} Items</span>
               </div>
 
               <div className="grid gap-3">
-                {content.length > 0 ? content.map((item, idx) => (
+                {content.length > 0 ? content
+                  .sort((a, b) => (a.season || 1) - (b.season || 1) || (a.episodeNumber || 0) - (b.episodeNumber || 0))
+                  .map((item, idx) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-5 bg-[#111111] hover:bg-white/[0.02] rounded-sm transition-all border border-white/5 group"
+                    className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/5 group"
                   >
                     <div className="flex items-center gap-6">
-                      <span className="text-white/10 font-medium text-xl">{String(idx + 1).padStart(2, '0')}</span>
+                      <span className="text-white/20 font-medium text-xl italic">{String(idx + 1).padStart(2, '0')}</span>
                       <div>
-                        <div className="text-sm font-medium text-white group-hover:text-[#e5a00d] transition-colors">{item.fileName}</div>
+                        <div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">{item.fileName}</div>
                         <div className="text-[11px] text-white/40 mt-1 font-medium">
-                          {item.fileType} • {item.isPublic ? 'Public' : 'Protected'}
+                          {(selectedProduction?.type === 'Series' || selectedProduction?.type === 'TV Show') && (item.fileType === 'Episode' || item.fileType === 'Full Movie')
+                            ? `Season ${item.season || 1} • Episode ${item.episodeNumber || 1}` 
+                            : item.fileType}
                         </div>
                       </div>
                     </div>
@@ -240,9 +246,9 @@ const MediaLibrary = () => {
                       )}
                       <button
                         onClick={() => navigate(`/watch/${item.id}`)}
-                        className="w-12 h-12 bg-[#e5a00d] text-black rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-[#e5a00d]/20"
+                        className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20"
                       >
-                        <Play size={16} fill="currentColor" className="ml-1" />
+                        <Play size={16} fill="currentColor" className="ml-0.5" />
                       </button>
                     </div>
                   </div>
