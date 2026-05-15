@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { AlertCircle, Plus, Globe, Lock, Film, Image as ImageIcon, Play } from 'lucide-react';
+import { AlertCircle, Plus, Globe, Lock, Film, Image as ImageIcon, Play, Trash2 } from 'lucide-react';
 
 const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   const [hasSeasons, setHasSeasons] = useState(initialData?.fileType === 'Episode');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [productions, setProductions] = useState([]);
-  
+
   const [mode, setMode] = useState('Movie');
-  const [assetIds, setAssetIds] = useState({ main: null, poster: null, trailer: null });
+  const [assetIds, setAssetIds] = useState({ poster: null, trailer: null });
   const [formData, setFormData] = useState({
-    fileName: initialData?.fileName?.replace(' - Poster', '').replace(' - Trailer', '') || '',
-    description: initialData?.description || '',
     productionId: initialData?.productionId || '',
     isPublic: initialData?.isPublic ?? true,
-    season: initialData?.season || 1,
-    episodeNumber: initialData?.episodeNumber || 1,
-    filePath: initialData?.filePath || '',
-    format: initialData?.format || ''
+    description: initialData?.description || '',
   });
+
+  const [episodes, setEpisodes] = useState([
+    { 
+      id: initialData?.id || null, 
+      fileName: initialData?.fileName?.replace(' - Poster', '').replace(' - Trailer', '') || '', 
+      filePath: initialData?.filePath || '', 
+      season: initialData?.season || 1, 
+      episodeNumber: initialData?.episodeNumber || 1, 
+      format: initialData?.format || '',
+      fileType: initialData?.fileType || 'Full Movie'
+    }
+  ]);
 
   const [packageAssets, setPackageAssets] = useState({
     poster: { url: '', format: '' },
@@ -28,10 +35,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
   useEffect(() => {
     fetchProductions();
-    if (initialData) {
-      fetchPackageData();
-    }
-  }, [initialData]);
+  }, []);
 
   const fetchProductions = async () => {
     try {
@@ -45,47 +49,115 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     }
   };
 
-  const fetchPackageData = async () => {
+  useEffect(() => {
+    if (formData.productionId) {
+      fetchPackageData(formData.productionId);
+      
+      if (productions.length > 0) {
+        const prod = productions.find(p => p.id == formData.productionId);
+        if (prod) {
+          const isSeries = prod.type === 'Series';
+          setHasSeasons(isSeries);
+          setMode(isSeries ? 'Series' : 'Movie');
+        }
+      }
+    }
+  }, [formData.productionId, productions.length > 0]);
+
+  const fetchPackageData = async (targetProductionId) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('http://localhost:5000/api/media', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      console.log('All Media from API:', response.data);
+      const projectAssets = response.data.filter(a => a.productionId == targetProductionId);
+      const currentProd = productions.find(p => p.id == targetProductionId);
       
-      const projectAssets = response.data.filter(a => a.productionId == initialData.productionId);
-      const main = projectAssets.find(a => a.fileType === 'Full Movie' || a.fileType === 'Episode') || initialData;
+      // Marketing Assets
       const poster = projectAssets.find(a => a.fileType === 'Poster');
       const trailer = projectAssets.find(a => a.fileType === 'Trailer');
       
-      // Get the production description from the linked production object if available
-      const prodDescription = main.production?.description || '';
+      // Media Content (Movies/Episodes)
+      const content = projectAssets.filter(a => a.fileType === 'Full Movie' || a.fileType === 'Episode');
       
-      const bestDescription = projectAssets
-        .map(a => a.description)
-        .find(d => d && d.trim().length > 0) || prodDescription || initialData.description || '';
+      // Sync structure
+      const isSeries = currentProd?.type === 'Series' || content.some(a => a.fileType === 'Episode');
+      setHasSeasons(isSeries);
+      setMode(isSeries ? 'Series' : 'Movie');
+      setAssetIds({ poster: poster?.id || null, trailer: trailer?.id || null });
 
-      setMode(main.fileType === 'Episode' ? 'Series' : 'Movie');
-      setHasSeasons(main.fileType === 'Episode');
-      setAssetIds({ main: main.id, poster: poster?.id, trailer: trailer?.id });
+      // Populate Episodes List
+      if (content.length > 0) {
+        setEpisodes(content.map(a => ({
+          id: a.id,
+          fileName: a.fileName,
+          filePath: a.filePath,
+          season: a.season || 1,
+          episodeNumber: a.episodeNumber || 1,
+          format: a.format,
+          fileType: a.fileType
+        })));
+      } else if (!initialData?.id) {
+        // Reset to one empty episode if it's a new asset form
+        setEpisodes([{ id: null, fileName: currentProd?.title || '', filePath: '', season: 1, episodeNumber: 1, format: '', fileType: isSeries ? 'Episode' : 'Full Movie' }]);
+      }
+
+      // Best description
+      const bestDescription = projectAssets.map(a => a.description).find(d => d && d.trim().length > 0) || currentProd?.description || '';
       
       setFormData(prev => ({
         ...prev,
         description: bestDescription,
-        fileName: main.fileName.replace(' - Poster', '').replace(' - Trailer', ''),
-        productionId: main.productionId,
-        isPublic: main.isPublic,
-        season: main.season || prev.season,
-        episodeNumber: main.episodeNumber || prev.episodeNumber,
-        filePath: main.filePath,
-        format: main.format
+        productionId: targetProductionId,
+        isPublic: content[0]?.isPublic ?? prev.isPublic
       }));
 
       if (poster) setPackageAssets(prev => ({ ...prev, poster: { url: poster.filePath, format: poster.format } }));
       if (trailer) setPackageAssets(prev => ({ ...prev, trailer: { url: trailer.filePath, format: trailer.format } }));
     } catch (err) {
       console.error('Failed to load package data', err);
+    }
+  };
+
+  const addEpisodeSlot = () => {
+    const currentProd = productions.find(p => p.id == formData.productionId);
+    setEpisodes([...episodes, { 
+      id: null, 
+      fileName: currentProd?.title || '', 
+      filePath: '', 
+      season: episodes[episodes.length - 1]?.season || 1, 
+      episodeNumber: (episodes[episodes.length - 1]?.episodeNumber || 0) + 1, 
+      format: '', 
+      fileType: 'Episode' 
+    }]);
+  };
+
+  const removeEpisodeSlot = (index) => {
+    if (episodes.length > 1) {
+      setEpisodes(episodes.filter((_, i) => i !== index));
+    }
+  };
+
+  const handleEpisodeUpload = async (file, index) => {
+    const uploadData = new FormData();
+    uploadData.append('file', file);
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post('http://localhost:5000/api/upload/media', uploadData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      });
+      const url = res.data.url;
+      const fmt = file.name.split('.').pop().toUpperCase();
+      
+      const newEpisodes = [...episodes];
+      newEpisodes[index] = { ...newEpisodes[index], filePath: url, format: fmt };
+      setEpisodes(newEpisodes);
+    } catch (err) {
+      setError(`Upload failed for episode ${index + 1}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,15 +170,9 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       const res = await axios.post('http://localhost:5000/api/upload/media', uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
-      
       const url = res.data.url;
       const fmt = file.name.split('.').pop().toUpperCase();
-
-      if (type === 'main') {
-        setFormData(prev => ({ ...prev, filePath: url, format: fmt }));
-      } else {
-        setPackageAssets(prev => ({ ...prev, [type]: { url, format: fmt } }));
-      }
+      setPackageAssets(prev => ({ ...prev, [type]: { url, format: fmt } }));
     } catch (err) {
       setError(`Upload failed for ${type}`);
     } finally {
@@ -121,69 +187,48 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
     try {
       const token = localStorage.getItem('token');
-      
-      const basePayload = {
-        ...formData,
-        fileType: hasSeasons ? 'Episode' : 'Full Movie'
-      };
+      const requests = [];
 
-      if (assetIds.main) {
-        // UPDATE MODE
-        const requests = [
-          axios.put(`http://localhost:5000/api/media/${assetIds.main}`, basePayload, { 
-            headers: { Authorization: `Bearer ${token}` } 
-          })
-        ];
-
-        // Update or Create Poster
-        if (packageAssets.poster.url) {
-          const posterPayload = { 
-            ...basePayload, 
-            fileName: `${formData.fileName} - Poster`, 
-            filePath: packageAssets.poster.url, 
-            fileType: 'Poster', 
-            format: packageAssets.poster.format 
-          };
-          if (assetIds.poster) {
-            requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.poster}`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
-          } else {
-            requests.push(axios.post('http://localhost:5000/api/media', posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
-          }
-        }
-
-        // Update or Create Trailer
-        if (packageAssets.trailer.url) {
-          const trailerPayload = { 
-            ...basePayload, 
-            fileName: `${formData.fileName} - Trailer`, 
-            filePath: packageAssets.trailer.url, 
-            fileType: 'Trailer', 
-            format: packageAssets.trailer.format 
-          };
-          if (assetIds.trailer) {
-            requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.trailer}`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
-          } else {
-            requests.push(axios.post('http://localhost:5000/api/media', trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
-          }
-        }
-
-        await Promise.all(requests);
-      } else {
-        // CREATE MODE
-        const batch = [basePayload];
-        if (packageAssets.poster.url) batch.push({ ...basePayload, fileName: `${formData.fileName} - Poster`, filePath: packageAssets.poster.url, fileType: 'Poster', format: packageAssets.poster.format });
-        if (packageAssets.trailer.url) batch.push({ ...basePayload, fileName: `${formData.fileName} - Trailer`, filePath: packageAssets.trailer.url, fileType: 'Trailer', format: packageAssets.trailer.format });
-        
-        await axios.post('http://localhost:5000/api/media', batch, { 
-          headers: { Authorization: `Bearer ${token}` } 
-        });
+      // 1. Handle Poster/Trailer Updates
+      if (packageAssets.poster.url) {
+        const posterPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Poster`, filePath: packageAssets.poster.url, fileType: 'Poster', format: packageAssets.poster.format };
+        if (assetIds.poster) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.poster}`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        else requests.push(axios.post('http://localhost:5000/api/media', posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
       }
+      if (packageAssets.trailer.url) {
+        const trailerPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Trailer`, filePath: packageAssets.trailer.url, fileType: 'Trailer', format: packageAssets.trailer.format };
+        if (assetIds.trailer) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.trailer}`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        else requests.push(axios.post('http://localhost:5000/api/media', trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
+      }
+
+      // 2. Handle All Episodes
+      episodes.forEach(ep => {
+        if (!ep.filePath) return; // Skip empty slots
+        const epPayload = { 
+          ...formData, 
+          fileName: ep.fileName, 
+          filePath: ep.filePath, 
+          season: ep.season, 
+          episodeNumber: ep.episodeNumber, 
+          format: ep.format, 
+          fileType: hasSeasons ? 'Episode' : 'Full Movie' 
+        };
+        
+        if (ep.id) {
+          requests.push(axios.put(`http://localhost:5000/api/media/${ep.id}`, epPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        } else {
+          requests.push(axios.post('http://localhost:5000/api/media', epPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        }
+      });
+
+      await Promise.all(requests);
       onSuccess();
     } catch (err) {
       setError('Failed to save media package');
       setLoading(false);
     }
   };
+
 
   const UploadSlot = ({ label, type, value, icon }) => (
     <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4 group hover:bg-white/[0.02] transition-all">
@@ -217,26 +262,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
       )}
 
-      {/* 1. Movie/Series Name */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
-        <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">
-            {hasSeasons ? 'Series Name' : 'Movie Name'}
-          </label>
-        </div>
-        <div className="w-full md:w-2/3">
-          <input
-            required
-            type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white font-medium"
-            placeholder={hasSeasons ? 'e.g. Episode 01' : 'e.g. Nacho Libre'}
-            value={formData.fileName}
-            onChange={(e) => setFormData({ ...formData, fileName: e.target.value })}
-          />
-        </div>
-      </div>
-
-      {/* 2. Select Project */}
+      {/* 1. Select Project */}
       <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-white/50">Select Project</label>
@@ -256,7 +282,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
       </div>
 
-      {/* 3. Has Seasons Toggle */}
+      {/* 2. Structure Toggle */}
       <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-white/50">Structure</label>
@@ -279,30 +305,120 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
       </div>
 
-      {/* Season/Episode Info (Conditional) */}
-      {hasSeasons && (
-        <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4 bg-white/[0.01]">
-          <div className="w-full md:w-1/3 mb-2 md:mb-0">
-            <label className="text-sm font-semibold text-[#e5a00d]">Episode Info</label>
-          </div>
-          <div className="w-full md:w-2/3 flex gap-4">
-            <input
-              type="number"
-              className="w-1/2 bg-black/40 border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white font-semibold"
-              placeholder="Season"
-              value={formData.season}
-              onChange={(e) => setFormData({ ...formData, season: e.target.value })}
-            />
-            <input
-              type="number"
-              className="w-1/2 bg-black/40 border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white font-semibold"
-              placeholder="Episode"
-              value={formData.episodeNumber}
-              onChange={(e) => setFormData({ ...formData, episodeNumber: e.target.value })}
-            />
-          </div>
+      {/* 3. Description */}
+      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50">Description</label>
         </div>
-      )}
+        <div className="w-full md:w-2/3">
+          <textarea
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white h-32 resize-none"
+            placeholder="Tell us more about this media package..."
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* 4. Episode Management */}
+      <div className="py-8 px-4 space-y-6">
+        <div className="flex items-center justify-between border-b border-white/5 pb-4">
+          <h3 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+            <Play size={16} className="text-[#e5a00d]" />
+            {hasSeasons ? 'Series Episodes' : 'Main Content'}
+          </h3>
+          {hasSeasons && (
+            <button
+              type="button"
+              onClick={addEpisodeSlot}
+              className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-bold rounded-sm border border-white/5 uppercase transition-all"
+            >
+              <Plus size={14} className="inline mr-1" /> Add Episode
+            </button>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          {episodes.map((ep, index) => (
+            <div key={index} className="bg-white/[0.02] border border-white/5 rounded-sm p-6 space-y-4 relative group">
+              {hasSeasons && episodes.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeEpisodeSlot(index)}
+                  className="absolute top-4 right-4 text-white/20 hover:text-red-500 transition-colors"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-white/30 uppercase">Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Episode Title"
+                    className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                    value={ep.fileName}
+                    onChange={(e) => {
+                      const newEps = [...episodes];
+                      newEps[index].fileName = e.target.value;
+                      setEpisodes(newEps);
+                    }}
+                  />
+                </div>
+                {hasSeasons && (
+                  <div className="flex gap-4">
+                    <div className="w-1/2 space-y-2">
+                      <label className="text-[10px] font-bold text-white/30 uppercase">Season</label>
+                      <input
+                        type="number"
+                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                        value={ep.season}
+                        onChange={(e) => {
+                          const newEps = [...episodes];
+                          newEps[index].season = e.target.value;
+                          setEpisodes(newEps);
+                        }}
+                      />
+                    </div>
+                    <div className="w-1/2 space-y-2">
+                      <label className="text-[10px] font-bold text-white/30 uppercase">Episode</label>
+                      <input
+                        type="number"
+                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                        value={ep.episodeNumber}
+                        onChange={(e) => {
+                          const newEps = [...episodes];
+                          newEps[index].episodeNumber = e.target.value;
+                          setEpisodes(newEps);
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center gap-4 pt-2">
+                <div className="w-full md:flex-1 bg-black/40 border border-white/5 rounded-sm px-4 py-3 text-[10px] text-white/30 truncate italic">
+                  {ep.filePath || 'No video file selected...'}
+                </div>
+                <input
+                  type="file"
+                  id={`upload-ep-${index}`}
+                  className="hidden"
+                  onChange={(e) => handleEpisodeUpload(e.target.files[0], index)}
+                />
+                <label 
+                  htmlFor={`upload-ep-${index}`}
+                  className="w-full md:w-auto px-8 py-3 bg-white/5 hover:bg-[#e5a00d] hover:text-black text-white/60 text-[10px] font-black rounded-sm cursor-pointer transition-all border border-white/10 uppercase text-center"
+                >
+                  {ep.filePath ? 'Change Video' : 'Upload Video'}
+                </label>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* 4. Upload Poster */}
       <UploadSlot label="Poster" type="poster" value={packageAssets.poster.url} icon={<ImageIcon size={16} className="text-[#e5a00d]" />} />
@@ -310,29 +426,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       {/* 5. Upload Trailer */}
       <UploadSlot label="Trailer" type="trailer" value={packageAssets.trailer.url} icon={<Play size={16} className="text-[#e5a00d]" />} />
 
-      {/* 6. Upload Movie/Episode */}
-      <UploadSlot 
-        label={hasSeasons ? 'Episode Video' : 'Movie Video'} 
-        type="main" 
-        value={formData.filePath} 
-        icon={<Film size={16} className="text-[#e5a00d]" />} 
-      />
-
-      {/* 7. Description */}
-      <div className="flex flex-col md:flex-row md:items-start py-6 border-b border-white/5 px-4">
-        <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Description</label>
-        </div>
-        <div className="w-full md:w-2/3">
-          <textarea
-            rows={4}
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white text-sm"
-            placeholder="Add asset description..."
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          />
-        </div>
-      </div>
+      {/* 5. Visibility */}
 
       {/* 8. Visibility */}
       <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
