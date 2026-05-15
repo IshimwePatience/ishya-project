@@ -153,7 +153,7 @@ const VideoPlayer = ({ src, mediaId }) => {
         <div className="relative w-full h-1 group/progress mb-4 px-1">
           <div className="absolute top-0 left-0 h-full bg-white/20 w-full rounded-full" />
           <div 
-            className="absolute top-0 left-0 h-full bg-red-600 rounded-full z-10" 
+            className="absolute top-0 left-0 h-full bg-[#e5a00d] rounded-full z-10" 
             style={{ width: `${(currentTime / duration) * 100}%` }}
           />
           <input
@@ -166,7 +166,7 @@ const VideoPlayer = ({ src, mediaId }) => {
           />
           {/* Knob */}
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-red-600 rounded-full opacity-0 group-hover/progress:opacity-100 transition-opacity z-30"
+            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#e5a00d] rounded-full opacity-0 group-hover/progress:opacity-100 transition-opacity z-30"
             style={{ left: `${(currentTime / duration) * 100}%`, transform: 'translate(-50%, -50%)' }}
           />
         </div>
