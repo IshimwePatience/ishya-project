@@ -29,12 +29,14 @@ const VideoPlayer = ({ src, mediaId }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
   const [stats, setStats] = useState({ likes: 0, unlikes: 0, userInteraction: null });
   
   let controlsTimeout;
 
   useEffect(() => {
     fetchStats();
+    setIsEnded(false);
   }, [mediaId]);
 
   const fetchStats = async () => {
@@ -67,10 +69,18 @@ const VideoPlayer = ({ src, mediaId }) => {
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
+      setIsEnded(false);
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
     }
+  };
+
+  const handleReplay = () => {
+    videoRef.current.currentTime = 0;
+    videoRef.current.play();
+    setIsPlaying(true);
+    setIsEnded(false);
   };
 
   const handleTimeUpdate = () => {
@@ -81,10 +91,17 @@ const VideoPlayer = ({ src, mediaId }) => {
     setDuration(videoRef.current.duration);
   };
 
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setIsEnded(true);
+    setShowControls(true);
+  };
+
   const handleSeek = (e) => {
     const time = e.target.value;
     videoRef.current.currentTime = time;
     setCurrentTime(time);
+    if (isEnded) setIsEnded(false);
   };
 
   const toggleMute = () => {
@@ -137,7 +154,20 @@ const VideoPlayer = ({ src, mediaId }) => {
         onClick={togglePlay}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onEnded={handleEnded}
       />
+
+      {/* Replay Overlay */}
+      {isEnded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-40">
+          <button 
+            onClick={handleReplay}
+            className="p-6 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white transition-all transform hover:scale-110 active:scale-95"
+          >
+            <RotateCcw size={48} className="animate-in fade-in zoom-in duration-300" />
+          </button>
+        </div>
+      )}
 
       {/* Overlay controls */}
       <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 transition-opacity duration-300 flex flex-col justify-end p-4 ${showControls ? 'opacity-100' : 'opacity-0'}`}>

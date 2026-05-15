@@ -57,7 +57,7 @@ const Cinema = () => {
       className="min-h-screen bg-[#121212] flex flex-col overflow-hidden select-none"
     >
       {/* Immersive Header */}
-      <div className="h-20 px-10 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-xl fixed top-0 w-full z-50">
+      <div className="h-20 px-10 flex items-center justify-between bg-transparent fixed top-0 w-full z-50">
         <div className="flex flex-col">
           <span className="text-[#e5a00d] text-[11px] font-medium uppercase tracking-widest">
             Now Playing • {media.fileName}
@@ -72,7 +72,7 @@ const Cinema = () => {
       </div>
 
       {/* Center Stage Player */}
-      <div className="flex-1 flex items-center justify-center p-4 md:p-12 pt-24">
+      <div className="flex-1 flex items-center justify-center p-4 md:p-12 pt-40">
         {media.filePath?.includes('/uploads/') ? (
           <VideoPlayer src={media.filePath} mediaId={media.id} />
         ) : (
