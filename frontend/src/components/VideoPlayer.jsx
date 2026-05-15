@@ -223,14 +223,6 @@ const VideoPlayer = ({ src, mediaId }) => {
           </div>
 
           <div className="flex items-center gap-5">
-            <button className="hover:text-white/80 transition-colors">
-              <div className="text-[10px] font-bold border-2 border-white px-0.5 py-0 rounded-sm scale-90">CC</div>
-            </button>
-
-            <button className="hover:text-white/80 transition-colors">
-              <Settings size={20} />
-            </button>
-
             <button 
               onClick={() => setIsTheaterMode(!isTheaterMode)}
               className={`hover:text-white/80 transition-colors ${isTheaterMode ? 'text-[#e5a00d]' : ''}`}
