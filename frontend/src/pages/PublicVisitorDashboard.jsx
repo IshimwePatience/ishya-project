@@ -121,15 +121,10 @@ const PublicVisitorDashboard = () => {
                   className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
                   style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
-                    // Force Resume: Find ANY unfinished progress for this production
-                    const progress = continueWatching.find(w => 
-                      Number(w.productionId) === Number(prod.id)
-                    );
-
-                    if (progress) {
-                      const mId = progress.mediaId || progress.media_id;
-                      const cTime = progress.currentTime || 0;
-                      navigate(`/watch/${mId}?resume=${cTime}`);
+                    // Only Bypass Detail Page if we are explicitly in the "Continue Watching" row
+                    if (isContinue) {
+                      const finalMediaId = item.mediaId || item.media_id;
+                      navigate(`/watch/${finalMediaId}?resume=${item.currentTime}`);
                     } else {
                       navigate(`/dashboard/production/${prod.id}`);
                     }
@@ -142,8 +137,8 @@ const PublicVisitorDashboard = () => {
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     />
                     
-                    {/* Real Progress Bar */}
-                    {actualProgress > 0 && (
+                    {/* Real Progress Bar - ONLY for Continue Watching row */}
+                    {isContinue && actualProgress > 0 && (
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
                         <div 
                           className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]" 
