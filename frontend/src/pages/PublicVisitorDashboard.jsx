@@ -8,15 +8,15 @@ import {
   Search,
   Star,
   Clock,
-  LayoutGrid
+  LayoutGrid,
+  Tv
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const PublicVisitorDashboard = ({ zoom }) => {
+const PublicVisitorDashboard = () => {
   const navigate = useNavigate();
   const [productions, setProductions] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
 
@@ -29,13 +29,11 @@ const PublicVisitorDashboard = ({ zoom }) => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
-      const [prodRes, catRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/productions', { headers }),
-        axios.get('http://localhost:5000/api/productions/categories', { headers })
+      const [prodRes] = await Promise.all([
+        axios.get('http://localhost:5000/api/productions', { headers })
       ]);
 
       setProductions(prodRes.data);
-      setCategories(catRes.data);
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch public dashboard data');
@@ -43,7 +41,7 @@ const PublicVisitorDashboard = ({ zoom }) => {
     }
   };
 
-  const MovieRow = ({ title, items }) => {
+  const MovieRow = ({ title, items, isLive = false }) => {
     const scrollRef = React.useRef(null);
 
     const scroll = (direction) => {
@@ -59,8 +57,8 @@ const PublicVisitorDashboard = ({ zoom }) => {
     return (
       <div className="space-y-4 group/row relative">
         <div className="flex items-center justify-between px-2">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2 hover:text-[#e5a00d] cursor-pointer transition-colors">
-            {title} <ChevronRight size={20} className="mt-0.5" />
+          <h3 className="text-xl font-bold text-white flex items-center gap-2 hover:text-[#e5a00d] cursor-pointer transition-colors group">
+            {title} <ChevronRight size={20} className="mt-0.5 group-hover:translate-x-1 transition-transform" />
           </h3>
         </div>
 
@@ -74,34 +72,60 @@ const PublicVisitorDashboard = ({ zoom }) => {
 
           <div 
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 px-2 no-scrollbar"
+            className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 px-2 no-scrollbar"
             style={{ scrollSnapType: 'x mandatory' }}
           >
+            {isLive && (
+              <div 
+                className="flex-shrink-0 w-80 aspect-video bg-gradient-to-br from-blue-900 to-purple-900 rounded-sm flex flex-col items-center justify-center space-y-4 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xl border border-white/5"
+                style={{ scrollSnapAlign: 'start' }}
+              >
+                <div className="w-16 h-16 bg-white/10 rounded-sm flex items-center justify-center">
+                  <Tv size={32} className="text-white" />
+                </div>
+                <span className="text-xl font-bold text-white tracking-tight">All Channels</span>
+              </div>
+            )}
+
             {items.map((prod) => (
-              <motion.div
+              <div
                 key={prod.id}
-                whileHover={{ scale: 1.05, zIndex: 20 }}
-                className="flex-shrink-0 w-64 aspect-[2/3] bg-[#121212] rounded-sm overflow-hidden relative group cursor-pointer shadow-xl transition-all"
+                className="flex-shrink-0 w-80 group cursor-pointer"
                 style={{ scrollSnapAlign: 'start' }}
                 onClick={() => navigate(`/showcase/${prod.id}`)}
               >
-                <img
-                  src={prod.posterUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920'}
-                  alt={prod.title}
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5 space-y-2">
-                  <div className="w-10 h-10 bg-[#e5a00d] rounded-full flex items-center justify-center text-black mb-2 self-center">
-                    <Play size={20} fill="currentColor" className="ml-1" />
-                  </div>
-                  <h4 className="text-sm font-bold text-white truncate">{prod.title}</h4>
-                  <div className="flex items-center gap-2 text-[10px] text-white/60 font-medium">
-                    <span>{new Date(prod.releaseDate).getFullYear()}</span>
-                    <span>•</span>
-                    <span className="uppercase tracking-widest">{prod.genre || 'Action'}</span>
+                <div className="aspect-video bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5">
+                  <img
+                    src={prod.posterUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920'}
+                    alt={prod.title}
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  />
+                  {isLive && (
+                    <>
+                      <div className="absolute top-3 right-3 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm flex items-center gap-1 shadow-lg">
+                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" /> LIVE
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
+                        <div 
+                          className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]" 
+                          style={{ width: `${Math.random() * 60 + 20}%` }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform">
+                      <Play size={24} fill="currentColor" className="ml-1" />
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+                <div className="mt-3 space-y-1">
+                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
+                  <p className="text-[10px] text-white/40 font-medium">
+                    {isLive ? `${Math.floor(Math.random() * 50 + 5)}m left` : `${new Date(prod.releaseDate).getFullYear()} • ${prod.genre || 'Action'}`}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
 
@@ -116,91 +140,33 @@ const PublicVisitorDashboard = ({ zoom }) => {
     );
   };
 
-  const genres = ['All', 'Action', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Horror', 'Music', 'Romance', 'Sci-Fi', 'Thriller', 'Western'];
+  const genres = ['All', 'Action', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'En Español', 'Horror', 'Music', 'Romance', 'Sci-Fi', 'Thriller', 'Western', 'Descriptive Audio'];
 
   if (loading) {
     return (
-      <div className="space-y-12">
-        <div className="h-96 w-full bg-white/5 animate-pulse rounded-sm" />
-        <div className="space-y-4">
-          <div className="h-8 w-48 bg-white/5 animate-pulse rounded-sm ml-2" />
-          <div className="flex gap-4 overflow-hidden">
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="flex-shrink-0 w-64 aspect-[2/3] bg-white/5 animate-pulse rounded-sm" />
-            ))}
+      <div className="space-y-12 py-10">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="space-y-4">
+            <div className="h-8 w-48 bg-white/5 animate-pulse rounded-sm ml-2" />
+            <div className="flex gap-4 overflow-hidden">
+              {[1, 2, 3, 4].map(j => (
+                <div key={j} className="flex-shrink-0 w-80 aspect-video bg-white/5 animate-pulse rounded-sm" />
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     );
   }
 
-  const featured = productions[0] || {};
-  const trending = productions.slice(1, 10);
-  const popular = productions.slice().sort(() => Math.random() - 0.5);
-
   return (
-    <div className="space-y-12 pb-20 -mt-6">
-      {/* Hero Spotlight */}
-      <section className="relative h-[60vh] -mx-8 overflow-hidden group">
-        <img 
-          src={featured.posterUrl || 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=2059'} 
-          className="w-full h-full object-cover opacity-40 scale-105 group-hover:scale-100 transition-transform duration-[10s]"
-          alt="" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-        
-        <div className="absolute bottom-20 left-12 max-w-2xl space-y-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-2"
-          >
-            <div className="flex items-center gap-3 text-[#e5a00d] font-bold text-xs uppercase tracking-[0.3em]">
-              <Star size={14} fill="currentColor" /> Featured Tonight
-            </div>
-            <h1 className="text-6xl font-black text-white tracking-tighter leading-none">
-              {featured.title || 'Welcome to Ishya Cinema'}
-            </h1>
-          </motion.div>
-          
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg text-white/60 font-medium italic leading-relaxed"
-          >
-            {featured.description || 'Discover the best in local and international cinema, curated just for you.'}
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-center gap-4"
-          >
-            <button 
-              onClick={() => navigate(`/showcase/${featured.id}`)}
-              className="flex items-center gap-3 px-8 py-4 bg-white text-black font-bold rounded-sm hover:bg-[#e5a00d] transition-all group/btn"
-            >
-              <Play size={18} fill="currentColor" className="group-hover/btn:scale-110 transition-transform" /> Watch Now
-            </button>
-            <button className="flex items-center gap-3 px-8 py-4 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-all border border-white/10">
-              <Info size={18} /> View Details
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
+    <div className="space-y-12 pb-20 -mt-2">
       {/* Genre Filter Bar */}
-      <section className="space-y-4 sticky top-0 z-30 bg-black/80 backdrop-blur-xl py-4 -mx-8 px-8 border-b border-white/5">
+      <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 px-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-            Browse Movies & TV Shows <ChevronRight size={14} />
+          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+            Browse Movies & TV Shows <ChevronRight size={20} className="text-white/20" />
           </h2>
-          <div className="flex items-center gap-2 text-white/40 hover:text-white transition-colors cursor-pointer group">
-            <LayoutGrid size={16} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Grid View</span>
-          </div>
         </div>
         
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -208,10 +174,10 @@ const PublicVisitorDashboard = ({ zoom }) => {
             <button
               key={genre}
               onClick={() => setSelectedGenre(genre)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-xs font-bold transition-all border ${
+              className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${
                 selectedGenre === genre 
                 ? 'bg-white text-black border-white' 
-                : 'bg-white/5 text-white/60 border-white/5 hover:border-white/20 hover:text-white'
+                : 'bg-white/5 text-white/60 border-white/5 hover:border-white/20 hover:text-white hover:bg-white/10'
               }`}
             >
               {genre}
@@ -222,8 +188,8 @@ const PublicVisitorDashboard = ({ zoom }) => {
 
       {/* Content Rows */}
       <div className="space-y-16">
-        <MovieRow title="What's On Now" items={trending} />
-        <MovieRow title="Tune In Now: Popular Shows" items={popular} />
+        <MovieRow title="What's On Now" items={productions.slice(0, 8)} isLive={true} />
+        <MovieRow title="Tune In Now: Popular Shows" items={productions.slice(8, 16)} isLive={true} />
         <MovieRow title="Best Of The West" items={productions.filter(p => p.genre === 'Western' || p.genre === 'Action')} />
         <MovieRow title="Recently Added" items={productions.slice().reverse()} />
       </div>

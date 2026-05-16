@@ -343,7 +343,8 @@ exports.me = async (req, res) => {
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       email: req.user.email,
-      role: req.user.role?.name
+      role: req.user.role?.name,
+      roleId: req.user.roleId
     }
   });
 };

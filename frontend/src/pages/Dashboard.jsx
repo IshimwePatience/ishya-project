@@ -250,14 +250,24 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [prodRes, talentRes, userRes, meRes] = await Promise.all([
+      const meRes = await axios.get('http://localhost:5000/api/auth/me', { headers });
+      const currentUser = meRes.data.user;
+      setUser(currentUser);
+
+      const userRole = currentUser?.role?.toLowerCase().trim();
+      const isPublicVisitor = userRole === 'public visitor' || currentUser?.roleId === 6;
+
+      if (isPublicVisitor) {
+        setLoading(false);
+        return;
+      }
+
+      const [prodRes, talentRes, userRes] = await Promise.all([
         axios.get('http://localhost:5000/api/productions', { headers }),
         axios.get('http://localhost:5000/api/talents', { headers }),
         axios.get('http://localhost:5000/api/users', { headers }),
-        axios.get('http://localhost:5000/api/auth/me', { headers })
       ]);
 
-      setUser(meRes.data.user);
       setStats({
         productionsCount: prodRes.data.length,
         talentsCount: talentRes.data.length,
@@ -280,10 +290,11 @@ const Dashboard = () => {
   }
 
   const userRole = user?.role?.toLowerCase().trim();
+  const isPublicVisitor = userRole === 'public visitor' || user?.roleId === 6;
   
   if (userRole === 'partner') return <PartnerDashboard />;
   if (userRole === 'actor/talent') return <ActorDashboard user={user} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
-  if (userRole === 'public visitor') return <PublicVisitorDashboard zoom={zoom} />;
+  if (isPublicVisitor) return <PublicVisitorDashboard zoom={zoom} />;
 
   return <StaffDashboard stats={stats} loading={loading} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
 };
