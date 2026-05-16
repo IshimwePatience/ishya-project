@@ -43,7 +43,11 @@ exports.getContinueWatching = async (req, res) => {
         {
           model: MediaFile,
           as: 'media',
-          include: [{ model: Production, as: 'production' }]
+          include: [{ 
+          model: Production, 
+          as: 'production',
+          include: [{ model: MediaFile, as: 'mediaFiles' }]
+        }]
         }
       ],
       order: [['lastWatched', 'DESC']],

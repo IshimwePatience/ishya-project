@@ -48,18 +48,28 @@ const PublicVisitorDashboard = () => {
   };
 
   const getPoster = (prod) => {
-    if (prod.posterUrl) return prod.posterUrl;
-    if (!prod.mediaFiles || prod.mediaFiles.length === 0) return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
+    const baseUrl = 'http://localhost:5000/';
+    const defaultPoster = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
+    
+    if (prod.posterUrl) {
+      return prod.posterUrl.startsWith('http') ? prod.posterUrl : `${baseUrl}${prod.posterUrl}`;
+    }
+    
+    if (!prod.mediaFiles || prod.mediaFiles.length === 0) return defaultPoster;
     
     // 1. Try to find explicit poster (case insensitive)
     const poster = prod.mediaFiles.find(f => f.fileType?.toLowerCase() === 'poster');
-    if (poster) return poster.filePath;
+    if (poster) {
+      return poster.filePath.startsWith('http') ? poster.filePath : `${baseUrl}${poster.filePath}`;
+    }
 
     // 2. Fallback to any image file
     const anyImage = prod.mediaFiles.find(f => /\.(jpg|jpeg|png|gif|jfif|webp)$/i.test(f.filePath));
-    if (anyImage) return anyImage.filePath;
+    if (anyImage) {
+      return anyImage.filePath.startsWith('http') ? anyImage.filePath : `${baseUrl}${anyImage.filePath}`;
+    }
 
-    return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
+    return defaultPoster;
   };
 
   const MovieRow = ({ title, items, isLive = false, isVertical = false, isContinue = false }) => {
