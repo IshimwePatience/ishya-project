@@ -194,7 +194,10 @@ const PublicVisitorDashboard = () => {
     );
   };
 
-  const genres = ['All', 'Action', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'En Español', 'Horror', 'Music', 'Romance', 'Sci-Fi', 'Thriller', 'Western', 'Descriptive Audio'];
+  const dynamicGenres = Array.from(new Set(
+    productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
+  ));
+  const genres = ['All', ...dynamicGenres];
 
   if (loading) {
     return (
@@ -248,19 +251,47 @@ const PublicVisitorDashboard = () => {
         {/* Recently Added (Landscape) */}
         <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
 
-        {/* Categories (Vertical Portrait) */}
-        {categories.map(cat => {
-          const categoryProds = productions.filter(p => p.categoryId === cat.id);
-          if (categoryProds.length === 0) return null;
-          return (
-            <MovieRow 
-              key={cat.id} 
-              title={cat.name} 
-              items={categoryProds} 
-              isVertical={true} 
-            />
+        {/* Dynamic Categories based on Typed Strings */}
+        {(() => {
+          // Extract unique categories from all productions' media files
+          const allMediaCategories = Array.from(new Set(
+            productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
+          ));
+
+          // Find productions WITHOUT any typed category in their media files
+          const uncategorizedProds = productions.filter(p => 
+            !p.mediaFiles || p.mediaFiles.every(m => !m.category || m.category.trim().length === 0)
           );
-        })}
+
+          return (
+            <>
+              {allMediaCategories.map(catName => {
+                const categoryProds = productions.filter(p => 
+                  p.mediaFiles?.some(m => m.category?.toLowerCase() === catName.toLowerCase())
+                );
+                if (categoryProds.length === 0) return null;
+                
+                return (
+                  <MovieRow 
+                    key={catName} 
+                    title={catName} 
+                    items={categoryProds} 
+                    isVertical={true} 
+                  />
+                );
+              })}
+              
+              {/* Fallback "Movies" row for anything not categorized yet */}
+              {uncategorizedProds.length > 0 && (
+                <MovieRow 
+                  title="Movies" 
+                  items={uncategorizedProds} 
+                  isVertical={true} 
+                />
+              )}
+            </>
+          );
+        })()}
       </div>
     </div>
   );

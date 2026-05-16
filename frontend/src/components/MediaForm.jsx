@@ -9,9 +9,11 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   const [productions, setProductions] = useState([]);
 
   const [mode, setMode] = useState('Movie');
+  const [categories, setCategories] = useState([]);
   const [assetIds, setAssetIds] = useState({ poster: null, trailer: null });
   const [formData, setFormData] = useState({
     productionId: initialData?.productionId || '',
+    category: initialData?.category || '',
     isPublic: initialData?.isPublic ?? true,
     description: initialData?.description || '',
   });
@@ -35,7 +37,20 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
   useEffect(() => {
     fetchProductions();
+    fetchCategories();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/productions/categories', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCategories(response.data);
+    } catch (err) {
+      console.error('Failed to fetch categories');
+    }
+  };
 
   const fetchProductions = async () => {
     try {
@@ -110,6 +125,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         ...prev,
         description: bestDescription,
         productionId: targetProductionId,
+        category: currentProd?.category?.name || currentProd?.genre || '',
         isPublic: content[0]?.isPublic ?? prev.isPublic
       }));
 
@@ -191,12 +207,12 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
       // 1. Handle Poster/Trailer Updates
       if (packageAssets.poster.url) {
-        const posterPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Poster`, filePath: packageAssets.poster.url, fileType: 'Poster', format: packageAssets.poster.format };
+        const posterPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Poster`, filePath: packageAssets.poster.url, fileType: 'Poster', format: packageAssets.poster.format, category: formData.category };
         if (assetIds.poster) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.poster}`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
         else requests.push(axios.post('http://localhost:5000/api/media', posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
       }
       if (packageAssets.trailer.url) {
-        const trailerPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Trailer`, filePath: packageAssets.trailer.url, fileType: 'Trailer', format: packageAssets.trailer.format };
+        const trailerPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Trailer`, filePath: packageAssets.trailer.url, fileType: 'Trailer', format: packageAssets.trailer.format, category: formData.category };
         if (assetIds.trailer) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.trailer}`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
         else requests.push(axios.post('http://localhost:5000/api/media', trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
       }
@@ -211,7 +227,8 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           season: ep.season,
           episodeNumber: ep.episodeNumber,
           format: ep.format,
-          fileType: hasSeasons ? 'Episode' : 'Full Movie'
+          fileType: hasSeasons ? 'Episode' : 'Full Movie',
+          category: formData.category
         };
 
         if (ep.id) {
@@ -302,6 +319,22 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           >
             Has Seasons
           </button>
+        </div>
+      </div>
+
+      {/* Category Selection */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50">Category / Genre</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input
+            type="text"
+            placeholder="e.g. Action, Comedy, Drama..."
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          />
         </div>
       </div>
 
