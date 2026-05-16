@@ -61,13 +61,14 @@ const Cinema = () => {
       {/* Immersive Header */}
       <div className="h-20 px-10 flex items-center justify-between bg-transparent fixed top-0 w-full z-50">
         <div className="flex flex-col">
-          <span className="text-[#e5a00d] text-[11px] font-medium uppercase tracking-widest">
-            Now Playing • {media.fileName}
+          <span className="text-[#e5a00d] text-[11px] font-black uppercase tracking-[0.2em]">
+            Now Playing • {media.production?.title || media.fileName}
+            {media.fileType === 'Episode' && ` • S${media.season || 1}:E${media.episodeNumber || 1}`}
           </span>
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-white/5 hover:bg-[#e5a00d] text-white/40 hover:text-black border border-white/10 rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
+          className="px-6 py-2 bg-[#e5a00d] hover:bg-[#e5a00d] text-black hover:text-black border border-white/10 rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
         >
           <X size={14} /> Exit
         </button>
