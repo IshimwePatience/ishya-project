@@ -1,4 +1,4 @@
-const { Production, ProductionCategory, Talent, User } = require('../models');
+const { Production, ProductionCategory, Talent, User, MediaFile } = require('../models');
 
 exports.getCategories = async (req, res) => {
   try {
@@ -24,7 +24,8 @@ exports.getAllProductions = async (req, res) => {
     const productions = await Production.findAll({
       include: [
         { model: ProductionCategory, as: 'category' },
-        { model: Talent, as: 'talents' }
+        { model: Talent, as: 'talents' },
+        { model: MediaFile, as: 'mediaFiles' }
       ]
     });
     res.json(productions);
@@ -38,7 +39,8 @@ exports.getProductionById = async (req, res) => {
     const production = await Production.findByPk(req.params.id, {
       include: [
         { model: ProductionCategory, as: 'category' },
-        { model: Talent, as: 'talents' }
+        { model: Talent, as: 'talents' },
+        { model: MediaFile, as: 'mediaFiles' }
       ]
     });
     if (!production) return res.status(404).json({ message: 'Production not found' });

@@ -41,6 +41,21 @@ const PublicVisitorDashboard = () => {
     }
   };
 
+  const getPoster = (prod) => {
+    if (prod.posterUrl) return prod.posterUrl;
+    if (!prod.mediaFiles || prod.mediaFiles.length === 0) return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
+    
+    // 1. Try to find explicit poster (case insensitive)
+    const poster = prod.mediaFiles.find(f => f.fileType?.toLowerCase() === 'poster');
+    if (poster) return poster.filePath;
+
+    // 2. Fallback to any image file
+    const anyImage = prod.mediaFiles.find(f => /\.(jpg|jpeg|png|gif|jfif|webp)$/i.test(f.filePath));
+    if (anyImage) return anyImage.filePath;
+
+    return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
+  };
+
   const MovieRow = ({ title, items, isLive = false }) => {
     const scrollRef = React.useRef(null);
 
@@ -96,7 +111,7 @@ const PublicVisitorDashboard = () => {
               >
                 <div className="aspect-video bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5">
                   <img
-                    src={prod.posterUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920'}
+                    src={getPoster(prod)}
                     alt={prod.title}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                   />
@@ -165,7 +180,7 @@ const PublicVisitorDashboard = () => {
       <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 px-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            Browse Movies & TV Shows <ChevronRight size={20} className="text-white/20" />
+            Browse Movies & Events <ChevronRight size={20} className="text-white/20" />
           </h2>
         </div>
         
