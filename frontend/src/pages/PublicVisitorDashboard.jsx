@@ -17,6 +17,7 @@ import axios from 'axios';
 const PublicVisitorDashboard = () => {
   const navigate = useNavigate();
   const [productions, setProductions] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
 
@@ -29,11 +30,13 @@ const PublicVisitorDashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
-      const [prodRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/productions', { headers })
+      const [prodRes, catRes] = await Promise.all([
+        axios.get('http://localhost:5000/api/productions', { headers }),
+        axios.get('http://localhost:5000/api/productions/categories', { headers })
       ]);
 
       setProductions(prodRes.data);
+      setCategories(catRes.data);
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch public dashboard data');
@@ -56,7 +59,7 @@ const PublicVisitorDashboard = () => {
     return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
   };
 
-  const MovieRow = ({ title, items, isLive = false }) => {
+  const MovieRow = ({ title, items, isLive = false, isVertical = false }) => {
     const scrollRef = React.useRef(null);
 
     const scroll = (direction) => {
@@ -80,7 +83,7 @@ const PublicVisitorDashboard = () => {
         <div className="relative">
           <button 
             onClick={() => scroll('left')}
-            className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-r from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
+            className="absolute left-0 top-0 bottom-0 z-20 w-12 bg-gradient-to-r from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
           >
             <ChevronLeft size={32} />
           </button>
@@ -105,11 +108,11 @@ const PublicVisitorDashboard = () => {
             {items.map((prod) => (
               <div
                 key={prod.id}
-                className="flex-shrink-0 w-80 group cursor-pointer"
+                className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
                 style={{ scrollSnapAlign: 'start' }}
                 onClick={() => navigate(`/showcase/${prod.id}`)}
               >
-                <div className="aspect-video bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5">
+                <div className={`${isVertical ? 'aspect-[2/3]' : 'aspect-video'} bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5`}>
                   <img
                     src={getPoster(prod)}
                     alt={prod.title}
@@ -137,7 +140,7 @@ const PublicVisitorDashboard = () => {
                 <div className="mt-3 space-y-1">
                   <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
                   <p className="text-[10px] text-white/40 font-medium">
-                    {isLive ? `${Math.floor(Math.random() * 50 + 5)}m left` : `${new Date(prod.releaseDate).getFullYear()} • ${prod.genre || 'Action'}`}
+                    {new Date(prod.releaseDate).getFullYear()} • {prod.category?.name || 'Feature'}
                   </p>
                 </div>
               </div>
@@ -146,7 +149,7 @@ const PublicVisitorDashboard = () => {
 
           <button 
             onClick={() => scroll('right')}
-            className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
+            className="absolute right-0 top-0 bottom-0 z-20 w-12 bg-gradient-to-l from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
           >
             <ChevronRight size={32} />
           </button>
@@ -180,7 +183,7 @@ const PublicVisitorDashboard = () => {
       <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 px-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            Browse Movies & Events <ChevronRight size={20} className="text-white/20" />
+            Browse Movies & TV Shows <ChevronRight size={20} className="text-white/20" />
           </h2>
         </div>
         
@@ -203,10 +206,25 @@ const PublicVisitorDashboard = () => {
 
       {/* Content Rows */}
       <div className="space-y-16">
+        {/* Featured Live Content (Landscape) */}
         <MovieRow title="What's On Now" items={productions.slice(0, 8)} isLive={true} />
-        <MovieRow title="Tune In Now: Popular Shows" items={productions.slice(8, 16)} isLive={true} />
-        <MovieRow title="Best Of The West" items={productions.filter(p => p.genre === 'Western' || p.genre === 'Action')} />
-        <MovieRow title="Recently Added" items={productions.slice().reverse()} />
+        
+        {/* Recently Added (Landscape) */}
+        <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 8)} />
+
+        {/* Categories (Vertical Portrait) */}
+        {categories.map(cat => {
+          const categoryProds = productions.filter(p => p.categoryId === cat.id);
+          if (categoryProds.length === 0) return null;
+          return (
+            <MovieRow 
+              key={cat.id} 
+              title={cat.name} 
+              items={categoryProds} 
+              isVertical={true} 
+            />
+          );
+        })}
       </div>
     </div>
   );
