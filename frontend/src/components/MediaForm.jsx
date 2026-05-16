@@ -118,14 +118,15 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         setEpisodes([{ id: null, fileName: currentProd?.title || '', filePath: '', season: 1, episodeNumber: 1, format: '', fileType: isSeries ? 'Episode' : 'Full Movie' }]);
       }
 
-      // Best description
+      // Best description and category
       const bestDescription = projectAssets.map(a => a.description).find(d => d && d.trim().length > 0) || currentProd?.description || '';
+      const bestCategory = projectAssets.map(a => a.category).find(c => c && c.trim().length > 0) || currentProd?.category?.name || currentProd?.genre || '';
 
       setFormData(prev => ({
         ...prev,
         description: bestDescription,
         productionId: targetProductionId,
-        category: currentProd?.category?.name || currentProd?.genre || '',
+        category: bestCategory,
         isPublic: content[0]?.isPublic ?? prev.isPublic
       }));
 
