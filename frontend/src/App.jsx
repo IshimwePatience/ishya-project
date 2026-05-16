@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicShowcase from './pages/PublicShowcase';
 import PublicEvents from './pages/PublicEvents';
+import PublicProductionDetail from './pages/PublicProductionDetail';
 import Cinema from './pages/Cinema';
 import Dashboard from './pages/Dashboard';
 import Productions from './pages/Productions';
@@ -62,6 +63,7 @@ function App() {
         <Route path="/dashboard/library" element={<DashboardLayout><MyLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
         <Route path="/dashboard/attendance" element={<DashboardLayout><Attendance /></DashboardLayout>} />
+        <Route path="/dashboard/production/:id" element={<PublicProductionDetail />} />
       </Routes>
     </Router>
   );

@@ -40,7 +40,7 @@ const Cinema = () => {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
         <h2 className="text-white font-bold">Media Not Found</h2>
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="px-6 py-2 bg-white/10 text-white rounded-full hover:bg-white hover:text-black transition-all"
         >
@@ -51,7 +51,7 @@ const Cinema = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen bg-[#121212] flex flex-col overflow-hidden select-none"

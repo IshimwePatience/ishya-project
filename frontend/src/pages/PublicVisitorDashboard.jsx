@@ -18,6 +18,7 @@ const PublicVisitorDashboard = () => {
   const navigate = useNavigate();
   const [productions, setProductions] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [continueWatching, setContinueWatching] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
 
@@ -30,13 +31,15 @@ const PublicVisitorDashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
-      const [prodRes, catRes] = await Promise.all([
+      const [prodRes, catRes, watchRes] = await Promise.all([
         axios.get('http://localhost:5000/api/productions', { headers }),
-        axios.get('http://localhost:5000/api/productions/categories', { headers })
+        axios.get('http://localhost:5000/api/productions/categories', { headers }),
+        axios.get('http://localhost:5000/api/watch-progress/continue', { headers })
       ]);
 
       setProductions(prodRes.data);
       setCategories(catRes.data);
+      setContinueWatching(watchRes.data);
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch public dashboard data');
@@ -59,7 +62,7 @@ const PublicVisitorDashboard = () => {
     return 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
   };
 
-  const MovieRow = ({ title, items, isLive = false, isVertical = false }) => {
+  const MovieRow = ({ title, items, isLive = false, isVertical = false, isContinue = false }) => {
     const scrollRef = React.useRef(null);
 
     const scroll = (direction) => {
@@ -105,46 +108,58 @@ const PublicVisitorDashboard = () => {
               </div>
             )}
 
-            {items.map((prod) => (
-              <div
-                key={prod.id}
-                className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
-                style={{ scrollSnapAlign: 'start' }}
-                onClick={() => navigate(`/showcase/${prod.id}`)}
-              >
-                <div className={`${isVertical ? 'aspect-[2/3]' : 'aspect-video'} bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5`}>
-                  <img
-                    src={getPoster(prod)}
-                    alt={prod.title}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                  />
-                  {isLive && (
-                    <>
-                      <div className="absolute top-3 right-3 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm flex items-center gap-1 shadow-lg">
-                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" /> LIVE
-                      </div>
+            {items.map((item) => {
+              const prod = isContinue ? item.media.production : item;
+              const progress = isContinue ? (item.currentTime / item.duration) * 100 : 0;
+              
+              return (
+                <div
+                  key={isContinue ? item.id : prod.id}
+                  className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
+                  style={{ scrollSnapAlign: 'start' }}
+                  onClick={() => navigate(`/dashboard/production/${prod.id}${isContinue ? `?resume=${item.currentTime}` : ''}`)}
+                >
+                  <div className={`${isVertical ? 'aspect-[2/3]' : 'aspect-video'} bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5`}>
+                    <img
+                      src={getPoster(prod)}
+                      alt={prod.title}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    />
+                    
+                    {/* Progress Bar for Continue Watching or Live */}
+                    {(isContinue || isLive) && (
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
                         <div 
                           className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]" 
-                          style={{ width: `${Math.random() * 60 + 20}%` }}
+                          style={{ width: `${isContinue ? progress : Math.random() * 60 + 20}%` }}
                         />
                       </div>
-                    </>
-                  )}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform">
-                      <Play size={24} fill="currentColor" className="ml-1" />
+                    )}
+
+                    {isLive && (
+                      <div className="absolute top-3 right-3 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm flex items-center gap-1 shadow-lg">
+                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" /> LIVE
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform">
+                        {isContinue ? <Play size={24} fill="currentColor" className="ml-1" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+                      </div>
                     </div>
                   </div>
+                  <div className="mt-3 space-y-1">
+                    <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
+                    <p className="text-[10px] text-white/40 font-medium">
+                      {isContinue 
+                        ? `${Math.floor((item.duration - item.currentTime) / 60)}m left` 
+                        : `${new Date(prod.releaseDate).getFullYear()} • ${prod.category?.name || 'Feature'}`
+                      }
+                    </p>
+                  </div>
                 </div>
-                <div className="mt-3 space-y-1">
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
-                  <p className="text-[10px] text-white/40 font-medium">
-                    {new Date(prod.releaseDate).getFullYear()} • {prod.category?.name || 'Feature'}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <button 
@@ -206,6 +221,9 @@ const PublicVisitorDashboard = () => {
 
       {/* Content Rows */}
       <div className="space-y-16">
+        {/* Continue Watching (Landscape) */}
+        <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
+
         {/* Featured Live Content (Landscape) */}
         <MovieRow title="What's On Now" items={productions.slice(0, 8)} isLive={true} />
         

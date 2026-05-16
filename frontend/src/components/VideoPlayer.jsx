@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const VideoPlayer = ({ src, mediaId }) => {
+const VideoPlayer = ({ src, mediaId, initialTime }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,7 +37,42 @@ const VideoPlayer = ({ src, mediaId }) => {
   useEffect(() => {
     fetchStats();
     setIsEnded(false);
-  }, [mediaId]);
+
+    // Resume logic
+    if (initialTime && videoRef.current) {
+      videoRef.current.currentTime = parseFloat(initialTime);
+    }
+  }, [mediaId, initialTime]);
+
+  // Progress Heartbeat
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isPlaying && videoRef.current) {
+        saveProgress();
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, currentTime]);
+
+  const saveProgress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      await axios.post('http://localhost:5000/api/watch-progress/update', {
+        mediaId,
+        productionId: 0, // Backend should find it or I can pass it
+        currentTime: videoRef.current.currentTime,
+        duration: videoRef.current.duration,
+        isFinished: videoRef.current.ended
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch (err) {
+      console.error('Failed to save watch progress');
+    }
+  };
 
   const fetchStats = async () => {
     try {

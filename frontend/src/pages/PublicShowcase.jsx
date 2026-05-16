@@ -249,7 +249,7 @@ const PublicShowcase = () => {
                     <span className="text-[10px] opacity-20">/</span>
                     <span className="text-white/60">{displayTitle}</span>
                   </div>
-                  
+
                   <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter mt-4">
                     {displayTitle}
                   </h2>
