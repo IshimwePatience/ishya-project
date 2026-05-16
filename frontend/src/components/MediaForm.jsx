@@ -150,8 +150,23 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     }]);
   };
 
-  const removeEpisodeSlot = (index) => {
-    if (episodes.length > 1) {
+  const removeEpisodeSlot = async (index) => {
+    const ep = episodes[index];
+    if (ep.id) {
+      if (!window.confirm('Are you sure you want to permanently delete this media file?')) return;
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        await axios.delete(`http://localhost:5000/api/media/${ep.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setEpisodes(episodes.filter((_, i) => i !== index));
+      } catch (err) {
+        setError('Failed to delete media asset');
+      } finally {
+        setLoading(false);
+      }
+    } else {
       setEpisodes(episodes.filter((_, i) => i !== index));
     }
   };

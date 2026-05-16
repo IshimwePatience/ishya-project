@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class MediaInteraction extends Model {
     static associate(models) {
       MediaInteraction.belongsTo(models.User, { foreignKey: 'userId' });
-      MediaInteraction.belongsTo(models.MediaFile, { foreignKey: 'mediaId' });
+      MediaInteraction.belongsTo(models.MediaFile, { foreignKey: 'mediaId', onDelete: 'CASCADE' });
     }
   }
   MediaInteraction.init({

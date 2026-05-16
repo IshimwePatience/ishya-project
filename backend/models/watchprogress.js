@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class WatchProgress extends Model {
     static associate(models) {
       WatchProgress.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-      WatchProgress.belongsTo(models.MediaFile, { foreignKey: 'mediaId', as: 'media' });
+      WatchProgress.belongsTo(models.MediaFile, { foreignKey: 'mediaId', as: 'media', onDelete: 'CASCADE' });
     }
   }
   WatchProgress.init({

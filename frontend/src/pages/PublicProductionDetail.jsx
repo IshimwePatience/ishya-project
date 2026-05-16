@@ -119,16 +119,14 @@ const PublicProductionDetail = () => {
                 {production.title}
               </h1>
               <p className="text-white/60 text-sm font-medium">
-                Directed by {production.director || 'Reinaldo Marcus Green'}
+                {production.director ? `Directed by ${production.director}` : 'Director TBA'}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 text-[13px] font-semibold text-white/80">
-                <span className="px-1.5 py-0.5 bg-white/10 rounded-sm text-[11px] font-bold">R</span>
-                <span>{new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                <span className="px-1.5 py-0.5 bg-white/10 rounded-sm text-[11px] font-bold">{production.rating || 'G'}</span>
+                <span>{production.releaseDate ? new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Coming Soon'}</span>
                 <span className="w-1 h-1 bg-white/20 rounded-full" />
-                <span>1h 48m</span>
-                <span className="w-1 h-1 bg-white/20 rounded-full" />
-                <span>{production.genre || 'Action, Adventure, and more'}</span>
+                <span>{production.mediaFiles?.find(m => m.category)?.category || production.genre || 'General'}</span>
               </div>
             </div>
 

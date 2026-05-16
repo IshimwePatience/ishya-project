@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     fileType: DataTypes.STRING, // Trailer, Full Movie, Poster
+    format: DataTypes.STRING, // JPG, PNG, MP4, etc.
     category: DataTypes.STRING,
     productionId: DataTypes.INTEGER,
     isPublic: {
