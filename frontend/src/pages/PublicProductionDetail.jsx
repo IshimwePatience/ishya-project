@@ -157,9 +157,6 @@ const PublicProductionDetail = () => {
                 <Check size={20} className="text-white/60" />
               </button>
               
-              <button className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/5">
-                <Share2 size={20} className="text-white/60" />
-              </button>
 
               <button className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/5">
                 <Info size={20} className="text-white/60" />

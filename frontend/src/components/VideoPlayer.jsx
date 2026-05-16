@@ -21,14 +21,14 @@ import axios from 'axios';
 const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
-  const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [isTheaterMode, setIsTheaterMode] = useState(true);
   const [isEnded, setIsEnded] = useState(false);
   const [stats, setStats] = useState({ likes: 0, unlikes: 0, userInteraction: null });
   
@@ -179,6 +179,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
       <video
         ref={videoRef}
         src={src}
+        autoPlay
         className="w-full h-full cursor-pointer"
         onClick={togglePlay}
         onTimeUpdate={handleTimeUpdate}

@@ -243,55 +243,106 @@ const PublicVisitorDashboard = () => {
         </div>
       </section>
 
-      {/* Content Rows */}
+      {/* Content Section */}
       <div className="space-y-16">
-        {/* Continue Watching (Landscape) - Only shows if there is REAL progress */}
-        <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
-        
-        {/* Recently Added (Landscape) */}
-        <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
+        {selectedGenre === 'All' ? (
+          <>
+            {/* Continue Watching (Landscape) */}
+            <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
+            
+            {/* Recently Added (Landscape) */}
+            <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
 
-        {/* Dynamic Categories based on Typed Strings */}
-        {(() => {
-          // Extract unique categories from all productions' media files
-          const allMediaCategories = Array.from(new Set(
-            productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
-          ));
+            {/* Dynamic Categories based on Typed Strings */}
+            {(() => {
+              const allMediaCategories = Array.from(new Set(
+                productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
+              ));
 
-          // Find productions WITHOUT any typed category in their media files
-          const uncategorizedProds = productions.filter(p => 
-            !p.mediaFiles || p.mediaFiles.every(m => !m.category || m.category.trim().length === 0)
-          );
+              const uncategorizedProds = productions.filter(p => 
+                !p.mediaFiles || p.mediaFiles.every(m => !m.category || m.category.trim().length === 0)
+              );
 
-          return (
-            <>
-              {allMediaCategories.map(catName => {
-                const categoryProds = productions.filter(p => 
-                  p.mediaFiles?.some(m => m.category?.toLowerCase() === catName.toLowerCase())
-                );
-                if (categoryProds.length === 0) return null;
-                
-                return (
-                  <MovieRow 
-                    key={catName} 
-                    title={catName} 
-                    items={categoryProds} 
-                    isVertical={true} 
-                  />
-                );
-              })}
-              
-              {/* Fallback "Movies" row for anything not categorized yet */}
-              {uncategorizedProds.length > 0 && (
-                <MovieRow 
-                  title="Movies" 
-                  items={uncategorizedProds} 
-                  isVertical={true} 
-                />
-              )}
-            </>
-          );
-        })()}
+              return (
+                <>
+                  {allMediaCategories.map(catName => {
+                    const categoryProds = productions.filter(p => 
+                      p.mediaFiles?.some(m => m.category?.toLowerCase() === catName.toLowerCase())
+                    );
+                    if (categoryProds.length === 0) return null;
+                    
+                    return (
+                      <MovieRow 
+                        key={catName} 
+                        title={catName} 
+                        items={categoryProds} 
+                        isVertical={true} 
+                      />
+                    );
+                  })}
+                  
+                  {uncategorizedProds.length > 0 && (
+                    <MovieRow 
+                      title="Movies" 
+                      items={uncategorizedProds} 
+                      isVertical={true} 
+                    />
+                  )}
+                </>
+              );
+            })()}
+          </>
+        ) : (
+          /* Genre Grid View (Netflix style) */
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-8"
+          >
+            <div className="space-y-3 pt-4">
+              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+                {selectedGenre} Movies & Shows
+              </h1>
+              <p className="text-white/60 max-w-2xl text-[15px] leading-relaxed">
+                Corruption, passion, and excitement fuel the action of the very best {selectedGenre.toLowerCase()} movies and shows. Watch the stories unfold and lose yourself in the cinematic journey.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10 pt-8">
+              {productions
+                .filter(p => 
+                  p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
+                  (selectedGenre === 'Movies' && (!p.mediaFiles || p.mediaFiles.every(m => !m.category)))
+                )
+                .map((prod) => (
+                  <div
+                    key={prod.id}
+                    className="group cursor-pointer space-y-3"
+                    onClick={() => navigate(`/dashboard/production/${prod.id}`)}
+                  >
+                    <div className="aspect-[2/3] bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5">
+                      <img
+                        src={getPoster(prod)}
+                        alt={prod.title}
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform">
+                          <Play size={24} fill="currentColor" className="ml-1" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
+                      <p className="text-[10px] text-white/40 font-medium">
+                        {new Date(prod.releaseDate).getFullYear()} • {prod.type || 'Movie'}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
