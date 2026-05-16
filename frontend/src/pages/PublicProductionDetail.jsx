@@ -134,13 +134,26 @@ const PublicProductionDetail = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-4">
-              <button 
-                onClick={() => movieAsset && navigate(`/watch/${movieAsset.id}${resumeTime ? `?resume=${resumeTime}` : ''}`)}
-                className="flex items-center gap-3 px-8 py-3 bg-white text-black rounded-full font-bold text-sm hover:bg-white/90 transition-all shadow-lg"
-              >
-                <Play size={18} fill="currentColor" />
-                {resumeTime ? 'Resume Movie' : 'Watch Now'}
-              </button>
+              {production.type === 'Series' ? (
+                <button 
+                  onClick={() => {
+                    const firstEp = production.mediaFiles?.find(m => m.fileType === 'Episode');
+                    if (firstEp) navigate(`/watch/${firstEp.id}`);
+                  }}
+                  className="flex items-center gap-3 px-8 py-3 bg-[#e5a00d] text-black rounded-full font-bold text-sm hover:bg-[#ffb414] transition-all shadow-lg shadow-[#e5a00d]/20"
+                >
+                  <Play size={18} fill="currentColor" />
+                  {resumeTime ? 'Resume Series' : 'Start S1:E1'}
+                </button>
+              ) : (
+                <button 
+                  onClick={() => movieAsset && navigate(`/watch/${movieAsset.id}${resumeTime ? `?resume=${resumeTime}` : ''}`)}
+                  className="flex items-center gap-3 px-8 py-3 bg-white text-black rounded-full font-bold text-sm hover:bg-white/90 transition-all shadow-lg"
+                >
+                  <Play size={18} fill="currentColor" />
+                  {resumeTime ? 'Resume Movie' : 'Watch Now'}
+                </button>
+              )}
 
               <button className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/5">
                 <Check size={20} className="text-white/60" />
@@ -158,9 +171,54 @@ const PublicProductionDetail = () => {
             {/* Description */}
             <div className="pt-6 max-w-3xl">
               <p className="text-[15px] text-white/90 leading-[1.6] font-normal">
-                {production.description || "Follows Frank Castle, a PTSD-addled veteran who returns to action when Ma Gnucci, a wheelchair-bound crime matriarch, seeks revenge after he killed her son, forcing him to fight off the city's criminals descending upon him."}
+                {production.description || "No description available for this title."}
               </p>
             </div>
+
+            {/* Episodes Section - ONLY for Series */}
+            {production.type === 'Series' && (
+              <div className="pt-10 space-y-6">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                    <Film size={20} className="text-[#e5a00d]" />
+                    Episodes
+                  </h3>
+                  <span className="text-[11px] font-bold text-white/40 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/10">
+                    Season 1
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-3">
+                  {production.mediaFiles
+                    ?.filter(m => m.fileType === 'Episode')
+                    .sort((a, b) => (a.episodeNumber || 0) - (b.episodeNumber || 0))
+                    .map((ep) => (
+                      <div 
+                        key={ep.id}
+                        onClick={() => navigate(`/watch/${ep.id}`)}
+                        className="flex items-center gap-6 p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 cursor-pointer transition-all group"
+                      >
+                        <div className="w-12 h-12 flex-shrink-0 bg-black/40 rounded-lg flex items-center justify-center text-[#e5a00d] group-hover:scale-110 transition-transform">
+                          <Play size={20} fill="currentColor" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-[10px] font-black text-[#e5a00d] uppercase">EP {ep.episodeNumber || '1'}</span>
+                            <span className="w-1 h-1 bg-white/10 rounded-full" />
+                            <span className="text-xs font-bold text-white/40 truncate">{ep.format || 'HD'}</span>
+                          </div>
+                          <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">
+                            {ep.fileName}
+                          </h4>
+                        </div>
+                        <div className="text-[10px] font-bold text-white/20 group-hover:text-white/60 transition-colors px-3 py-1 border border-white/5 rounded-full">
+                          WATCH
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
 
             {/* Community Section (Replacing Cast with Likes) */}
             <div className="grid grid-cols-1 gap-6 pt-12 border-t border-white/5">

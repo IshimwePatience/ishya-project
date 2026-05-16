@@ -174,7 +174,7 @@ const PublicVisitorDashboard = () => {
                     <p className="text-[10px] text-white/40 font-medium">
                       {isContinue 
                         ? `${Math.floor((item.duration - item.currentTime) / 60)}m left` 
-                        : `${new Date(prod.releaseDate).getFullYear()} • ${prod.category?.name || 'Feature'}`
+                        : `${new Date(prod.releaseDate).getFullYear()} • ${prod.type || 'Movie'}`
                       }
                     </p>
                   </div>

@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'Draft'
     },
     type: {
-      type: DataTypes.ENUM('Movie', 'Theatre', 'Radio Drama', 'Journal/Paper', 'Script'),
+      type: DataTypes.ENUM('Movie', 'Series', 'Theatre', 'Radio Drama', 'Journal/Paper', 'Script'),
       defaultValue: 'Movie'
     },
     categoryId: {
