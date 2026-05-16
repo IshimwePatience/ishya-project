@@ -93,6 +93,7 @@ const MediaLibrary = () => {
               allAssets.push({
                 ...file,
                 productionId: p.id,
+                isLicensed: p.isLicensed,
                 filePath: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `http://localhost:5000${file.filePath}`) : null
               });
             });
@@ -212,6 +213,11 @@ const MediaLibrary = () => {
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <h3 className="text-xl font-medium text-white">
                   {selectedProduction?.type === 'Series' || selectedProduction?.type === 'TV Show' ? 'Episodes' : 'Media Assets'}
+                  {isPartner && !selectedProduction.isLicensed && (
+                    <span className="ml-3 text-[10px] bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded-full uppercase tracking-widest font-bold">
+                      Licensed Access Only
+                    </span>
+                  )}
                 </h3>
                 <span className="text-xs text-white/40 font-medium">{content.length} Items</span>
               </div>
@@ -244,12 +250,18 @@ const MediaLibrary = () => {
                           <Edit2 size={16} />
                         </button>
                       )}
-                      <button
-                        onClick={() => navigate(`/watch/${item.id}`)}
-                        className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20"
-                      >
-                        <Play size={16} fill="currentColor" className="ml-0.5" />
-                      </button>
+                      {(!isPartner || selectedProduction.isLicensed) ? (
+                        <button
+                          onClick={() => navigate(`/watch/${item.id}`)}
+                          className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20"
+                        >
+                          <Play size={16} fill="currentColor" className="ml-0.5" />
+                        </button>
+                      ) : (
+                        <div className="w-10 h-10 bg-white/5 text-white/20 rounded-full flex items-center justify-center cursor-not-allowed border border-white/5" title="License Required">
+                          <Lock size={16} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )) : (

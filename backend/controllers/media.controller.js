@@ -3,19 +3,48 @@ const { Op } = require('sequelize');
 
 exports.getPartnerCatalog = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const user = await req.user.constructor.findByPk(userId);
+    
+    if (user && !user.buyerId) {
+      const matchingBuyer = await Buyer.findOne({ where: { email: user.email } });
+      if (matchingBuyer) {
+        user.buyerId = matchingBuyer.id;
+        await user.save();
+      }
+    }
+    
+    const buyerId = user?.buyerId;
+
     const productions = await Production.findAll({
       include: [
         {
           model: MediaFile,
           as: 'mediaFiles',
-          model: MediaFile,
-          as: 'mediaFiles',
           required: false
+        },
+        {
+          model: Contract,
+          where: { buyerId: buyerId || 0 }, // Filter by this partner's contracts if they have a buyerId
+          required: false, // Include all productions, even those without a contract
+          attributes: ['id', 'status', 'expiryDate']
         }
       ],
       order: [['createdAt', 'DESC']]
     });
-    res.json(productions);
+
+    // Map productions to include a simple 'isLicensed' boolean for the frontend
+    const results = productions.map(p => {
+      const activeContract = p.Contracts?.find(c => c.status === 'Active' && new Date(c.expiryDate) > new Date());
+      const prodJson = p.toJSON();
+      delete prodJson.Contracts; // Remove raw contracts for cleaner API
+      return {
+        ...prodJson,
+        isLicensed: !!activeContract
+      };
+    });
+
+    res.json(results);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
