@@ -23,7 +23,7 @@ const VerifyEmail = () => {
       const response = await axios.post('http://localhost:5000/api/auth/verify-email', { email, code });
       const { user, accessToken, refreshToken } = response.data;
       const fromFlow = location.state?.from || 'register';
-      
+
       if (fromFlow === 'register') {
         setSuccess('Email verified successfully! Redirecting to login...');
         setTimeout(() => navigate('/login'), 2000);
@@ -32,10 +32,10 @@ const VerifyEmail = () => {
         localStorage.setItem('token', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('user', JSON.stringify(user));
-        
+
         setSuccess('Account activated! Logging you in...');
         window.dispatchEvent(new Event('storage'));
-        
+
         if (user.role === 'Actor/Talent') {
           setTimeout(() => navigate('/dashboard/scripts'), 1500);
         } else {
@@ -70,9 +70,6 @@ const VerifyEmail = () => {
       </div>
 
       <div className="w-full max-w-sm text-center">
-        <div className="w-16 h-16 bg-brown/30 rounded-full flex items-center justify-center mx-auto mb-8 border border-brown-light">
-          <ShieldCheck className="text-white" size={32} />
-        </div>
 
         <h2 className="text-3xl font-bold mb-4">Verify Email</h2>
         <p className="text-gray-500 text-sm mb-12 font-medium leading-relaxed px-4">

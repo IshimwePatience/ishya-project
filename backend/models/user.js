@@ -69,12 +69,12 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     hooks: {
       beforeCreate: (user) => {
-        if (user.password) {
+        if (user.password && !user.password.startsWith('$2b$')) {
           user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
         }
       },
       beforeUpdate: (user) => {
-        if (user.changed('password')) {
+        if (user.changed('password') && user.password && !user.password.startsWith('$2b$')) {
           user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
         }
       }
