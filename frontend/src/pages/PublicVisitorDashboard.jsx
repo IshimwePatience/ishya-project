@@ -109,15 +109,31 @@ const PublicVisitorDashboard = () => {
             )}
 
             {items.map((item) => {
-              const prod = isContinue ? item.media.production : item;
-              const progress = isContinue ? (item.currentTime / item.duration) * 100 : 0;
+              const prod = isContinue ? (item.media?.production) : item;
+              if (!prod) return null; // Skip if production data is missing
+              
+              const watchItem = continueWatching.find(w => Number(w.productionId) === Number(prod.id));
+              const actualProgress = watchItem ? (watchItem.currentTime / watchItem.duration) * 100 : 0;
               
               return (
                 <div
                   key={isContinue ? item.id : prod.id}
                   className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
                   style={{ scrollSnapAlign: 'start' }}
-                  onClick={() => navigate(`/dashboard/production/${prod.id}${isContinue ? `?resume=${item.currentTime}` : ''}`)}
+                  onClick={() => {
+                    // Force Resume: Find ANY unfinished progress for this production
+                    const progress = continueWatching.find(w => 
+                      Number(w.productionId) === Number(prod.id)
+                    );
+
+                    if (progress) {
+                      const mId = progress.mediaId || progress.media_id;
+                      const cTime = progress.currentTime || 0;
+                      navigate(`/watch/${mId}?resume=${cTime}`);
+                    } else {
+                      navigate(`/dashboard/production/${prod.id}`);
+                    }
+                  }}
                 >
                   <div className={`${isVertical ? 'aspect-[2/3]' : 'aspect-video'} bg-[#121212] rounded-sm overflow-hidden relative shadow-xl border border-white/5`}>
                     <img
@@ -126,12 +142,12 @@ const PublicVisitorDashboard = () => {
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     />
                     
-                    {/* Progress Bar for Continue Watching or Live */}
-                    {(isContinue || isLive) && (
+                    {/* Real Progress Bar */}
+                    {actualProgress > 0 && (
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
                         <div 
                           className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]" 
-                          style={{ width: `${isContinue ? progress : Math.random() * 60 + 20}%` }}
+                          style={{ width: `${actualProgress}%` }}
                         />
                       </div>
                     )}
@@ -221,14 +237,11 @@ const PublicVisitorDashboard = () => {
 
       {/* Content Rows */}
       <div className="space-y-16">
-        {/* Continue Watching (Landscape) */}
+        {/* Continue Watching (Landscape) - Only shows if there is REAL progress */}
         <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
-
-        {/* Featured Live Content (Landscape) */}
-        <MovieRow title="What's On Now" items={productions.slice(0, 8)} isLive={true} />
         
         {/* Recently Added (Landscape) */}
-        <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 8)} />
+        <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
 
         {/* Categories (Vertical Portrait) */}
         {categories.map(cat => {

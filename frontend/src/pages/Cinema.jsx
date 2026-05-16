@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { X, Film, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -9,8 +9,10 @@ import VideoPlayer from '../components/VideoPlayer';
 const Cinema = () => {
   const { mediaId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
+  const resumeTime = new URLSearchParams(location.search).get('resume');
 
   useEffect(() => {
     const fetchMedia = async () => {
@@ -74,7 +76,12 @@ const Cinema = () => {
       {/* Center Stage Player */}
       <div className="flex-1 flex items-center justify-center p-4 md:p-12 pt-40">
         {media.filePath?.includes('/uploads/') ? (
-          <VideoPlayer src={media.filePath} mediaId={media.id} />
+          <VideoPlayer 
+            src={media.filePath} 
+            mediaId={media.id} 
+            productionId={media.productionId}
+            initialTime={resumeTime}
+          />
         ) : (
           <div className="w-full max-w-6xl aspect-video bg-[#121212] border border-white/5 relative group shadow-[0_0_100px_rgba(229,160,13,0.05)]">
             <iframe

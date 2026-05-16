@@ -17,6 +17,7 @@ exports.updateProgress = async (req, res) => {
 
     if (!created) {
       await progress.update({
+        productionId,
         currentTime,
         duration,
         isFinished,

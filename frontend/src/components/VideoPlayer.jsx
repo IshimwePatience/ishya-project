@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const VideoPlayer = ({ src, mediaId, initialTime }) => {
+const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -53,7 +53,7 @@ const VideoPlayer = ({ src, mediaId, initialTime }) => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isPlaying, currentTime]);
+  }, [isPlaying]);
 
   const saveProgress = async () => {
     try {
@@ -62,7 +62,7 @@ const VideoPlayer = ({ src, mediaId, initialTime }) => {
 
       await axios.post('http://localhost:5000/api/watch-progress/update', {
         mediaId,
-        productionId: 0, // Backend should find it or I can pass it
+        productionId: productionId || 0,
         currentTime: videoRef.current.currentTime,
         duration: videoRef.current.duration,
         isFinished: videoRef.current.ended
@@ -126,12 +126,6 @@ const VideoPlayer = ({ src, mediaId, initialTime }) => {
     setDuration(videoRef.current.duration);
   };
 
-  const handleEnded = () => {
-    setIsPlaying(false);
-    setIsEnded(true);
-    setShowControls(true);
-  };
-
   const handleSeek = (e) => {
     const time = e.target.value;
     videoRef.current.currentTime = time;
@@ -189,7 +183,16 @@ const VideoPlayer = ({ src, mediaId, initialTime }) => {
         onClick={togglePlay}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onEnded={handleEnded}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => {
+          setIsPlaying(false);
+          saveProgress();
+        }}
+        onEnded={() => {
+          setIsPlaying(false);
+          setIsEnded(true);
+          saveProgress();
+        }}
       />
 
       {/* Replay Overlay */}
