@@ -198,7 +198,7 @@ const PublicVisitorDashboard = () => {
       <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 px-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            Browse Movies & TV Shows <ChevronRight size={20} className="text-white/20" />
+            Browse Movies & Events <ChevronRight size={20} className="text-white/20" />
           </h2>
         </div>
         
