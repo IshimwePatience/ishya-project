@@ -15,6 +15,8 @@ import {
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
+import PublicVisitorDashboard from './PublicVisitorDashboard';
+import PartnerDashboard from './PartnerDashboard';
 
 const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
@@ -67,8 +69,8 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 
   return (
     <div className="space-y-12 pb-20">
-      <PageHeader 
-        title={`Welcome back, ${user.firstName}`} 
+      <PageHeader
+        title={`Welcome back, ${user.firstName}`}
         zoom={zoom}
         setZoom={setZoom}
         viewMode={viewMode}
@@ -85,15 +87,15 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
           </div>
 
           {scripts.length > 0 ? (
-            <div 
+            <div
               className="grid gap-4"
               style={{
                 gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
               }}
             >
               {scripts.map((script, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   onClick={() => script.filePath && handleDownload(script.filePath, script.title)}
                   className="bg-[#121212] border border-white/5 p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all cursor-pointer"
                 >
@@ -155,15 +157,15 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 
 const StaffDashboard = ({ stats, loading, zoom, setZoom, viewMode, setViewMode }) => (
   <div className="space-y-8 pb-20">
-    <PageHeader 
-      title="Studio overview" 
+    <PageHeader
+      title="Studio overview"
       zoom={zoom}
       setZoom={setZoom}
       viewMode={viewMode}
       setViewMode={setViewMode}
     />
 
-    <div 
+    <div
       className="grid gap-6"
       style={{
         gridTemplateColumns: `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2.5}px, 1fr))`
@@ -177,7 +179,7 @@ const StaffDashboard = ({ stats, loading, zoom, setZoom, viewMode, setViewMode }
 
     <section className="space-y-6 pt-10">
       <h3 className="text-sm font-semibold text-white">What's on now</h3>
-      <div 
+      <div
         className="grid gap-6"
         style={{
           gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2.2}px, 1fr))`
@@ -207,7 +209,7 @@ const StaffDashboard = ({ stats, loading, zoom, setZoom, viewMode, setViewMode }
 );
 
 const StatCard = ({ label, value, icon: Icon, color, zoom }) => (
-  <div 
+  <div
     className="bg-[#121212] rounded-sm border border-white/5 group hover:bg-white/5 transition-all"
     style={{ padding: `${1.5 * (zoom / 50)}rem` }}
   >
@@ -277,8 +279,11 @@ const Dashboard = () => {
     );
   }
 
-  if (user?.role === 'Partner') return <PartnerDashboard />;
-  if (user?.role === 'Actor/Talent') return <ActorDashboard user={user} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
+  const userRole = user?.role?.toLowerCase().trim();
+  
+  if (userRole === 'partner') return <PartnerDashboard />;
+  if (userRole === 'actor/talent') return <ActorDashboard user={user} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
+  if (userRole === 'public visitor') return <PublicVisitorDashboard zoom={zoom} />;
 
   return <StaffDashboard stats={stats} loading={loading} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
 };

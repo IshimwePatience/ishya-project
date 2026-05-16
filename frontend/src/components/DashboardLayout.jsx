@@ -16,7 +16,8 @@ import {
   Search,
   ChevronDown,
   Receipt,
-  Briefcase
+  Briefcase,
+  Clock
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -40,13 +41,13 @@ const SidebarGroup = ({ label, items, location }) => {
 
   return (
     <div className="mb-2">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white uppercase tracking-widest hover:text-white transition-colors group"
       >
         <span>{label}</span>
-        <ChevronDown 
-          size={12} 
+        <ChevronDown
+          size={12}
           className={`transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
         />
       </button>
@@ -182,8 +183,24 @@ const DashboardLayout = ({ children }) => {
         ]
       }
     ];
+  } else if (user?.role?.toLowerCase().trim() === 'public visitor') {
+    menuGroups = [
+      {
+        label: 'Streaming',
+        items: [
+          { to: '/dashboard', icon: LayoutDashboard, label: 'Cinema Home' },
+        ]
+      },
+      {
+        label: 'Account',
+        items: [
+          { to: '/dashboard/settings', icon: Settings, label: 'My Account' },
+        ]
+      }
+    ];
   }
 
+  const isPublic = user?.role?.toLowerCase().trim() === 'public visitor';
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
@@ -196,6 +213,12 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         <div className="flex-1 flex justify-center px-10">
+          {isPublic && (
+            <div className="flex items-center gap-8 mr-10 text-sm font-bold text-white/60">
+              <button onClick={() => navigate('/dashboard')} className="hover:text-white transition-colors">Catalog</button>
+              <button onClick={() => navigate('/events')} className="hover:text-white transition-colors">Events</button>
+            </div>
+          )}
           <div className="relative w-full max-w-xl">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={16} />
             <input
@@ -236,7 +259,8 @@ const DashboardLayout = ({ children }) => {
 
       <div className="flex flex-1 pt-20">
         {/* Shared Sidebar */}
-        <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30 border-r border-white/5">
+        {!isPublic && (
+          <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-80px)] z-30 border-r border-white/5">
           <div className="flex-1 overflow-y-auto no-scrollbar py-2">
             {menuGroups.map((group) => (
               <SidebarGroup
@@ -257,9 +281,10 @@ const DashboardLayout = ({ children }) => {
             </button>
           </div>
         </aside>
+        )}
 
         {/* Main Content Area */}
-        <main className="flex-1 ml-72">
+        <main className={`flex-1 ${isPublic ? '' : 'ml-72'}`}>
           <div className="p-8 max-w-[1600px]">
             {children}
           </div>
