@@ -126,8 +126,8 @@ const PublicNavbar = () => {
 
       <nav
         className={`fixed top-0 left-0 right-0 z-[150] h-20 md:h-24 px-6 md:px-20 flex items-center justify-between transition-all duration-700 ${isVisible
-            ? "bg-black/90 backdrop-blur-xl border-b border-white/5"
-            : "bg-transparent border-b border-transparent"
+          ? "bg-black/90 backdrop-blur-xl border-b border-white/5"
+          : "bg-transparent border-b border-transparent"
           }`}
       >
         <div className="flex items-center gap-10">

@@ -30,7 +30,7 @@ const PublicVisitorDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      
+
       const [prodRes, catRes, watchRes] = await Promise.all([
         axios.get('http://localhost:5000/api/productions', { headers }),
         axios.get('http://localhost:5000/api/productions/categories', { headers }),
@@ -50,13 +50,13 @@ const PublicVisitorDashboard = () => {
   const getPoster = (prod) => {
     const baseUrl = 'http://localhost:5000/';
     const defaultPoster = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
-    
+
     if (prod.posterUrl) {
       return prod.posterUrl.startsWith('http') ? prod.posterUrl : `${baseUrl}${prod.posterUrl}`;
     }
-    
+
     if (!prod.mediaFiles || prod.mediaFiles.length === 0) return defaultPoster;
-    
+
     // 1. Try to find explicit poster (case insensitive)
     const poster = prod.mediaFiles.find(f => f.fileType?.toLowerCase() === 'poster');
     if (poster) {
@@ -94,20 +94,20 @@ const PublicVisitorDashboard = () => {
         </div>
 
         <div className="relative">
-          <button 
+          <button
             onClick={() => scroll('left')}
             className="absolute left-0 top-0 bottom-0 z-20 w-12 bg-gradient-to-r from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
           >
             <ChevronLeft size={32} />
           </button>
 
-          <div 
+          <div
             ref={scrollRef}
             className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 px-2 no-scrollbar"
             style={{ scrollSnapType: 'x mandatory' }}
           >
             {isLive && (
-              <div 
+              <div
                 className="flex-shrink-0 w-80 aspect-video bg-gradient-to-br from-blue-900 to-purple-900 rounded-sm flex flex-col items-center justify-center space-y-4 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xl border border-white/5"
                 style={{ scrollSnapAlign: 'start' }}
               >
@@ -121,10 +121,10 @@ const PublicVisitorDashboard = () => {
             {items.map((item) => {
               const prod = isContinue ? (item.media?.production) : item;
               if (!prod) return null; // Skip if production data is missing
-              
+
               const watchItem = continueWatching.find(w => Number(w.productionId) === Number(prod.id));
               const actualProgress = watchItem ? (watchItem.currentTime / watchItem.duration) * 100 : 0;
-              
+
               return (
                 <div
                   key={isContinue ? item.id : prod.id}
@@ -146,12 +146,12 @@ const PublicVisitorDashboard = () => {
                       alt={prod.title}
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     />
-                    
+
                     {/* Real Progress Bar - ONLY for Continue Watching row */}
                     {isContinue && actualProgress > 0 && (
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
-                        <div 
-                          className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]" 
+                        <div
+                          className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]"
                           style={{ width: `${actualProgress}%` }}
                         />
                       </div>
@@ -172,8 +172,8 @@ const PublicVisitorDashboard = () => {
                   <div className="mt-3 space-y-1">
                     <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
                     <p className="text-[10px] text-white/40 font-medium">
-                      {isContinue 
-                        ? `${Math.floor((item.duration - item.currentTime) / 60)}m left` 
+                      {isContinue
+                        ? `${Math.floor((item.duration - item.currentTime) / 60)}m left`
                         : `${new Date(prod.releaseDate).getFullYear()} • ${prod.type || 'Movie'}`
                       }
                     </p>
@@ -183,7 +183,7 @@ const PublicVisitorDashboard = () => {
             })}
           </div>
 
-          <button 
+          <button
             onClick={() => scroll('right')}
             className="absolute right-0 top-0 bottom-0 z-20 w-12 bg-gradient-to-l from-black/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center text-white"
           >
@@ -225,17 +225,16 @@ const PublicVisitorDashboard = () => {
             Browse Movies & Events <ChevronRight size={20} className="text-white/20" />
           </h2>
         </div>
-        
+
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
           {genres.map(genre => (
             <button
               key={genre}
               onClick={() => setSelectedGenre(genre)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${
-                selectedGenre === genre 
-                ? 'bg-white text-black border-white' 
-                : 'bg-white/5 text-white/60 border-white/5 hover:border-white/20 hover:text-white hover:bg-white/10'
-              }`}
+              className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${selectedGenre === genre
+                  ? 'bg-white text-black border-white'
+                  : 'bg-white/5 text-white/60 border-white/5 hover:border-white/20 hover:text-white hover:bg-white/10'
+                }`}
             >
               {genre}
             </button>
@@ -249,7 +248,7 @@ const PublicVisitorDashboard = () => {
           <>
             {/* Continue Watching (Landscape) */}
             <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
-            
+
             {/* Recently Added (Landscape) */}
             <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
 
@@ -259,33 +258,33 @@ const PublicVisitorDashboard = () => {
                 productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
               ));
 
-              const uncategorizedProds = productions.filter(p => 
+              const uncategorizedProds = productions.filter(p =>
                 !p.mediaFiles || p.mediaFiles.every(m => !m.category || m.category.trim().length === 0)
               );
 
               return (
                 <>
                   {allMediaCategories.map(catName => {
-                    const categoryProds = productions.filter(p => 
+                    const categoryProds = productions.filter(p =>
                       p.mediaFiles?.some(m => m.category?.toLowerCase() === catName.toLowerCase())
                     );
                     if (categoryProds.length === 0) return null;
-                    
+
                     return (
-                      <MovieRow 
-                        key={catName} 
-                        title={catName} 
-                        items={categoryProds} 
-                        isVertical={true} 
+                      <MovieRow
+                        key={catName}
+                        title={catName}
+                        items={categoryProds}
+                        isVertical={true}
                       />
                     );
                   })}
-                  
+
                   {uncategorizedProds.length > 0 && (
-                    <MovieRow 
-                      title="Movies" 
-                      items={uncategorizedProds} 
-                      isVertical={true} 
+                    <MovieRow
+                      title="Movies"
+                      items={uncategorizedProds}
+                      isVertical={true}
                     />
                   )}
                 </>
@@ -294,7 +293,7 @@ const PublicVisitorDashboard = () => {
           </>
         ) : (
           /* Genre Grid View (Netflix style) */
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
@@ -310,7 +309,7 @@ const PublicVisitorDashboard = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10 pt-8">
               {productions
-                .filter(p => 
+                .filter(p =>
                   p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
                   (selectedGenre === 'Movies' && (!p.mediaFiles || p.mediaFiles.every(m => !m.category)))
                 )
