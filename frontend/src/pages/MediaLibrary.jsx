@@ -22,6 +22,7 @@ const MediaLibrary = () => {
   const [showLicenseModal, setShowLicenseModal] = useState(false);
   const [partnerProfile, setPartnerProfile] = useState(null);
   const [licenseSuccess, setLicenseSuccess] = useState(false);
+  const [sales, setSales] = useState([]);
   const [licenseForm, setLicenseForm] = useState({
     name: '',
     type: 'TV Channel',
@@ -61,6 +62,12 @@ const MediaLibrary = () => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
+      // Re-fetch sales
+      const salesRes = await axios.get('http://localhost:5000/api/sales', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSales(salesRes.data);
       
       setLicenseSuccess(true);
     } catch (err) {
@@ -83,6 +90,12 @@ const MediaLibrary = () => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
+      // Re-fetch sales
+      const salesRes = await axios.get('http://localhost:5000/api/sales', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSales(salesRes.data);
       
       setLicenseSuccess(true);
     } catch (err) {
@@ -132,6 +145,12 @@ const MediaLibrary = () => {
       if (matching) {
         setPartnerProfile(matching);
       }
+
+      // Fetch sales to track license request status
+      const salesRes = await axios.get('http://localhost:5000/api/sales', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSales(salesRes.data);
     } catch (err) {
       console.error('Session fetch failed');
     }
@@ -228,6 +247,12 @@ const MediaLibrary = () => {
   );
 
   const posters = filteredAssets.filter(a => a.fileType === 'Poster');
+
+  const hasPendingRequest = selectedProduction && partnerProfile && sales.some(s => 
+    s.productionId === selectedProduction.id && 
+    s.buyerId === partnerProfile.id && 
+    s.paymentStatus === 'Pending'
+  );
 
   if (selectedProduction) {
     // Filter assets from the main state to ensure we get everything fetched for admin
@@ -355,14 +380,31 @@ const MediaLibrary = () => {
             {isPartner && (
               <div className="pt-12 border-t border-white/5 text-center space-y-6">
                 <p className="text-white/40 text-sm italic max-w-lg mx-auto">
-                  Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
+                  {hasPendingRequest 
+                    ? "Your distribution request has been submitted. Our operations team is reviewing your TV/broadcasting credentials."
+                    : "Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits."
+                  }
                 </p>
-                <button
-                  className="px-12 py-5 bg-[#e5a00d] text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto text-sm"
-                  onClick={() => setShowLicenseModal(true)}
-                >
-                  <Briefcase size={18} /> Request License
-                </button>
+                {hasPendingRequest ? (
+                  <div className="space-y-4">
+                    <button
+                      disabled
+                      className="px-12 py-5 bg-[#222] text-white/40 font-medium rounded-sm border border-white/5 flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed"
+                    >
+                      <Clock size={18} className="text-[#e5a00d] animate-pulse" /> License Pending Review
+                    </button>
+                    <p className="text-xs text-[#e5a00d] font-semibold max-w-md mx-auto">
+                      ⏳ Verification in progress. Please allow 24 to 48 hours for contract generation and catalog unlock.
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    className="px-12 py-5 bg-[#e5a00d] text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto text-sm"
+                    onClick={() => setShowLicenseModal(true)}
+                  >
+                    <Briefcase size={18} /> Request License
+                  </button>
+                )}
               </div>
             )}
 
