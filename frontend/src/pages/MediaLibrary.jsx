@@ -19,6 +19,77 @@ const MediaLibrary = () => {
   const [editingAsset, setEditingAsset] = useState(null);
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
+  const [showLicenseModal, setShowLicenseModal] = useState(false);
+  const [partnerProfile, setPartnerProfile] = useState(null);
+  const [licenseSuccess, setLicenseSuccess] = useState(false);
+  const [licenseForm, setLicenseForm] = useState({
+    name: '',
+    type: 'TV Channel',
+    contactPerson: '',
+    phone: '',
+    address: '',
+    certificateNumber: ''
+  });
+
+  const handleRegisterPartner = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const buyerData = {
+        name: licenseForm.name,
+        type: licenseForm.type,
+        contactPerson: licenseForm.contactPerson,
+        email: user.email,
+        phone: licenseForm.certificateNumber,
+        address: licenseForm.address
+      };
+      
+      const res = await axios.post('http://localhost:5000/api/sales/buyers', buyerData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setPartnerProfile(res.data);
+      
+      await axios.post('http://localhost:5000/api/sales', {
+        amount: 0,
+        saleType: 'Licensing',
+        paymentStatus: 'Pending',
+        productionId: selectedProduction.id,
+        buyerId: res.data.id,
+        date: new Date().toISOString().split('T')[0],
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setLicenseSuccess(true);
+    } catch (err) {
+      console.error('Partner registration failed', err);
+      alert('Verification failed. Please contact Ishya support.');
+    }
+  };
+
+  const handleRequestDirectLicense = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/sales', {
+        amount: 0,
+        saleType: 'Licensing',
+        paymentStatus: 'Pending',
+        productionId: selectedProduction.id,
+        buyerId: partnerProfile.id,
+        date: new Date().toISOString().split('T')[0],
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setLicenseSuccess(true);
+    } catch (err) {
+      console.error('License request failed', err);
+      alert('Failed to request license. Please try again.');
+    }
+  };
 
   const { zoom, setZoom, viewMode, setViewMode } = usePreferences('media-library');
 
@@ -52,6 +123,15 @@ const MediaLibrary = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(res.data.user);
+
+      // Look up matching buyer profile
+      const buyersRes = await axios.get('http://localhost:5000/api/sales/buyers', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const matching = buyersRes.data.find(b => b.email === res.data.user.email);
+      if (matching) {
+        setPartnerProfile(matching);
+      }
     } catch (err) {
       console.error('Session fetch failed');
     }
@@ -279,12 +359,215 @@ const MediaLibrary = () => {
                 </p>
                 <button
                   className="px-12 py-5 bg-[#e5a00d] text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto text-sm"
-                  onClick={() => alert('License request sent to Ishya Team!')}
+                  onClick={() => setShowLicenseModal(true)}
                 >
                   <Briefcase size={18} /> Request License
                 </button>
               </div>
             )}
+
+            {/* License Request Modal */}
+            <AnimatePresence>
+              {showLicenseModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="bg-[#121212] border border-white/10 rounded-sm p-8 max-w-lg w-full relative shadow-2xl space-y-6 font-sans text-white text-left"
+                  >
+                    {/* Close button */}
+                    <button
+                      onClick={() => {
+                        setShowLicenseModal(false);
+                        setLicenseSuccess(false);
+                      }}
+                      className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
+                    >
+                      ✕
+                    </button>
+
+                    {!partnerProfile ? (
+                      /* FIRST TIME: Verification Form */
+                      <div className="space-y-5">
+                        <div className="text-center space-y-2">
+                          <Briefcase className="text-[#e5a00d] mx-auto mb-2" size={36} />
+                          <h3 className="text-xl font-bold tracking-tight text-white">Partner Verification Profile</h3>
+                          <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                            Complete your distribution broadcasting credentials once. This will bind your organization profile so subsequent licenses can be requested instantly.
+                          </p>
+                        </div>
+
+                        <form onSubmit={handleRegisterPartner} className="space-y-4 pt-2">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Company / Channel Name</label>
+                            <input
+                              required
+                              type="text"
+                              placeholder="e.g. Rwanda Broadcasting Agency"
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                              value={licenseForm.name}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, name: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Partner Type</label>
+                              <select
+                                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white cursor-pointer transition-all"
+                                value={licenseForm.type}
+                                onChange={(e) => setLicenseForm({ ...licenseForm, type: e.target.value })}
+                              >
+                                <option value="TV Channel" className="bg-[#111111]">TV Channel</option>
+                                <option value="Radio Station" className="bg-[#111111]">Radio Station</option>
+                                <option value="Streaming Platform" className="bg-[#111111]">Streaming Platform</option>
+                                <option value="Production Company" className="bg-[#111111]">Production Company</option>
+                              </select>
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Broadcasting License #</label>
+                              <input
+                                required
+                                type="text"
+                                placeholder="e.g. RURA-TV-2026"
+                                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                                value={licenseForm.certificateNumber}
+                                onChange={(e) => setLicenseForm({ ...licenseForm, certificateNumber: e.target.value })}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Contact Representative</label>
+                              <input
+                                required
+                                type="text"
+                                placeholder="Full Name"
+                                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                                value={licenseForm.contactPerson}
+                                onChange={(e) => setLicenseForm({ ...licenseForm, contactPerson: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Phone Contact</label>
+                              <input
+                                required
+                                type="text"
+                                placeholder="e.g. +250 788 123 456"
+                                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                                value={licenseForm.phone}
+                                onChange={(e) => setLicenseForm({ ...licenseForm, phone: e.target.value })}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Physical Head Office Address</label>
+                            <textarea
+                              required
+                              placeholder="e.g. Kigali, Rwanda, KN 3 Rd"
+                              rows={2}
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 resize-none transition-all"
+                              value={licenseForm.address}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, address: e.target.value })}
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="w-full py-4 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all mt-4 text-xs uppercase tracking-widest"
+                          >
+                            Verify & Submit License Request
+                          </button>
+                        </form>
+                      </div>
+                    ) : licenseSuccess ? (
+                      /* SUCCESS FEEDBACK Screen */
+                      <div className="text-center space-y-6 py-6 animate-in fade-in duration-300">
+                        <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto shadow-xl shadow-[#e5a00d]/5 text-2xl font-bold">
+                          ✓
+                        </div>
+                        <div className="space-y-3">
+                          <h3 className="text-xl font-bold tracking-tight text-white">License Request Logged</h3>
+                          <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                            Your distribution license request for <span className="text-white font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile.name}</span>.
+                          </p>
+                          <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-white/70">
+                            <div>• <span className="font-semibold text-white">Distributor:</span> {partnerProfile.name}</div>
+                            <div>• <span className="font-semibold text-white">Channel Type:</span> {partnerProfile.type}</div>
+                            <div>• <span className="font-semibold text-white">Representative:</span> {partnerProfile.contactPerson}</div>
+                            <div className="text-[#e5a00d] pt-1 font-semibold flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] animate-ping inline-block" />
+                              Pending Admin Signoff & Contract Generation
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setShowLicenseModal(false);
+                            setLicenseSuccess(false);
+                          }}
+                          className="px-10 py-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-sm text-xs font-semibold uppercase tracking-widest transition-all"
+                        >
+                          Close Portal
+                        </button>
+                      </div>
+                    ) : (
+                      /* SUBSEQUENT REQUESTS: Direct Confirmation Screen */
+                      <div className="space-y-6 text-center py-2">
+                        <Briefcase className="text-[#e5a00d] mx-auto" size={38} />
+                        <div className="space-y-2">
+                          <h3 className="text-xl font-bold tracking-tight text-white">Request Distribution License</h3>
+                          <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                            Submit a new distribution license request for <span className="text-white font-semibold">{selectedProduction.title}</span>.
+                          </p>
+                        </div>
+
+                        <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-6 text-left text-xs space-y-3 text-white/50 max-w-sm mx-auto">
+                          <div className="flex justify-between border-b border-white/5 pb-3.5 text-white">
+                            <span className="font-bold uppercase tracking-widest text-[10px]">Verified Partner Identity</span>
+                            <span className="text-[#e5a00d] font-semibold flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                              Active
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Distributor:</span>
+                            <span className="text-white font-semibold">{partnerProfile.name}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Platform/Channel:</span>
+                            <span className="text-white font-semibold">{partnerProfile.type}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Official Representative:</span>
+                            <span className="text-white font-semibold">{partnerProfile.contactPerson}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-4 max-w-sm mx-auto pt-4">
+                          <button
+                            onClick={handleRequestDirectLicense}
+                            className="flex-1 py-3.5 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#e5a00d]/10"
+                          >
+                            Confirm Request
+                          </button>
+                          <button
+                            onClick={() => setShowLicenseModal(false)}
+                            className="flex-1 py-3.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-sm font-semibold transition-all text-xs uppercase tracking-widest"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -455,6 +738,208 @@ const MediaLibrary = () => {
               )}
             </div>
           )}
+          {/* License Request Modal */}
+          <AnimatePresence>
+            {showLicenseModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="bg-[#121212] border border-white/10 rounded-sm p-8 max-w-lg w-full relative shadow-2xl space-y-6 font-sans text-white text-left"
+                >
+                  {/* Close button */}
+                  <button
+                    onClick={() => {
+                      setShowLicenseModal(false);
+                      setLicenseSuccess(false);
+                    }}
+                    className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
+                  >
+                    ✕
+                  </button>
+
+                  {!partnerProfile ? (
+                    /* FIRST TIME: Verification Form */
+                    <div className="space-y-5">
+                      <div className="text-center space-y-2">
+                        <Briefcase className="text-[#e5a00d] mx-auto mb-2" size={36} />
+                        <h3 className="text-xl font-bold tracking-tight text-white">Partner Verification Profile</h3>
+                        <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                          Complete your distribution broadcasting credentials once. This will bind your organization profile so subsequent licenses can be requested instantly.
+                        </p>
+                      </div>
+
+                      <form onSubmit={handleRegisterPartner} className="space-y-4 pt-2">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Company / Channel Name</label>
+                          <input
+                            required
+                            type="text"
+                            placeholder="e.g. Rwanda Broadcasting Agency"
+                            className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                            value={licenseForm.name}
+                            onChange={(e) => setLicenseForm({ ...licenseForm, name: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Partner Type</label>
+                            <select
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white cursor-pointer transition-all"
+                              value={licenseForm.type}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, type: e.target.value })}
+                            >
+                              <option value="TV Channel" className="bg-[#111111]">TV Channel</option>
+                              <option value="Radio Station" className="bg-[#111111]">Radio Station</option>
+                              <option value="Streaming Platform" className="bg-[#111111]">Streaming Platform</option>
+                              <option value="Production Company" className="bg-[#111111]">Production Company</option>
+                            </select>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Broadcasting License #</label>
+                            <input
+                              required
+                              type="text"
+                              placeholder="e.g. RURA-TV-2026"
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                              value={licenseForm.certificateNumber}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, certificateNumber: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Contact Representative</label>
+                            <input
+                              required
+                              type="text"
+                              placeholder="Full Name"
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                              value={licenseForm.contactPerson}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, contactPerson: e.target.value })}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Phone Contact</label>
+                            <input
+                              required
+                              type="text"
+                              placeholder="e.g. +250 788 123 456"
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 transition-all"
+                              value={licenseForm.phone}
+                              onChange={(e) => setLicenseForm({ ...licenseForm, phone: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">Physical Head Office Address</label>
+                          <textarea
+                            required
+                            placeholder="e.g. Kigali, Rwanda, KN 3 Rd"
+                            rows={2}
+                            className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none text-white placeholder-white/20 resize-none transition-all"
+                            value={licenseForm.address}
+                            onChange={(e) => setLicenseForm({ ...licenseForm, address: e.target.value })}
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full py-4 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all mt-4 text-xs uppercase tracking-widest"
+                        >
+                          Verify & Submit License Request
+                        </button>
+                      </form>
+                    </div>
+                  ) : licenseSuccess ? (
+                    /* SUCCESS FEEDBACK Screen */
+                    <div className="text-center space-y-6 py-6 animate-in fade-in duration-300">
+                      <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto shadow-xl shadow-[#e5a00d]/5 text-2xl font-bold">
+                        ✓
+                      </div>
+                      <div className="space-y-3">
+                        <h3 className="text-xl font-bold tracking-tight text-white">License Request Logged</h3>
+                        <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                          Your distribution license request for <span className="text-white font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile.name}</span>.
+                        </p>
+                        <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-white/70">
+                          <div>• <span className="font-semibold text-white">Distributor:</span> {partnerProfile.name}</div>
+                          <div>• <span className="font-semibold text-white">Channel Type:</span> {partnerProfile.type}</div>
+                          <div>• <span className="font-semibold text-white">Representative:</span> {partnerProfile.contactPerson}</div>
+                          <div className="text-[#e5a00d] pt-1 font-semibold flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] animate-ping inline-block" />
+                            Pending Admin Signoff & Contract Generation
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setShowLicenseModal(false);
+                          setLicenseSuccess(false);
+                        }}
+                        className="px-10 py-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-sm text-xs font-semibold uppercase tracking-widest transition-all"
+                      >
+                        Close Portal
+                      </button>
+                    </div>
+                  ) : (
+                    /* SUBSEQUENT REQUESTS: Direct Confirmation Screen */
+                    <div className="space-y-6 text-center py-2">
+                      <Briefcase className="text-[#e5a00d] mx-auto" size={38} />
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold tracking-tight text-white">Request Distribution License</h3>
+                        <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
+                          Submit a new distribution license request for <span className="text-white font-semibold">{selectedProduction.title}</span>.
+                        </p>
+                      </div>
+
+                      <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-6 text-left text-xs space-y-3 text-white/50 max-w-sm mx-auto">
+                        <div className="flex justify-between border-b border-white/5 pb-3.5 text-white">
+                          <span className="font-bold uppercase tracking-widest text-[10px]">Verified Partner Identity</span>
+                          <span className="text-[#e5a00d] font-semibold flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                            Active
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Distributor:</span>
+                          <span className="text-white font-semibold">{partnerProfile.name}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Platform/Channel:</span>
+                          <span className="text-white font-semibold">{partnerProfile.type}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Official Representative:</span>
+                          <span className="text-white font-semibold">{partnerProfile.contactPerson}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 max-w-sm mx-auto pt-4">
+                        <button
+                          onClick={handleRequestDirectLicense}
+                          className="flex-1 py-3.5 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#e5a00d]/10"
+                        >
+                          Confirm Request
+                        </button>
+                        <button
+                          onClick={() => setShowLicenseModal(false)}
+                          className="flex-1 py-3.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-sm font-semibold transition-all text-xs uppercase tracking-widest"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </div>
