@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, ChevronRight, Menu, Film, Users, Settings } from 'lucide-react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import logoImg from '../assets/images/ubuntu.png';
 
 const SearchOverlay = ({ isOpen, onClose, productions, isLoggedIn }) => {
   const [query, setQuery] = useState('');
@@ -131,7 +132,9 @@ const PublicNavbar = () => {
           }`}
       >
         <div className="flex items-center gap-10">
-          <Link to="/" className="text-lg md:text-xl font-black uppercase tracking-tighter italic cursor-pointer">Ishya <span className="text-white/20">Studios</span></Link>
+          <Link to="/" className="cursor-pointer">
+            <img src={logoImg} alt="Ishya" className="h-24 w-auto object-contain" />
+          </Link>
           <div className="hidden lg:flex items-center gap-8">
             <Link to="/" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Catalog</Link>
             <Link to="/events" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/events' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Events</Link>

@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-import logoImg from '../assets/images/12.png';
+import logoImg from '../assets/images/ubuntu.png';
 
 const SidebarLink = ({ to, icon: Icon, label, active }) => (
   <Link
@@ -221,7 +221,7 @@ const DashboardLayout = ({ children }) => {
       }}>
         {/* LEFT: Logo */}
         <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
-          <img src={logoImg} alt="Ishya" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+          <img src={logoImg} alt="Ishya" style={{ height: '64px', width: 'auto', objectFit: 'contain' }} />
         </Link>
 
         {/* LEFT: Search bar — next to logo, like Plex */}

@@ -4,7 +4,7 @@ import { Building2, Mail, Phone, User, MapPin, Send, CheckCircle, ArrowLeft } fr
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import logoImg from '../assets/images/12.png';
+import logoImg from '../assets/images/ubuntu.png';
 
 const PartnerRegistration = () => {
   const [formData, setFormData] = useState({
@@ -75,7 +75,7 @@ const PartnerRegistration = () => {
         
         <div className="relative z-10">
           <Link to="/">
-            <img src={logoImg} alt="Ishya" className="h-16 w-auto object-contain mb-12" />
+            <img src={logoImg} alt="Ishya" className="h-32 w-auto object-contain mb-12" />
           </Link>
           
           <div className="space-y-8">

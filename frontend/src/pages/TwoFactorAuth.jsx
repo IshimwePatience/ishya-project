@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldCheck, ArrowRight, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
-import logoImg from '../assets/images/12.png';
+import logoImg from '../assets/images/ubuntu.png';
 
 const TwoFactorAuth = () => {
   const [code, setCode] = useState('');
@@ -43,7 +43,7 @@ const TwoFactorAuth = () => {
       {/* Header */}
       <div className="flex flex-col items-center mb-20 text-center">
         <Link to="/" className="hover:opacity-80 transition-opacity">
-          <img src={logoImg} alt="Ishya Logo" className="w-32 h-auto mb-2" />
+          <img src={logoImg} alt="Ishya Logo" className="h-32 w-auto object-contain mb-2" />
         </Link>
         <span className="text-sm font-medium text-gray-500">Production management</span>
       </div>
