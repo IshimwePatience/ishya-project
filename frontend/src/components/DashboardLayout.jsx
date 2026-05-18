@@ -234,7 +234,7 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* CENTER: Absolutely Centered Search Bar */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-[380px] shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all">
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-[480px] shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all">
           <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
           <input
             type="text"
