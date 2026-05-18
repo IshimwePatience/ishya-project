@@ -271,36 +271,30 @@ const DashboardLayout = ({ children }) => {
             <button
               onClick={() => navigate('/dashboard')}
               style={{
-                padding: '5px 14px', borderRadius: '6px', fontSize: '14px',
+                padding: '5px 14px', fontSize: '14px',
                 fontWeight: location.pathname === '/dashboard' ? 600 : 400,
-                color: location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.65)',
-                background: location.pathname === '/dashboard' ? 'rgba(255,255,255,0.1)' : 'transparent',
-                border: 'none', cursor: 'pointer', transition: 'color 0.15s, background 0.15s',
+                color: location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.55)',
+                background: 'transparent',
+                border: 'none', cursor: 'pointer', transition: 'color 0.15s',
                 whiteSpace: 'nowrap',
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.65)';
-                e.currentTarget.style.background = location.pathname === '/dashboard' ? 'rgba(255,255,255,0.1)' : 'transparent';
-              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.55)'; }}
             >
               Catalog
             </button>
             <button
               onClick={() => navigate('/events')}
               style={{
-                padding: '5px 14px', borderRadius: '6px', fontSize: '14px',
+                padding: '5px 14px', fontSize: '14px',
                 fontWeight: location.pathname === '/events' ? 600 : 400,
-                color: location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.65)',
-                background: location.pathname === '/events' ? 'rgba(255,255,255,0.1)' : 'transparent',
-                border: 'none', cursor: 'pointer', transition: 'color 0.15s, background 0.15s',
+                color: location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.55)',
+                background: 'transparent',
+                border: 'none', cursor: 'pointer', transition: 'color 0.15s',
                 whiteSpace: 'nowrap',
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.65)';
-                e.currentTarget.style.background = location.pathname === '/events' ? 'rgba(255,255,255,0.1)' : 'transparent';
-              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.55)'; }}
             >
               Events
             </button>
