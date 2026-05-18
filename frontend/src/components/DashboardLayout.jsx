@@ -205,138 +205,57 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
-      <header style={{
-        height: '48px',
-        backgroundColor: '#121212',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 40px',
-        position: 'fixed',
-        top: 0,
-        width: '100%',
-        zIndex: 40,
-        gap: '12px',
-        fontFamily: '"Inter", system-ui, sans-serif',
-      }}>
-        {/* LEFT: Logo */}
-        <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
-          <img src={logoImg} alt="Ishya" style={{ height: '64px', width: 'auto', objectFit: 'contain' }} />
-        </Link>
+      <header className="h-16 bg-[#121212] border-b border-white/5 flex items-center px-10 fixed top-0 w-full z-40 gap-3 font-sans">
+        {/* LEFT: Logo & Nav Links */}
+        <div className="flex items-center gap-8 shrink-0">
+          <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
+            <img src={logoImg} alt="Ishya" className="h-24 w-auto object-contain" />
+          </Link>
+          {isPublic && (
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
+                  location.pathname === '/dashboard' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
+                }`}
+              >
+                Catalog
+              </button>
+              <button
+                onClick={() => navigate('/events')}
+                className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
+                  location.pathname === '/events' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
+                }`}
+              >
+                Events
+              </button>
+            </div>
+          )}
+        </div>
 
-        {/* LEFT: Search bar — next to logo, like Plex */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          backgroundColor: 'rgba(255,255,255,0.08)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: '9999px',
-          padding: '0 12px',
-          height: '28px',
-          width: '280px',
-          flexShrink: 0,
-          cursor: 'text',
-          transition: 'border-color 0.2s, background 0.2s',
-        }}
-          onMouseEnter={e => {
-            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)';
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-          }}
-        >
-          <Search size={13} color="rgba(255,255,255,0.4)" style={{ flexShrink: 0 }} />
+        {/* CENTER: Absolutely Centered Search Bar */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-[380px] shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all">
+          <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
           <input
             type="text"
             placeholder="Search..."
-            style={{
-              background: 'none', border: 'none', outline: 'none',
-              fontSize: '13px', color: '#fff', width: '100%',
-              caretColor: '#E5A00D',
-            }}
+            className="bg-transparent border-none outline-none text-sm text-white w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
           />
         </div>
 
-        {/* CENTER: Nav links — absolutely centered like Plex */}
-        {isPublic && (
-          <div style={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}>
-            <button
-              onClick={() => navigate('/dashboard')}
-              style={{
-                padding: '5px 14px', fontSize: '14px',
-                fontWeight: location.pathname === '/dashboard' ? 600 : 400,
-                color: location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.55)',
-                background: 'transparent',
-                border: 'none', cursor: 'pointer', transition: 'color 0.15s',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = location.pathname === '/dashboard' ? '#fff' : 'rgba(255,255,255,0.55)'; }}
-            >
-              Catalog
-            </button>
-            <button
-              onClick={() => navigate('/events')}
-              style={{
-                padding: '5px 14px', fontSize: '14px',
-                fontWeight: location.pathname === '/events' ? 600 : 400,
-                color: location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.55)',
-                background: 'transparent',
-                border: 'none', cursor: 'pointer', transition: 'color 0.15s',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = location.pathname === '/events' ? '#fff' : 'rgba(255,255,255,0.55)'; }}
-            >
-              Events
-            </button>
-          </div>
-        )}
-
         {/* SPACER */}
-        <div style={{ flex: 1 }} />
+        <div className="flex-1" />
 
         {/* RIGHT: Bell + Avatar — like Plex */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-          <button
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              padding: '6px 8px', borderRadius: '6px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'rgba(255,255,255,0.55)', transition: 'color 0.15s, background 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; e.currentTarget.style.background = 'transparent'; }}
-          >
+        <div className="flex items-center gap-1 shrink-0">
+          <button className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-white/55 hover:text-white hover:bg-white/5 transition-all duration-150">
             <Bell size={17} />
           </button>
 
           {/* Avatar + dropdown */}
-          <div style={{ position: 'relative' }} className="group">
-            <button
-              style={{
-                display: 'flex', alignItems: 'center', gap: '4px',
-                background: 'none', border: 'none', cursor: 'pointer',
-                padding: '4px 6px', borderRadius: '6px', transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.07)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            >
-              <div style={{
-                width: '28px', height: '28px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #E5A00D, #f5c842)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0,
-              }}>
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-white/5">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0">
                 <UserIcon size={14} color="#1a1a1a" />
               </div>
               <ChevronDown size={13} color="rgba(255,255,255,0.4)" />
@@ -359,10 +278,10 @@ const DashboardLayout = ({ children }) => {
         </div>
       </header>
 
-      <div className="flex flex-1 pt-12">
+      <div className="flex flex-1 pt-16">
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-48px)] z-30 border-r border-white/5">
+          <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-30 border-r border-white/5">
             <div className="flex-1 overflow-y-auto no-scrollbar py-2">
               {menuGroups.map((group) => (
                 <SidebarGroup
