@@ -92,7 +92,15 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
             required
             className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
             value={formData.categoryId}
-            onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+            onChange={(e) => {
+              const catId = e.target.value;
+              const selectedCat = categories.find(c => String(c.id) === String(catId));
+              setFormData({ 
+                ...formData, 
+                categoryId: catId,
+                type: selectedCat ? selectedCat.name : 'Movie'
+              });
+            }}
           >
             <option value="" disabled className="bg-[#111111]">Select category</option>
             {categories
@@ -100,25 +108,6 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
               .map(cat => (
                 <option key={cat.id} value={cat.id} className="bg-[#111111]">{cat.name}</option>
               ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Project Type Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
-        <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Project type</label>
-          <p className="text-[11px] text-white/20 mt-1">Format of the production</p>
-        </div>
-        <div className="w-full md:w-2/3">
-          <select 
-            required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-          >
-            <option value="Movie" className="bg-[#111111]">Movie</option>
-            <option value="Theatre" className="bg-[#111111]">Theatre</option>
           </select>
         </div>
       </div>
