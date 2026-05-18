@@ -95,9 +95,11 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
           >
             <option value="" disabled className="bg-[#111111]">Select category</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id} className="bg-[#111111]">{cat.name}</option>
-            ))}
+            {categories
+              .filter(cat => !['Radio Drama', 'Journal/Paper', 'Script'].includes(cat?.name))
+              .map(cat => (
+                <option key={cat.id} value={cat.id} className="bg-[#111111]">{cat.name}</option>
+              ))}
           </select>
         </div>
       </div>
@@ -117,33 +119,6 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
           >
             <option value="Movie" className="bg-[#111111]">Movie</option>
             <option value="Theatre" className="bg-[#111111]">Theatre</option>
-            <option value="Radio Drama" className="bg-[#111111]">Radio Drama</option>
-            <option value="Journal/Paper" className="bg-[#111111]">Journal/Paper</option>
-            <option value="Script" className="bg-[#111111]">Script</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Status Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
-        <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Production status</label>
-          <p className="text-[11px] text-white/20 mt-1">Current stage of development</p>
-        </div>
-        <div className="w-full md:w-2/3">
-          <select 
-            required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
-            value={formData.status}
-            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          >
-            <option value="Draft" className="bg-[#111111]">Draft</option>
-            <option value="Writing" className="bg-[#111111]">Writing</option>
-            <option value="Rehearsal" className="bg-[#111111]">Rehearsal</option>
-            <option value="Filming" className="bg-[#111111]">Filming</option>
-            <option value="Editing" className="bg-[#111111]">Editing</option>
-            <option value="Released" className="bg-[#111111]">Released</option>
-            <option value="Sold/Licensed" className="bg-[#111111]">Sold/Licensed</option>
           </select>
         </div>
       </div>
@@ -151,7 +126,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       {/* Budget Field */}
       <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Budget ($)</label>
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Budget (RWF)</label>
           <p className="text-[11px] text-white/20 mt-1">Estimated production cost</p>
         </div>
         <div className="w-full md:w-2/3">
