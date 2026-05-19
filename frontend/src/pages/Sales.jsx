@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, Search, Plus, ListFilter, TrendingUp, CreditCard, Receipt, ExternalLink } from 'lucide-react';
+import { Wallet, Search, Plus, ListFilter, TrendingUp, CreditCard, Receipt, ExternalLink, Edit2, Trash2 } from 'lucide-react';
 import axios from 'axios';
 import SaleForm from '../components/SaleForm';
 import PageHeader from '../components/PageHeader';
