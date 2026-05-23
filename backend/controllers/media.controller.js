@@ -1,5 +1,9 @@
 const { MediaFile, Production, Contract, Buyer } = require('../models');
 const { Op } = require('sequelize');
+const { exec } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
 
 exports.getPartnerCatalog = async (req, res) => {
   try {
@@ -161,5 +165,177 @@ exports.deleteMedia = async (req, res) => {
     res.json({ message: 'Media asset deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.downloadMediaFile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const format = req.query.format ? req.query.format.toLowerCase() : null;
+
+    const mediaFile = await MediaFile.findByPk(id);
+    if (!mediaFile) {
+      return res.status(404).json({ message: 'Media file not found' });
+    }
+
+    // Build the full path
+    let cleanPath = mediaFile.filePath;
+    if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+      try {
+        const urlObj = new URL(cleanPath);
+        cleanPath = urlObj.pathname;
+      } catch (e) {
+        const index = cleanPath.indexOf('/uploads/');
+        if (index !== -1) {
+          cleanPath = cleanPath.substring(index);
+        }
+      }
+    }
+    cleanPath = cleanPath.replace(/^\//, ''); // remove leading slash if any
+    const fullPath = path.resolve(__dirname, '..', cleanPath);
+
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ message: 'Physical file not found on server' });
+    }
+
+    const currentExt = path.extname(fullPath).toLowerCase(); // e.g., '.webm' or '.png'
+    const targetExt = format ? `.${format}` : currentExt;
+
+    let baseName = mediaFile.fileName || 'asset';
+    // Clean baseName from any existing extension
+    const existingExt = path.extname(baseName);
+    if (existingExt) {
+      baseName = path.basename(baseName, existingExt);
+    }
+
+    const finalFilename = `${baseName}${targetExt}`;
+
+    // If no format requested, or format is the same as the current file
+    if (!format || currentExt === targetExt || (targetExt === '.jpg' && currentExt === '.jpeg') || (targetExt === '.jpeg' && currentExt === '.jpg')) {
+      return res.download(fullPath, finalFilename);
+    }
+
+    // We need to transcode/convert the file!
+    console.log(`🎬 Transcoding: ${currentExt} -> ${targetExt} for file ${fullPath}`);
+    
+    // Create a temp file path in our workspace backend temp folder
+    const tempDir = path.resolve(__dirname, '..', 'temp');
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+    const tempPath = path.join(tempDir, `download-${Date.now()}${targetExt}`);
+
+    // Formulate ffmpeg command
+    let ffmpegCmd = '';
+    
+    if (['.mp4', '.webm'].includes(targetExt)) {
+      // Video transcoding: use standard highly compatible libx264 / aac codecs for mp4
+      if (targetExt === '.mp4') {
+        ffmpegCmd = `ffmpeg -i "${fullPath}" -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 128k -y "${tempPath}"`;
+      } else if (targetExt === '.webm') {
+        ffmpegCmd = `ffmpeg -i "${fullPath}" -c:v libvpx-vp9 -crf 30 -b:v 0 -c:a libopus -y "${tempPath}"`;
+      }
+    } else if (['.png', '.jpg', '.jpeg'].includes(targetExt)) {
+      // Image conversion
+      ffmpegCmd = `ffmpeg -i "${fullPath}" -y "${tempPath}"`;
+    }
+
+    if (!ffmpegCmd) {
+      // Unsupported conversion, fall back to direct file download
+      return res.download(fullPath, finalFilename);
+    }
+
+    exec(ffmpegCmd, (error, stdout, stderr) => {
+      if (error) {
+        console.error('ffmpeg conversion error:', error);
+        console.error('ffmpeg stderr:', stderr);
+        // Fall back to direct file download if transcoding fails
+        return res.download(fullPath, finalFilename);
+      }
+
+      // Transcoding succeeded! Send the converted file as a forced attachment download.
+      res.download(tempPath, finalFilename, (downloadError) => {
+        // Clean up the temp file after download ends (success or fail)
+        fs.unlink(tempPath, (unlinkError) => {
+          if (unlinkError) console.error('Failed to delete temp file:', unlinkError);
+        });
+      });
+    });
+
+  } catch (error) {
+    console.error('Error in downloadMediaFile:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.downloadZip = async (req, res) => {
+  try {
+    const { ids, name } = req.query;
+    if (!ids) {
+      return res.status(400).json({ message: 'No file IDs provided' });
+    }
+
+    const idList = ids.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
+    if (idList.length === 0) {
+      return res.status(400).json({ message: 'Invalid file IDs' });
+    }
+
+    const mediaFiles = await MediaFile.findAll({
+      where: {
+        id: { [Op.in]: idList }
+      }
+    });
+
+    if (mediaFiles.length === 0) {
+      return res.status(404).json({ message: 'No media files found matching the provided IDs' });
+    }
+
+    const zipName = (name || 'assets').replace(/[^a-z0-9_-]/gi, '_') + '.zip';
+
+    // Set headers
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${zipName}"`);
+
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Maximum compression
+    });
+
+    // Pipe archive data to the response
+    archive.pipe(res);
+
+    for (const mediaFile of mediaFiles) {
+      let cleanPath = mediaFile.filePath;
+      if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+        try {
+          const urlObj = new URL(cleanPath);
+          cleanPath = urlObj.pathname;
+        } catch (e) {
+          const index = cleanPath.indexOf('/uploads/');
+          if (index !== -1) {
+            cleanPath = cleanPath.substring(index);
+          }
+        }
+      }
+      cleanPath = cleanPath.replace(/^\//, '');
+      const fullPath = path.resolve(__dirname, '..', cleanPath);
+
+      if (fs.existsSync(fullPath)) {
+        const ext = path.extname(fullPath);
+        let baseName = mediaFile.fileName || 'asset';
+        if (baseName.endsWith(ext)) {
+          baseName = path.basename(baseName, ext);
+        }
+        const fileInZipName = `${baseName}${ext}`;
+        archive.file(fullPath, { name: fileInZipName });
+      }
+    }
+
+    await archive.finalize();
+
+  } catch (error) {
+    console.error('Error creating ZIP download:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };

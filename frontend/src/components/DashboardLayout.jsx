@@ -224,6 +224,10 @@ const DashboardLayout = ({ children }) => {
       case 'productions':
         if (user?.role === 'Partner') {
           navigate(`/dashboard/media/${item.id}`);
+        } else if (user?.role?.toLowerCase().trim() === 'public visitor') {
+          navigate(`/dashboard/production/${item.id}`);
+        } else if (user?.role === 'Actor/Talent') {
+          navigate(`/dashboard/production/${item.id}`);
         } else {
           navigate('/dashboard/productions', { state: { openId: item.id } });
         }
@@ -244,7 +248,11 @@ const DashboardLayout = ({ children }) => {
         navigate('/dashboard/partner-requests', { state: { openId: item.id } });
         break;
       case 'events':
-        navigate('/dashboard/events', { state: { openId: item.id } });
+        if (user?.role?.toLowerCase().trim() === 'public visitor') {
+          navigate('/events');
+        } else {
+          navigate('/dashboard/events', { state: { openId: item.id } });
+        }
         break;
       case 'expenses':
         navigate('/dashboard/expenses', { state: { openId: item.id } });

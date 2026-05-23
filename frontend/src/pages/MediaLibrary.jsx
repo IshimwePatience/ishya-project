@@ -18,6 +18,31 @@ const MediaLibrary = () => {
   const [editingAsset, setEditingAsset] = useState(null);
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
+  const [openDownloadDropdown, setOpenDownloadDropdown] = useState(null);
+
+  useEffect(() => {
+    const handleOutsideClick = () => setOpenDownloadDropdown(null);
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
+
+  const triggerDownload = (fileId, format = '') => {
+    const token = localStorage.getItem('token');
+    let url = `http://localhost:5000/api/media/download/${fileId}?token=${token}`;
+    if (format) {
+      url += `&format=${format}`;
+    }
+    
+    // Create an invisible iframe to handle download securely without navigating or crashing the current tab
+    let iframe = document.getElementById('secure-downloader-iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = 'secure-downloader-iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+  };
   const [showLicenseModal, setShowLicenseModal] = useState(false);
   const [partnerProfile, setPartnerProfile] = useState(null);
   const [licenseSuccess, setLicenseSuccess] = useState(false);
@@ -229,13 +254,48 @@ const MediaLibrary = () => {
                 <img src={poster.filePath} alt={bestTitle} className="w-full h-auto" />
                 {(isPartner && selectedProduction.isLicensed) && (
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/poster:opacity-100 transition-opacity flex items-center justify-center">
-                    <a
-                      href={poster.filePath}
-                      download
-                      className="px-6 py-3 bg-[#e5a00d] text-black hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg"
-                    >
-                      <Download size={14} /> Download Poster
-                    </a>
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenDownloadDropdown(openDownloadDropdown === poster.id ? null : poster.id);
+                        }}
+                        className="px-6 py-3 bg-[#e5a00d] text-black hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg border-none"
+                      >
+                        <Download size={14} /> Download Poster
+                      </button>
+                      {openDownloadDropdown === poster.id && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
+                          <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                            Format Options
+                          </div>
+                          <button
+                            onClick={() => { triggerDownload(poster.id); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            Original
+                          </button>
+                          <button
+                            onClick={() => { triggerDownload(poster.id, 'png'); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            PNG Image
+                          </button>
+                          <button
+                            onClick={() => { triggerDownload(poster.id, 'jpg'); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            JPG Image
+                          </button>
+                          <button
+                            onClick={() => { triggerDownload(poster.id, 'jpeg'); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            JPEG Image
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </>
@@ -261,14 +321,42 @@ const MediaLibrary = () => {
                     Watch Trailer
                   </button>
                   {(isPartner && selectedProduction.isLicensed) && (
-                    <a
-                      href={trailer.filePath}
-                      download
-                      className="px-10 py-4 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer"
-                      title="Download trailer"
-                    >
-                      <Download size={14} /> Download Trailer
-                    </a>
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenDownloadDropdown(openDownloadDropdown === trailer.id ? null : trailer.id);
+                        }}
+                        className="px-10 py-4 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer border-none flex items-center justify-center"
+                      >
+                        <Download size={14} /> Download Trailer
+                      </button>
+                      {openDownloadDropdown === trailer.id && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
+                          <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                            Format Options
+                          </div>
+                          <button
+                            onClick={() => { triggerDownload(trailer.id); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            Original
+                          </button>
+                          <button
+                            onClick={() => { triggerDownload(trailer.id, 'mp4'); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            MP4 Video
+                          </button>
+                          <button
+                            onClick={() => { triggerDownload(trailer.id, 'webm'); setOpenDownloadDropdown(null); }}
+                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                          >
+                            WebM Video
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
@@ -322,14 +410,43 @@ const MediaLibrary = () => {
                             >
                               <Play size={16} fill="currentColor" className="ml-0.5" />
                             </button>
-                            <a
-                              href={item.filePath}
-                              download
-                              className="w-10 h-10 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20 cursor-pointer"
-                              title="Download master file"
-                            >
-                              <Download size={16} />
-                            </a>
+                            <div className="relative">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenDownloadDropdown(openDownloadDropdown === item.id ? null : item.id);
+                                }}
+                                className="w-10 h-10 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20 cursor-pointer border-none flex items-center justify-center"
+                                title="Download master file"
+                              >
+                                <Download size={16} />
+                              </button>
+                              {openDownloadDropdown === item.id && (
+                                <div className="absolute right-0 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
+                                  <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                    Format Options
+                                  </div>
+                                  <button
+                                    onClick={() => { triggerDownload(item.id); setOpenDownloadDropdown(null); }}
+                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                  >
+                                    Original
+                                  </button>
+                                  <button
+                                    onClick={() => { triggerDownload(item.id, 'mp4'); setOpenDownloadDropdown(null); }}
+                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                  >
+                                    MP4 Video
+                                  </button>
+                                  <button
+                                    onClick={() => { triggerDownload(item.id, 'webm'); setOpenDownloadDropdown(null); }}
+                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                  >
+                                    WebM Video
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         ) : (
                           <div className="w-10 h-10 bg-white/5 text-white/20 rounded-full flex items-center justify-center cursor-not-allowed border border-white/5" title="License Required">

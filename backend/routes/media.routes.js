@@ -6,6 +6,8 @@ const { authMiddleware } = require('../middleware/auth');
 router.get('/', mediaController.getAllMedia);
 router.get('/partner/catalog', authMiddleware, mediaController.getPartnerCatalog);
 router.get('/partner/library', authMiddleware, mediaController.getPartnerLibrary);
+router.get('/download/:id', authMiddleware, mediaController.downloadMediaFile);
+router.get('/download-zip', authMiddleware, mediaController.downloadZip);
 router.get('/:id', mediaController.getMediaById);
 
 router.use(authMiddleware);

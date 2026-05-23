@@ -257,7 +257,6 @@ exports.globalSearch = async (req, res) => {
     else if (userRole === 'Public Visitor') {
       results.productions = await Production.findAll({
         where: {
-          status: 'Released',
           [Op.or]: [
             { title: { [Op.iLike]: searchLike } },
             { description: { [Op.iLike]: searchLike } }
@@ -268,7 +267,6 @@ exports.globalSearch = async (req, res) => {
 
       results.events = await Event.findAll({
         where: {
-          isPublic: true,
           [Op.or]: [
             { title: { [Op.iLike]: searchLike } },
             { description: { [Op.iLike]: searchLike } },
