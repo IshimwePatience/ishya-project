@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Mail, Phone, User, Check, X, Trash2, Clock, Search, Film, Calendar, FileText } from 'lucide-react';
+import { Building2, Mail, Phone, User, Check, X, Trash2, Clock, Film, Calendar, FileText } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
 
 const PartnerRequests = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('partners'); // 'partners' or 'licensing'
   const [requests, setRequests] = useState([]);
   const [licensingRequests, setLicensingRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchData = async () => {
     try {
@@ -35,6 +36,22 @@ const PartnerRequests = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.openId) {
+      const openId = parseInt(location.state.openId);
+      const matchPartner = requests.find(r => r.id === openId);
+      if (matchPartner) {
+        setActiveTab('partners');
+        return;
+      }
+      const matchLicense = licensingRequests.find(s => s.id === openId);
+      if (matchLicense) {
+        setActiveTab('licensing');
+        return;
+      }
+    }
+  }, [requests, licensingRequests, location.state]);
 
   // prospective partner approvals
   const handleApprovePartner = async (id) => {
@@ -101,45 +118,24 @@ const PartnerRequests = () => {
   };
 
   // Filter logic
-  const filteredRequests = requests.filter(r => 
-    r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    r.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredRequests = requests;
 
   const pendingPartners = filteredRequests.filter(r => r.status === 'Pending');
   const historyPartners = filteredRequests.filter(r => r.status !== 'Pending');
 
   const pendingLicenses = licensingRequests.filter(s => 
     s.saleType === 'Licensing' && 
-    s.paymentStatus === 'Pending' && 
-    (s.buyer?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     s.production?.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    s.paymentStatus === 'Pending'
   );
 
   const historyLicenses = licensingRequests.filter(s => 
     s.saleType === 'Licensing' && 
-    s.paymentStatus !== 'Pending' && 
-    (s.buyer?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     s.production?.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    s.paymentStatus !== 'Pending'
   );
 
   return (
     <div className="space-y-8">
-      <PageHeader 
-        title="Partner & Distribution Portal" 
-        actions={
-          <div className="relative w-full max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={14} />
-            <input
-              type="text"
-              placeholder={activeTab === 'partners' ? "Search partner signups..." : "Search movie requests..."}
-              className="w-full bg-[#333333] border-none rounded-sm pl-10 pr-4 py-2 text-xs text-white placeholder-white/20 focus:outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        }
-      />
+      <PageHeader title="Partner & Distribution Portal" />
 
       {/* Modern Tabs Navigation */}
       <div className="flex border-b border-white/5 gap-2">

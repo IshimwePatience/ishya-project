@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, ListFilter, Edit2, Trash2, ExternalLink, Calendar, User, Folder, FileText, ChevronRight, ChevronDown, ArrowLeft, Film } from 'lucide-react';
+import { Plus, ListFilter, Edit2, Trash2, ExternalLink, Calendar, User, Folder, FileText, ChevronRight, ChevronDown, ArrowLeft, Film } from 'lucide-react';
 import axios from 'axios';
 import ProductionForm from '../components/ProductionForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const Productions = () => {
+  const location = useLocation();
   const [productions, setProductions] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [currentView, setCurrentView] = useState('folders'); // 'folders' or 'category'
   const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +37,19 @@ const Productions = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (productions.length > 0 && location.state?.openId) {
+      const prodId = parseInt(location.state.openId);
+      const match = productions.find(p => p.id === prodId);
+      if (match) {
+        const catName = match.category?.name || 'General';
+        setActiveCategory(catName);
+        setCurrentView('category');
+        handleEdit(match);
+      }
+    }
+  }, [productions, location.state]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this production?')) return;
@@ -124,33 +138,20 @@ const Productions = () => {
             </div>
           )}
 
-          {/* Search & Breadcrumbs */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          {/* Breadcrumbs */}
+          {currentView === 'category' && (
+            <div className="flex justify-end items-center gap-4 mb-12">
+              <button
+                onClick={goBack}
+                className="text-white/40 hover:text-white transition-all flex items-center gap-2 text-sm font-medium"
+              >
+                Back
+              </button>
+              <div className="w-px h-3 bg-white/10" />
+              <div className="text-sm font-medium text-white">{activeCategory}</div>
             </div>
-
-            {currentView === 'category' && (
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={goBack}
-                  className="text-white/40 hover:text-white transition-all flex items-center gap-2 text-sm font-medium"
-                >
-                  Back
-                </button>
-                <div className="w-px h-3 bg-white/10" />
-                <div className="text-sm font-medium text-white">{activeCategory}</div>
-              </div>
-            )}
-          </div>
-
+          )}
+ 
           {/* Content Sections */}
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
@@ -202,17 +203,15 @@ const Productions = () => {
                       <p className="text-white/40 text-sm mt-1">Recently added</p>
                     </div>
                   </div>
-
+ 
                   <div 
                     className="grid gap-x-6 gap-y-10"
                     style={{
                       gridTemplateColumns: `repeat(auto-fill, minmax(${100 + (zoom - 50) * 1.5}px, 1fr))`
                     }}
                   >
-                    {displayedProductions
-                      .filter(prod => prod.title.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((prod) => (
-                        <motion.div
+                    {displayedProductions.map((prod) => (
+                      <motion.div
                           key={prod.id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}

@@ -66,6 +66,7 @@ app.use('/api/user-preferences', require('./routes/userPreference.routes'));
 app.use('/api/media-interactions', require('./routes/mediaInteraction.routes'));
 app.use('/api/watch-progress', require('./routes/watchprogress.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
+app.use('/api/search', require('./routes/search.routes'));
 
 // Database connection and server start
 const PORT = process.env.PORT || 5000;

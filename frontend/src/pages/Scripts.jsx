@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users } from 'lucide-react';
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const Scripts = () => {
+  const location = useLocation();
   const [scripts, setScripts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingScript, setEditingScript] = useState(null);
@@ -44,6 +45,16 @@ const Scripts = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (scripts.length > 0 && location.state?.openId) {
+      const scriptId = parseInt(location.state.openId);
+      const match = scripts.find(s => s.id === scriptId);
+      if (match) {
+        handleEdit(match);
+      }
+    }
+  }, [scripts, location.state, userRole]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this script?')) return;
@@ -87,9 +98,7 @@ const Scripts = () => {
     setIsFormOpen(true);
   };
 
-  const filteredScripts = scripts.filter(s => 
-    s.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredScripts = scripts;
 
   const isManagement = userRole === 'Admin' || userRole === 'Staff';
 
@@ -143,19 +152,6 @@ const Scripts = () => {
             </div>
           )}
 
-          {/* Search */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search scripts..."
-                className="w-full bg-[#1c1c1c] border border-white/5 rounded-sm pl-12 pr-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none transition-all focus:border-white/10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
 
           {/* Scripts Grid */}
           {loading ? (

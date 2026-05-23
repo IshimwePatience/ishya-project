@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, Mail, User, ChevronRight } from 'lucide-react';
+import { Plus, Edit2, Trash2, Mail, User, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import TalentForm from '../components/TalentForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 
 const Talents = () => {
+  const location = useLocation();
   const [talents, setTalents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTalent, setEditingTalent] = useState(null);
@@ -35,6 +36,17 @@ const Talents = () => {
     }
   };
 
+  useEffect(() => {
+    if (talents.length > 0 && location.state?.openId) {
+      const talentId = parseInt(location.state.openId);
+      const match = talents.find(t => t.id === talentId);
+      if (match) {
+        setEditingTalent(match);
+        setIsFormOpen(true);
+      }
+    }
+  }, [talents, location.state]);
+
   const handleDelete = async (id) => {
     if (!window.confirm('Remove this talent from the roster?')) return;
     try {
@@ -48,9 +60,7 @@ const Talents = () => {
     }
   };
 
-  const filteredTalents = talents.filter(t => 
-    `${t.firstName} ${t.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredTalents = talents;
 
   return (
     <div className="space-y-6">
@@ -104,19 +114,6 @@ const Talents = () => {
             </div>
           )}
 
-          {/* Search */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
 
           {/* Talents Grid */}
           {loading ? (

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Building2, Search, Plus, Mail, Phone, ExternalLink, Globe } from 'lucide-react';
+import { Building2, Plus, Mail, Phone, ExternalLink, Globe } from 'lucide-react';
 import axios from 'axios';
 
 import PartnerForm from '../components/PartnerForm';
 import PageHeader from '../components/PageHeader';
 
 const Buyers = () => {
+  const location = useLocation();
   const [buyers, setBuyers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState(null);
@@ -31,14 +32,22 @@ const Buyers = () => {
     fetchBuyers();
   }, []);
 
+  useEffect(() => {
+    if (buyers.length > 0 && location.state?.openId) {
+      const partnerId = parseInt(location.state.openId);
+      const match = buyers.find(b => b.id === partnerId);
+      if (match) {
+        handleEdit(match);
+      }
+    }
+  }, [buyers, location.state]);
+
   const handleEdit = (partner) => {
     setEditingPartner(partner);
     setIsFormOpen(true);
   };
 
-  const filteredBuyers = buyers.filter(b => 
-    b.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredBuyers = buyers;
 
   return (
     <div className="space-y-6">
@@ -73,20 +82,6 @@ const Buyers = () => {
       ) : (
         <>
       <PageHeader title="Buyers & Partners" />
-
-          {/* Search */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search partners..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
 
           {/* Buyers Grid */}
           {loading ? (

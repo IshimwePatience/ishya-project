@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
   Plus,
-  Search,
   Shield,
   Mail,
   MoreVertical,
@@ -19,9 +19,9 @@ import UserForm from '../components/UserForm';
 import PageHeader from '../components/PageHeader';
 
 const UserManagement = () => {
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,6 +60,16 @@ const UserManagement = () => {
     }
   };
 
+  useEffect(() => {
+    if (users.length > 0 && location.state?.openId) {
+      const targetId = parseInt(location.state.openId);
+      const match = users.find(u => u.id === targetId);
+      if (match) {
+        handleEdit(match);
+      }
+    }
+  }, [users, location.state]);
+
   const handleEdit = (user) => {
     setEditingUser(user);
     setIsFormOpen(true);
@@ -88,8 +98,7 @@ const UserManagement = () => {
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = true;
     
     let matchesRole = selectedRole === 'All';
     if (!matchesRole && user.role) {
@@ -151,20 +160,8 @@ const UserManagement = () => {
             </div>
           )}
 
-          {/* Search Explorer */}
-
-          {/* Search Explorer */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search users..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          {/* Role Filter */}
+          <div className="flex justify-end mb-8">
             <div className="relative min-w-[200px]">
               <select
                 className="w-full px-4 py-2 bg-[#121212] rounded-sm border border-white/5 outline-none text-sm font-medium text-white cursor-pointer"

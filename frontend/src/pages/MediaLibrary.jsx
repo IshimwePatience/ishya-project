@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import MediaForm from '../components/MediaForm';
@@ -11,7 +11,6 @@ const MediaLibrary = () => {
   const navigate = useNavigate();
   const { prodId } = useParams();
   const [assets, setAssets] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduction, setSelectedProduction] = useState(null);
   const [productions, setProductions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -187,10 +186,7 @@ const MediaLibrary = () => {
     }
   };
 
-  const filteredAssets = assets.filter(a =>
-    a.fileName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    productions.find(p => p.id === a.productionId)?.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAssets = assets;
 
   const posters = filteredAssets.filter(a => a.fileType === 'Poster');
 
@@ -561,20 +557,6 @@ const MediaLibrary = () => {
               {error}
             </div>
           )}
-
-          {/* Search */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-              <input
-                type="text"
-                placeholder="Search assets..."
-                className="w-full bg-[#333333] border-none rounded-sm pl-12 pr-4 py-2 text-sm text-white placeholder-white/20 focus:outline-none transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
 
           {/* Media Grid */}
           {loading ? (

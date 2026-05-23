@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -73,6 +73,192 @@ const DashboardLayout = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState({
+    productions: [],
+    scripts: [],
+    talents: [],
+    buyers: [],
+    buyerRequests: [],
+    events: [],
+    expenses: [],
+    sales: [],
+    users: [],
+    mediaFiles: []
+  });
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length === 0) {
+        setSearchResults({
+          productions: [],
+          scripts: [],
+          talents: [],
+          buyers: [],
+          buyerRequests: [],
+          events: [],
+          expenses: [],
+          sales: [],
+          users: [],
+          mediaFiles: []
+        });
+        setIsSearching(false);
+        return;
+      }
+
+      setIsSearching(true);
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get(`http://localhost:5000/api/search?q=${encodeURIComponent(searchQuery)}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setSearchResults(res.data);
+      } catch (err) {
+        console.error('Failed to execute global search:', err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  const [recentSearches, setRecentSearches] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      const historyKey = `search_history_${user.id}`;
+      setRecentSearches(JSON.parse(localStorage.getItem(historyKey) || '[]'));
+    }
+  }, [user]);
+
+  const saveSearchHistory = (item) => {
+    if (!user) return;
+    const historyKey = `search_history_${user.id}`;
+    const existingHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+    
+    const updatedHistory = [
+      item,
+      ...existingHistory.filter(h => !(h.id === item.id && h.type === item.type))
+    ].slice(0, 5);
+
+    localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
+    setRecentSearches(updatedHistory);
+  };
+
+  const removeFromSearchHistory = (item) => {
+    if (!user) return;
+    const historyKey = `search_history_${user.id}`;
+    const existingHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+    const updatedHistory = existingHistory.filter(h => !(h.id === item.id && h.type === item.type));
+    localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
+    setRecentSearches(updatedHistory);
+  };
+
+  const clearSearchHistory = () => {
+    if (!user) return;
+    const historyKey = `search_history_${user.id}`;
+    localStorage.removeItem(historyKey);
+    setRecentSearches([]);
+  };
+
+  const getHistoryIcon = (type) => {
+    switch (type) {
+      case 'productions': return <Film size={14} className="text-white/45" />;
+      case 'scripts': return <FileText size={14} className="text-white/45" />;
+      case 'mediaFiles': return <Library size={14} className="text-white/45" />;
+      case 'talents': return <Users size={14} className="text-white/45" />;
+      case 'buyers': return <Briefcase size={14} className="text-white/45" />;
+      case 'buyerRequests': return <Bell size={14} className="text-white/45" />;
+      case 'events': return <Calendar size={14} className="text-white/45" />;
+      case 'expenses': return <Receipt size={14} className="text-white/45" />;
+      case 'sales': return <Wallet size={14} className="text-white/45" />;
+      case 'users': return <ShieldCheck size={14} className="text-white/45" />;
+      default: return <Film size={14} className="text-white/45" />;
+    }
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchResults(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
+  const handleSearchResultClick = (type, item) => {
+    setShowSearchResults(false);
+    setSearchQuery('');
+
+    // Save to secure user-specific history
+    const finalTitle = item.title || item.fileName || item.name || `${item.firstName || ''} ${item.lastName || ''}`;
+    const finalSublabel = item.sublabel !== undefined ? item.sublabel : (
+                     type === 'productions' ? `${item.genre || ''} • ${item.type || ''}` :
+                     type === 'scripts' ? `Version ${item.version || ''}` :
+                     type === 'mediaFiles' ? `Type: ${item.fileType || ''}` :
+                     type === 'talents' ? `${item.specialty || ''}` :
+                     type === 'buyers' ? `${item.type || ''}` :
+                     type === 'buyerRequests' ? `Status: ${item.status || ''}` :
+                     type === 'events' ? (item.date ? `${new Date(item.date).toLocaleDateString()}` : '') :
+                     type === 'expenses' ? `Amount: $${item.amount ? Number(item.amount).toLocaleString() : ''}` :
+                     type === 'sales' ? `Amount: $${item.amount ? Number(item.amount).toLocaleString() : ''}` :
+                     type === 'users' ? `${item.email || ''}` : ''
+    );
+
+    saveSearchHistory({
+      id: item.id,
+      title: finalTitle,
+      type: type,
+      sublabel: finalSublabel
+    });
+    
+    switch (type) {
+      case 'productions':
+        if (user?.role === 'Partner') {
+          navigate(`/dashboard/media/${item.id}`);
+        } else {
+          navigate('/dashboard/productions', { state: { openId: item.id } });
+        }
+        break;
+      case 'mediaFiles':
+        navigate(`/dashboard/media/${item.productionId}`);
+        break;
+      case 'scripts':
+        navigate('/dashboard/scripts', { state: { openId: item.id } });
+        break;
+      case 'talents':
+        navigate('/dashboard/talents', { state: { openId: item.id } });
+        break;
+      case 'buyers':
+        navigate('/dashboard/buyers', { state: { openId: item.id } });
+        break;
+      case 'buyerRequests':
+        navigate('/dashboard/partner-requests', { state: { openId: item.id } });
+        break;
+      case 'events':
+        navigate('/dashboard/events', { state: { openId: item.id } });
+        break;
+      case 'expenses':
+        navigate('/dashboard/expenses', { state: { openId: item.id } });
+        break;
+      case 'sales':
+        navigate('/dashboard/sales', { state: { openId: item.id } });
+        break;
+      case 'users':
+        navigate('/dashboard/users', { state: { openId: item.id } });
+        break;
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -378,13 +564,310 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* CENTER: Absolutely Centered Search Bar */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-[480px] shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all">
-          <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-transparent border-none outline-none text-sm text-white w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
-          />
+        <div ref={searchRef} className="absolute left-1/2 -translate-x-1/2 w-[480px] z-50">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all focus-within:bg-white/10 focus-within:border-white/20">
+            <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="bg-transparent border-none outline-none text-sm text-white w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setShowSearchResults(true)}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="bg-transparent border-none text-white/40 hover:text-white text-xs cursor-pointer p-0 shrink-0 font-bold"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          {showSearchResults && searchQuery.trim() && (
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+              {isSearching ? (
+                <div className="p-8 text-center text-xs text-white/40 font-medium animate-pulse">
+                  Searching secure vault...
+                </div>
+              ) : Object.keys(searchResults).every(key => !searchResults[key] || searchResults[key].length === 0) ? (
+                <div className="p-8 text-center text-xs text-white/40 font-medium">
+                  No matching results found
+                </div>
+              ) : (
+                <div className="divide-y divide-white/5">
+                  {/* Category: Productions */}
+                  {searchResults.productions?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Productions</div>
+                      <div className="space-y-1">
+                        {searchResults.productions.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('productions', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Film size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-white/40 truncate">{item.genre} • {item.type} • {item.status}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Scripts */}
+                  {searchResults.scripts?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Scripts</div>
+                      <div className="space-y-1">
+                        {searchResults.scripts.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('scripts', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <FileText size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-white/40 truncate">Version {item.version} • {item.fileType || 'Document'}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Media Files */}
+                  {searchResults.mediaFiles?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Media Catalog</div>
+                      <div className="space-y-1">
+                        {searchResults.mediaFiles.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('mediaFiles', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Library size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.fileName}</div>
+                              <div className="text-[10px] text-white/40 truncate">Type: {item.fileType || 'Asset'}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Talents */}
+                  {searchResults.talents?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Talent Roster</div>
+                      <div className="space-y-1">
+                        {searchResults.talents.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('talents', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <UserIcon size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-[10px] text-white/40 truncate">{item.specialty || 'Talent'} • {item.email}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Buyers / Partners */}
+                  {searchResults.buyers?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Partners</div>
+                      <div className="space-y-1">
+                        {searchResults.buyers.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('buyers', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Briefcase size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-[10px] text-white/40 truncate">{item.type} • Contact: {item.contactPerson}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Partner Requests */}
+                  {searchResults.buyerRequests?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Partner Requests</div>
+                      <div className="space-y-1">
+                        {searchResults.buyerRequests.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('buyerRequests', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Bell size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-[10px] text-white/40 truncate">Status: {item.status} • Representative: {item.contactPerson}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Events */}
+                  {searchResults.events?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Events</div>
+                      <div className="space-y-1">
+                        {searchResults.events.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('events', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Calendar size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-white/40 truncate">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Expenses */}
+                  {searchResults.expenses?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Expenses</div>
+                      <div className="space-y-1">
+                        {searchResults.expenses.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('expenses', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Receipt size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.description}</div>
+                              <div className="text-[10px] text-white/40 truncate">Category: {item.category} • Amount: ${Number(item.amount).toLocaleString()}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Sales */}
+                  {searchResults.sales?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Revenue / Sales</div>
+                      <div className="space-y-1">
+                        {searchResults.sales.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('sales', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <Wallet size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">License: {item.production?.title || 'Production'}</div>
+                              <div className="text-[10px] text-white/40 truncate">Type: {item.saleType} • Partner: {item.buyer?.name || 'Buyer'} • Amount: ${Number(item.amount).toLocaleString()}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Category: Users */}
+                  {searchResults.users?.length > 0 && (
+                    <div className="p-4">
+                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Users</div>
+                      <div className="space-y-1">
+                        {searchResults.users.map(item => (
+                          <div
+                            key={item.id}
+                            onClick={() => handleSearchResultClick('users', item)}
+                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                          >
+                            <ShieldCheck size={14} className="text-white/45 group-hover:text-white" />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-[10px] text-white/40 truncate">{item.email}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {showSearchResults && !searchQuery.trim() && recentSearches.length > 0 && (
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
+                  <span className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider">Recent Searches</span>
+                  <button
+                    onClick={clearSearchHistory}
+                    className="bg-transparent border-none text-[10px] text-white/40 hover:text-white cursor-pointer transition-colors"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <div className="space-y-1">
+                  {recentSearches.map(item => (
+                    <div
+                      key={`${item.type}-${item.id}`}
+                      onClick={() => handleSearchResultClick(item.type, item)}
+                      className="flex items-center justify-between p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="shrink-0 w-6 h-6 rounded-full bg-white/5 flex items-center justify-center">
+                          {getHistoryIcon(item.type)}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">
+                            {item.title}
+                          </div>
+                          <div className="text-[10px] text-white/40 truncate">
+                            {item.type.charAt(0).toUpperCase() + item.type.slice(1)} {item.sublabel ? `• ${item.sublabel}` : ''}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFromSearchHistory(item);
+                        }}
+                        className="bg-transparent border-none text-white/30 hover:text-red-400 p-1.5 rounded cursor-pointer transition-colors opacity-0 group-hover:opacity-100 flex items-center justify-center shrink-0"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* SPACER */}
