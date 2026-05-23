@@ -1,4 +1,5 @@
 const { Production, ProductionCategory, Talent, User, MediaFile } = require('../models');
+const { sendNotification } = require('../socket');
 
 exports.getCategories = async (req, res) => {
   try {
@@ -54,6 +55,15 @@ exports.createProduction = async (req, res) => {
   try {
     console.log('Creating production with data:', req.body);
     const production = await Production.create(req.body);
+
+    // Notify all Partner users in real-time
+    await sendNotification({
+      role: 'Partner',
+      title: 'New Movie Available',
+      message: `"${production.title}" is now available in the catalog for distribution licensing!`,
+      type: 'new_movie'
+    });
+
     res.status(201).json(production);
   } catch (error) {
     console.error('Error in createProduction:', error);

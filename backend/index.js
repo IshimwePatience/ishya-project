@@ -65,6 +65,7 @@ app.use('/api/attendance', require('./routes/attendance.routes'));
 app.use('/api/user-preferences', require('./routes/userPreference.routes'));
 app.use('/api/media-interactions', require('./routes/mediaInteraction.routes'));
 app.use('/api/watch-progress', require('./routes/watchprogress.routes'));
+app.use('/api/notifications', require('./routes/notification.routes'));
 
 // Database connection and server start
 const PORT = process.env.PORT || 5000;
@@ -83,6 +84,11 @@ const startServer = async () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
       console.log('✨ Press CTRL+C to stop');
     });
+
+    // Initialize WebSockets
+    const { init: initSockets } = require('./socket');
+    initSockets(server);
+    console.log('✅ WebSockets initialized successfully.');
 
     // 💓 Heartbeat to keep process alive in some environments
     setInterval(() => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Save, AlertCircle } from 'lucide-react';
+import { Save, AlertCircle, Trash2 } from 'lucide-react';
 
 const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
   const [formData, setFormData] = useState({
@@ -40,6 +40,22 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       onSuccess();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to register partner');
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete "${initialData.name}" permanently? This will remove this partner and their associations.`)) return;
+    setLoading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      await axios.delete(`http://localhost:5000/api/sales/buyers/${initialData.id}`, { headers });
+      onSuccess();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete partner');
       setLoading(false);
     }
   };
@@ -156,21 +172,34 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Form Actions */}
-      <div className="pt-10 flex items-center justify-start gap-4 px-4">
-        <button 
-          type="submit"
-          disabled={loading || !formData.name}
-          className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
-        </button>
-        <button 
-          type="button"
-          onClick={onCancel}
-          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white"
-        >
-          Cancel
-        </button>
+      <div className="pt-10 flex items-center justify-between px-4">
+        <div className="flex items-center gap-4">
+          <button 
+            type="submit"
+            disabled={loading || !formData.name}
+            className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
+          >
+            {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
+          </button>
+          <button 
+            type="button"
+            onClick={onCancel}
+            className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white cursor-pointer"
+          >
+            Cancel
+          </button>
+        </div>
+
+        {initialData && (
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={loading}
+            className="px-6 py-3 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-sm text-sm font-semibold border border-red-500/20 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <Trash2 size={16} /> Delete Partner
+          </button>
+        )}
       </div>
     </form>
   );

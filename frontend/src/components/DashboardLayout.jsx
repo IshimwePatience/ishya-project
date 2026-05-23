@@ -17,9 +17,13 @@ import {
   ChevronDown,
   Receipt,
   Briefcase,
-  Clock
+  Clock,
+  Check,
+  Trash2,
+  Inbox
 } from 'lucide-react';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 import logoImg from '../assets/images/ubuntu.png';
 
@@ -97,6 +101,146 @@ const DashboardLayout = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+  };
+
+  const [notifications, setNotifications] = useState([]);
+  const [isNotifDropdownOpen, setIsNotifDropdownOpen] = useState(false);
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const fetchNotifications = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await axios.get('http://localhost:5000/api/notifications', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotifications(res.data);
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    fetchNotifications();
+
+    const token = localStorage.getItem('token');
+    const socket = io('http://localhost:5000', {
+      auth: { token }
+    });
+
+    socket.on('connect', () => {
+      console.log('⚡ Connected to socket.io server');
+    });
+
+    socket.on('notification', (newNotif) => {
+      setNotifications((prev) => {
+        if (prev.some((n) => n.id === newNotif.id)) return prev;
+        return [newNotif, ...prev];
+      });
+    });
+
+    socket.on('notification_refresh', () => {
+      fetchNotifications();
+    });
+
+    socket.on('disconnect', () => {
+      console.log('🔌 Disconnected from socket.io server');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (isNotifDropdownOpen && !event.target.closest('.notif-container')) {
+        setIsNotifDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isNotifDropdownOpen]);
+
+  const markAsRead = async (id) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.patch(`http://localhost:5000/api/notifications/${id}/read`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      );
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.patch('http://localhost:5000/api/notifications/read-all', {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotifications((prev) =>
+        prev.map((n) => ({ ...n, isRead: true }))
+      );
+    } catch (err) {
+      console.error('Error marking all notifications as read:', err);
+    }
+  };
+
+  const deleteNotification = async (id, e) => {
+    if (e) e.stopPropagation();
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:5000/api/notifications/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+    }
+  };
+
+  const formatTime = (dateStr) => {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHr = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHr / 24);
+
+    if (diffSec < 60) return 'Just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffHr < 24) return `${diffHr}h ago`;
+    if (diffDays === 1) return 'Yesterday';
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  };
+
+  const getNotifIcon = (type) => {
+    switch (type) {
+      case 'partner_request':
+        return <Users size={14} className="text-[#E5A00D]" />;
+      case 'license_request':
+        return <Briefcase size={14} className="text-[#E5A00D]" />;
+      case 'partner_approval':
+      case 'license_approval':
+        return <ShieldCheck size={14} className="text-green-400" />;
+      case 'partner_rejection':
+      case 'license_rejection':
+        return <LogOut size={14} className="text-red-400" />;
+      case 'new_movie':
+        return <Film size={14} className="text-blue-400" />;
+      default:
+        return <Bell size={14} className="text-white/60" />;
+    }
   };
 
   if (loading) {
@@ -248,9 +392,116 @@ const DashboardLayout = ({ children }) => {
 
         {/* RIGHT: Bell + Avatar — like Plex */}
         <div className="flex items-center gap-1 shrink-0">
-          <button className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-white/55 hover:text-white hover:bg-white/5 transition-all duration-150">
-            <Bell size={17} />
-          </button>
+          <div className="notif-container relative">
+            <button
+              onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
+              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-white/55 hover:text-white hover:bg-white/5 transition-all duration-150"
+            >
+              <Bell size={17} />
+              {unreadCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E5A00D] ring-2 ring-[#121212] animate-pulse" />
+              )}
+            </button>
+
+            {isNotifDropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-96 bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-hidden z-50 flex flex-col max-h-[480px]">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between shrink-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-white">Notifications</span>
+                    {unreadCount > 0 && (
+                      <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#E5A00D]/20 text-[#E5A00D] rounded-full">
+                        {unreadCount} new
+                      </span>
+                    )}
+                  </div>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllAsRead}
+                      className="text-xs text-[#E5A00D] hover:underline bg-transparent border-none cursor-pointer p-0"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+
+                {/* List */}
+                <div className="flex-1 overflow-y-auto divide-y divide-white/5 max-h-[360px] no-scrollbar">
+                  {notifications.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/30 mb-3">
+                        <Inbox size={18} />
+                      </div>
+                      <p className="text-xs text-white/50 font-medium">All caught up!</p>
+                      <p className="text-[10px] text-white/30 mt-1">You have no new notifications.</p>
+                    </div>
+                  ) : (
+                    notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        onClick={() => !notif.isRead && markAsRead(notif.id)}
+                        className={`px-4 py-3 flex gap-3 transition-colors duration-150 relative group cursor-pointer hover:bg-white/[0.03] ${
+                          !notif.isRead ? 'bg-[#E5A00D]/[0.02] border-l-2 border-[#E5A00D]' : 'border-l-2 border-transparent'
+                        }`}
+                      >
+                        {/* Icon Column */}
+                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                          {getNotifIcon(notif.type)}
+                        </div>
+
+                        {/* Content Column */}
+                        <div className="flex-1 min-w-0 pr-8">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className={`text-xs truncate ${!notif.isRead ? 'font-semibold text-white' : 'font-medium text-white/80'}`}>
+                              {notif.title}
+                            </span>
+                            <span className="text-[9px] text-white/30 shrink-0">
+                              {formatTime(notif.createdAt)}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-white/50 line-clamp-2 mt-1 leading-normal">
+                            {notif.message}
+                          </p>
+                        </div>
+
+                        {/* Hover Actions Column */}
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {!notif.isRead && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                markAsRead(notif.id);
+                              }}
+                              title="Mark as read"
+                              className="w-6.5 h-6.5 rounded bg-[#1a1a1a] hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white border border-white/5 transition-all cursor-pointer"
+                            >
+                              <Check size={12} />
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => deleteNotification(notif.id, e)}
+                            title="Delete notification"
+                            className="w-6.5 h-6.5 rounded bg-[#1a1a1a] hover:bg-red-950 flex items-center justify-center text-white/60 hover:text-red-400 border border-white/5 transition-all cursor-pointer"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Footer */}
+                {notifications.length > 0 && (
+                  <div className="px-4 py-2 bg-white/[0.01] border-t border-white/5 flex items-center justify-center shrink-0">
+                    <span className="text-[9px] text-white/35 uppercase tracking-wider font-bold">
+                      Notifications Panel
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Avatar + dropdown */}
           <div className="relative group">

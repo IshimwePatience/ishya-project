@@ -10,7 +10,8 @@ import {
   FileVideo,
   Image as ImageIcon,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Tv
 } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
@@ -22,6 +23,8 @@ const MyLibrary = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProduction, setSelectedProduction] = useState(null);
+  const [activeSeason, setActiveSeason] = useState({});
+  const [zipProgress, setZipProgress] = useState(null);
 
   const { zoom, setZoom, viewMode, setViewMode } = usePreferences('my-library');
 
@@ -29,13 +32,106 @@ const MyLibrary = () => {
     fetchLibrary();
   }, []);
 
+  const handleOpenModal = (prod) => {
+    setSelectedProduction(prod);
+    if (prod.mediaFiles) {
+      const episodes = prod.mediaFiles.filter(f => f.type === 'Episode');
+      const seasons = Array.from(new Set(episodes.map(e => e.season || 1)));
+      if (seasons.length > 0) {
+        const initialActive = {};
+        seasons.forEach((s, idx) => {
+          initialActive[`Season ${s}`] = idx === 0;
+        });
+        setActiveSeason(initialActive);
+      }
+    }
+  };
+
+  const loadJSZip = () => {
+    if (window.JSZip) return Promise.resolve(window.JSZip);
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      script.onload = () => resolve(window.JSZip);
+      script.onerror = () => reject(new Error('Failed to load JSZip from CDN.'));
+      document.head.appendChild(script);
+    });
+  };
+
+  const handleDownloadZip = async (files, folderName) => {
+    if (!files || files.length === 0) return;
+    setZipProgress({ text: 'Initializing ZIP packager...', percent: 0 });
+    try {
+      const JSZip = await loadJSZip();
+      const zip = new JSZip();
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const displayIndex = i + 1;
+        setZipProgress({
+          text: `Fetching "${file.fileName || 'Asset'}" (${displayIndex}/${files.length})...`,
+          percent: Math.round((i / files.length) * 80)
+        });
+
+        const fileUrl = file.url || file.filePath;
+        const response = await fetch(fileUrl);
+        if (!response.ok) throw new Error(`Failed to download file: ${file.fileName}`);
+        const blob = await response.blob();
+
+        const extension = fileUrl.split('.').pop().split('?')[0] || 'dat';
+        const rawName = file.fileName || `file_${displayIndex}`;
+        const nameWithExt = rawName.endsWith(`.${extension}`) ? rawName : `${rawName}.${extension}`;
+        
+        zip.file(nameWithExt, blob);
+      }
+
+      setZipProgress({ text: 'Compressing files into folder...', percent: 85 });
+      const content = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+        setZipProgress({
+          text: `Compressing... ${Math.round(metadata.percent)}%`,
+          percent: 85 + Math.round((metadata.percent / 100) * 10)
+        });
+      });
+
+      setZipProgress({ text: 'Triggering browser download...', percent: 98 });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = `${folderName.replace(/[^a-z0-9_-]/gi, '_')}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      setZipProgress({ text: 'Download completed successfully!', percent: 100 });
+      setTimeout(() => setZipProgress(null), 1500);
+    } catch (err) {
+      console.error('ZIP generation failed', err);
+      setZipProgress({ text: `Failed: ${err.message}`, percent: -1 });
+      setTimeout(() => setZipProgress(null), 3000);
+    }
+  };
+
   const fetchLibrary = async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.get('http://localhost:5000/api/media/partner/library', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setProductions(res.data);
+      
+      const normalized = res.data.map(prod => {
+        const posterFile = prod.mediaFiles?.find(f => (f.fileType || f.type) === 'Poster');
+        const posterUrl = posterFile ? (posterFile.filePath.startsWith('http') ? posterFile.filePath : `http://localhost:5000${posterFile.filePath}`) : null;
+        return {
+          ...prod,
+          poster: posterUrl || prod.poster,
+          mediaFiles: prod.mediaFiles?.map(file => ({
+            ...file,
+            url: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `http://localhost:5000${file.filePath}`) : null,
+            type: file.fileType || file.type // Ensure full compatibility with original modal filters
+          }))
+        };
+      });
+
+      setProductions(normalized);
       setLoading(false);
     } catch (err) {
       console.error('Library fetch failed', err);
@@ -47,7 +143,7 @@ const MyLibrary = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40 space-y-4">
-        <div className="text-white/10 animate-pulse text-xs font-bold uppercase tracking-widest">Accessing Secure Vault...</div>
+        <div className="text-white/10 animate-pulse text-xs font-bold tracking-widest">Accessing Secure Vault...</div>
       </div>
     );
   }
@@ -76,81 +172,190 @@ const MyLibrary = () => {
               : '1fr'
           }}
         >
-          {productions.map((prod) => (
-            <motion.div
-              key={prod.id}
-              whileHover={{ x: viewMode === 'list' ? 4 : 0, scale: viewMode === 'grid' ? 1.02 : 1 }}
-              className={`bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all ${viewMode === 'list' ? 'p-5 flex items-center justify-between' : 'flex flex-col'
-                }`}
-            >
-              <div className={`flex items-center gap-8 ${viewMode === 'grid' ? 'flex-col items-start gap-0' : ''}`}>
-                {/* Poster Thumbnail */}
-                <div className={`bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl ${viewMode === 'list' ? 'w-24 h-36 rounded-sm' : 'w-full aspect-[2/3]'
-                  }`}>
-                  {prod.poster ? (
-                    <img
-                      src={prod.poster}
-                      alt=""
-                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Film size={viewMode === 'list' ? 24 : 48} className="text-white/10" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Play size={20} className="text-white fill-white" />
-                  </div>
-                </div>
+          {productions.map((prod) => {
+            const isSeries = prod.type === 'Series' || prod.type === 'TV Show';
+            const episodes = prod.mediaFiles?.filter(f => (f.fileType || f.type) === 'Episode') || [];
+            const seasonsCount = new Set(episodes.map(e => e.season || 1)).size;
 
-                {/* Details */}
-                <div className={`space-y-3 ${viewMode === 'grid' ? 'p-5 w-full' : ''}`}>
-                  <div>
-                    <h4 className="text-xl font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight">
-                      {prod.title}
-                    </h4>
-                    <p className="text-xs text-white/40 mt-1 uppercase tracking-widest font-medium">
-                      {prod.type || 'Production'} • {prod.genre || 'Drama'}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-bold bg-green-400/10 px-3 py-1 rounded-full uppercase tracking-wider">
-                      <ShieldCheck size={12} /> Active
-                    </div>
-                    {viewMode === 'list' && (
-                      <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold uppercase tracking-wider">
-                        <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
+            return (
+              <motion.div
+                key={prod.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={viewMode === 'list' ? { x: 4 } : {}}
+                className={viewMode === 'list'
+                  ? "bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all p-5 flex items-center justify-between"
+                  : "group cursor-pointer flex flex-col"
+                }
+              >
+                {viewMode === 'list' ? (
+                  /* --- LIST VIEW MODE --- */
+                  <div className="flex items-center gap-8 w-full justify-between">
+                    <div className="flex items-center gap-8">
+                      {/* Poster Thumbnail */}
+                      <div className="bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl w-24 h-36 rounded-sm">
+                        {prod.poster ? (
+                          <img
+                            src={prod.poster}
+                            alt=""
+                            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Film size={24} className="text-white/10" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Play size={20} className="text-white fill-white" />
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
 
-              {/* Actions */}
-              <div className={`flex flex-col gap-2 ${viewMode === 'list' ? 'min-w-[180px] pr-4' : 'p-5 pt-0'}`}>
-                <button
-                  onClick={() => setSelectedProduction(prod)}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20"
-                >
-                  <Download size={14} /> Access Assets
-                </button>
-                {viewMode === 'list' && (
-                  <button
-                    onClick={() => {
-                      const video = prod.mediaFiles?.find(f => f.type === 'Trailer' || f.type === 'Master');
-                      if (video && (video.id || video.url)) {
-                        navigate(`/watch/${video.id || video.url.split('/').pop()}`);
-                      }
-                    }}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-tighter rounded-sm hover:bg-white/10 transition-all border border-white/5"
-                  >
-                    <Play size={14} fill="currentColor" /> Watch Now
-                  </button>
+                      {/* Details */}
+                      <div className="space-y-3">
+                        <div>
+                          <h4 className="text-xl font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight flex items-center gap-2">
+                            {prod.title}
+                            {isSeries ? (
+                              <span className="text-[10px] bg-indigo-600/20 text-indigo-400 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-500/10">
+                                Series
+                              </span>
+                            ) : (
+                              <span className="text-[10px] bg-[#e5a00d]/10 text-[#e5a00d] font-semibold px-2.5 py-0.5 rounded-full border border-[#e5a00d]/10">
+                                Movie
+                              </span>
+                            )}
+                          </h4>
+                          <p className="text-xs text-white/40 mt-1 font-medium tracking-normal">
+                            {isSeries ? (
+                              <span>
+                                {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
+                              </span>
+                            ) : (
+                              <span>Movie • {prod.genre || 'Drama'}</span>
+                            )}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-4">
+                          <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-bold bg-green-400/10 px-3 py-1 rounded-full tracking-normal">
+                            <ShieldCheck size={12} /> Active
+                          </div>
+                          <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold tracking-normal">
+                            <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col gap-2 min-w-[180px] pr-4">
+                      <button
+                        onClick={() => handleOpenModal(prod)}
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black tracking-tight rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20 cursor-pointer"
+                      >
+                        <Download size={14} /> Access Assets
+                      </button>
+                      <button
+                        onClick={() => {
+                          const video = prod.mediaFiles?.find(f => (f.fileType || f.type) === 'Trailer' || (f.fileType || f.type) === 'Master');
+                          const videoId = video?.id || (video?.url ? video.url.split('/').pop() : null);
+                          if (videoId) {
+                            navigate(`/watch/${videoId}`);
+                          }
+                        }}
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black tracking-tight rounded-sm hover:bg-white/10 transition-all border border-white/5 cursor-pointer"
+                      >
+                        <Play size={14} fill="currentColor" /> Watch Now
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* --- GRID VIEW MODE (Differentiated and without uppercase) --- */
+                  <div className="flex flex-col cursor-pointer" onClick={() => handleOpenModal(prod)}>
+                    {/* Poster Card Container with stacked cards effect for Series */}
+                    <div className="relative mb-4 group/card w-full aspect-[2/3]">
+                      {isSeries && (
+                        <>
+                          {/* Layer 2: backmost */}
+                          <div className="absolute inset-0 bg-[#121212]/50 border border-white/5 rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
+                          {/* Layer 1: middle */}
+                          <div className="absolute inset-0 bg-[#121212]/80 border border-white/5 rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
+                        </>
+                      )}
+                      {/* Main Poster Card */}
+                      <div className="relative w-full h-full bg-[#121212] border border-white/5 rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-white/20">
+                        {prod.poster ? (
+                          <img
+                            src={prod.poster}
+                            alt={prod.title}
+                            className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-black/20 text-white/10 group-hover/card:text-white/40 transition-all">
+                            <Film size={40} />
+                          </div>
+                        )}
+
+                        {/* Type tag (Series or Movie) */}
+                        <div className="absolute top-3 left-3 z-10">
+                          {isSeries ? (
+                            <div className="bg-indigo-600/90 text-white text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                              <Tv size={10} /> Series
+                            </div>
+                          ) : (
+                            <div className="bg-[#e5a00d]/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                              <Film size={10} /> Movie
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
+                            <Play size={20} className="text-white fill-white ml-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Metadata & Title stacked cleanly below the card */}
+                    <div className="space-y-2">
+                      <div className="space-y-0.5">
+                        <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors leading-snug">
+                          {prod.title}
+                        </div>
+                        <p className="text-[10px] text-white/40 font-medium tracking-normal">
+                          {isSeries ? (
+                            <span className="text-indigo-400 font-semibold">
+                              {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
+                            </span>
+                          ) : (
+                            <span>Movie • {prod.genre || 'Drama'}</span>
+                          )}
+                        </p>
+                      </div>
+
+                      {/* Active Status Badge & Download Button (word down) */}
+                      <div className="flex flex-col gap-2 pt-1">
+                        <div className="flex items-center gap-1 text-[9px] text-green-400 font-medium bg-green-400/5 px-2 py-0.5 rounded-full border border-green-500/10 w-fit">
+                          <ShieldCheck size={10} /> Active
+                        </div>
+                        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModal(prod);
+                          }}
+                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-[#e5a00d] transition-all shadow-md shadow-black/20 cursor-pointer"
+                        >
+                          <Download size={11} /> Access Assets
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       )}
 
@@ -160,25 +365,44 @@ const MyLibrary = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#121212] border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col rounded-sm shadow-2xl"
+            className="bg-[#121212] border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col rounded-sm shadow-2xl relative"
           >
+            {/* ZIP Packaging Loader Overlay */}
+            {zipProgress && (
+              <div className="absolute inset-0 bg-black/85 backdrop-blur-md z-[110] flex flex-col items-center justify-center p-6 text-center space-y-6">
+                <div className="w-16 h-16 rounded-full border-4 border-white/5 border-t-[#e5a00d] animate-spin" />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium text-white">Packaging Assets</h3>
+                  <p className="text-sm text-white/60 max-w-sm">{zipProgress.text}</p>
+                </div>
+                {zipProgress.percent >= 0 && (
+                  <div className="w-64 bg-white/10 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="bg-[#e5a00d] h-full transition-all duration-300"
+                      style={{ width: `${zipProgress.percent}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Modal Header */}
             <div className="p-8 border-b border-white/5 flex items-center justify-between bg-[#161616]">
               <div className="space-y-1">
-                <h2 className="text-2xl font-bold text-white tracking-tighter">{selectedProduction.title}</h2>
+                <h2 className="text-2xl font-medium text-white tracking-normal">{selectedProduction.title}</h2>
                 <div className="flex items-center gap-3">
-                  <p className="text-[10px] text-[#e5a00d] font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <p className="text-xs text-[#e5a00d] font-medium flex items-center gap-1.5">
                     <ShieldCheck size={12} /> Master Asset Pool
                   </p>
                   <span className="text-white/10">•</span>
-                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <p className="text-xs text-white/40 font-medium flex items-center gap-1.5">
                     <Clock size={12} /> Verified Access
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedProduction(null)}
-                className="text-white/20 hover:text-white transition-colors p-2 text-xs font-bold uppercase tracking-widest"
+                className="text-white/40 hover:text-white transition-colors p-2 text-sm font-medium"
               >
                 Close Window
               </button>
@@ -188,74 +412,269 @@ const MyLibrary = () => {
             <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar">
               {/* Asset Groups */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Master Files */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-2 text-white font-bold border-b border-white/5 pb-3">
-                    <FileVideo size={18} className="text-[#e5a00d]" />
-                    <span>Master Files (ProRes/4K)</span>
-                  </div>
-                  <div className="space-y-3">
-                    {selectedProduction.mediaFiles?.filter(f => f.type === 'Master').map((file, idx) => (
-                      <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => {
-                              const id = file.id || (file.url ? file.url.split('/').pop() : null);
-                              if (id) navigate(`/watch/${id}`);
-                            }}
-                            className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all"
-                          >
-                            <Play size={16} fill="currentColor" className="ml-0.5" />
-                          </button>
-                          <div className="space-y-0.5">
-                            <p className="text-sm font-bold text-white">Full Movie Master</p>
-                            <p className="text-[10px] text-white/20 uppercase tracking-widest">Digital Negative • 24.5GB</p>
+                
+                {/* Left Column: Master Video Files & Trailers */}
+                <div className="space-y-8">
+                  {/* Master Video Files */}
+                  <div className="space-y-6">
+                    {(() => {
+                      const episodes = selectedProduction.mediaFiles?.filter(f => f.type === 'Episode') || [];
+                      const movieMasters = selectedProduction.mediaFiles?.filter(f => f.type === 'Full Movie' || f.type === 'Master') || [];
+                      const trailers = selectedProduction.mediaFiles?.filter(f => f.type === 'Trailer') || [];
+                      const isSeries = selectedProduction.type === 'Series' || selectedProduction.type === 'TV Show' || episodes.length > 0;
+
+                      // Series Accordion Setup
+                      const episodesBySeason = {};
+                      episodes.forEach(file => {
+                        const s = file.season || 1;
+                        if (!episodesBySeason[s]) episodesBySeason[s] = [];
+                        episodesBySeason[s].push(file);
+                      });
+                      Object.keys(episodesBySeason).forEach(s => {
+                        episodesBySeason[s].sort((a, b) => (a.episodeNumber || 0) - (b.episodeNumber || 0));
+                      });
+                      const sortedSeasons = Object.keys(episodesBySeason).sort((a, b) => Number(a) - Number(b));
+
+                      return (
+                        <>
+                          {/* Column Header */}
+                          <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                            <div className="flex items-center gap-2 text-white font-semibold">
+                              <FileVideo size={18} className="text-[#e5a00d]" />
+                              <span>{isSeries ? 'Series Episodes' : 'Feature Movie Presentation'}</span>
+                            </div>
+                            {isSeries ? (
+                              episodes.length > 0 && (
+                                <button
+                                  onClick={() => handleDownloadZip(episodes, `${selectedProduction.title} - All Episodes`)}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all border border-[#e5a00d]/20 cursor-pointer"
+                                >
+                                  <Download size={12} /> Download All Episodes (ZIP)
+                                </button>
+                              )
+                            ) : (
+                              movieMasters.length > 0 && (
+                                <button
+                                  onClick={() => handleDownloadZip(movieMasters, `${selectedProduction.title} - All Masters`)}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all border border-[#e5a00d]/20 cursor-pointer"
+                                >
+                                  <Download size={12} /> Download All Masters (ZIP)
+                                </button>
+                              )
+                            )}
                           </div>
-                        </div>
-                        <a href={file.url} download className="p-2 bg-[#e5a00d] text-black rounded-sm hover:bg-white transition-colors">
-                          <Download size={16} />
-                        </a>
-                      </div>
-                    ))}
-                    {!selectedProduction.mediaFiles?.some(f => f.type === 'Master') && (
-                      <p className="text-white/20 text-xs italic">No master files uploaded yet.</p>
-                    )}
+
+                          {/* Master Content */}
+                          <div className="space-y-3 pt-2">
+                            {isSeries ? (
+                              // Series Collapsible Accordions
+                              <div className="space-y-4">
+                                {sortedSeasons.map(seasonNum => {
+                                  const seasonName = `Season ${seasonNum}`;
+                                  const seasonEpisodes = episodesBySeason[seasonNum];
+                                  const isOpen = activeSeason[seasonName];
+
+                                  return (
+                                    <div key={seasonNum} className="border border-white/5 bg-white/2.5 rounded-sm overflow-hidden">
+                                      {/* Accordion Header */}
+                                      <div
+                                        className="p-4 bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-between cursor-pointer select-none"
+                                        onClick={() => {
+                                          setActiveSeason(prev => ({
+                                            ...prev,
+                                            [seasonName]: !prev[seasonName]
+                                          }));
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <ChevronRight
+                                            size={16}
+                                            className={`text-[#e5a00d] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
+                                          />
+                                          <span className="font-semibold text-white">Season {seasonNum}</span>
+                                          <span className="text-xs text-white/40 font-normal">({seasonEpisodes.length} Episodes)</span>
+                                        </div>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDownloadZip(seasonEpisodes, `${selectedProduction.title} - Season ${seasonNum}`);
+                                          }}
+                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all cursor-pointer"
+                                        >
+                                          <Download size={12} /> Download Season (ZIP)
+                                        </button>
+                                      </div>
+
+                                      {/* Accordion Content */}
+                                      {isOpen && (
+                                        <div className="p-4 bg-black/20 divide-y divide-white/5 space-y-3">
+                                          {seasonEpisodes.map((file, idx) => (
+                                            <div key={idx} className="flex items-center justify-between py-2 border-transparent hover:border-white/10 transition-all">
+                                              <div className="flex items-center gap-3">
+                                                <button
+                                                  onClick={() => {
+                                                    const id = file.id || (file.url ? file.url.split('/').pop() : null);
+                                                    if (id) navigate(`/watch/${id}`);
+                                                  }}
+                                                  className="w-8 h-8 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all cursor-pointer"
+                                                >
+                                                  <Play size={14} fill="currentColor" className="ml-0.5" />
+                                                </button>
+                                                <div className="space-y-0.5">
+                                                  <p className="text-sm font-medium text-white">{file.fileName || `Episode ${file.episodeNumber || idx + 1}`}</p>
+                                                  <p className="text-xs text-white/40 font-normal mt-0.5">Episode {file.episodeNumber || idx + 1} • {file.format || 'ProRes/4K'}</p>
+                                                </div>
+                                              </div>
+                                              <a href={file.url} download className="p-1.5 bg-white/5 text-white/60 hover:bg-[#e5a00d] hover:text-black rounded-sm transition-colors cursor-pointer">
+                                                <Download size={14} />
+                                              </a>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                                {episodes.length === 0 && (
+                                  <p className="text-white/20 text-xs italic">No series episodes uploaded yet.</p>
+                                )}
+                              </div>
+                            ) : (
+                              // Movie Feature Presentation Block
+                              <div className="space-y-3">
+                                {movieMasters.map((file, idx) => (
+                                  <div key={idx} className="bg-gradient-to-r from-[#e5a00d]/10 to-transparent p-6 rounded-sm border border-[#e5a00d]/20 space-y-4 shadow-lg shadow-black/20 hover:border-[#e5a00d]/40 transition-all">
+                                    <div className="flex items-start justify-between">
+                                      <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                          <Film className="text-[#e5a00d]" size={20} />
+                                          <span className="text-[10px] bg-[#e5a00d]/20 text-[#e5a00d] font-bold tracking-normal px-2 py-0.5 rounded-sm">Feature Presentation</span>
+                                        </div>
+                                        <h4 className="text-lg font-semibold text-white pt-1">{file.fileName || 'Full Movie Master'}</h4>
+                                        <p className="text-xs text-white/40">Digital Negative • 24.5GB • {file.format || 'ProRes/4K'}</p>
+                                      </div>
+                                      
+                                      <a href={file.url} download className="p-3 bg-[#e5a00d] text-black hover:bg-white hover:text-black transition-colors rounded-sm shadow-md cursor-pointer">
+                                        <Download size={20} />
+                                      </a>
+                                    </div>
+                                    <div className="pt-2">
+                                      <button
+                                        onClick={() => {
+                                          const id = file.id || (file.url ? file.url.split('/').pop() : null);
+                                          if (id) navigate(`/watch/${id}`);
+                                        }}
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-[#e5a00d]/20 text-white font-semibold text-sm rounded-sm border border-white/10 hover:border-[#e5a00d]/30 transition-all cursor-pointer"
+                                      >
+                                        <Play size={16} fill="currentColor" /> Watch Full Feature Film
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                                {movieMasters.length === 0 && (
+                                  <p className="text-white/20 text-xs italic">No feature movie master files uploaded yet.</p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Official Trailers */}
+                          {trailers.length > 0 && (
+                            <div className="space-y-6 pt-6">
+                              <div className="flex items-center gap-2 text-white font-semibold border-b border-white/5 pb-3">
+                                <FileVideo size={18} className="text-[#e5a00d]" />
+                                <span>Official Trailers</span>
+                              </div>
+                              <div className="grid grid-cols-1 gap-3 pt-2">
+                                {trailers.map((file, idx) => (
+                                  <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
+                                    <div className="flex items-center gap-3">
+                                      <button
+                                        onClick={() => {
+                                          const id = file.id || (file.url ? file.url.split('/').pop() : null);
+                                          if (id) navigate(`/watch/${id}`);
+                                        }}
+                                        className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all cursor-pointer"
+                                      >
+                                        <Play size={16} fill="currentColor" className="ml-0.5" />
+                                      </button>
+                                      <div className="space-y-0.5">
+                                        <p className="text-sm font-medium text-white">{file.fileName || 'Official Trailer'}</p>
+                                        <p className="text-xs text-white/40 font-normal mt-0.5">Promo Video • {file.format || 'WEBM'}</p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <a href={file.url} download className="p-2 border border-white/10 text-white hover:bg-white hover:text-black transition-colors rounded-sm cursor-pointer">
+                                        <Download size={16} />
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 
-                {/* Marketing Materials */}
+                {/* Right Column: Marketing Materials & Press Kit */}
                 <div className="space-y-6">
-                  <div className="flex items-center gap-2 text-white font-bold border-b border-white/5 pb-3">
-                    <ImageIcon size={18} className="text-[#e5a00d]" />
-                    <span>Marketing & Press Kit</span>
-                  </div>
-                  <div className="space-y-3">
-                    {selectedProduction.mediaFiles?.filter(f => f.type !== 'Master' && f.type !== 'Trailer').map((file, idx) => (
-                      <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center">
-                            <ImageIcon size={16} className="text-white/60" />
+                  {(() => {
+                    const marketingFiles = selectedProduction.mediaFiles?.filter(f => f.type === 'Poster' || (f.type !== 'Master' && f.type !== 'Full Movie' && f.type !== 'Episode' && f.type !== 'Trailer')) || [];
+
+                    return (
+                      <>
+                        <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                          <div className="flex items-center gap-2 text-white font-semibold">
+                            <ImageIcon size={18} className="text-[#e5a00d]" />
+                            <span>Marketing & Press Kit</span>
                           </div>
-                          <div className="space-y-0.5">
-                            <p className="text-sm font-bold text-white">{file.name || 'Marketing Asset'}</p>
-                            <p className="text-[10px] text-white/20 uppercase tracking-widest">{file.type} • 12.4MB</p>
-                          </div>
+                          {marketingFiles.length > 0 && (
+                            <button
+                              onClick={() => handleDownloadZip(marketingFiles, `${selectedProduction.title} - Press Kit`)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white text-white/80 hover:text-black text-[10px] font-bold rounded-sm transition-all border border-white/10 cursor-pointer"
+                            >
+                              <Download size={12} /> Download Press Kit (ZIP)
+                            </button>
+                          )}
                         </div>
-                        <a href={file.url} download className="p-2 border border-white/10 text-white hover:bg-white hover:text-black transition-colors rounded-sm">
-                          <Download size={16} />
-                        </a>
-                      </div>
-                    ))}
-                    {!selectedProduction.mediaFiles?.some(f => f.type !== 'Master' && f.type !== 'Trailer') && (
-                      <p className="text-white/20 text-xs italic">No marketing assets uploaded yet.</p>
-                    )}
-                  </div>
+
+                        <div className="space-y-3 pt-2">
+                          {marketingFiles.map((file, idx) => (
+                            <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
+                              <div className="flex items-center gap-3">
+                                {file.url ? (
+                                  <img src={file.url} alt={file.fileName} className="w-10 h-10 object-cover rounded-sm bg-black/40" />
+                                ) : (
+                                  <div className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center">
+                                    <ImageIcon size={16} className="text-white/60" />
+                                  </div>
+                                )}
+                                <div className="space-y-0.5">
+                                  <p className="text-sm font-medium text-white">{file.fileName || file.name || 'Marketing Asset'}</p>
+                                  <p className="text-xs text-white/40 font-normal mt-0.5">{file.type || 'Poster'} • {file.format || 'PNG/JPG'}</p>
+                                </div>
+                              </div>
+                              <a href={file.url} download className="p-2 border border-white/10 text-white hover:bg-white hover:text-black transition-colors rounded-sm">
+                                <Download size={16} />
+                              </a>
+                            </div>
+                          ))}
+                          {marketingFiles.length === 0 && (
+                            <p className="text-white/20 text-xs italic">No marketing assets uploaded yet.</p>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
               {/* License Info Section */}
               <div className="bg-[#e5a00d]/5 border border-[#e5a00d]/20 p-6 rounded-sm space-y-4">
-                <div className="flex items-center gap-2 text-[#e5a00d] font-bold">
+                <div className="flex items-center gap-2 text-[#e5a00d] font-semibold">
                   <ShieldCheck size={20} />
                   <h3>License Compliance</h3>
                 </div>
@@ -265,12 +684,12 @@ const MyLibrary = () => {
                 </p>
                 <div className="pt-2 flex items-center gap-6">
                   <div className="space-y-1">
-                    <p className="text-[10px] text-white/20 uppercase tracking-widest font-bold">Contract Status</p>
-                    <p className="text-sm text-green-500 font-bold">Active & Verified</p>
+                    <p className="text-xs text-white/40 font-normal">Contract Status</p>
+                    <p className="text-sm text-green-400 font-medium">Active & Verified</p>
                   </div>
                   <div className="space-y-1 border-l border-white/10 pl-6">
-                    <p className="text-[10px] text-white/20 uppercase tracking-widest font-bold">Usage Rights</p>
-                    <p className="text-sm text-white font-bold italic">Unlimited Broadcast</p>
+                    <p className="text-xs text-white/40 font-normal">Usage Rights</p>
+                    <p className="text-sm text-white font-medium italic">Unlimited Broadcast</p>
                   </div>
                 </div>
               </div>

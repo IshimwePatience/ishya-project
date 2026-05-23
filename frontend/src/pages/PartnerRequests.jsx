@@ -177,7 +177,7 @@ const PartnerRequests = () => {
         /* PARTNERS SIGN-UP TAB */
         <div className="space-y-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] tracking-widest">
               <Clock size={14} />
               <span>Pending Organization Review ({pendingPartners.length})</span>
             </div>
@@ -251,14 +251,14 @@ const PartnerRequests = () => {
 
           {/* History Section */}
           <div className="space-y-4 pt-10">
-            <div className="flex items-center gap-2 text-xs font-bold text-white/20 uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-white/20 tracking-widest">
               <span>Distributor Signup Log</span>
             </div>
 
             <div className="bg-[#121212] border border-white/5 rounded-sm overflow-hidden">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-white/5 text-[11px] font-bold text-white/40 uppercase tracking-widest">
+                  <tr className="bg-white/5 text-[11px] font-bold text-white/40 tracking-widest">
                     <th className="px-6 py-4">Partner</th>
                     <th className="px-6 py-4">Contact</th>
                     <th className="px-6 py-4">Status</th>
@@ -278,7 +278,7 @@ const PartnerRequests = () => {
                         <div className="text-xs">{req.phone}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${
                           req.status === 'Approved' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
                         }`}>
                           {req.status}
@@ -311,7 +311,7 @@ const PartnerRequests = () => {
         /* MOVIE LICENSE REQUESTS TAB */
         <div className="space-y-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] tracking-widest">
               <Clock size={14} />
               <span>Pending Movie Distribution Approvals ({pendingLicenses.length})</span>
             </div>
@@ -385,14 +385,14 @@ const PartnerRequests = () => {
 
           {/* History Section */}
           <div className="space-y-4 pt-10">
-            <div className="flex items-center gap-2 text-xs font-bold text-white/20 uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-white/20 tracking-widest">
               <span>Approved Movie Licenses Log</span>
             </div>
 
             <div className="bg-[#121212] border border-white/5 rounded-sm overflow-hidden">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-white/5 text-[11px] font-bold text-white/40 uppercase tracking-widest">
+                  <tr className="bg-white/5 text-[11px] font-bold text-white/40 tracking-widest">
                     <th className="px-6 py-4">Movie / Production</th>
                     <th className="px-6 py-4">Distributor</th>
                     <th className="px-6 py-4">Status</th>
@@ -412,7 +412,7 @@ const PartnerRequests = () => {
                         <div className="text-[11px] text-[#e5a00d]">{sale.buyer?.type}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-green-500/10 text-green-500">
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-500">
                           Active & Licensed
                         </span>
                       </td>

@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: "Inter", sans-serif;
   --font-display: "Inter", sans-serif;
   --color-primary: #e5a00d; /* Plex Yellow */
   --color-primary-dark: #cc8e0b;

@@ -1,8 +1,14 @@
-const { Buyer } = require('../models');
+const { Buyer, Contract } = require('../models');
 
 exports.getBuyers = async (req, res) => {
   try {
     const buyers = await Buyer.findAll({
+      include: [
+        {
+          model: Contract,
+          required: true
+        }
+      ],
       order: [['name', 'ASC']]
     });
     res.json(buyers);
@@ -28,5 +34,16 @@ exports.deleteBuyer = async (req, res) => {
     res.json({ message: 'Partner deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateBuyer = async (req, res) => {
+  try {
+    const buyer = await Buyer.findByPk(req.params.id);
+    if (!buyer) return res.status(404).json({ message: 'Partner not found' });
+    await buyer.update(req.body);
+    res.json(buyer);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
