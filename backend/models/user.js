@@ -63,7 +63,16 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     emailVerifyCode: DataTypes.STRING,
-    emailVerifyExpires: DataTypes.DATE
+    emailVerifyExpires: DataTypes.DATE,
+    notificationPrefs: {
+      type: DataTypes.JSONB,
+      defaultValue: {
+        emailAlerts: true,
+        browserAlerts: true,
+        marketingEmails: false,
+        troubleshootingAlerts: true
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

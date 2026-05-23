@@ -344,7 +344,70 @@ exports.me = async (req, res) => {
       lastName: req.user.lastName,
       email: req.user.email,
       role: req.user.role?.name,
-      roleId: req.user.roleId
+      roleId: req.user.roleId,
+      phone: req.user.phone,
+      profilePic: req.user.profilePic,
+      isTwoFactorEnabled: req.user.isTwoFactorEnabled,
+      notificationPrefs: req.user.notificationPrefs || {
+        emailAlerts: true,
+        browserAlerts: true,
+        marketingEmails: false,
+        troubleshootingAlerts: true
+      }
     }
   });
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const { firstName, lastName, phone, profilePic, notificationPrefs, isTwoFactorEnabled } = req.body;
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (phone !== undefined) user.phone = phone;
+    if (profilePic !== undefined) user.profilePic = profilePic;
+    if (notificationPrefs !== undefined) user.notificationPrefs = notificationPrefs;
+    if (isTwoFactorEnabled !== undefined) user.isTwoFactorEnabled = isTwoFactorEnabled;
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        profilePic: user.profilePic,
+        isTwoFactorEnabled: user.isTwoFactorEnabled,
+        notificationPrefs: user.notificationPrefs
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const { currentPassword, newPassword } = req.body;
+
+    if (!user.validPassword(currentPassword)) {
+      return res.status(400).json({ message: 'Incorrect current password' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

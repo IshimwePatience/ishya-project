@@ -997,8 +997,12 @@ const DashboardLayout = ({ children }) => {
           {/* Avatar + dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-white/5">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0">
-                <UserIcon size={14} color="#1a1a1a" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
+                {user?.profilePic ? (
+                  <img src={user.profilePic} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <UserIcon size={14} color="#1a1a1a" />
+                )}
               </div>
               <ChevronDown size={13} color="rgba(255,255,255,0.4)" />
             </button>
