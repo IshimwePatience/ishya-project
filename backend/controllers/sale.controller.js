@@ -41,12 +41,56 @@ exports.createSale = async (req, res) => {
 
 exports.getFinanceSummary = async (req, res) => {
   try {
-    const totalRevenue = await Sale.sum('amount') || 0;
-    res.json({ totalRevenue });
+    const { Op } = require('sequelize');
+
+    // Fetch all paid sales
+    const sales = await Sale.findAll({ where: { paymentStatus: 'Paid' } });
+
+    // Revenue per category
+    const licenseTypes = ['Licensing', 'Full ownership sale', 'Broadcast rights', 'Script sale'];
+    const ticketType   = 'Theatre ticket sales';
+
+    let licenseRevenue      = 0;
+    let ticketRevenue       = 0;
+
+    for (const s of sales) {
+      const amt = parseFloat(s.amount) || 0;
+      if (licenseTypes.includes(s.saleType)) licenseRevenue += amt;
+      else if (s.saleType === ticketType)    ticketRevenue  += amt;
+    }
+
+    // Subscription revenue — count users with active paid subscriptions
+    const activeSubscribers = await User.count({
+      where: {
+        subscriptionStatus: 'active',
+        subscriptionExpiresAt: { [Op.gt]: new Date() }
+      }
+    });
+
+    // Get subscription price from SystemSetting
+    let subscriptionPrice = 10000; // default RWF
+    try {
+      const { SystemSetting } = require('../models');
+      const setting = await SystemSetting.findOne({ where: { key: 'public_monthly_subscription_price' } });
+      if (setting) subscriptionPrice = parseFloat(setting.value) || 10000;
+    } catch (_) {}
+
+    const subscriptionRevenue = activeSubscribers * subscriptionPrice;
+    const totalRevenue = licenseRevenue + ticketRevenue + subscriptionRevenue;
+
+    res.json({
+      totalRevenue,
+      licenseRevenue,
+      ticketRevenue,
+      subscriptionRevenue,
+      activeSubscribers,
+      paidSalesCount: sales.length
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 exports.updateSale = async (req, res) => {
   try {
