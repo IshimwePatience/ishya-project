@@ -18,6 +18,14 @@ const PublicEvents = () => {
   const [ticketTier, setTicketTier] = useState('regular');
   const [ticketQuantity, setTicketQuantity] = useState(1);
 
+  // OTP verification
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [otpSuccess, setOtpSuccess] = useState('');
+
   const getTicketTierPrice = (show, tier) => {
     if (!show) return 0;
     const regular = Number(show.ticketPrice) || 0;
@@ -52,9 +60,88 @@ const PublicEvents = () => {
     }
   };
 
+  // Reset OTP whenever a new booking modal opens
+  useEffect(() => {
+    if (bookingShow) {
+      setOtpCode('');
+      setOtpSent(false);
+      setOtpVerified(false);
+      setOtpError('');
+      setOtpSuccess('');
+      setBuyerName('');
+      setBuyerEmail('');
+      setTicketTier('regular');
+      setTicketQuantity(1);
+      setBookingSuccess(false);
+      setTicketDetails(null);
+    }
+  }, [bookingShow]);
+
+  // ── OTP Handlers ────────────────────────────────────────────────────────────
+  const handleSendOTP = async () => {
+    if (!buyerEmail || !buyerName) return;
+    setOtpLoading(true);
+    setOtpError('');
+    setOtpSuccess('');
+    try {
+      await axios.post('http://localhost:5000/api/ticket-email/send-otp', { email: buyerEmail, name: buyerName });
+      setOtpSent(true);
+      setOtpSuccess('Code sent! Check your inbox.');
+    } catch (err) {
+      setOtpError(err.response?.data?.message || 'Failed to send code. Check your email address.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    if (!otpCode) return;
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      await axios.post('http://localhost:5000/api/ticket-email/verify-otp', { email: buyerEmail, otp: otpCode });
+      setOtpVerified(true);
+      setOtpSuccess('Email verified ✓');
+    } catch (err) {
+      setOtpError(err.response?.data?.message || 'Incorrect code. Please try again.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const resetOTP = () => {
+    setOtpSent(false);
+    setOtpVerified(false);
+    setOtpCode('');
+    setOtpError('');
+    setOtpSuccess('');
+  };
+
+  // ── Booking Helpers ─────────────────────────────────────────────────────────
+  const dispatchTicketEmail = async (details) => {
+    try {
+      await axios.post('http://localhost:5000/api/ticket-email/send-ticket', {
+        to: details.buyerEmail,
+        ticket: {
+          buyerName: details.buyerName,
+          showTitle: details.showTitle,
+          venue: details.venue,
+          startTime: details.startTime,
+          tier: details.tier,
+          quantity: details.quantity,
+          amount: details.amount,
+          ticketId: details.id,
+          transactionId: details.transactionId || null
+        }
+      });
+    } catch (err) {
+      console.warn('Ticket email failed (non-blocking):', err.message);
+    }
+  };
+
   const handleFreeBooking = async (e) => {
     e.preventDefault();
-    if (!buyerName || !buyerEmail) return;
+    if (!buyerName || !buyerEmail || !otpVerified) return;
     setIsSubmittingBooking(true);
     try {
       const payload = {
@@ -68,9 +155,8 @@ const PublicEvents = () => {
         ticketTier,
         ticketQuantity
       };
-      
       const res = await axios.post('http://localhost:5000/api/sales', payload);
-      setTicketDetails({
+      const details = {
         id: res.data.id || 'TKT-' + Date.now(),
         buyerName,
         buyerEmail,
@@ -80,8 +166,10 @@ const PublicEvents = () => {
         amount: 0.00,
         quantity: ticketQuantity,
         tier: ticketTier
-      });
+      };
+      setTicketDetails(details);
       setBookingSuccess(true);
+      await dispatchTicketEmail(details);
     } catch (err) {
       console.error(err);
       alert('Failed to book tickets. Please try again.');
@@ -104,9 +192,8 @@ const PublicEvents = () => {
         ticketTier,
         ticketQuantity
       };
-      
       const res = await axios.post('http://localhost:5000/api/sales', payload);
-      setTicketDetails({
+      const details = {
         id: res.data.id || 'TKT-' + Date.now(),
         buyerName,
         buyerEmail,
@@ -117,8 +204,10 @@ const PublicEvents = () => {
         transactionId: paypalDetails.id,
         quantity: ticketQuantity,
         tier: ticketTier
-      });
+      };
+      setTicketDetails(details);
       setBookingSuccess(true);
+      await dispatchTicketEmail(details);
     } catch (err) {
       console.error(err);
       alert('Payment succeeded but logging the ticket failed. Please save your PayPal transaction ID: ' + paypalDetails.id);
@@ -494,15 +583,74 @@ const PublicEvents = () => {
 
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block font-sans">Email Address</label>
-                          <input
-                            type="email"
-                            required
-                            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white text-xs font-sans"
-                            placeholder="kevine@example.rw"
-                            value={buyerEmail}
-                            onChange={(e) => setBuyerEmail(e.target.value)}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="email"
+                              required
+                              disabled={otpVerified}
+                              className={`flex-1 bg-[#161616] border rounded-sm px-4 py-3 outline-none text-white text-xs font-sans transition-colors ${
+                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-white/10 focus:border-[#e5a00d]'
+                              }`}
+                              placeholder="kevine@example.rw"
+                              value={buyerEmail}
+                              onChange={(e) => { setBuyerEmail(e.target.value); resetOTP(); }}
+                            />
+                            {!otpVerified && (
+                              <button
+                                type="button"
+                                disabled={!buyerEmail || !buyerName || otpLoading}
+                                onClick={handleSendOTP}
+                                className="px-4 py-3 bg-[#e5a00d] text-black text-[10px] font-black uppercase tracking-wider rounded-sm hover:bg-[#ffb414] disabled:opacity-30 transition-all whitespace-nowrap cursor-pointer"
+                              >
+                                {otpLoading && !otpSent ? '...' : otpSent ? 'Resend' : 'Verify'}
+                              </button>
+                            )}
+                            {otpVerified && (
+                              <div className="flex items-center px-3 text-green-400 text-xs font-bold gap-1">
+                                <CheckCircle2 size={14} /> Verified
+                              </div>
+                            )}
+                          </div>
                         </div>
+
+                        {/* OTP Code Entry */}
+                        {otpSent && !otpVerified && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="space-y-2 p-4 bg-[#0d0d0d] border border-[#e5a00d]/20 rounded-sm"
+                          >
+                            <p className="text-[10px] font-bold text-[#e5a00d] uppercase tracking-wider">
+                              Enter the 6-digit code sent to {buyerEmail}
+                            </p>
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                maxLength={6}
+                                inputMode="numeric"
+                                placeholder="● ● ● ● ● ●"
+                                value={otpCode}
+                                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                                className="flex-1 bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-white text-sm font-mono font-bold tracking-[0.5em] focus:border-[#e5a00d] outline-none text-center"
+                              />
+                              <button
+                                type="button"
+                                disabled={otpCode.length < 6 || otpLoading}
+                                onClick={handleVerifyOTP}
+                                className="px-5 py-3 bg-white text-black text-[10px] font-black uppercase tracking-wider rounded-sm hover:bg-gray-200 disabled:opacity-30 transition-all cursor-pointer"
+                              >
+                                {otpLoading ? '...' : 'Confirm'}
+                              </button>
+                            </div>
+                            {otpError && <p className="text-[11px] text-red-400 font-medium">{otpError}</p>}
+                          </motion.div>
+                        )}
+
+                        {otpSuccess && otpVerified && (
+                          <p className="text-[11px] text-green-400 font-bold flex items-center gap-1">
+                            <CheckCircle2 size={12} /> Email verified – proceed to select your ticket class and pay.
+                          </p>
+                        )}
 
                         {/* Tier Selection */}
                         {bookingShow && (Number(bookingShow.ticketPrice) > 0 || Number(bookingShow.vipPrice) > 0 || Number(bookingShow.vvipPrice) > 0 || Number(bookingShow.tablePrice) > 0) && (
@@ -618,9 +766,11 @@ const PublicEvents = () => {
                       {totalBookingAmount > 0 ? (
                         /* Paid Checkout via PayPal buttons */
                         <div className="space-y-4">
-                          {(!buyerName || !buyerEmail) ? (
+                          {(!buyerName || !buyerEmail || !otpVerified) ? (
                             <div className="p-3 bg-[#111] border border-white/5 text-center text-[11px] text-white/40 font-medium rounded-sm font-sans">
-                              Please enter your Name and Email to activate checkout.
+                              {!buyerName || !buyerEmail
+                                ? 'Please enter your Name and Email to activate checkout.'
+                                : 'Please verify your email address above to proceed.'}
                             </div>
                           ) : (
                             <div className="space-y-2 animate-in fade-in duration-300">
@@ -644,10 +794,10 @@ const PublicEvents = () => {
                         /* Free registration button */
                         <button
                           type="submit"
-                          disabled={isSubmittingBooking}
+                          disabled={isSubmittingBooking || !otpVerified}
                           className="w-full py-3 bg-[#e5a00d] hover:bg-[#ffb414] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer disabled:opacity-30 font-sans"
                         >
-                          {isSubmittingBooking ? 'Securing Pass...' : 'Confirm Free Booking'}
+                          {isSubmittingBooking ? 'Securing Pass...' : !otpVerified ? 'Verify Your Email First' : 'Confirm Free Booking'}
                         </button>
                       )}
                     </form>
