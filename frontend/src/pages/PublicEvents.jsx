@@ -15,6 +15,26 @@ const PublicEvents = () => {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
   const [ticketDetails, setTicketDetails] = useState(null);
+  const [ticketTier, setTicketTier] = useState('regular');
+  const [ticketQuantity, setTicketQuantity] = useState(1);
+
+  const getTicketTierPrice = (show, tier) => {
+    if (!show) return 0;
+    const regular = Number(show.ticketPrice) || 0;
+    const vip = Number(show.vipPrice) || 0;
+    const vvip = Number(show.vvipPrice) || 0;
+    const table = Number(show.tablePrice) || 0;
+
+    switch (tier) {
+      case 'vip': return vip;
+      case 'vvip': return vvip;
+      case 'table': return table;
+      default: return regular;
+    }
+  };
+
+  const activeUnitPrice = bookingShow ? getTicketTierPrice(bookingShow, ticketTier) : 0;
+  const totalBookingAmount = activeUnitPrice * ticketQuantity;
 
   useEffect(() => {
     fetchEvents();
@@ -42,7 +62,11 @@ const PublicEvents = () => {
         saleType: 'Theatre ticket sales',
         paymentStatus: 'Paid',
         productionId: bookingShow.productionId || 1,
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        buyerName,
+        buyerEmail,
+        ticketTier,
+        ticketQuantity
       };
       
       const res = await axios.post('http://localhost:5000/api/sales', payload);
@@ -53,7 +77,9 @@ const PublicEvents = () => {
         showTitle: bookingShow.title,
         venue: bookingShow.venue,
         startTime: bookingShow.startTime,
-        amount: 0.00
+        amount: 0.00,
+        quantity: ticketQuantity,
+        tier: ticketTier
       });
       setBookingSuccess(true);
     } catch (err) {
@@ -68,11 +94,15 @@ const PublicEvents = () => {
     setIsSubmittingBooking(true);
     try {
       const payload = {
-        amount: parseFloat(bookingShow.ticketPrice) || 0.00,
+        amount: parseFloat(totalBookingAmount) || 0.00,
         saleType: 'Theatre ticket sales',
         paymentStatus: 'Paid',
         productionId: bookingShow.productionId || 1,
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        buyerName,
+        buyerEmail,
+        ticketTier,
+        ticketQuantity
       };
       
       const res = await axios.post('http://localhost:5000/api/sales', payload);
@@ -83,8 +113,10 @@ const PublicEvents = () => {
         showTitle: bookingShow.title,
         venue: bookingShow.venue,
         startTime: bookingShow.startTime,
-        amount: parseFloat(bookingShow.ticketPrice) || 0.00,
-        transactionId: paypalDetails.id
+        amount: parseFloat(totalBookingAmount) || 0.00,
+        transactionId: paypalDetails.id,
+        quantity: ticketQuantity,
+        tier: ticketTier
       });
       setBookingSuccess(true);
     } catch (err) {
@@ -95,10 +127,10 @@ const PublicEvents = () => {
     }
   };
 
-  const publicPerformances = events.filter(e => e.type === 'Performance' && e.status === 'Scheduled')
+  const publicPerformances = events.filter(e => e.type === 'Performance' && e.status === 'Scheduled' && new Date(e.startTime) >= new Date())
     .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
-  const pastHighlights = events.filter(e => e.type === 'Performance' && e.status === 'Completed')
+  const pastHighlights = events.filter(e => e.type === 'Performance' && (e.status === 'Completed' || new Date(e.startTime) < new Date()))
     .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
 
   // Auto-slide logic
@@ -165,7 +197,7 @@ const PublicEvents = () => {
                     {currentShow.posterUrl && (
                       <div className="absolute inset-0 z-0">
                         <img
-                          src={currentShow.posterUrl}
+                          src={currentShow.posterUrl.startsWith('http') ? currentShow.posterUrl : `http://localhost:5000${currentShow.posterUrl}`}
                           alt={currentShow.title}
                           className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-1000"
                         />
@@ -200,7 +232,7 @@ const PublicEvents = () => {
                         <div className="text-center md:text-right">
                           <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1">Ticket Price</span>
                           <span className="text-2xl md:text-3xl font-black text-[#e5a00d]">
-                            {Number(currentShow.ticketPrice) > 0 ? `$${Number(currentShow.ticketPrice).toFixed(2)}` : 'FREE ENTRY'}
+                            {Number(currentShow.ticketPrice) > 0 ? `${Number(currentShow.ticketPrice).toLocaleString()} RWF` : 'FREE ENTRY'}
                           </span>
                         </div>
                         <button 
@@ -210,6 +242,8 @@ const PublicEvents = () => {
                             setBuyerEmail('');
                             setBookingSuccess(false);
                             setTicketDetails(null);
+                            setTicketTier('regular');
+                            setTicketQuantity(1);
                           }}
                           className="px-12 py-5 bg-white text-black font-black text-xs md:text-sm hover:bg-gray-200 transition-all shadow-2xl active:scale-95 border-none cursor-pointer"
                         >
@@ -303,7 +337,7 @@ const PublicEvents = () => {
                     {/* Golden header */}
                     <div className="bg-[#e5a00d] text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center font-sans">
                       <span>Ishya Live Pass</span>
-                      <span>GEN ADMISSION</span>
+                      <span>{ticketDetails.tier?.toUpperCase()} x{ticketDetails.quantity}</span>
                     </div>
 
                     <div className="p-5 space-y-4 text-xs text-white/70">
@@ -334,8 +368,10 @@ const PublicEvents = () => {
                           <span className="font-bold text-white truncate block font-sans">{ticketDetails.buyerName}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] text-white/30 uppercase block font-sans">Ticket ID</span>
-                          <span className="font-bold text-[#e5a00d] block truncate font-sans">{ticketDetails.id}</span>
+                          <span className="text-[9px] text-white/30 uppercase block font-sans">Total Paid</span>
+                          <span className="font-bold text-[#e5a00d] block truncate font-sans">
+                            {ticketDetails.amount > 0 ? `${Number(ticketDetails.amount).toLocaleString()} RWF` : 'FREE ENTRY'}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -384,16 +420,119 @@ const PublicEvents = () => {
                         onChange={(e) => setBuyerEmail(e.target.value)}
                       />
                     </div>
+
+                    {/* Tier Selection */}
+                    {bookingShow && (Number(bookingShow.ticketPrice) > 0 || Number(bookingShow.vipPrice) > 0 || Number(bookingShow.vvipPrice) > 0 || Number(bookingShow.tablePrice) > 0) && (
+                      <div className="space-y-2 pt-2">
+                        <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block font-sans">Select Ticket Class</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {/* Regular option */}
+                          <button
+                            type="button"
+                            onClick={() => setTicketTier('regular')}
+                            className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
+                              ticketTier === 'regular'
+                                ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-white'
+                                : 'border-white/10 bg-[#161616]/40 hover:border-white/20 text-white/60'
+                            }`}
+                          >
+                            <div className="text-[9px] font-bold uppercase tracking-wider">Regular</div>
+                            <div className="text-xs font-black text-[#e5a00d] mt-1">
+                              {Number(bookingShow.ticketPrice) > 0 ? `${Number(bookingShow.ticketPrice).toLocaleString()} RWF` : 'FREE'}
+                            </div>
+                          </button>
+
+                          {/* VIP option */}
+                          {Number(bookingShow.vipPrice) > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setTicketTier('vip')}
+                              className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
+                                ticketTier === 'vip'
+                                  ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-white'
+                                  : 'border-white/10 bg-[#161616]/40 hover:border-white/20 text-white/60'
+                              }`}
+                            >
+                              <div className="text-[9px] font-bold uppercase tracking-wider text-blue-400">VIP Pass</div>
+                              <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                {Number(bookingShow.vipPrice).toLocaleString()} RWF
+                              </div>
+                            </button>
+                          )}
+
+                          {/* VVIP option */}
+                          {Number(bookingShow.vvipPrice) > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setTicketTier('vvip')}
+                              className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
+                                ticketTier === 'vvip'
+                                  ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-white'
+                                  : 'border-white/10 bg-[#161616]/40 hover:border-white/20 text-white/60'
+                              }`}
+                            >
+                              <div className="text-[9px] font-bold uppercase tracking-wider text-purple-400">VVIP Pass</div>
+                              <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                {Number(bookingShow.vvipPrice).toLocaleString()} RWF
+                              </div>
+                            </button>
+                          )}
+
+                          {/* Table option */}
+                          {Number(bookingShow.tablePrice) > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setTicketTier('table')}
+                              className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
+                                ticketTier === 'table'
+                                  ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-white'
+                                  : 'border-white/10 bg-[#161616]/40 hover:border-white/20 text-white/60'
+                              }`}
+                            >
+                              <div className="text-[9px] font-bold uppercase tracking-wider text-yellow-500">Table (Group)</div>
+                              <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                {Number(bookingShow.tablePrice).toLocaleString()} RWF
+                              </div>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Quantity selector */}
+                    <div className="space-y-2 pt-2">
+                      <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block font-sans">Ticket Quantity</label>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setTicketQuantity(prev => Math.max(1, prev - 1))}
+                          className="w-10 h-10 bg-white/5 border border-white/10 rounded-sm flex items-center justify-center text-white hover:bg-white/10 text-lg cursor-pointer transition-colors"
+                        >
+                          -
+                        </button>
+                        <div className="w-16 h-10 bg-[#161616] border border-white/10 rounded-sm flex items-center justify-center text-white font-bold text-sm">
+                          {ticketQuantity}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setTicketQuantity(prev => Math.min(10, prev + 1))}
+                          className="w-10 h-10 bg-white/5 border border-white/10 rounded-sm flex items-center justify-center text-white hover:bg-white/10 text-lg cursor-pointer transition-colors"
+                        >
+                          +
+                        </button>
+                        <span className="text-[10px] text-white/30 italic ml-2">Max 10 per booking</span>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
                     <span className="text-white/40">Total Amount:</span>
                     <span className="text-lg font-black text-[#e5a00d]">
-                      {Number(bookingShow.ticketPrice) > 0 ? `$${Number(bookingShow.ticketPrice).toFixed(2)}` : 'FREE ENTRY'}
+                      {totalBookingAmount > 0 ? `${totalBookingAmount.toLocaleString()} RWF` : 'FREE ENTRY'}
                     </span>
                   </div>
 
-                  {Number(bookingShow.ticketPrice) > 0 ? (
+                  {totalBookingAmount > 0 ? (
                     /* Paid Checkout via PayPal buttons */
                     <div className="space-y-4">
                       {(!buyerName || !buyerEmail) ? (
@@ -404,14 +543,14 @@ const PublicEvents = () => {
                         <div className="space-y-2 animate-in fade-in duration-300">
                           <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
                           <PaypalButton
-                            amount={bookingShow.ticketPrice}
+                            amount={(totalBookingAmount / 1300).toFixed(2)}
                             onSuccess={handlePaidBookingSuccess}
                             type="ticket"
                           />
                           <button
                             type="button"
                             onClick={() => setBookingShow(null)}
-                            className="w-full py-3 mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider"
+                            className="w-full py-3 mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider block"
                           >
                             Cancel Checkout
                           </button>

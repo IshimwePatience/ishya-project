@@ -140,7 +140,7 @@ const Cinema = () => {
 
             <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs max-w-sm mx-auto font-sans">
               <span className="text-white/45">Monthly Membership Rate:</span>
-              <span className="text-base font-black text-[#e5a00d]">${subPrice}/mo</span>
+              <span className="text-base font-black text-[#e5a00d]">{Number(subPrice).toLocaleString()} RWF/mo</span>
             </div>
 
             <div className="max-w-sm mx-auto pt-4 space-y-2">
@@ -152,7 +152,7 @@ const Cinema = () => {
                 <>
                   <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block text-left font-sans">Checkout via Secure PayPal Sandbox:</span>
                   <PaypalButton
-                    amount={subPrice}
+                    amount={(parseFloat(subPrice) / 1300).toFixed(2)}
                     onSuccess={handleSubscribeSuccess}
                     type="subscription"
                   />

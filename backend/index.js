@@ -86,7 +86,7 @@ const startServer = async () => {
       const { SystemSetting } = require('./models');
       await SystemSetting.findOrCreate({
         where: { key: 'public_monthly_subscription_price' },
-        defaults: { value: '9.99' }
+        defaults: { value: '10000' }
       });
       console.log('✅ Default system settings seeded.');
     } catch (err) {

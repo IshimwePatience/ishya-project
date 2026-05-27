@@ -13,6 +13,9 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
     productionId: initialData?.productionId || '',
     description: initialData?.description || '',
     ticketPrice: initialData?.ticketPrice || 0.00,
+    vipPrice: initialData?.vipPrice || 0.00,
+    vvipPrice: initialData?.vvipPrice || 0.00,
+    tablePrice: initialData?.tablePrice || 0.00,
     status: initialData?.status || 'Scheduled'
   });
   const [productions, setProductions] = useState([]);
@@ -139,24 +142,74 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
       </div>
 
-      {/* Ticket Price Field (Only shown for Performance) */}
+      {/* Ticket Prices Fields (Only shown for Performance) */}
       {formData.type === 'Performance' && (
-        <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4 animate-in slide-in-from-top-2 duration-300">
-          <div className="w-full md:w-1/3 mb-2 md:mb-0">
-            <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Ticket Price ($)</label>
-            <p className="text-[11px] text-white/20 mt-1">Set to 0.00 for free entry performances</p>
+        <div className="py-6 border-b border-white/5 px-4 animate-in slide-in-from-top-2 duration-300 space-y-4">
+          <div className="mb-2">
+            <h4 className="text-xs font-bold text-[#e5a00d] uppercase tracking-wider">Performance Ticket Pricing</h4>
+            <p className="text-[11px] text-white/20 mt-1">Configure admission rates for each class level. Set to 0.00 for free admission.</p>
           </div>
-          <div className="w-full md:w-2/3">
-            <input 
-              required
-              type="number"
-              step="0.01"
-              min="0"
-              className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
-              placeholder="e.g. 15.00"
-              value={formData.ticketPrice}
-              onChange={(e) => setFormData({...formData, ticketPrice: parseFloat(e.target.value) || 0})}
-            />
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Regular price */}
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-white/50">Regular Ticket (RWF)</label>
+              <input 
+                required
+                type="number"
+                step="1"
+                min="0"
+                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                placeholder="0"
+                value={formData.ticketPrice}
+                onChange={(e) => setFormData({...formData, ticketPrice: parseFloat(e.target.value) || 0})}
+              />
+            </div>
+
+            {/* VIP price */}
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-white/50">VIP Ticket (RWF)</label>
+              <input 
+                required
+                type="number"
+                step="1"
+                min="0"
+                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                placeholder="0"
+                value={formData.vipPrice}
+                onChange={(e) => setFormData({...formData, vipPrice: parseFloat(e.target.value) || 0})}
+              />
+            </div>
+
+            {/* VVIP price */}
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-white/50">VVIP Ticket (RWF)</label>
+              <input 
+                required
+                type="number"
+                step="1"
+                min="0"
+                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                placeholder="0"
+                value={formData.vvipPrice}
+                onChange={(e) => setFormData({...formData, vvipPrice: parseFloat(e.target.value) || 0})}
+              />
+            </div>
+
+            {/* Table price */}
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-white/50">Table Booking (RWF)</label>
+              <input 
+                required
+                type="number"
+                step="1"
+                min="0"
+                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                placeholder="0"
+                value={formData.tablePrice}
+                onChange={(e) => setFormData({...formData, tablePrice: parseFloat(e.target.value) || 0})}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -228,6 +281,72 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
               value={formData.venue}
               onChange={(e) => setFormData({...formData, venue: e.target.value})}
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Event Picture Field */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4 animate-in slide-in-from-top-2 duration-300">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Event Picture / Banner</label>
+          <p className="text-[11px] text-white/20 mt-1">Upload an image for public display or ticketing display</p>
+        </div>
+        <div className="w-full md:w-2/3 space-y-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            accept="image/*"
+            className="hidden"
+          />
+          
+          <div className="flex items-center gap-4">
+            {formData.posterUrl ? (
+              <div className="relative w-40 aspect-video rounded-sm overflow-hidden border border-white/10 group/img">
+                <img
+                  src={formData.posterUrl.startsWith('http') ? formData.posterUrl : `http://localhost:5000${formData.posterUrl}`}
+                  alt="Event poster preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, posterUrl: '' })}
+                  className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center text-red-450 hover:text-red-400 font-bold border-none cursor-pointer text-xs"
+                >
+                  <X size={14} className="mr-1" /> Remove
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-sm text-xs font-bold text-white transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                {uploading ? (
+                  <>
+                    <Clock className="animate-spin text-[#e5a00d]" size={14} />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload size={14} className="text-[#e5a00d]" />
+                    Upload Image
+                  </>
+                )}
+              </button>
+            )}
+            
+            <div className="flex-1 relative">
+              <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={14} />
+              <input
+                type="text"
+                className="w-full bg-[#161616] border border-white/10 rounded-sm pl-10 pr-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10 text-xs"
+                placeholder="Or paste direct image URL..."
+                value={formData.posterUrl}
+                onChange={(e) => setFormData({ ...formData, posterUrl: e.target.value })}
+              />
+            </div>
           </div>
         </div>
       </div>

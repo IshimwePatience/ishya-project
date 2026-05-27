@@ -28,6 +28,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     buyerId: DataTypes.INTEGER,
+    buyerName: DataTypes.STRING,
+    buyerEmail: DataTypes.STRING,
+    ticketTier: DataTypes.STRING,
+    ticketQuantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
     date: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW

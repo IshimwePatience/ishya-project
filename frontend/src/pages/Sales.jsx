@@ -123,10 +123,24 @@ const Sales = () => {
                         </div>
                         <div>
                           <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{sale.saleType} • {sale.production?.title || 'Unknown'}</div>
-                          <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
-                            <span>{sale.buyer?.name || 'Partner'}</span>
-                            <span className="w-1 h-1 bg-white/10 rounded-full" />
-                            <span>Expires {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
+                          <div className="text-[11px] text-white/40 font-medium flex items-center gap-2 mt-1 flex-wrap">
+                            {sale.saleType === 'Theatre ticket sales' ? (
+                              <>
+                                <span className="text-[#e5a00d] font-bold uppercase tracking-wider text-[9px]">
+                                  {sale.ticketTier || 'regular'} x{sale.ticketQuantity || 1}
+                                </span>
+                                <span className="w-1 h-1 bg-white/15 rounded-full" />
+                                <span className="text-white/60">{sale.buyerName || 'Guest'}</span>
+                                <span className="w-1 h-1 bg-white/15 rounded-full" />
+                                <span className="text-white/30 italic">{sale.buyerEmail}</span>
+                              </>
+                            ) : (
+                              <>
+                                <span>{sale.buyer?.name || 'Partner'}</span>
+                                <span className="w-1 h-1 bg-white/10 rounded-full" />
+                                <span>Expires {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>

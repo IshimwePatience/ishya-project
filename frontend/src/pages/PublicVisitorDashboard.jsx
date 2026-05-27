@@ -280,7 +280,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             <div>
               <h4 className="text-sm font-bold text-white font-sans">No Active Subscription</h4>
               <p className="text-[11px] text-white/40 leading-relaxed font-sans mt-0.5">
-                Subscribe today for just <span className="text-[#e5a00d] font-bold">${subPrice}/month</span> to unlock premium Rwandan theater schedules and stream unlimited cinema.
+                Subscribe today for just <span className="text-[#e5a00d] font-bold">{Number(subPrice).toLocaleString()} RWF/month</span> to unlock premium Rwandan theater schedules and stream unlimited cinema.
               </p>
             </div>
           </div>
@@ -482,7 +482,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                   <div className="bg-[#121212] border border-white/5 rounded p-4 text-xs space-y-1.5 text-white/60 text-left max-w-xs mx-auto">
                     <div className="flex justify-between">
                       <span>Plan Rate:</span>
-                      <span className="text-white font-bold">${subPrice}/month</span>
+                      <span className="text-white font-bold">{Number(subPrice).toLocaleString()} RWF/month</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Status:</span>
@@ -529,13 +529,13 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
 
                   <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs">
                     <span className="text-white/40">Monthly Membership Rate:</span>
-                    <span className="text-lg font-black text-[#e5a00d]">${subPrice}/mo</span>
+                    <span className="text-lg font-black text-[#e5a00d]">{Number(subPrice).toLocaleString()} RWF/mo</span>
                   </div>
 
                   <div className="space-y-2 pt-2">
                     <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block">Checkout via Secure PayPal Sandbox:</span>
                     <PaypalButton
-                      amount={subPrice}
+                      amount={(parseFloat(subPrice) / 1300).toFixed(2)}
                       onSuccess={handleSubscribeSuccess}
                       type="subscription"
                     />

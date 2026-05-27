@@ -32,6 +32,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       defaultValue: 0.00
     },
+    vipPrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00
+    },
+    vvipPrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00
+    },
+    tablePrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00
+    },
     status: {
       type: DataTypes.ENUM('Scheduled', 'Completed', 'Cancelled'),
       defaultValue: 'Scheduled'

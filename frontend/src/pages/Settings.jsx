@@ -692,18 +692,18 @@ const Settings = () => {
 
               <form onSubmit={handleSaveSubPrice} className="space-y-4 max-w-md">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">Monthly Rate (USD)</label>
+                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">Monthly Rate (RWF)</label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-xs font-bold font-sans">$</span>
                     <input
                       required
                       type="number"
-                      step="0.01"
-                      min="0.01"
-                      className="w-full bg-white/5 border border-white/10 focus:border-[#e5a00d]/40 rounded-sm pl-8 pr-4 py-3 text-sm text-white outline-none transition-colors font-sans"
+                      step="1"
+                      min="1"
+                      className="w-full bg-white/5 border border-white/10 focus:border-[#e5a00d]/40 rounded-sm pl-4 pr-12 py-3 text-sm text-white outline-none transition-colors font-sans"
                       value={subPrice}
                       onChange={(e) => setSubPrice(e.target.value)}
                     />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 text-xs font-bold font-sans">RWF</span>
                   </div>
                 </div>
 
