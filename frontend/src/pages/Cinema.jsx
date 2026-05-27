@@ -14,7 +14,7 @@ const Cinema = () => {
   const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [subPrice, setSubPrice] = useState('9.99');
+  const [subPrice, setSubPrice] = useState('10000');
   const [subSuccess, setSubSuccess] = useState(false);
   const [submittingSub, setSubmittingSub] = useState(false);
   const resumeTime = new URLSearchParams(location.search).get('resume');

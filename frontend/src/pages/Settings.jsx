@@ -52,7 +52,7 @@ const Settings = () => {
 
   // 2FA state
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
-  const [subPrice, setSubPrice] = useState('9.99');
+  const [subPrice, setSubPrice] = useState('10000');
 
   // File upload state
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -227,6 +227,11 @@ const Settings = () => {
 
   const handleSaveSubPrice = async (e) => {
     e.preventDefault();
+    const confirmed = window.confirm(
+      `Are you sure you want to set the public subscription price to ${Number(subPrice).toLocaleString()} RWF/month?\n\nThis will immediately affect what all visitors pay to subscribe.`
+    );
+    if (!confirmed) return;
+
     setSaving(true);
     setSaveStatus(null);
     try {
@@ -234,7 +239,7 @@ const Settings = () => {
       await axios.post('http://localhost:5000/api/auth/subscription-price', { price: parseFloat(subPrice) }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      showStatus('success', 'Public monthly subscription price updated successfully!');
+      showStatus('success', `Subscription price updated to ${Number(subPrice).toLocaleString()} RWF/month.`);
     } catch (err) {
       console.error(err);
       showStatus('error', 'Failed to update subscription price.');

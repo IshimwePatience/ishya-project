@@ -25,7 +25,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   const [continueWatching, setContinueWatching] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
-  const [subPrice, setSubPrice] = useState('9.99');
+  const [subPrice, setSubPrice] = useState('10000');
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [subSuccess, setSubSuccess] = useState(false);
   const [submittingSub, setSubmittingSub] = useState(false);
