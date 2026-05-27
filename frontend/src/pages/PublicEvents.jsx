@@ -406,11 +406,6 @@ const PublicEvents = () => {
                     <h4 className="text-sm md:text-base font-black text-white uppercase tracking-tight font-sans">Ticketing Desk</h4>
                     <p className="text-[9px] text-white/40 tracking-wider uppercase font-semibold font-mono">Secure Transaction Ledger</p>
                   </div>
-                  {/* Visual status light */}
-                  <div className="flex items-center gap-2 px-2 py-1 bg-green-500/10 border border-green-500/20 rounded-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-[9px] font-bold text-green-400 uppercase tracking-widest font-mono">Secured</span>
-                  </div>
                 </div>
 
                 {/* Form body container with absolute independent scrolling */}
