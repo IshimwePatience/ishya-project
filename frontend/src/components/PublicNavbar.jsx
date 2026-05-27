@@ -5,12 +5,22 @@ import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import logoImg from '../assets/images/ubuntu.png';
 
-const SearchOverlay = ({ isOpen, onClose, productions, isLoggedIn }) => {
+const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => {
   const [query, setQuery] = useState('');
 
-  const filtered = productions.filter(p =>
-    p.title.toLowerCase().includes(query.toLowerCase())
+  const filteredMovies = productions.filter(p =>
+    p.title?.toLowerCase().includes(query.toLowerCase()) ||
+    p.genre?.toLowerCase().includes(query.toLowerCase()) ||
+    p.description?.toLowerCase().includes(query.toLowerCase())
   );
+
+  const filteredEvents = events.filter(e =>
+    e.title?.toLowerCase().includes(query.toLowerCase()) ||
+    e.venue?.toLowerCase().includes(query.toLowerCase()) ||
+    e.description?.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const hasResults = filteredMovies.length > 0 || filteredEvents.length > 0;
 
   return (
     <AnimatePresence>
@@ -20,9 +30,9 @@ const SearchOverlay = ({ isOpen, onClose, productions, isLoggedIn }) => {
           animate={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="fixed inset-0 z-[200] bg-black text-white px-6 md:px-10 pt-6 overflow-y-auto pb-20"
+          className="fixed inset-0 z-[200] bg-black text-white px-6 md:px-10 pt-6 overflow-y-auto pb-20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
-          <div className="flex justify-between items-center mb-16">
+          <div className="flex justify-between items-center mb-12">
             <button onClick={onClose} className="flex items-center gap-4 group">
               <X size={24} className="group-hover:rotate-90 transition-transform" />
               <span className="text-sm font-bold hidden md:block">Close Search</span>
@@ -32,10 +42,10 @@ const SearchOverlay = ({ isOpen, onClose, productions, isLoggedIn }) => {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="flex gap-4 mb-16 md:mb-24 h-16 md:h-20">
+            <div className="flex gap-4 mb-10 h-16 md:h-20">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search movies, events, venues..."
                 className="flex-1 bg-transparent border-b-2 border-white/10 px-0 text-2xl md:text-3xl font-bold tracking-tighter focus:outline-none focus:border-white transition-colors placeholder:text-white/10"
                 autoFocus
                 value={query}
@@ -44,30 +54,74 @@ const SearchOverlay = ({ isOpen, onClose, productions, isLoggedIn }) => {
             </div>
 
             {query && (
-              <div className="space-y-8 md:space-y-12">
+              <div className="space-y-10">
+                {/* Movies / Productions */}
                 <div>
-                  <h2 className="text-[11px] font-medium text-white/20 mb-8 uppercase tracking-widest">Search Results</h2>
-                  <div className="space-y-4">
-                    {filtered.map(p => (
-                      <div key={p.id} className="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-white/5 border border-white/5 hover:border-white/20 transition-all gap-4">
-                        <div>
-                          <div className="text-xl md:text-2xl font-bold tracking-tight">{p.title}</div>
-                          <div className="text-[11px] font-medium text-white/40 mt-1">{p.genre} • {p.status}</div>
-                        </div>
-                        {isLoggedIn ? (
-                          <a href="/dashboard/productions" className="px-6 py-3 bg-white text-black text-xs font-bold hover:bg-gray-200 transition-all text-center">
-                            Manage
-                          </a>
-                        ) : (
-                          <button onClick={onClose} className="text-white/20 group-hover:text-white transition-colors hidden md:block">
-                            <ChevronRight size={24} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    {filtered.length === 0 && <div className="text-xl font-bold opacity-20">No matches found</div>}
-                  </div>
+                  <h2 className="text-[11px] font-bold text-white/20 mb-5 uppercase tracking-widest">
+                    Movies & Productions <span className="text-white/10">({filteredMovies.length})</span>
+                  </h2>
+                  {filteredMovies.length > 0 ? (
+                    <div className="space-y-3">
+                      {filteredMovies.map(p => (
+                        <a
+                          key={p.id}
+                          href={`/showcase/${p.id}`}
+                          onClick={onClose}
+                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/[0.08] transition-all gap-4"
+                        >
+                          <div>
+                            <div className="text-lg md:text-xl font-bold tracking-tight">{p.title}</div>
+                            <div className="text-[11px] font-medium text-white/40 mt-1">{[p.genre, p.type].filter(Boolean).join(' • ')}</div>
+                          </div>
+                          <ChevronRight size={20} className="text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all hidden md:block" />
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm font-medium text-white/20 italic">No movies match your search.</div>
+                  )}
                 </div>
+
+                {/* Live Events / Performances */}
+                <div>
+                  <h2 className="text-[11px] font-bold text-white/20 mb-5 uppercase tracking-widest">
+                    Live Events & Performances <span className="text-white/10">({filteredEvents.length})</span>
+                  </h2>
+                  {filteredEvents.length > 0 ? (
+                    <div className="space-y-3">
+                      {filteredEvents.map(e => (
+                        <a
+                          key={e.id}
+                          href="/events"
+                          onClick={onClose}
+                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/[0.08] transition-all gap-4"
+                        >
+                          <div>
+                            <div className="text-lg md:text-xl font-bold tracking-tight">{e.title}</div>
+                            <div className="text-[11px] font-medium text-white/40 mt-1">
+                              {e.type} • {e.venue} • {e.startTime ? new Date(e.startTime).toLocaleDateString() : ''}
+                            </div>
+                          </div>
+                          <ChevronRight size={20} className="text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all hidden md:block" />
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm font-medium text-white/20 italic">No events match your search.</div>
+                  )}
+                </div>
+
+                {!hasResults && (
+                  <div className="text-2xl font-bold opacity-20">No results found for "{query}"</div>
+                )}
+              </div>
+            )}
+
+            {!query && (
+              <div className="flex items-center gap-6 pt-2">
+                <span className="text-[11px] text-white/20 uppercase tracking-widest font-bold">Quick links:</span>
+                <a href="/" onClick={onClose} className="text-[11px] text-white/40 hover:text-white transition-colors font-semibold uppercase tracking-widest">Movies</a>
+                <a href="/events" onClick={onClose} className="text-[11px] text-white/40 hover:text-white transition-colors font-semibold uppercase tracking-widest">Live Events</a>
               </div>
             )}
           </div>
@@ -81,11 +135,13 @@ const PublicNavbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [productions, setProductions] = useState([]);
+  const [events, setEvents] = useState([]);
   const location = useLocation();
   const isLoggedIn = !!localStorage.getItem('token');
 
   useEffect(() => {
     fetchProductions();
+    fetchEvents();
   }, []);
 
   useEffect(() => {
@@ -112,7 +168,16 @@ const PublicNavbar = () => {
       const res = await axios.get('http://localhost:5000/api/productions');
       setProductions(res.data);
     } catch (err) {
-      console.error('Failed to fetch for search');
+      console.error('Failed to fetch productions for search');
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/events');
+      setEvents(Array.isArray(res.data) ? res.data : res.data.events || []);
+    } catch (err) {
+      console.error('Failed to fetch events for search');
     }
   };
 
@@ -122,6 +187,7 @@ const PublicNavbar = () => {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         productions={productions}
+        events={events}
         isLoggedIn={isLoggedIn}
       />
 
