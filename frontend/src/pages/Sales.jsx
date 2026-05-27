@@ -30,6 +30,33 @@ const Sales = () => {
     }
   };
 
+  const getTopPartnerData = () => {
+    if (sales.length === 0) return { name: 'None', share: 0 };
+    const counts = {};
+    sales.forEach(s => {
+      const name = s.buyer?.name || s.buyerName;
+      if (name) {
+        counts[name] = (counts[name] || 0) + 1;
+      }
+    });
+    
+    let topName = 'None';
+    let maxCount = 0;
+    for (const name in counts) {
+      if (counts[name] > maxCount) {
+        maxCount = counts[name];
+        topName = name;
+      }
+    }
+    const share = sales.length > 0 ? Math.round((maxCount / sales.length) * 100) : 0;
+    
+    // Truncate name nicely if too long for design
+    const displayName = topName.length > 15 ? topName.slice(0, 12) + '...' : topName;
+    return { name: displayName, share };
+  };
+  
+  const topPartnerData = getTopPartnerData();
+
   useEffect(() => {
     fetchSalesData();
   }, []);
@@ -80,8 +107,8 @@ const Sales = () => {
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
               <div className="text-[11px] font-medium text-white/40 mb-4">Total Gross Revenue</div>
               <div className="text-3xl font-bold text-white tracking-tight">{summary.totalRevenue?.toLocaleString()} RWF</div>
-              <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-green-400">
-                 <TrendingUp size={12} /> +12.5% vs Last Quarter
+              <div className="mt-4 text-[11px] font-medium text-white/20">
+                 Across {sales.length} active transactions
               </div>
             </div>
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
@@ -91,8 +118,8 @@ const Sales = () => {
             </div>
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
               <div className="text-[11px] font-medium text-white/40 mb-4">Top Partner</div>
-              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">RBA</div>
-              <div className="mt-4 text-[11px] font-medium text-white/20">Majority of active licenses</div>
+              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">{topPartnerData.name}</div>
+              <div className="mt-4 text-[11px] font-medium text-white/20">{topPartnerData.share}% of total licenses</div>
             </div>
           </div>
 

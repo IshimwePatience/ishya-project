@@ -30,6 +30,33 @@ const Expenses = () => {
     }
   };
 
+  const getTopCategoryData = () => {
+    if (expenses.length === 0) return { category: 'None', percent: 0 };
+    const totals = {};
+    let grandTotal = 0;
+    expenses.forEach(e => {
+      const cat = e.category;
+      const amt = parseFloat(e.amount) || 0;
+      if (cat) {
+        totals[cat] = (totals[cat] || 0) + amt;
+        grandTotal += amt;
+      }
+    });
+    
+    let topCategory = 'None';
+    let maxAmount = 0;
+    for (const cat in totals) {
+      if (totals[cat] > maxAmount) {
+        maxAmount = totals[cat];
+        topCategory = cat;
+      }
+    }
+    const percent = grandTotal > 0 ? Math.round((maxAmount / grandTotal) * 100) : 0;
+    return { category: topCategory, percent };
+  };
+  
+  const topCatData = getTopCategoryData();
+
   useEffect(() => {
     fetchExpenses();
   }, []);
@@ -76,19 +103,19 @@ const Expenses = () => {
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
               <div className="text-[11px] font-medium text-white/40 mb-4">Total Expenditure</div>
               <div className="text-3xl font-bold text-white tracking-tight">{summary.totalExpenses?.toLocaleString()} RWF</div>
-              <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-red-400">
-                 <TrendingDown size={12} /> +5.2% vs Last Month
+              <div className="mt-4 text-[11px] font-medium text-white/20">
+                 Across {expenses.length} logged payments
               </div>
             </div>
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
               <div className="text-[11px] font-medium text-white/40 mb-4">Active Budgets</div>
               <div className="text-3xl font-bold text-white tracking-tight">{new Set(expenses.map(e => e.productionId)).size}</div>
-              <div className="mt-4 text-[11px] font-medium text-white/20">Across active productions</div>
+              <div className="mt-4 text-[11px] font-medium text-white/20">Unique production budgets managed</div>
             </div>
             <div className="bg-[#121212] p-8 rounded-sm border border-white/5 group hover:bg-white/5 transition-all">
               <div className="text-[11px] font-medium text-white/40 mb-4">Top Category</div>
-              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">Equipment</div>
-              <div className="mt-4 text-[11px] font-medium text-white/20">35% of total spend</div>
+              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">{topCatData.category}</div>
+              <div className="mt-4 text-[11px] font-medium text-white/20">{topCatData.percent}% of total spend</div>
             </div>
           </div>
 

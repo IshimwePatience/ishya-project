@@ -228,9 +228,6 @@ const MyLibrary = () => {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4">
-                          <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-bold bg-green-400/10 px-3 py-1 rounded-full tracking-normal">
-                            <ShieldCheck size={12} /> Active
-                          </div>
                           <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold tracking-normal">
                             <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
                           </div>
@@ -327,10 +324,6 @@ const MyLibrary = () => {
 
                       {/* Active Status Badge & Download Button (word down) */}
                       <div className="flex flex-col gap-2 pt-1">
-                        <div className="flex items-center gap-1 text-[9px] text-green-400 font-medium bg-green-400/5 px-2 py-0.5 rounded-full border border-green-500/10 w-fit">
-                          <ShieldCheck size={10} /> Active
-                        </div>
-                        
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
