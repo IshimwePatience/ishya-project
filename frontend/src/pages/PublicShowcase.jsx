@@ -204,7 +204,7 @@ const PublicShowcase = () => {
                       }}
                       className="relative group cursor-pointer"
                     >
-                      <span className="absolute -left-12 md:-left-20 bottom-[-20px] text-[180px] md:text-[280px] font-black leading-none select-none text-transparent transition-all group-hover:text-white/5"
+                      <span className="absolute -left-8 md:-left-12 bottom-[-10px] text-[100px] md:text-[150px] font-black leading-none select-none text-transparent transition-all group-hover:text-white/5"
                         style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)', fontFamily: 'system-ui' }}>
                         {index + 1}
                       </span>
@@ -350,8 +350,8 @@ const PublicShowcase = () => {
 
       {/* Simple Footer - Only show on catalog grid */}
       {!selectedProduction && (
-        <footer className="px-10 md:px-20 py-20 text-center">
-          <div className="text-sm font-medium text-white/40">Ishya Culture Troupe • 2026</div>
+        <footer className="px-10 md:px-20 py-12 text-center text-xs text-white/40 font-normal font-sans tracking-wide">
+          © {new Date().getFullYear()} Ishya Studios. All rights reserved.
         </footer>
       )}
     </div>

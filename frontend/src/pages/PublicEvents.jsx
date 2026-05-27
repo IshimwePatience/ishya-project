@@ -158,14 +158,22 @@ const PublicEvents = () => {
 
       <div className="pt-32 md:pt-40 px-6 md:px-20 pb-20 overflow-hidden">
         {/* Header */}
-        <header className="max-w-4xl mb-16 md:mb-20">
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-none mb-6 md:mb-8">
-            Live <span className="text-white/20">Schedule</span>
+        <motion.header 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-20 space-y-4"
+        >
+          <div className="text-[10px] md:text-xs font-black tracking-[0.25em] text-[#e5a00d] uppercase">
+            Performances & Live Tours
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">
+            Live <span className="bg-gradient-to-r from-[#e5a00d] to-[#f5c842] bg-clip-text text-transparent">Schedule</span>
           </h1>
-          <p className="text-base md:text-xl text-white/60 font-medium leading-relaxed max-w-2xl">
-            Witness Ishya's cinematic and theatrical masterpieces live on stage. Track every moment of the Ishya experience globally.
+          <p className="text-base md:text-lg text-white/50 font-medium leading-relaxed max-w-2xl pt-2 border-l-2 border-[#e5a00d] pl-5">
+            Witness Ishya's theatrical masterpieces live on stage. Track every moment of the Ishya experience globally.
           </p>
-        </header>
+        </motion.header>
 
         {/* Cinematic Slider Section */}
         <section className="mb-24 md:mb-40 relative">
@@ -656,9 +664,8 @@ const PublicEvents = () => {
         )}
       </AnimatePresence>
 
-      <footer className="bg-white/5 border-t border-white/5 py-16 md:py-20 px-6 md:px-10 text-center">
-        <div className="text-xl md:text-2xl font-bold tracking-tighter mb-4">Ishya Studios</div>
-        <p className="text-[10px] font-semibold text-white/20">Elevating Rwanda Culture Globally</p>
+      <footer className="bg-white/2.5 border-t border-white/5 py-12 px-6 text-center text-xs text-white/40 font-normal font-sans tracking-wide">
+        © {new Date().getFullYear()} Ishya Studios. All rights reserved.
       </footer>
     </div>
   );
