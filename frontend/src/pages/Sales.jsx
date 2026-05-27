@@ -73,14 +73,6 @@ const Sales = () => {
         <>
       <PageHeader 
         title="Sales & Revenue" 
-        actions={
-          <button 
-            onClick={() => setIsFormOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-          >
-            <Plus size={16} /> Log New Sale
-          </button>
-        }
       />
 
           {/* Stats Grid */}
@@ -148,14 +140,6 @@ const Sales = () => {
                         <div className="text-right">
                           <div className="text-sm font-bold text-white tracking-tight">{sale.amount?.toLocaleString()} RWF</div>
                           <div className={`text-[11px] font-medium ${sale.paymentStatus === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{sale.paymentStatus}</div>
-                        </div>
-                        <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
-                          <button onClick={() => handleEdit(sale)} className="text-white/20 hover:text-white transition-all" title="Edit">
-                            <Edit2 size={14} />
-                          </button>
-                          <button className="text-white/20 hover:text-red-400 transition-all" title="Delete">
-                            <Trash2 size={14} />
-                          </button>
                         </div>
                       </div>
                     </div>
