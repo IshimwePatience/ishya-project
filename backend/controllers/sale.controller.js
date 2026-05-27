@@ -79,6 +79,19 @@ exports.setSalePrice = async (req, res) => {
     sale.amount = amount;
     await sale.save();
 
+    // Notify the partner user about the price quote in real-time
+    const targetUser = await User.findOne({ where: { buyerId: sale.buyerId } });
+    if (targetUser) {
+      const production = await Production.findByPk(sale.productionId);
+      const movieTitle = production ? production.title : 'requested movie';
+      await sendNotification({
+        userId: targetUser.id,
+        title: 'License Price Quoted',
+        message: `A distribution license price of ${Number(amount).toLocaleString()} RWF has been set for "${movieTitle}". Complete checkout to unlock.`,
+        type: 'license_pricing'
+      });
+    }
+
     res.json({ message: 'License request price updated successfully.', sale });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -375,7 +375,7 @@ const PartnerRequests = () => {
                         <div className="flex justify-between border-t border-white/5 pt-2 mt-2">
                           <span>Quoted License Price:</span>
                           <span className="text-[#e5a00d] font-bold">
-                            {Number(sale.amount) > 0 ? `$${Number(sale.amount).toLocaleString()}` : 'Not Quoted'}
+                            {Number(sale.amount) > 0 ? `${Number(sale.amount).toLocaleString()} RWF` : 'Not Quoted'}
                           </span>
                         </div>
                       </div>
@@ -494,13 +494,13 @@ const PartnerRequests = () => {
 
               <form onSubmit={handleSetLicensePrice} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">License Cost (USD)</label>
+                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">License Cost (RWF)</label>
                   <input
                     required
                     type="number"
                     min="1"
                     className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white text-sm font-sans"
-                    placeholder="e.g. 500"
+                    placeholder="e.g. 500000"
                     value={licensePrice}
                     onChange={(e) => setLicensePrice(e.target.value)}
                   />

@@ -525,7 +525,7 @@ const MediaLibrary = () => {
                         </div>
                         <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
                           <span className="text-white/45">Licensing Fee:</span>
-                          <span className="text-lg font-black text-[#e5a00d]">${Number(pendingRequest.amount).toLocaleString()} USD</span>
+                          <span className="text-lg font-black text-[#e5a00d]">{Number(pendingRequest.amount).toLocaleString()} RWF</span>
                         </div>
                         <div className="pt-2">
                           <PaypalButton

@@ -31,7 +31,7 @@ const PaypalButton = ({ amount, onSuccess, type = 'generic' }) => {
     const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test';
     const script = document.createElement('script');
     script.id = 'paypal-sdk-script';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&disable-funding=card`;
     script.async = true;
     script.addEventListener('load', initializeButtons);
     script.addEventListener('error', () => {
@@ -62,13 +62,21 @@ const PaypalButton = ({ amount, onSuccess, type = 'generic' }) => {
         height: 48
       },
       createOrder: (data, actions) => {
+        let finalAmount = parseFloat(amount);
+        if (type === 'license') {
+          // Convert RWF to USD for PayPal processing (exchange rate: 1 USD = 1300 RWF)
+          finalAmount = finalAmount / 1300;
+        }
         return actions.order.create({
+          application_context: {
+            shipping_preference: 'NO_SHIPPING'
+          },
           purchase_units: [
             {
               description: `Ishya System - ${type.toUpperCase()} Payment`,
               amount: {
                 currency_code: 'USD',
-                value: parseFloat(amount).toFixed(2)
+                value: finalAmount.toFixed(2)
               }
             }
           ]
@@ -90,6 +98,11 @@ const PaypalButton = ({ amount, onSuccess, type = 'generic' }) => {
       },
       onError: (err) => {
         console.error('PayPal button error:', err);
+        const errMsg = err?.message || String(err);
+        if (errMsg.includes('Detected popup close') || errMsg.includes('popup close')) {
+          setLoading(false);
+          return;
+        }
         setError('An error occurred during the checkout process. Please try again.');
         setLoading(false);
       }
