@@ -52,6 +52,7 @@ const Settings = () => {
 
   // 2FA state
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [subPrice, setSubPrice] = useState('9.99');
 
   // File upload state
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -83,6 +84,10 @@ const Settings = () => {
         troubleshootingAlerts: true
       });
       setIs2FAEnabled(userData.isTwoFactorEnabled || false);
+      if (userData.role === 'Admin') {
+        const priceRes = await axios.get('http://localhost:5000/api/auth/subscription-price');
+        setSubPrice(priceRes.data.price);
+      }
       setLoading(false);
     } catch (err) {
       console.error('Failed to load profile settings', err);
@@ -218,6 +223,24 @@ const Settings = () => {
 
   const clearLogsCache = () => {
     showStatus('success', 'Platform cache and logs successfully purged!');
+  };
+
+  const handleSaveSubPrice = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setSaveStatus(null);
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/auth/subscription-price', { price: parseFloat(subPrice) }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      showStatus('success', 'Public monthly subscription price updated successfully!');
+    } catch (err) {
+      console.error(err);
+      showStatus('error', 'Failed to update subscription price.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -652,10 +675,47 @@ const Settings = () => {
 
             <div className="bg-white/2.5 p-6 border border-white/5 rounded-sm text-center space-y-3">
               <Database size={28} className="text-white/20 mx-auto" />
-              <div className="text-xs font-bold text-white">Default Category Catalog Loaded</div>
-              <div className="text-[11px] text-white/45 max-w-sm mx-auto leading-relaxed">
+              <div className="text-xs font-bold text-white font-sans">Default Category Catalog Loaded</div>
+              <div className="text-[11px] text-white/45 max-w-sm mx-auto leading-relaxed font-sans">
                 Database production category parameters are synchronizing successfully. No manual overrides are currently needed.
               </div>
+            </div>
+
+            {/* Global Pricing & Subscription Settings */}
+            <div className="border border-white/5 bg-white/[0.01] rounded-sm p-6 space-y-6 text-left">
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-white font-sans">Public Monthly Subscription Price</h4>
+                <p className="text-xs text-white/40 leading-relaxed font-sans">
+                  Specify the global monthly rate for Public Visitors. Users will pay this price to unlock theater schedules and movie streams.
+                </p>
+              </div>
+
+              <form onSubmit={handleSaveSubPrice} className="space-y-4 max-w-md">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">Monthly Rate (USD)</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 text-xs font-bold font-sans">$</span>
+                    <input
+                      required
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      className="w-full bg-white/5 border border-white/10 focus:border-[#e5a00d]/40 rounded-sm pl-8 pr-4 py-3 text-sm text-white outline-none transition-colors font-sans"
+                      value={subPrice}
+                      onChange={(e) => setSubPrice(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="px-6 py-3 bg-[#e5a00d] hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
+                >
+                  {saving && <Loader2 className="animate-spin" size={14} />}
+                  Save Subscription Price
+                </button>
+              </form>
             </div>
           </div>
         </div>

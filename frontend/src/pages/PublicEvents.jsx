@@ -3,11 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, ChevronRight, ArrowLeft, Search, Film, Users, Settings, X, Play } from 'lucide-react';
 import axios from 'axios';
 import PublicNavbar from '../components/PublicNavbar';
+import PaypalButton from '../components/PaypalButton';
 
 const PublicEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [bookingShow, setBookingShow] = useState(null);
+  const [buyerName, setBuyerName] = useState('');
+  const [buyerEmail, setBuyerEmail] = useState('');
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
+  const [ticketDetails, setTicketDetails] = useState(null);
 
   useEffect(() => {
     fetchEvents();
@@ -22,6 +29,69 @@ const PublicEvents = () => {
     } catch (err) {
       console.error('Failed to fetch events');
       setLoading(false);
+    }
+  };
+
+  const handleFreeBooking = async (e) => {
+    e.preventDefault();
+    if (!buyerName || !buyerEmail) return;
+    setIsSubmittingBooking(true);
+    try {
+      const payload = {
+        amount: 0.00,
+        saleType: 'Theatre ticket sales',
+        paymentStatus: 'Paid',
+        productionId: bookingShow.productionId || 1,
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      const res = await axios.post('http://localhost:5000/api/sales', payload);
+      setTicketDetails({
+        id: res.data.id || 'TKT-' + Date.now(),
+        buyerName,
+        buyerEmail,
+        showTitle: bookingShow.title,
+        venue: bookingShow.venue,
+        startTime: bookingShow.startTime,
+        amount: 0.00
+      });
+      setBookingSuccess(true);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to book tickets. Please try again.');
+    } finally {
+      setIsSubmittingBooking(false);
+    }
+  };
+
+  const handlePaidBookingSuccess = async (paypalDetails) => {
+    setIsSubmittingBooking(true);
+    try {
+      const payload = {
+        amount: parseFloat(bookingShow.ticketPrice) || 0.00,
+        saleType: 'Theatre ticket sales',
+        paymentStatus: 'Paid',
+        productionId: bookingShow.productionId || 1,
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      const res = await axios.post('http://localhost:5000/api/sales', payload);
+      setTicketDetails({
+        id: res.data.id || 'TKT-' + Date.now(),
+        buyerName,
+        buyerEmail,
+        showTitle: bookingShow.title,
+        venue: bookingShow.venue,
+        startTime: bookingShow.startTime,
+        amount: parseFloat(bookingShow.ticketPrice) || 0.00,
+        transactionId: paypalDetails.id
+      });
+      setBookingSuccess(true);
+    } catch (err) {
+      console.error(err);
+      alert('Payment succeeded but logging the ticket failed. Please save your PayPal transaction ID: ' + paypalDetails.id);
+    } finally {
+      setIsSubmittingBooking(false);
     }
   };
 
@@ -127,7 +197,22 @@ const PublicEvents = () => {
                       </div>
 
                       <div className="flex flex-col gap-4 w-full md:w-auto mt-6 md:mt-0 items-center md:items-end">
-                        <button className="px-12 py-5 bg-white text-black font-black text-xs md:text-sm hover:bg-gray-200 transition-all shadow-2xl active:scale-95">
+                        <div className="text-center md:text-right">
+                          <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1">Ticket Price</span>
+                          <span className="text-2xl md:text-3xl font-black text-[#e5a00d]">
+                            {Number(currentShow.ticketPrice) > 0 ? `$${Number(currentShow.ticketPrice).toFixed(2)}` : 'FREE ENTRY'}
+                          </span>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            setBookingShow(currentShow);
+                            setBuyerName('');
+                            setBuyerEmail('');
+                            setBookingSuccess(false);
+                            setTicketDetails(null);
+                          }}
+                          className="px-12 py-5 bg-white text-black font-black text-xs md:text-sm hover:bg-gray-200 transition-all shadow-2xl active:scale-95 border-none cursor-pointer"
+                        >
                           Book Tickets
                         </button>
                         <p className="text-[10px] font-bold text-white/30">Limited Availability</p>
@@ -185,6 +270,170 @@ const PublicEvents = () => {
           </section>
         )}
       </div>
+
+      {/* Booking Checkout Modal */}
+      <AnimatePresence>
+        {bookingShow && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto no-scrollbar">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-[#0c0c0c] border border-white/10 rounded-sm p-6 md:p-8 max-w-md w-full relative shadow-2xl space-y-6 text-left my-8"
+            >
+              <button
+                onClick={() => setBookingShow(null)}
+                className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
+              >
+                ✕
+              </button>
+
+              {bookingSuccess && ticketDetails ? (
+                /* Ticket Success View */
+                <div className="space-y-6 py-4 text-center">
+                  <div className="w-12 h-12 bg-green-500/10 border border-green-500/30 text-green-400 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-black tracking-tight text-white font-sans">Booking Confirmed!</h3>
+                    <p className="text-xs text-white/40">Your ticket has been secured. Show this pass at the gate.</p>
+                  </div>
+
+                  {/* Premium Ticket Stub */}
+                  <div className="border border-white/10 rounded-sm bg-[#121212] overflow-hidden shadow-2xl text-left relative font-mono">
+                    {/* Golden header */}
+                    <div className="bg-[#e5a00d] text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center font-sans">
+                      <span>Ishya Live Pass</span>
+                      <span>GEN ADMISSION</span>
+                    </div>
+
+                    <div className="p-5 space-y-4 text-xs text-white/70">
+                      <div>
+                        <span className="text-[9px] text-white/30 uppercase block font-sans">Show / Performance</span>
+                        <span className="font-bold text-white text-sm font-sans">{ticketDetails.showTitle}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-[9px] text-white/30 uppercase block font-sans">Date</span>
+                          <span className="font-bold text-white font-sans">{new Date(ticketDetails.startTime).toLocaleDateString()}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-white/30 uppercase block font-sans">Time</span>
+                          <span className="font-bold text-white font-sans">{new Date(ticketDetails.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <span className="text-[9px] text-white/30 uppercase block font-sans">Venue</span>
+                        <span className="font-bold text-white font-sans">{ticketDetails.venue}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                        <div>
+                          <span className="text-[9px] text-white/30 uppercase block font-sans">Attendee</span>
+                          <span className="font-bold text-white truncate block font-sans">{ticketDetails.buyerName}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-white/30 uppercase block font-sans">Ticket ID</span>
+                          <span className="font-bold text-[#e5a00d] block truncate font-sans">{ticketDetails.id}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Decorative side cutouts for ticket look */}
+                    <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-r border-white/10" />
+                    <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-l border-white/10" />
+                  </div>
+
+                  <button
+                    onClick={() => setBookingShow(null)}
+                    className="w-full py-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 text-xs font-bold rounded-sm transition-colors cursor-pointer"
+                  >
+                    Close & Finish
+                  </button>
+                </div>
+              ) : (
+                /* Booking Form View */
+                <form onSubmit={handleFreeBooking} className="space-y-6">
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-black text-white font-sans">Book Your Tickets</h3>
+                    <p className="text-xs text-white/40 font-sans">{bookingShow.title} live at {bookingShow.venue}</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block font-sans">Full Name</label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white text-xs font-sans"
+                        placeholder="Kevine Mugisha"
+                        value={buyerName}
+                        onChange={(e) => setBuyerName(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block font-sans">Email Address</label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white text-xs font-sans"
+                        placeholder="kevine@example.rw"
+                        value={buyerEmail}
+                        onChange={(e) => setBuyerEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
+                    <span className="text-white/40">Total Amount:</span>
+                    <span className="text-lg font-black text-[#e5a00d]">
+                      {Number(bookingShow.ticketPrice) > 0 ? `$${Number(bookingShow.ticketPrice).toFixed(2)}` : 'FREE ENTRY'}
+                    </span>
+                  </div>
+
+                  {Number(bookingShow.ticketPrice) > 0 ? (
+                    /* Paid Checkout via PayPal buttons */
+                    <div className="space-y-4">
+                      {(!buyerName || !buyerEmail) ? (
+                        <div className="p-3 bg-[#111] border border-white/5 text-center text-[11px] text-white/40 font-medium rounded-sm font-sans">
+                          Please enter your Name and Email to activate checkout.
+                        </div>
+                      ) : (
+                        <div className="space-y-2 animate-in fade-in duration-300">
+                          <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
+                          <PaypalButton
+                            amount={bookingShow.ticketPrice}
+                            onSuccess={handlePaidBookingSuccess}
+                            type="ticket"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setBookingShow(null)}
+                            className="w-full py-3 mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider"
+                          >
+                            Cancel Checkout
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Free registration button */
+                    <button
+                      type="submit"
+                      disabled={isSubmittingBooking}
+                      className="w-full py-3 bg-[#e5a00d] hover:bg-[#ffb414] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer disabled:opacity-30 font-sans"
+                    >
+                      {isSubmittingBooking ? 'Securing Pass...' : 'Confirm Free Booking'}
+                    </button>
+                  )}
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <footer className="bg-white/5 border-t border-white/5 py-16 md:py-20 px-6 md:px-10 text-center">
         <div className="text-xl md:text-2xl font-bold tracking-tighter mb-4">Ishya Studios</div>

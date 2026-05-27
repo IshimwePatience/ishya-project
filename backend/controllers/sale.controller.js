@@ -70,6 +70,21 @@ exports.deleteSale = async (req, res) => {
   }
 };
 
+exports.setSalePrice = async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const sale = await Sale.findByPk(req.params.id);
+    if (!sale) return res.status(404).json({ message: 'Sale request not found' });
+
+    sale.amount = amount;
+    await sale.save();
+
+    res.json({ message: 'License request price updated successfully.', sale });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.approveSale = async (req, res) => {
   try {
     const sale = await Sale.findByPk(req.params.id);

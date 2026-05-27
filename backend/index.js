@@ -81,6 +81,18 @@ const startServer = async () => {
     await sequelize.sync({ alter: true });
     console.log('✅ Database synced.');
 
+    // Seed default system settings
+    try {
+      const { SystemSetting } = require('./models');
+      await SystemSetting.findOrCreate({
+        where: { key: 'public_monthly_subscription_price' },
+        defaults: { value: '9.99' }
+      });
+      console.log('✅ Default system settings seeded.');
+    } catch (err) {
+      console.error('⚠️ Error seeding system settings:', err);
+    }
+
     const server = app.listen(PORT, () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
       console.log('✨ Press CTRL+C to stop');

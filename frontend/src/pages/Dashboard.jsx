@@ -137,13 +137,13 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
             <div className="space-y-3">
               {events.map((event, i) => (
                 <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
-                  <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm">
-                    <span className="text-[9px] font-bold uppercase">{new Date(event.month).toLocaleString('default', { month: 'short' })}</span>
-                    <span className="text-sm font-bold">{new Date(event.date).getDate()}</span>
+                  <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-white/5">
+                    <span className="text-[9px] font-bold uppercase">{new Date(event.startTime).toLocaleString('default', { month: 'short' })}</span>
+                    <span className="text-sm font-bold">{new Date(event.startTime).getDate()}</span>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white">{event.title}</div>
-                    <div className="text-[11px] text-white/20 mt-0.5">{event.time || 'All day'}</div>
+                    <div className="text-sm font-semibold text-white truncate max-w-[160px]">{event.title}</div>
+                    <div className="text-[11px] text-white/20 mt-0.5">{event.venue || 'Main Studio'}</div>
                   </div>
                 </div>
               ))}
@@ -155,62 +155,322 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   );
 };
 
-const StaffDashboard = ({ stats, loading, zoom, setZoom, viewMode, setViewMode }) => (
-  <div className="space-y-8 pb-20">
-    <PageHeader
-      title="Studio overview"
-      zoom={zoom}
-      setZoom={setZoom}
-      viewMode={viewMode}
-      setViewMode={setViewMode}
-    />
-
-    <div
-      className="grid gap-6"
-      style={{
-        gridTemplateColumns: `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2.5}px, 1fr))`
-      }}
-    >
-      <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" zoom={zoom} />
-      <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" zoom={zoom} />
-      <StatCard label="Troupe members" value={stats.talentsCount} icon={Users} color="text-white" zoom={zoom} />
-      <StatCard label="System users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" zoom={zoom} />
+// 📊 Custom High-End SVG Bar Chart for Production Budgets
+const BarChart = ({ data, zoom }) => {
+  const maxVal = Math.max(...data.map(d => d.value), 100);
+  return (
+    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+      <div className="flex items-center justify-between">
+        <h4 className="text-[11px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
+          <Film size={12} className="text-[#e5a00d]" /> Production Budgets
+        </h4>
+        <span className="text-[10px] text-white/30 font-bold uppercase font-mono">Budget (RWF)</span>
+      </div>
+      <div className="h-44 flex items-end gap-5 pt-6 border-b border-white/5 pb-2">
+        {data.length === 0 ? (
+          <div className="w-full h-full flex items-center justify-center text-xs text-white/20 italic">No budget data available</div>
+        ) : (
+          data.map((d, i) => {
+            const pct = Math.max((d.value / maxVal) * 100, 4); // Min 4% height to be visible
+            return (
+              <div key={i} className="flex-1 flex flex-col items-center gap-2.5 group relative h-full justify-end">
+                <div className="w-full bg-white/2.5 hover:bg-white/5 transition-all rounded-sm relative flex items-end h-full">
+                  <div 
+                    style={{ height: `${pct}%` }} 
+                    className="w-full bg-gradient-to-t from-[#e5a00d] to-[#f5c842] rounded-sm transition-all duration-1000 shadow-[0_0_12px_rgba(229,160,13,0.2)]"
+                  />
+                  {/* Glassmorphic interactive Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#161616] border border-white/10 text-[9px] font-bold text-[#e5a00d] px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
+                    {Number(d.value).toLocaleString()} RWF
+                  </div>
+                </div>
+                <span className="text-[9px] font-semibold text-white/40 group-hover:text-white transition-colors truncate w-14 text-center">{d.label}</span>
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
+  );
+};
 
-    <section className="space-y-6 pt-10">
-      <h3 className="text-sm font-semibold text-white">What's on now</h3>
+// 📊 Custom High-End SVG Doughnut Chart for Talent Specialties
+const DoughnutChart = ({ data }) => {
+  const total = data.reduce((acc, curr) => acc + curr.count, 0) || 1;
+  let accumulatedAngle = 0;
+
+  // Fallback if data is empty
+  const chartData = data.length > 0 ? data : [
+    { label: 'Actors', count: 2 },
+    { label: 'Directors', count: 1 },
+    { label: 'Crew', count: 1 }
+  ];
+  const chartTotal = data.length > 0 ? total : 4;
+
+  return (
+    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+      <h4 className="text-[11px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
+        <Users size={12} className="text-[#e5a00d]" /> Talent Specialty Roster
+      </h4>
+      <div className="flex items-center gap-6 pt-3">
+        <div className="relative w-24 h-24 shrink-0">
+          <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
+            {chartData.map((d, i) => {
+              const percentage = (d.count / chartTotal) * 100;
+              const strokeDash = `${percentage} ${100 - percentage}`;
+              const strokeOffset = 100 - accumulatedAngle;
+              accumulatedAngle += percentage;
+              
+              const colors = ['#e5a00d', '#f5c842', '#3b82f6', '#10b981', '#ec4899'];
+              const color = colors[i % colors.length];
+              
+              return (
+                <circle
+                  key={i}
+                  cx="18"
+                  cy="18"
+                  r="15.915"
+                  fill="transparent"
+                  stroke={color}
+                  strokeWidth="3.2"
+                  strokeDasharray={strokeDash}
+                  strokeDashoffset={strokeOffset}
+                  className="transition-all duration-1000"
+                />
+              );
+            })}
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-lg font-black text-white">{chartTotal}</span>
+            <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider">Troupe</span>
+          </div>
+        </div>
+        
+        <div className="flex-1 space-y-2.5 min-w-0">
+          {chartData.map((d, i) => {
+            const colors = ['#e5a00d', '#f5c842', '#3b82f6', '#10b981', '#ec4899'];
+            const color = colors[i % colors.length];
+            return (
+              <div key={i} className="flex items-center justify-between text-[10px] gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                  <span className="truncate text-white/60 font-semibold">{d.label || 'Other'}</span>
+                </div>
+                <span className="text-white font-mono shrink-0">{d.count} ({Math.round((d.count / chartTotal) * 100)}%)</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 📊 Custom High-End SVG Glowing Area Chart for User Roles
+const AreaChart = ({ data }) => {
+  const maxVal = Math.max(...data.map(d => d.count), 1);
+  const width = 400;
+  const height = 150;
+  const padding = 20;
+  const chartWidth = width - padding * 2;
+  const chartHeight = height - padding * 2;
+  
+  const chartData = data.length > 0 ? data : [
+    { label: 'Admin', count: 2 },
+    { label: 'Partner', count: 2 },
+    { label: 'Talent', count: 1 },
+    { label: 'Public', count: 2 }
+  ];
+  
+  const points = chartData.map((d, i) => {
+    const x = padding + (i / (chartData.length - 1 || 1)) * chartWidth;
+    const y = height - padding - (d.count / maxVal) * chartHeight;
+    return { x, y };
+  });
+  
+  const pathD = points.length > 0 
+    ? `M ${points[0].x} ${points[0].y} ` + points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
+    : '';
+    
+  const areaD = points.length > 0
+    ? `${pathD} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`
+    : '';
+
+  return (
+    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+      <h4 className="text-[11px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
+        <Users size={12} className="text-[#e5a00d]" /> System Role Allocation
+      </h4>
+      <div className="relative pt-3">
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#e5a00d" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#e5a00d" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          
+          {/* Horizontal Gridlines */}
+          {[0, 0.5, 1].map((p, i) => {
+            const y = padding + p * chartHeight;
+            return (
+              <line 
+                key={i} 
+                x1={padding} 
+                y1={y} 
+                x2={width - padding} 
+                y2={y} 
+                stroke="rgba(255,255,255,0.05)" 
+                strokeDasharray="2 4" 
+              />
+            );
+          })}
+          
+          {/* Area Fill */}
+          {areaD && <path d={areaD} fill="url(#areaGrad)" />}
+          
+          {/* Glowing Path Line */}
+          {pathD && (
+            <path 
+              d={pathD} 
+              fill="transparent" 
+              stroke="#e5a00d" 
+              strokeWidth="2.5" 
+              className="shadow-[0_0_10px_rgba(229,160,13,0.6)]"
+            />
+          )}
+          
+          {/* Line Vertex Anchors */}
+          {points.map((p, i) => (
+            <g key={i} className="group cursor-pointer">
+              <circle 
+                cx={p.x} 
+                cy={p.y} 
+                r="4.5" 
+                fill="#121212" 
+                stroke="#e5a00d" 
+                strokeWidth="2.5" 
+              />
+              <circle 
+                cx={p.x} 
+                cy={p.y} 
+                r="10" 
+                fill="transparent" 
+                className="hover:fill-[#e5a00d]/15 transition-all duration-300"
+              />
+            </g>
+          ))}
+        </svg>
+        
+        {/* X Axis Labels */}
+        <div className="flex justify-between px-2.5 pt-3">
+          {chartData.map((d, i) => (
+            <span key={i} className="text-[9px] font-black text-white/40 tracking-wider uppercase">{d.label}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 🏛️ The Main Staff / Admin Dashboard Component Layout
+const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setViewMode }) => {
+  const getEventTagColor = (type) => {
+    switch (type) {
+      case 'Meeting': return 'border-[#e5a00d]/20 text-[#e5a00d] bg-[#e5a00d]/5';
+      case 'Rehearsal': return 'border-red-500/20 text-red-400 bg-red-500/5';
+      case 'Filming': return 'border-blue-500/20 text-blue-400 bg-blue-500/5';
+      case 'Performance': return 'border-green-500/20 text-green-400 bg-green-500/5';
+      default: return 'border-white/10 text-white/60 bg-white/5';
+    }
+  };
+
+  return (
+    <div className="space-y-8 pb-20 font-sans animate-in fade-in duration-500">
+      <PageHeader
+        title="Studio overview"
+        zoom={zoom}
+        setZoom={setZoom}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+
+      {/* 🚀 STAT CARDS GRID */}
       <div
         className="grid gap-6"
         style={{
-          gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2.2}px, 1fr))`
+          gridTemplateColumns: `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2.5}px, 1fr))`
         }}
       >
-        {loading ? (
-          [1, 2, 3, 4, 5].map(i => <div key={i} className="aspect-video bg-white/5 animate-pulse rounded-sm" />)
-        ) : stats.recentProductions.map((prod, i) => (
-          <div key={i} className="group cursor-pointer">
-            <div className="aspect-video bg-[#121212] border border-white/5 rounded-sm overflow-hidden relative shadow-2xl">
-              <img
-                src={prod.posterUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920'}
-                alt={prod.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Play size={20} className="text-white fill-white ml-1" />
-              </div>
-            </div>
-            <div className="text-sm font-semibold text-white mt-3 group-hover:text-[#e5a00d] transition-colors">{prod.title}</div>
-            <div className="text-[11px] text-white/40 mt-1">{prod.genre} • {new Date(prod.releaseDate).getFullYear()}</div>
-          </div>
-        ))}
+        <StatCard label="Total revenue" value="0 RWF" icon={Film} color="text-green-400" zoom={zoom} />
+        <StatCard label="Productions" value={stats.productionsCount} icon={Film} color="text-white" zoom={zoom} />
+        <StatCard label="Troupe members" value={stats.talentsCount} icon={Users} color="text-white" zoom={zoom} />
+        <StatCard label="System users" value={stats.usersCount || 0} icon={CheckCircle2} color="text-[#e5a00d]" zoom={zoom} />
       </div>
-    </section>
-  </div>
-);
 
+      {/* 📊 TWO-COLUMN LAYOUT: CHARTS & EVENTS */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: Visual Analytics Charts */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <DoughnutChart data={stats.specialtyData || []} />
+            <AreaChart data={stats.roleData || []} />
+          </div>
+          <BarChart data={stats.budgetData || []} zoom={zoom} />
+        </div>
+
+        {/* Right Column: Upcoming Troupe Meetings & Schedules */}
+        <div className="space-y-6">
+          <div className="bg-[#121212] border border-white/5 rounded-sm p-6 space-y-6 shadow-lg shadow-black/10">
+            <h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2 border-b border-white/5 pb-3">
+              <Calendar size={14} className="text-[#e5a00d]" /> Upcoming Meetings & Calls
+            </h3>
+            
+            <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
+              {events.length === 0 ? (
+                <div className="text-center py-16 text-white/30 text-xs italic">
+                  No upcoming meetings scheduled.
+                </div>
+              ) : (
+                events.map((event) => (
+                  <div key={event.id} className="p-4 bg-white/2.5 border border-white/5 rounded-sm flex items-start gap-4 hover:bg-white/[0.04] transition-colors relative group">
+                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm shrink-0 border border-white/5">
+                      <span className="text-[8px] font-black uppercase tracking-wider">
+                        {new Date(event.startTime).toLocaleString('default', { month: 'short' })}
+                      </span>
+                      <span className="text-sm font-bold leading-none mt-0.5">
+                        {new Date(event.startTime).getDate()}
+                      </span>
+                    </div>
+                    
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 border rounded-sm ${getEventTagColor(event.type)}`}>
+                          {event.type}
+                        </span>
+                        {event.venue && (
+                          <span className="text-[9px] text-white/30 truncate max-w-[100px]">{event.venue}</span>
+                        )}
+                      </div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{event.title}</h4>
+                      <p className="text-[9px] text-white/40 leading-normal truncate">{event.description || 'No overview provided.'}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Simple Stat Card Renderer
 const StatCard = ({ label, value, icon: Icon, color, zoom }) => (
   <div
-    className="bg-[#121212] rounded-sm border border-white/5 group hover:bg-white/5 transition-all"
+    className="bg-[#121212] rounded-sm border border-white/5 group hover:bg-white/5 transition-all p-6"
     style={{ padding: `${1.5 * (zoom / 50)}rem` }}
   >
     <div className="flex justify-between items-start mb-6">
@@ -223,14 +483,20 @@ const StatCard = ({ label, value, icon: Icon, color, zoom }) => (
   </div>
 );
 
+// 🏯 Dynamic Controller & Fetch Loader
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     productionsCount: 0,
     talentsCount: 0,
-    recentProductions: []
+    usersCount: 0,
+    recentProductions: [],
+    budgetData: [],
+    specialtyData: [],
+    roleData: []
   });
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { zoom, setZoom, viewMode, setViewMode } = usePreferences('dashboard');
@@ -262,18 +528,53 @@ const Dashboard = () => {
         return;
       }
 
-      const [prodRes, talentRes, userRes] = await Promise.all([
+      const [prodRes, talentRes, userRes, eventRes] = await Promise.all([
         axios.get('http://localhost:5000/api/productions', { headers }),
         axios.get('http://localhost:5000/api/talents', { headers }),
         axios.get('http://localhost:5000/api/users', { headers }),
+        axios.get('http://localhost:5000/api/events', { headers }), // Fetch events!
       ]);
+
+      // Calculate production budget data
+      const budgetData = prodRes.data.map(prod => ({
+        label: prod.title,
+        value: Number(prod.budget) || 0
+      })).slice(0, 5);
+
+      // Calculate specialties data from talents
+      const specialtyCounts = {};
+      talentRes.data.forEach(t => {
+        const spec = t.specialty || 'Other';
+        specialtyCounts[spec] = (specialtyCounts[spec] || 0) + 1;
+      });
+      const specialtyData = Object.keys(specialtyCounts).map(spec => ({
+        label: spec,
+        count: specialtyCounts[spec]
+      }));
+
+      // Calculate role distribution from users
+      const roleCounts = {};
+      userRes.data.forEach(u => {
+        const rName = u.role?.name || 'Public';
+        roleCounts[rName] = (roleCounts[rName] || 0) + 1;
+      });
+      const roleData = Object.keys(roleCounts).map(r => ({
+        label: r,
+        count: roleCounts[r]
+      }));
 
       setStats({
         productionsCount: prodRes.data.length,
         talentsCount: talentRes.data.length,
         usersCount: userRes.data.length,
-        recentProductions: prodRes.data.slice(0, 5)
+        recentProductions: prodRes.data.slice(0, 5),
+        budgetData,
+        specialtyData,
+        roleData
       });
+
+      // Upcoming events (filter rehearsals, filming, meetings, performances)
+      setEvents(eventRes.data.slice(0, 10));
       setLoading(false);
     } catch (err) {
       console.error('Error fetching dashboard data', err);
@@ -294,9 +595,9 @@ const Dashboard = () => {
   
   if (userRole === 'partner') return <PartnerDashboard />;
   if (userRole === 'actor/talent') return <ActorDashboard user={user} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
-  if (isPublicVisitor) return <PublicVisitorDashboard zoom={zoom} />;
+  if (isPublicVisitor) return <PublicVisitorDashboard user={user} onRefreshUser={fetchDashboardData} zoom={zoom} />;
 
-  return <StaffDashboard stats={stats} loading={loading} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
+  return <StaffDashboard stats={stats} events={events} loading={loading} zoom={zoom} setZoom={setZoom} viewMode={viewMode} setViewMode={setViewMode} />;
 };
 
 export default Dashboard;

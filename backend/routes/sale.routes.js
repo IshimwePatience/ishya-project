@@ -16,6 +16,7 @@ router.delete('/:id', saleController.deleteSale);
 
 router.patch('/:id/approve', saleController.approveSale);
 router.patch('/:id/reject', saleController.rejectSale);
+router.patch('/:id/set-price', saleController.setSalePrice);
 
 // Buyers
 router.get('/buyers', buyerController.getBuyers);

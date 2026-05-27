@@ -1,4 +1,4 @@
-const { User, Role, PendingUser } = require('../models');
+const { User, Role, PendingUser, SystemSetting, Sale } = require('../models');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { sendEmail } = require('../utils/mailer');
@@ -348,6 +348,8 @@ exports.me = async (req, res) => {
       phone: req.user.phone,
       profilePic: req.user.profilePic,
       isTwoFactorEnabled: req.user.isTwoFactorEnabled,
+      subscriptionStatus: req.user.subscriptionStatus,
+      subscriptionExpiresAt: req.user.subscriptionExpiresAt,
       notificationPrefs: req.user.notificationPrefs || {
         emailAlerts: true,
         browserAlerts: true,
@@ -407,6 +409,71 @@ exports.changePassword = async (req, res) => {
     await user.save();
 
     res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getSubscriptionPrice = async (req, res) => {
+  try {
+    const setting = await SystemSetting.findOne({ where: { key: 'public_monthly_subscription_price' } });
+    res.json({ price: setting ? setting.value : '9.99' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.setSubscriptionPrice = async (req, res) => {
+  try {
+    const { price } = req.body;
+    const [setting] = await SystemSetting.findOrCreate({
+      where: { key: 'public_monthly_subscription_price' },
+      defaults: { value: parseFloat(price).toFixed(2) }
+    });
+    setting.value = parseFloat(price).toFixed(2);
+    await setting.save();
+    res.json({ message: 'Subscription price updated successfully.', price: setting.value });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.subscribeUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const setting = await SystemSetting.findOne({ where: { key: 'public_monthly_subscription_price' } });
+    const currentPrice = parseFloat(setting ? setting.value : '9.99');
+
+    // Calculate new expiration date
+    let newExpiryDate = new Date();
+    if (user.subscriptionExpiresAt && new Date(user.subscriptionExpiresAt) > new Date()) {
+      // User is topping up their active subscription
+      newExpiryDate = new Date(user.subscriptionExpiresAt);
+    }
+    // Add 30 days
+    newExpiryDate.setDate(newExpiryDate.getDate() + 30);
+
+    user.subscriptionStatus = 'active';
+    user.subscriptionExpiresAt = newExpiryDate;
+    await user.save();
+
+    // Log the transaction as a Sale of type Theatre ticket sales (or generic subscription sale)
+    await Sale.create({
+      amount: currentPrice,
+      saleType: 'Theatre ticket sales',
+      paymentStatus: 'Paid',
+      productionId: 1, // Tying to a default production or master entry
+      date: new Date().toISOString().split('T')[0]
+    });
+
+    res.json({
+      message: 'Subscription successfully extended by 30 days!',
+      subscriptionStatus: user.subscriptionStatus,
+      subscriptionExpiresAt: user.subscriptionExpiresAt
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

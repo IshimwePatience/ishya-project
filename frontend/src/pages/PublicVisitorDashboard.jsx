@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play,
   Info,
@@ -9,18 +9,26 @@ import {
   Star,
   Clock,
   LayoutGrid,
-  Tv
+  Tv,
+  AlertTriangle,
+  CheckCircle,
+  X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PaypalButton from '../components/PaypalButton';
 
-const PublicVisitorDashboard = () => {
+const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   const navigate = useNavigate();
   const [productions, setProductions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [continueWatching, setContinueWatching] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
+  const [subPrice, setSubPrice] = useState('9.99');
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [subSuccess, setSubSuccess] = useState(false);
+  const [submittingSub, setSubmittingSub] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -31,19 +39,61 @@ const PublicVisitorDashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [prodRes, catRes, watchRes] = await Promise.all([
+      const [prodRes, catRes, watchRes, priceRes] = await Promise.all([
         axios.get('http://localhost:5000/api/productions', { headers }),
         axios.get('http://localhost:5000/api/productions/categories', { headers }),
-        axios.get('http://localhost:5000/api/watch-progress/continue', { headers })
+        axios.get('http://localhost:5000/api/watch-progress/continue', { headers }),
+        axios.get('http://localhost:5000/api/auth/subscription-price')
       ]);
 
       setProductions(prodRes.data);
       setCategories(catRes.data);
       setContinueWatching(watchRes.data);
+      if (priceRes.data?.price) {
+        setSubPrice(priceRes.data.price);
+      }
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch public dashboard data');
       setLoading(false);
+    }
+  };
+
+  const getSubscriptionDetails = () => {
+    if (!user) return { status: 'inactive', daysLeft: 0, bannerType: 'danger' };
+    
+    if (user.subscriptionStatus === 'active' && user.subscriptionExpiresAt) {
+      const diffTime = new Date(user.subscriptionExpiresAt) - new Date();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays <= 0) {
+        return { status: 'expired', daysLeft: 0, bannerType: 'danger' };
+      } else if (diffDays <= 5) {
+        return { status: 'expiring_soon', daysLeft: diffDays, bannerType: 'warning' };
+      }
+      return { status: 'active', daysLeft: diffDays, bannerType: 'success' };
+    }
+    return { status: 'inactive', daysLeft: 0, bannerType: 'danger' };
+  };
+
+  const handleSubscribeSuccess = async (paypalDetails) => {
+    setSubmittingSub(true);
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/auth/subscribe', {
+        transactionId: paypalDetails.id
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSubSuccess(true);
+      if (onRefreshUser) {
+        onRefreshUser(); // Refreshes session user details in parent dashboard
+      }
+    } catch (err) {
+      console.error('Subscription error:', err);
+      alert('Subscription payment completed but logging failed. Contact admin with PayPal Transaction ID: ' + paypalDetails.id);
+    } finally {
+      setSubmittingSub(false);
     }
   };
 
@@ -216,8 +266,65 @@ const PublicVisitorDashboard = () => {
     );
   }
 
+  const subDetails = getSubscriptionDetails();
+
   return (
     <div className="space-y-12 pb-20 -mt-2">
+      {/* Dynamic Subscription Banner */}
+      {subDetails.status !== 'active' ? (
+        <div className="bg-red-950/40 border border-red-500/20 p-5 rounded-sm flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 shrink-0">
+              <AlertTriangle size={20} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-sans">No Active Subscription</h4>
+              <p className="text-[11px] text-white/40 leading-relaxed font-sans mt-0.5">
+                Subscribe today for just <span className="text-[#e5a00d] font-bold">${subPrice}/month</span> to unlock premium Rwandan theater schedules and stream unlimited cinema.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setShowSubscriptionModal(true);
+              setSubSuccess(false);
+            }}
+            className="px-6 py-2.5 bg-[#e5a00d] hover:bg-[#ffb414] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+          >
+            Subscribe Now
+          </button>
+        </div>
+      ) : subDetails.status === 'expiring_soon' ? (
+        <div className="bg-[#e5a00d]/10 border border-[#e5a00d]/20 p-5 rounded-sm flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-10 h-10 rounded-full bg-[#e5a00d]/15 flex items-center justify-center text-[#e5a00d] shrink-0">
+              <AlertTriangle size={20} />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-sans">Subscription Expiring Soon!</h4>
+              <p className="text-[11px] text-white/40 leading-relaxed font-sans mt-0.5">
+                Your monthly plan expires in <span className="text-white font-bold">{subDetails.daysLeft} days</span>. Top up now to keep uninterrupted access to cinema vault.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setShowSubscriptionModal(true);
+              setSubSuccess(false);
+            }}
+            className="px-6 py-2.5 bg-[#e5a00d] hover:bg-[#ffb414] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+          >
+            Top Up Plan
+          </button>
+        </div>
+      ) : (
+        /* Sub Active checkmark */
+        <div className="px-4 py-2.5 bg-green-950/20 border border-green-500/10 rounded-sm flex items-center gap-2 text-xs text-green-400 font-medium font-sans">
+          <CheckCircle size={14} />
+          <span>Monthly Subscription Active (Expires in {subDetails.daysLeft} days)</span>
+        </div>
+      )}
+
       {/* Genre Filter Bar */}
       <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 -mt-8 px-8">
         <div className="flex items-center justify-between">
@@ -343,6 +450,109 @@ const PublicVisitorDashboard = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Subscription Purchase Modal */}
+      <AnimatePresence>
+        {showSubscriptionModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto no-scrollbar">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-[#0c0c0c] border border-white/10 rounded-sm p-8 max-w-md w-full relative shadow-2xl space-y-6 text-left my-8"
+            >
+              <button
+                onClick={() => setShowSubscriptionModal(false)}
+                className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold font-sans"
+              >
+                ✕
+              </button>
+
+              {subSuccess ? (
+                /* Subscription Success View */
+                <div className="text-center space-y-6 py-6 font-sans">
+                  <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-black tracking-tight text-white">Subscription Active!</h3>
+                    <p className="text-xs text-white/40 max-w-xs mx-auto leading-relaxed">
+                      Welcome to <span className="text-white font-semibold">Ishya Monthly</span>. Your account has been upgraded, and access has been extended by 30 days!
+                    </p>
+                  </div>
+                  <div className="bg-[#121212] border border-white/5 rounded p-4 text-xs space-y-1.5 text-white/60 text-left max-w-xs mx-auto">
+                    <div className="flex justify-between">
+                      <span>Plan Rate:</span>
+                      <span className="text-white font-bold">${subPrice}/month</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Status:</span>
+                      <span className="text-green-400 font-bold">Active</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Expiration:</span>
+                      <span className="text-white font-bold">{user?.subscriptionExpiresAt ? new Date(new Date(user.subscriptionExpiresAt).setDate(new Date(user.subscriptionExpiresAt).getDate() + 30)).toLocaleDateString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowSubscriptionModal(false);
+                      setSubSuccess(false);
+                    }}
+                    className="w-full py-3 bg-[#e5a00d] hover:bg-[#ffb414] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
+                  >
+                    Start Watching
+                  </button>
+                </div>
+              ) : (
+                /* Subscription Purchase / Top-up Form View */
+                <div className="space-y-6 font-sans">
+                  <div className="space-y-2 text-center">
+                    <Tv className="text-[#e5a00d] mx-auto animate-pulse" size={32} />
+                    <h3 className="text-xl font-black text-white">Ishya Monthly Premium</h3>
+                    <p className="text-xs text-white/40">Unlock exclusive streams and Rwandan masterpieces</p>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/5 rounded-sm p-5 space-y-3 text-xs text-white/70">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span>Stream all Full Movies & Episodes in High Quality</span>
+                    </div>
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span>Access to continue watching and resume streams</span>
+                    </div>
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span>Frictionless live performance schedule booking</span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs">
+                    <span className="text-white/40">Monthly Membership Rate:</span>
+                    <span className="text-lg font-black text-[#e5a00d]">${subPrice}/mo</span>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block">Checkout via Secure PayPal Sandbox:</span>
+                    <PaypalButton
+                      amount={subPrice}
+                      onSuccess={handleSubscribeSuccess}
+                      type="subscription"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowSubscriptionModal(false)}
+                      className="w-full py-3 mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider"
+                    >
+                      Cancel Checkout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

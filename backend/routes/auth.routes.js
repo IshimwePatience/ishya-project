@@ -15,6 +15,9 @@ router.post('/reset-password', authController.resetPassword);
 router.get('/me', authMiddleware, authController.me);
 router.put('/profile', authMiddleware, authController.updateProfile);
 router.put('/change-password', authMiddleware, authController.changePassword);
+router.get('/subscription-price', authController.getSubscriptionPrice);
+router.post('/subscription-price', authMiddleware, authController.setSubscriptionPrice);
+router.post('/subscribe', authMiddleware, authController.subscribeUser);
 
 // Google OAuth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

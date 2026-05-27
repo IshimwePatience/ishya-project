@@ -64,6 +64,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     emailVerifyCode: DataTypes.STRING,
     emailVerifyExpires: DataTypes.DATE,
+    subscriptionStatus: {
+      type: DataTypes.ENUM('active', 'inactive', 'expired'),
+      defaultValue: 'inactive'
+    },
+    subscriptionExpiresAt: DataTypes.DATE,
     notificationPrefs: {
       type: DataTypes.JSONB,
       defaultValue: {

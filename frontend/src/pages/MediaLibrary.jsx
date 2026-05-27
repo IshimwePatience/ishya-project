@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MediaForm from '../components/MediaForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
+import PaypalButton from '../components/PaypalButton';
 
 const MediaLibrary = () => {
   const navigate = useNavigate();
@@ -76,6 +77,24 @@ const MediaLibrary = () => {
     } catch (err) {
       console.error('License request failed', err);
       alert('Failed to request license. Please try again.');
+    }
+  };
+
+  const handleActivateLicense = async (saleId, paypalDetails) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(`http://localhost:5000/api/sales/${saleId}/approve`, {
+        transactionId: paypalDetails.id
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert('Congratulations! License payment completed and catalog access granted.');
+      // Refresh session and catalog data
+      fetchSession();
+      fetchAssets();
+    } catch (err) {
+      console.error('Failed to activate license:', err);
+      alert('Payment succeeded but activating access failed. Please contact admin with transaction ID: ' + paypalDetails.id);
     }
   };
 
@@ -215,12 +234,13 @@ const MediaLibrary = () => {
 
   const posters = filteredAssets.filter(a => a.fileType === 'Poster');
 
-  const hasPendingRequest = selectedProduction && partnerProfile && sales.some(s =>
+  const pendingRequest = selectedProduction && partnerProfile && sales.find(s =>
     s.productionId === selectedProduction.id &&
     s.buyerId === partnerProfile.id &&
     s.paymentStatus === 'Pending' &&
     s.saleType === 'Licensing'
   );
+  const hasPendingRequest = !!pendingRequest;
 
   if (selectedProduction) {
     const productionAssets = assets.filter(a => a.productionId === selectedProduction.id);
@@ -490,19 +510,48 @@ const MediaLibrary = () => {
                   </div>
                 ) : hasPendingRequest ? (
                   /* APPROVED + PENDING REQUEST */
-                  <div className="space-y-4">
-                    <p className="text-white/40 text-sm italic max-w-lg mx-auto">
-                      Your distribution request has been submitted. Our operations team is reviewing your credentials.
-                    </p>
-                    <button
-                      disabled
-                      className="px-12 py-5 bg-[#222] text-white/40 font-medium rounded-sm border border-white/5 flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed"
-                    >
-                      <Clock size={18} className="text-[#e5a00d] animate-pulse" /> License Pending Review
-                    </button>
-                    <p className="text-xs text-[#e5a00d] font-semibold max-w-md mx-auto">
-                      ⏳ Verification in progress. Please allow 24–48 hours for contract generation and catalog unlock.
-                    </p>
+                  <div className="space-y-6 max-w-md mx-auto">
+                    {Number(pendingRequest?.amount) > 0 ? (
+                      /* Price Set: Partner can complete checkout to unlock */
+                      <div className="space-y-6 bg-white/[0.02] border border-white/5 rounded-sm p-6 text-center shadow-xl animate-in fade-in duration-300">
+                        <div className="w-12 h-12 rounded-full bg-[#e5a00d]/10 border border-[#e5a00d]/20 text-[#e5a00d] flex items-center justify-center mx-auto">
+                          <Briefcase size={22} />
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-bold text-white font-sans">License Price Quoted</h4>
+                          <p className="text-xs text-white/40 leading-relaxed font-sans">
+                            K Kigali operations team has approved this request. Complete checkout below to unlock full masters and marketing assets.
+                          </p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
+                          <span className="text-white/45">Licensing Fee:</span>
+                          <span className="text-lg font-black text-[#e5a00d]">${Number(pendingRequest.amount).toLocaleString()} USD</span>
+                        </div>
+                        <div className="pt-2">
+                          <PaypalButton
+                            amount={pendingRequest.amount}
+                            onSuccess={(paypalDetails) => handleActivateLicense(pendingRequest.id, paypalDetails)}
+                            type="license"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      /* Standard Pending Review (no price set yet) */
+                      <div className="space-y-4">
+                        <p className="text-white/40 text-sm italic max-w-lg mx-auto font-sans">
+                          Your distribution request has been submitted. Our operations team is reviewing your credentials.
+                        </p>
+                        <button
+                          disabled
+                          className="px-12 py-5 bg-[#222] text-white/40 font-medium rounded-sm border border-white/5 flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed font-sans"
+                        >
+                          <Clock size={18} className="text-[#e5a00d] animate-pulse" /> License Pending Review
+                        </button>
+                        <p className="text-xs text-[#e5a00d] font-semibold max-w-md mx-auto font-sans">
+                          ⏳ Verification in progress. Please allow 24–48 hours for contract generation and catalog unlock.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   /* APPROVED + NO PENDING — can request */

@@ -11,6 +11,8 @@ const PartnerRequests = () => {
   const [requests, setRequests] = useState([]);
   const [licensingRequests, setLicensingRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pricingLicense, setPricingLicense] = useState(null);
+  const [licensePrice, setLicensePrice] = useState('');
 
   const fetchData = async () => {
     try {
@@ -101,6 +103,24 @@ const PartnerRequests = () => {
       fetchData();
     } catch (err) {
       alert('Failed to approve movie distribution license.');
+    }
+  };
+
+  const handleSetLicensePrice = async (e) => {
+    e.preventDefault();
+    if (!pricingLicense || licensePrice <= 0) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(`http://localhost:5000/api/sales/${pricingLicense.id}/set-price`, {
+        amount: parseFloat(licensePrice)
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPricingLicense(null);
+      setLicensePrice('');
+      fetchData();
+    } catch (err) {
+      alert('Failed to set license price.');
     }
   };
 
@@ -352,14 +372,23 @@ const PartnerRequests = () => {
                           <span>Contract Expiry:</span>
                           <span className="text-white font-medium">{new Date(sale.expiryDate).toLocaleDateString()}</span>
                         </div>
+                        <div className="flex justify-between border-t border-white/5 pt-2 mt-2">
+                          <span>Quoted License Price:</span>
+                          <span className="text-[#e5a00d] font-bold">
+                            {Number(sale.amount) > 0 ? `$${Number(sale.amount).toLocaleString()}` : 'Not Quoted'}
+                          </span>
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-3 pt-2">
                         <button 
-                          onClick={() => handleApproveLicense(sale.id)}
-                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-green-600 hover:bg-green-500 text-white rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
+                          onClick={() => {
+                            setPricingLicense(sale);
+                            setLicensePrice(sale.amount || '');
+                          }}
+                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-[#e5a00d] hover:bg-[#ffb414] text-black rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
                         >
-                          <Check size={14} /> Approve & Grant Access
+                          <Check size={14} /> {Number(sale.amount) > 0 ? 'Update Price' : 'Set Price & Approve'}
                         </button>
                         <button 
                           onClick={() => handleRejectLicense(sale.id)}
@@ -437,6 +466,69 @@ const PartnerRequests = () => {
           </div>
         </div>
       )}
+
+      {/* Price Input Modal */}
+      <AnimatePresence>
+        {pricingLicense && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-[#121212] border border-white/10 rounded-sm p-8 max-w-md w-full relative shadow-2xl space-y-6 text-left"
+            >
+              <button
+                onClick={() => setPricingLicense(null)}
+                className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
+              >
+                ✕
+              </button>
+
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold tracking-tight text-white font-sans">Quote License Price</h3>
+                <p className="text-xs text-white/40 font-sans">
+                  Set the distribution license cost for <span className="text-white font-semibold">{pricingLicense.production?.title}</span> requested by <span className="text-white font-semibold">{pricingLicense.buyer?.name}</span>.
+                </p>
+              </div>
+
+              <form onSubmit={handleSetLicensePrice} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-sans">License Cost (USD)</label>
+                  <input
+                    required
+                    type="number"
+                    min="1"
+                    className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-white text-sm font-sans"
+                    placeholder="e.g. 500"
+                    value={licensePrice}
+                    onChange={(e) => setLicensePrice(e.target.value)}
+                  />
+                  <p className="text-[10px] text-white/30 font-sans">
+                    Once set, the partner will be notified to review and complete checkout via PayPal to activate access.
+                  </p>
+                </div>
+
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    className="flex-1 py-3 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl font-sans"
+                  >
+                    Confirm Quote & Notify
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPricingLicense(null)}
+                    className="flex-1 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-sm font-semibold transition-all text-xs tracking-normal cursor-pointer font-sans"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

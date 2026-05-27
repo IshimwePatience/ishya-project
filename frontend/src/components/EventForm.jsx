@@ -12,6 +12,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
     posterUrl: initialData?.posterUrl || '',
     productionId: initialData?.productionId || '',
     description: initialData?.description || '',
+    ticketPrice: initialData?.ticketPrice || 0.00,
     status: initialData?.status || 'Scheduled'
   });
   const [productions, setProductions] = useState([]);
@@ -137,6 +138,28 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           </div>
         </div>
       </div>
+
+      {/* Ticket Price Field (Only shown for Performance) */}
+      {formData.type === 'Performance' && (
+        <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4 animate-in slide-in-from-top-2 duration-300">
+          <div className="w-full md:w-1/3 mb-2 md:mb-0">
+            <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Ticket Price ($)</label>
+            <p className="text-[11px] text-white/20 mt-1">Set to 0.00 for free entry performances</p>
+          </div>
+          <div className="w-full md:w-2/3">
+            <input 
+              required
+              type="number"
+              step="0.01"
+              min="0"
+              className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+              placeholder="e.g. 15.00"
+              value={formData.ticketPrice}
+              onChange={(e) => setFormData({...formData, ticketPrice: parseFloat(e.target.value) || 0})}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Linked Project Field */}
       <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">

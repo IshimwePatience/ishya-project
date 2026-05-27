@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     posterUrl: DataTypes.STRING,
     productionId: DataTypes.INTEGER,
     description: DataTypes.TEXT,
+    ticketPrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00
+    },
     status: {
       type: DataTypes.ENUM('Scheduled', 'Completed', 'Cancelled'),
       defaultValue: 'Scheduled'
