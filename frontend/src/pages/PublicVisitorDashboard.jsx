@@ -356,8 +356,18 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             {/* Continue Watching (Landscape) */}
             <MovieRow title="Continue Watching" items={continueWatching} isContinue={true} />
 
-            {/* Recently Added (Landscape) */}
-            <MovieRow title="Recently Added" items={productions.slice().reverse().slice(0, 12)} />
+            {/* Recently Added (Landscape) - Only items from last 30 days */}
+            {(() => {
+              const thirtyDaysAgo = new Date();
+              thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+              const recentProductions = productions
+                .filter(p => p.createdAt && new Date(p.createdAt) >= thirtyDaysAgo)
+                .reverse()
+                .slice(0, 12);
+              
+              if (recentProductions.length === 0) return null;
+              return <MovieRow title="Recently Added" items={recentProductions} />;
+            })()}
 
             {/* Dynamic Categories based on Typed Strings */}
             {(() => {

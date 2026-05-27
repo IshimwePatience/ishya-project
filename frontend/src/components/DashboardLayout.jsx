@@ -248,11 +248,7 @@ const DashboardLayout = ({ children }) => {
         navigate('/dashboard/partner-requests', { state: { openId: item.id } });
         break;
       case 'events':
-        if (user?.role?.toLowerCase().trim() === 'public visitor') {
-          navigate('/events');
-        } else {
-          navigate('/dashboard/events', { state: { openId: item.id } });
-        }
+        navigate('/dashboard/events', { state: { openId: item.id } });
         break;
       case 'expenses':
         navigate('/dashboard/expenses', { state: { openId: item.id } });
@@ -560,9 +556,9 @@ const DashboardLayout = ({ children }) => {
                 Catalog
               </button>
               <button
-                onClick={() => navigate('/events')}
+                onClick={() => navigate('/dashboard/events')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/events' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
+                  location.pathname === '/dashboard/events' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
                 }`}
               >
                 Events

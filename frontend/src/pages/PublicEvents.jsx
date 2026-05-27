@@ -5,7 +5,7 @@ import axios from 'axios';
 import PublicNavbar from '../components/PublicNavbar';
 import PaypalButton from '../components/PaypalButton';
 
-const PublicEvents = () => {
+const PublicEvents = ({ isDashboard }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -242,10 +242,10 @@ const PublicEvents = () => {
   const currentShow = publicPerformances[currentIndex];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-white selection:text-black">
-      <PublicNavbar />
+    <div className={`min-h-screen bg-[#050505] text-white font-sans selection:bg-white selection:text-black ${isDashboard ? 'rounded-lg overflow-hidden' : ''}`}>
+      {!isDashboard && <PublicNavbar />}
 
-      <div className="pt-32 md:pt-40 px-6 md:px-20 pb-20 overflow-hidden">
+      <div className={`${isDashboard ? 'pt-8' : 'pt-32 md:pt-40'} px-6 md:px-20 pb-20 overflow-hidden`}>
         {/* Header */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}

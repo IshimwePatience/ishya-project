@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, ChevronRight, ChevronLeft } from 'lucide-react';
 import axios from 'axios';
 import EventForm from '../components/EventForm';
+import PublicEvents from './PublicEvents';
 
 const Events = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (user?.role?.toLowerCase().trim() === 'public visitor') {
+    return <PublicEvents isDashboard={true} />;
+  }
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
