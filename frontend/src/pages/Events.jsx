@@ -7,7 +7,8 @@ import PublicEvents from './PublicEvents';
 
 const Events = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  if (user?.role?.toLowerCase().trim() === 'public visitor') {
+  const isAdminOrStaff = user?.role === 'Admin' || user?.role === 'Staff';
+  if (!isAdminOrStaff) {
     return <PublicEvents isDashboard={true} />;
   }
   const [events, setEvents] = useState([]);
