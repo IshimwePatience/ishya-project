@@ -277,6 +277,7 @@ const DashboardLayout = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data.user);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
         setLoading(false);
       } catch (err) {
         console.error('Session error', err);
@@ -487,6 +488,10 @@ const DashboardLayout = ({ children }) => {
     ];
   } else if (user?.role === 'Actor/Talent') {
     menuGroups = [
+      {
+        label: 'Main',
+        items: [{ to: '/dashboard', icon: LayoutDashboard, label: 'Home' }]
+      },
       {
         label: 'My Production',
         items: [

@@ -63,9 +63,7 @@ const Login = () => {
         localStorage.setItem('token', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         
-        if (response.data.user.role === 'Actor/Talent') {
-          navigate('/dashboard/scripts');
-        } else if (response.data.user.role === 'Partner') {
+        if (response.data.user.role === 'Partner') {
           navigate('/dashboard/library');
         } else {
           navigate('/dashboard');

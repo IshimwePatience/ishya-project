@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Film,
@@ -21,6 +21,7 @@ import PartnerDashboard from './PartnerDashboard';
 const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
   const [events, setEvents] = useState([]);
+  const [nextCall, setNextCall] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,7 +60,15 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
       const eventsRes = await axios.get('http://localhost:5000/api/events', { headers });
 
       setScripts(myScripts);
-      setEvents(eventsRes.data.slice(0, 3));
+      const actorEvents = eventsRes.data.filter(e => e.type?.toLowerCase() === 'rehearsal');
+      setEvents(actorEvents.slice(0, 3));
+      
+      const now = new Date();
+      const upcoming = actorEvents
+        .filter(e => new Date(e.startTime) >= now)
+        .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+      setNextCall(upcoming.length > 0 ? upcoming[0] : null);
+
       setLoading(false);
     } catch (err) {
       console.error('Error fetching actor data', err);
@@ -83,7 +92,14 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
             <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <FileText size={14} className="text-[#e5a00d]" /> My assigned scripts
             </h3>
-            <span className="text-xs text-white/20">{scripts.length} files</span>
+            <div className="flex items-center gap-4">
+              {scripts.length > 2 && (
+                <Link to="/dashboard/scripts" className="text-xs text-[#e5a00d] hover:underline font-semibold">
+                  Show more
+                </Link>
+              )}
+              <span className="text-xs text-white/20">{scripts.length} files</span>
+            </div>
           </div>
 
           {scripts.length > 0 ? (
@@ -93,7 +109,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                 gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))`
               }}
             >
-              {scripts.map((script, i) => (
+              {scripts.slice(0, 2).map((script, i) => (
                 <div
                   key={i}
                   onClick={() => script.filePath && handleDownload(script.filePath, script.title)}
@@ -122,14 +138,41 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
         <div className="space-y-10">
           <section className="space-y-6">
             <h3 className="text-sm font-semibold text-white">Next call time</h3>
-            <div className="bg-[#e5a00d] p-6 rounded-sm text-black shadow-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock size={16} />
-                <span className="text-[10px] font-bold uppercase">Immediate call</span>
+            {nextCall ? (
+              <div className="relative p-6 rounded-sm shadow-lg overflow-hidden min-h-[140px] flex flex-col justify-end">
+                <div className="absolute inset-0 bg-[#e5a00d] z-0" />
+                {nextCall.posterUrl && (
+                  <>
+                    <img
+                      src={nextCall.posterUrl.startsWith('http') ? nextCall.posterUrl : `http://localhost:5000${nextCall.posterUrl}`}
+                      alt="Event Poster"
+                      className="absolute inset-0 w-full h-full object-cover z-0"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#e5a00d] via-[#e5a00d]/90 to-transparent z-0" />
+                  </>
+                )}
+                <div className="relative z-10 text-black">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock size={16} />
+                    <span className="text-[10px] font-bold uppercase">
+                      {new Date(nextCall.startTime).toLocaleDateString() === new Date().toLocaleDateString() ? 'Today' : new Date(nextCall.startTime).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                  <div className="text-3xl font-bold">
+                    {new Date(nextCall.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                  <p className="text-xs font-semibold mt-1 opacity-80 truncate">
+                    {nextCall.venue || 'Main Studio'} • {nextCall.title}
+                  </p>
+                </div>
               </div>
-              <div className="text-3xl font-bold">10:00 AM</div>
-              <p className="text-xs font-semibold mt-1 opacity-80">Main Hall • Costume Fitting</p>
-            </div>
+            ) : (
+              <div className="bg-[#121212] border border-white/5 p-6 rounded-sm shadow-lg text-center py-10">
+                <div className="text-xs font-semibold text-white/40 italic">
+                  No immediate calls scheduled
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="space-y-6">
