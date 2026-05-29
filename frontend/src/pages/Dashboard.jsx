@@ -20,7 +20,9 @@ import PartnerDashboard from './PartnerDashboard';
 
 const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [recentEvents, setRecentEvents] = useState([]);
+  const [activeEventTab, setActiveEventTab] = useState('upcoming');
   const [nextCall, setNextCall] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,13 +62,24 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
       const eventsRes = await axios.get('http://localhost:5000/api/events', { headers });
 
       setScripts(myScripts);
-      const actorEvents = eventsRes.data.filter(e => e.type?.toLowerCase() === 'rehearsal');
-      setEvents(actorEvents.slice(0, 3));
+      
+      const actorEvents = eventsRes.data.filter(e => {
+        const type = e.type?.toLowerCase() || '';
+        return type === 'rehearsal' || type === 'meeting' || type === 'filming';
+      });
       
       const now = new Date();
       const upcoming = actorEvents
         .filter(e => new Date(e.startTime) >= now)
         .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+        
+      const recent = actorEvents
+        .filter(e => new Date(e.startTime) < now)
+        .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+
+      setUpcomingEvents(upcoming);
+      setRecentEvents(recent);
+      
       setNextCall(upcoming.length > 0 ? upcoming[0] : null);
 
       setLoading(false);
@@ -176,20 +189,45 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
           </section>
 
           <section className="space-y-6">
-            <h3 className="text-sm font-semibold text-white">Upcoming events</h3>
+            <div className="flex items-center justify-between">
+              <div className="flex gap-6">
+                <button 
+                  onClick={() => setActiveEventTab('upcoming')}
+                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'upcoming' ? 'text-white border-[#e5a00d]' : 'text-white/40 border-transparent hover:text-white/80'}`}
+                >
+                  Upcoming
+                </button>
+                <button 
+                  onClick={() => setActiveEventTab('recent')}
+                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'recent' ? 'text-white border-[#e5a00d]' : 'text-white/40 border-transparent hover:text-white/80'}`}
+                >
+                  Recent
+                </button>
+              </div>
+              <Link to="/dashboard/schedule" className="text-xs text-[#e5a00d] hover:underline font-semibold">
+                Show more
+              </Link>
+            </div>
+            
             <div className="space-y-3">
-              {events.map((event, i) => (
-                <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
-                  <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-white/5">
-                    <span className="text-[9px] font-bold uppercase">{new Date(event.startTime).toLocaleString('default', { month: 'short' })}</span>
-                    <span className="text-sm font-bold">{new Date(event.startTime).getDate()}</span>
+              {(activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).length > 0 ? (
+                (activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).map((event, i) => (
+                  <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
+                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-white/5">
+                      <span className="text-[9px] font-bold uppercase">{new Date(event.startTime).toLocaleString('default', { month: 'short' })}</span>
+                      <span className="text-sm font-bold">{new Date(event.startTime).getDate()}</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-white truncate max-w-[160px]">{event.title}</div>
+                      <div className="text-[11px] text-white/40 mt-0.5">{event.type || 'Event'} • {event.venue || 'Main Studio'}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-semibold text-white truncate max-w-[160px]">{event.title}</div>
-                    <div className="text-[11px] text-white/20 mt-0.5">{event.venue || 'Main Studio'}</div>
-                  </div>
+                ))
+              ) : (
+                <div className="py-8 flex flex-col items-center justify-center text-center opacity-40 border border-white/5 bg-[#121212] rounded-sm">
+                  <p className="text-xs font-semibold">No {activeEventTab} events found.</p>
                 </div>
-              ))}
+              )}
             </div>
           </section>
         </div>

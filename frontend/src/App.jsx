@@ -25,6 +25,7 @@ import Settings from './pages/Settings';
 import Attendance from './pages/Attendance';
 import PartnerRegistration from './pages/PartnerRegistration';
 import PartnerRequests from './pages/PartnerRequests';
+import ActorSchedule from './pages/ActorSchedule';
 import DashboardLayout from './components/DashboardLayout';
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
         <Route path="/dashboard/buyers" element={<DashboardLayout><Buyers /></DashboardLayout>} />
         <Route path="/dashboard/partner-requests" element={<DashboardLayout><PartnerRequests /></DashboardLayout>} />
         <Route path="/dashboard/events" element={<DashboardLayout><Events /></DashboardLayout>} />
+        <Route path="/dashboard/schedule" element={<DashboardLayout><ActorSchedule /></DashboardLayout>} />
         <Route path="/dashboard/media" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/media/:prodId" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/library" element={<DashboardLayout><MyLibrary /></DashboardLayout>} />

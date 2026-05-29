@@ -495,6 +495,7 @@ const DashboardLayout = ({ children }) => {
       {
         label: 'My Production',
         items: [
+          { to: '/dashboard/schedule', icon: Calendar, label: 'My Schedule' },
           { to: '/dashboard/scripts', icon: FileText, label: 'My Scripts' },
           { to: '/dashboard/attendance', icon: Calendar, label: 'My Attendance' },
         ]
