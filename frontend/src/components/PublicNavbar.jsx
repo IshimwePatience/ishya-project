@@ -202,15 +202,16 @@ const PublicNavbar = () => {
             <img src={logoImg} alt="Ishya" className="h-24 w-auto object-contain" />
           </Link>
           <div className="hidden lg:flex items-center gap-8">
-            <Link to="/" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Catalog</Link>
-            <Link to="/events" className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${location.pathname === '/events' ? 'text-white' : 'text-white/40 hover:text-white'}`}>Events</Link>
+            <Link to="/" className={`text-sm transition-colors ${location.pathname === '/' ? 'text-white' : 'text-white/40 hover:text-white'}`} style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>Catalog</Link>
+            <Link to="/events" className={`text-sm transition-colors ${location.pathname === '/events' ? 'text-white' : 'text-white/40 hover:text-white'}`} style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>Events</Link>
           </div>
         </div>
 
         <div className="flex items-center gap-4 md:gap-8">
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="flex items-center gap-2 md:gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:text-gray-300 transition-all"
+            className="flex items-center gap-2 md:gap-3 text-sm text-white hover:text-gray-300 transition-all"
+            style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}
           >
             <Search size={18} /> <span className="hidden sm:inline">Search</span>
           </button>
@@ -219,7 +220,8 @@ const PublicNavbar = () => {
 
           <Link
             to="/login"
-            className="hidden md:flex px-6 py-3 border border-white/20 hover:border-white rounded-sm text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-white/5 backdrop-blur-md items-center gap-3 group"
+            className="hidden md:flex px-6 py-3 border border-white/20 hover:border-white rounded-sm text-sm transition-all bg-white/5 backdrop-blur-md items-center gap-3 group"
+            style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}
           >
             Login <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -244,11 +246,11 @@ const PublicNavbar = () => {
             className="fixed inset-0 z-[140] bg-[#0a0a0a] pt-24 px-6 lg:hidden"
           >
             <div className="flex flex-col gap-6">
-              <Link to="/" className="text-4xl font-black uppercase tracking-tighter italic text-white/40 hover:text-white transition-colors">Catalog</Link>
-              <Link to="/events" className="text-4xl font-black uppercase tracking-tighter italic text-white/40 hover:text-white transition-colors">Events</Link>
-              <a href="#" className="text-4xl font-black uppercase tracking-tighter italic text-white/40 hover:text-white transition-colors">About</a>
+              <Link to="/" className="text-4xl transition-colors text-white/40 hover:text-white" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>Catalog</Link>
+              <Link to="/events" className="text-4xl transition-colors text-white/40 hover:text-white" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>Events</Link>
+              <a href="#" className="text-4xl transition-colors text-white/40 hover:text-white" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>About</a>
               <div className="h-px bg-white/10 my-4" />
-              <Link to="/login" className="text-xl font-black uppercase tracking-widest flex items-center gap-4">
+              <Link to="/login" className="text-xl flex items-center gap-4" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>
                 Staff Login <ChevronRight size={20} />
               </Link>
             </div>

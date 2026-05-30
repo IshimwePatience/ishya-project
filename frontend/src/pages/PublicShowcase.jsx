@@ -156,8 +156,8 @@ const PublicShowcase = () => {
               <h1 className="text-4xl md:text-8xl font-black tracking-tight leading-[0.9]">
                 Premium Cinema, <br className="hidden md:block" /> Tailored for You
               </h1>
-              <p className="text-sm md:text-xl text-white/60 font-medium tracking-wide">
-                Access the full Ishya library for 3,000 RWF / month. Cancel anytime.
+              <p className="text-sm md:text-xl text-white font-normal">
+                Access the full Ishya library for 3,000 RWF month. Cancel anytime.
               </p>
             </motion.div>
 

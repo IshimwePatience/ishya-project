@@ -575,7 +575,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="absolute left-1/2 -translate-x-1/2 w-[480px] z-50">
-          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-white/10 hover:border-white/20 transition-all focus-within:bg-white/10 focus-within:border-white/20">
+          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-white/10 transition-all focus-within:bg-white/10">
             <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
             <input
               type="text"

@@ -253,9 +253,7 @@ const PublicEvents = ({ isDashboard }) => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl mb-16 md:mb-20 space-y-4"
         >
-          <div className="text-[10px] md:text-xs font-black tracking-[0.25em] text-[#e5a00d] uppercase">
-            Performances & Live Tours
-          </div>
+
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">
             Live <span className="bg-gradient-to-r from-[#e5a00d] to-[#f5c842] bg-clip-text text-transparent">Schedule</span>
           </h1>
