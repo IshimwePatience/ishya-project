@@ -18,13 +18,14 @@ process.on('uncaughtException', (error) => {
 const app = express();
 
 // Middleware
+app.set('trust proxy', 1);
 app.use(helmet({
   crossOriginResourcePolicy: false,
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: false, // Disable for easier local dev video streaming
 }));
 app.use(cors({
-  origin: 'http://localhost:5173', // Hardcode for dev or use process.env.CLIENT_URL
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true
 }));
 app.use(morgan('dev'));
