@@ -160,7 +160,7 @@ const Cinema = () => {
               )}
             </div>
           </div>
-        ) : media.filePath?.includes('/uploads/') ? (
+        ) : (media.filePath?.includes('/uploads/') || media.filePath?.includes('supabase.co')) ? (
           <VideoPlayer 
             src={media.filePath} 
             mediaId={media.id} 
