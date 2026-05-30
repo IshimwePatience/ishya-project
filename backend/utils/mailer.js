@@ -248,4 +248,14 @@ const sendTicketEmail = async ({ to, ticket }) => {
   });
 };
 
-module.exports = { sendOTPEmail, sendTicketEmail };
+const sendEmail = async (to, subject, text, html) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to,
+    subject,
+    text,
+    html
+  });
+};
+
+module.exports = { sendOTPEmail, sendTicketEmail, sendEmail };

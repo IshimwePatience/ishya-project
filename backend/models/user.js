@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     
     validPassword(password) {
+      if (!this.password) return false;
       return bcrypt.compareSync(password, this.password);
     }
   }
