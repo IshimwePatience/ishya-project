@@ -24,13 +24,13 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 
 router.get('/google/callback', 
   passport.authenticate('google', { 
-    failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:5173'}/login?error=no_account`,
+    failureRedirect: `${process.env.CLIENT_URL}/login?error=no_account`,
     session: false
   }),
   (req, res) => {
     const jwt = require('jsonwebtoken');
     const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:5173'}/login?token=${token}`);
+    res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`);
   }
 );
 

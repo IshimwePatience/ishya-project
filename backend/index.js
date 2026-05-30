@@ -25,7 +25,7 @@ app.use(helmet({
   contentSecurityPolicy: false, // Disable for easier local dev video streaming
 }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 app.use(morgan('dev'));
