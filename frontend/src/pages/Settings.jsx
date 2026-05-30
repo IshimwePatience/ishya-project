@@ -66,7 +66,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const res = await axios.get('http://localhost:5000/api/auth/me', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const userData = res.data.user;
@@ -85,7 +85,7 @@ const Settings = () => {
       });
       setIs2FAEnabled(userData.isTwoFactorEnabled || false);
       if (userData.role === 'Admin') {
-        const priceRes = await axios.get('http://localhost:5000/api/auth/subscription-price');
+        const priceRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`);
         setSubPrice(priceRes.data.price);
       }
       setLoading(false);
@@ -101,7 +101,7 @@ const Settings = () => {
     setSaveStatus(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.put('http://localhost:5000/api/auth/profile', formData, {
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(prev => ({ ...prev, ...res.data.user }));
@@ -124,7 +124,7 @@ const Settings = () => {
     setSaveStatus(null);
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/auth/change-password', {
+      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/change-password`, {
         currentPassword: pwdData.currentPassword,
         newPassword: pwdData.newPassword
       }, {
@@ -145,7 +145,7 @@ const Settings = () => {
     setNotifPrefs(updated);
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/auth/profile', {
+      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         notificationPrefs: updated
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -160,7 +160,7 @@ const Settings = () => {
     setIs2FAEnabled(updatedState);
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/auth/profile', {
+      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         isTwoFactorEnabled: updatedState
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -185,7 +185,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem('token');
       // Upload using platform asset uploader
-      const res = await axios.post('http://localhost:5000/api/upload/media', uploadForm, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadForm, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -196,7 +196,7 @@ const Settings = () => {
       // Update local and database profile picture URL
       setFormData(prev => ({ ...prev, profilePic: fileUrl }));
       
-      await axios.put('http://localhost:5000/api/auth/profile', {
+      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         profilePic: fileUrl
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -236,7 +236,7 @@ const Settings = () => {
     setSaveStatus(null);
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/auth/subscription-price', { price: parseFloat(subPrice) }, {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`, { price: parseFloat(subPrice) }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       showStatus('success', `Subscription price updated to ${Number(subPrice).toLocaleString()} RWF/month.`);

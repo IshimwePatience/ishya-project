@@ -51,7 +51,7 @@ const PublicEvents = ({ isDashboard }) => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:5000/api/events');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`);
       setEvents(res.data);
       setLoading(false);
     } catch (err) {
@@ -84,7 +84,7 @@ const PublicEvents = ({ isDashboard }) => {
     setOtpError('');
     setOtpSuccess('');
     try {
-      await axios.post('http://localhost:5000/api/ticket-email/send-otp', { email: buyerEmail, name: buyerName });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ticket-email/send-otp`, { email: buyerEmail, name: buyerName });
       setOtpSent(true);
       setOtpSuccess('Code sent! Check your inbox.');
     } catch (err) {
@@ -99,7 +99,7 @@ const PublicEvents = ({ isDashboard }) => {
     setOtpLoading(true);
     setOtpError('');
     try {
-      await axios.post('http://localhost:5000/api/ticket-email/verify-otp', { email: buyerEmail, otp: otpCode });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ticket-email/verify-otp`, { email: buyerEmail, otp: otpCode });
       setOtpVerified(true);
       setOtpSuccess('Email verified ✓');
     } catch (err) {
@@ -120,7 +120,7 @@ const PublicEvents = ({ isDashboard }) => {
   // ── Booking Helpers ─────────────────────────────────────────────────────────
   const dispatchTicketEmail = async (details) => {
     try {
-      await axios.post('http://localhost:5000/api/ticket-email/send-ticket', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ticket-email/send-ticket`, {
         to: details.buyerEmail,
         ticket: {
           buyerName: details.buyerName,
@@ -155,7 +155,7 @@ const PublicEvents = ({ isDashboard }) => {
         ticketTier,
         ticketQuantity
       };
-      const res = await axios.post('http://localhost:5000/api/sales', payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, payload);
       const details = {
         id: res.data.id || 'TKT-' + Date.now(),
         buyerName,
@@ -192,7 +192,7 @@ const PublicEvents = ({ isDashboard }) => {
         ticketTier,
         ticketQuantity
       };
-      const res = await axios.post('http://localhost:5000/api/sales', payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, payload);
       const details = {
         id: res.data.id || 'TKT-' + Date.now(),
         buyerName,
@@ -294,7 +294,7 @@ const PublicEvents = ({ isDashboard }) => {
                     {currentShow.posterUrl && (
                       <div className="absolute inset-0 z-0">
                         <img
-                          src={currentShow.posterUrl.startsWith('http') ? currentShow.posterUrl : `http://localhost:5000${currentShow.posterUrl}`}
+                          src={currentShow.posterUrl.startsWith('http') ? currentShow.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${currentShow.posterUrl}`}
                           alt={currentShow.title}
                           className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-1000"
                         />
@@ -434,7 +434,7 @@ const PublicEvents = ({ isDashboard }) => {
                 <div className="absolute inset-0 bg-[#0e0e0e]">
                   {bookingShow.posterUrl ? (
                     <img
-                      src={bookingShow.posterUrl.startsWith('http') ? bookingShow.posterUrl : `http://localhost:5000${bookingShow.posterUrl}`}
+                      src={bookingShow.posterUrl.startsWith('http') ? bookingShow.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${bookingShow.posterUrl}`}
                       alt={bookingShow.title}
                       className="w-full h-full object-cover opacity-60 md:opacity-40"
                     />

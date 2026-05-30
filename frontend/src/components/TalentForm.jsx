@@ -44,7 +44,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/upload/media', uploadData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}` 
@@ -66,11 +66,11 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/talents/${initialData.id}`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/talents', formData, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

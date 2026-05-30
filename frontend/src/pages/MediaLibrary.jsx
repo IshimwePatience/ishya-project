@@ -29,7 +29,7 @@ const MediaLibrary = () => {
 
   const triggerDownload = (fileId, format = '') => {
     const token = localStorage.getItem('token');
-    let url = `http://localhost:5000/api/media/download/${fileId}?token=${token}`;
+    let url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download/${fileId}?token=${token}`;
     if (format) {
       url += `&format=${format}`;
     }
@@ -54,7 +54,7 @@ const MediaLibrary = () => {
   const handleRequestDirectLicense = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/sales', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, {
         amount: 0,
         saleType: 'Licensing',
         paymentStatus: 'Pending',
@@ -67,7 +67,7 @@ const MediaLibrary = () => {
       });
 
       // Re-fetch only this partner's requests
-      const myReqRes = await axios.get('http://localhost:5000/api/sales/my-license-requests', {
+      const myReqRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/my-license-requests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (myReqRes.data.buyer) setPartnerProfile(myReqRes.data.buyer);
@@ -83,7 +83,7 @@ const MediaLibrary = () => {
   const handleActivateLicense = async (saleId, paypalDetails) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/sales/${saleId}/approve`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${saleId}/approve`, {
         transactionId: paypalDetails.id
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -129,14 +129,14 @@ const MediaLibrary = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const res = await axios.get('http://localhost:5000/api/auth/me', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(res.data.user);
 
       // Only fetch license data for Partners
       if (res.data.user?.role === 'Partner') {
-        const myRequestsRes = await axios.get('http://localhost:5000/api/sales/my-license-requests', {
+        const myRequestsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/my-license-requests`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         // approved = true means admin approved this partner via BuyerRequest flow (buyerId set)
@@ -152,7 +152,7 @@ const MediaLibrary = () => {
   const fetchProductions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/productions', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProductions(response.data);
@@ -166,7 +166,7 @@ const MediaLibrary = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
 
-      const endpoint = isPartner ? 'http://localhost:5000/api/media/partner/catalog' : 'http://localhost:5000/api/media';
+      const endpoint = isPartner ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/partner/catalog` : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`;
 
       const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` }
@@ -182,7 +182,7 @@ const MediaLibrary = () => {
                 ...file,
                 productionId: p.id,
                 isLicensed: p.isLicensed,
-                filePath: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `http://localhost:5000${file.filePath}`) : null
+                filePath: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${file.filePath}`) : null
               });
             });
           }
@@ -191,7 +191,7 @@ const MediaLibrary = () => {
       } else {
         const processedAssets = response.data.map(a => ({
           ...a,
-          filePath: a.filePath ? (a.filePath.startsWith('http') ? a.filePath : `http://localhost:5000${a.filePath}`) : null
+          filePath: a.filePath ? (a.filePath.startsWith('http') ? a.filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${a.filePath}`) : null
         }));
         setAssets(processedAssets);
       }
@@ -207,7 +207,7 @@ const MediaLibrary = () => {
     if (!window.confirm('Delete this asset from the library? This cannot be undone.')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/media/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchAssets();

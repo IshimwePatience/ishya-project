@@ -74,8 +74,8 @@ const Sales = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       const [salesRes, summaryRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/sales', { headers }),
-        axios.get('http://localhost:5000/api/sales/summary', { headers })
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/summary`, { headers })
       ]);
       setSales(salesRes.data);
       setSummary(summaryRes.data || {});

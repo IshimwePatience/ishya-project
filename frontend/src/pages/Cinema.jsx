@@ -28,7 +28,7 @@ const Cinema = () => {
         // 1. Fetch User Session
         if (token) {
           try {
-            const meRes = await axios.get('http://localhost:5000/api/auth/me', { headers });
+            const meRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, { headers });
             setUser(meRes.data.user);
           } catch (e) {
             console.error('Session expired or invalid');
@@ -37,14 +37,14 @@ const Cinema = () => {
 
         // 2. Fetch Subscription Price
         try {
-          const priceRes = await axios.get('http://localhost:5000/api/auth/subscription-price');
+          const priceRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`);
           setSubPrice(priceRes.data.price);
         } catch (e) {
           console.error(e);
         }
 
         // 3. Fetch Media Details
-        const res = await axios.get(`http://localhost:5000/api/media/${mediaId}`, { headers });
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${mediaId}`, { headers });
         setMedia(res.data);
       } catch (err) {
         console.error('Failed to load media');
@@ -59,14 +59,14 @@ const Cinema = () => {
     setSubmittingSub(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/auth/subscribe', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscribe`, {
         transactionId: paypalDetails.id
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSubSuccess(true);
       // Refresh local user state
-      const meRes = await axios.get('http://localhost:5000/api/auth/me', {
+      const meRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(meRes.data.user);

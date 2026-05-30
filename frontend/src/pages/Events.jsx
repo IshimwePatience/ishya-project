@@ -28,7 +28,7 @@ const Events = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/events', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEvents(response.data);
@@ -43,7 +43,7 @@ const Events = () => {
     if (!window.confirm('Delete this event?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/events/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchEvents();

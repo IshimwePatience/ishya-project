@@ -12,7 +12,7 @@ const usePreferences = (pageKey) => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        const response = await axios.get('http://localhost:5000/api/user-preferences', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/user-preferences`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -36,7 +36,7 @@ const usePreferences = (pageKey) => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      await axios.post('http://localhost:5000/api/user-preferences', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/user-preferences`, {
         pageKey,
         zoomLevel: newZoom !== undefined ? newZoom : zoom,
         viewMode: newViewMode !== undefined ? newViewMode : viewMode

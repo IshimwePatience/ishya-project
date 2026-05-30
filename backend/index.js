@@ -76,7 +76,7 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     console.log('⏳ Starting Ishya PMS Backend...');
-    
+
     await sequelize.authenticate();
     console.log('✅ Database connected successfully.');
 

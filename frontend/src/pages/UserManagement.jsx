@@ -37,7 +37,7 @@ const UserManagement = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -51,7 +51,7 @@ const UserManagement = () => {
   const fetchRoles = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users/roles', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/roles`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRoles(response.data);
@@ -79,7 +79,7 @@ const UserManagement = () => {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/users/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchUsers(); // Refresh list

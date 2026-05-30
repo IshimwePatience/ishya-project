@@ -40,10 +40,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [prodRes, catRes, watchRes, priceRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/productions', { headers }),
-        axios.get('http://localhost:5000/api/productions/categories', { headers }),
-        axios.get('http://localhost:5000/api/watch-progress/continue', { headers }),
-        axios.get('http://localhost:5000/api/auth/subscription-price')
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/categories`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/watch-progress/continue`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`)
       ]);
 
       setProductions(prodRes.data);
@@ -80,7 +80,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
     setSubmittingSub(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/auth/subscribe', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscribe`, {
         transactionId: paypalDetails.id
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -98,7 +98,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   };
 
   const getPoster = (prod) => {
-    const baseUrl = 'http://localhost:5000/';
+    const baseUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/`;
     const defaultPoster = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1920';
 
     if (prod.posterUrl) {

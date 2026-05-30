@@ -29,7 +29,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
     const fetchProductions = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/productions', {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProductions(res.data);
@@ -50,9 +50,9 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       const headers = { Authorization: `Bearer ${token}` };
       
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/expenses/${initialData.id}`, formData, { headers });
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/expenses/${initialData.id}`, formData, { headers });
       } else {
-        await axios.post('http://localhost:5000/api/expenses', formData, { headers });
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/expenses`, formData, { headers });
       }
       onSuccess();
     } catch (err) {

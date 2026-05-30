@@ -60,7 +60,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      await axios.post('http://localhost:5000/api/watch-progress/update', {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/watch-progress/update`, {
         mediaId,
         productionId: productionId || 0,
         currentTime: videoRef.current.currentTime,
@@ -78,7 +78,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
     try {
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.get(`http://localhost:5000/api/media-interactions/${mediaId}/stats`, { headers });
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media-interactions/${mediaId}/stats`, { headers });
       setStats(res.data);
     } catch (err) {
       console.error('Failed to fetch stats');
@@ -88,7 +88,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
   const handleToggleLike = async (type) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/media-interactions/toggle`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media-interactions/toggle`, {
         mediaId,
         type
       }, {

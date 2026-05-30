@@ -36,13 +36,13 @@ const PublicProductionDetail = () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      const res = await axios.get(`http://localhost:5000/api/productions/${id}`, { headers });
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/${id}`, { headers });
       setProduction(res.data);
       
       // Fetch stats for the main media asset
       const movieAsset = res.data.mediaFiles?.find(m => m.fileType === 'Full Movie' || m.fileType === 'Episode');
       if (movieAsset) {
-        const statsRes = await axios.get(`http://localhost:5000/api/media-interactions/${movieAsset.id}/stats`, { headers });
+        const statsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media-interactions/${movieAsset.id}/stats`, { headers });
         setStats(statsRes.data);
       }
       

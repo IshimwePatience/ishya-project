@@ -41,7 +41,7 @@ const MyLibrary = () => {
 
   const triggerDownload = (fileId, format = '') => {
     const token = localStorage.getItem('token');
-    let url = `http://localhost:5000/api/media/download/${fileId}?token=${token}`;
+    let url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download/${fileId}?token=${token}`;
     if (format) {
       url += `&format=${format}`;
     }
@@ -78,7 +78,7 @@ const MyLibrary = () => {
     try {
       const fileIds = files.map(f => f.id).join(',');
       const token = localStorage.getItem('token');
-      const url = `http://localhost:5000/api/media/download-zip?ids=${fileIds}&name=${encodeURIComponent(folderName)}&token=${token}`;
+      const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download-zip?ids=${fileIds}&name=${encodeURIComponent(folderName)}&token=${token}`;
 
       setZipProgress({ text: 'Streaming ZIP download...', percent: 50 });
 
@@ -104,19 +104,19 @@ const MyLibrary = () => {
   const fetchLibrary = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/media/partner/library', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/partner/library`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       const normalized = res.data.map(prod => {
         const posterFile = prod.mediaFiles?.find(f => (f.fileType || f.type) === 'Poster');
-        const posterUrl = posterFile ? (posterFile.filePath.startsWith('http') ? posterFile.filePath : `http://localhost:5000${posterFile.filePath}`) : null;
+        const posterUrl = posterFile ? (posterFile.filePath.startsWith('http') ? posterFile.filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${posterFile.filePath}`) : null;
         return {
           ...prod,
           poster: posterUrl || prod.poster,
           mediaFiles: prod.mediaFiles?.map(file => ({
             ...file,
-            url: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `http://localhost:5000${file.filePath}`) : null,
+            url: file.filePath ? (file.filePath.startsWith('http') ? file.filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${file.filePath}`) : null,
             type: file.fileType || file.type // Ensure full compatibility with original modal filters
           }))
         };

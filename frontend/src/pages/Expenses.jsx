@@ -17,8 +17,8 @@ const Expenses = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       const [expensesRes, summaryRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/expenses', { headers }),
-        axios.get('http://localhost:5000/api/expenses/summary', { headers })
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/expenses`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/expenses/summary`, { headers })
       ]);
       setExpenses(expensesRes.data);
       setSummary(summaryRes.data);

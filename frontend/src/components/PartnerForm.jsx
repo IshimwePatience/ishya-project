@@ -33,9 +33,9 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       const headers = { Authorization: `Bearer ${token}` };
       
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/sales/buyers/${initialData.id}`, formData, { headers });
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers/${initialData.id}`, formData, { headers });
       } else {
-        await axios.post('http://localhost:5000/api/sales/buyers', formData, { headers });
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers`, formData, { headers });
       }
       onSuccess();
     } catch (err) {
@@ -52,7 +52,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      await axios.delete(`http://localhost:5000/api/sales/buyers/${initialData.id}`, { headers });
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers/${initialData.id}`, { headers });
       onSuccess();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete partner');

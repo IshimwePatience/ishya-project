@@ -23,7 +23,7 @@ const Scripts = () => {
     fetchScripts();
     const token = localStorage.getItem('token');
     if (token) {
-      axios.get('http://localhost:5000/api/auth/me', {
+      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
         setUserRole(res.data.user.role);
@@ -35,7 +35,7 @@ const Scripts = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/scripts', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setScripts(response.data);
@@ -60,7 +60,7 @@ const Scripts = () => {
     if (!window.confirm('Are you sure you want to delete this script?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/scripts/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchScripts();
@@ -71,7 +71,7 @@ const Scripts = () => {
 
   const handleDownload = async (filePath, fileName) => {
     try {
-      const fullUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const fullUrl = filePath.startsWith('http') ? filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${filePath}`;
       const response = await fetch(fullUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -84,7 +84,7 @@ const Scripts = () => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Download failed', err);
-      const fallbackUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const fallbackUrl = filePath.startsWith('http') ? filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${filePath}`;
       window.open(fallbackUrl, '_blank');
     }
   };

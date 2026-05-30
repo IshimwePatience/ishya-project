@@ -30,7 +30,7 @@ const PartnerRegistration = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/partner-requests/request', formData);
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/request`, formData);
       setStatus('success');
     } catch (err) {
       console.error('Request failed', err);

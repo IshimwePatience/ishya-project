@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     setMessage('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/forgot-password`, { email });
       setMessage('A 6-digit reset code has been sent to your email');
       setStep(2);
     } catch (err) {
@@ -43,7 +43,7 @@ const ForgotPassword = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/reset-password', { email, code, password });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/reset-password`, { email, code, password });
       setMessage('Password reset successfully!');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {

@@ -32,7 +32,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 
   const handleDownload = async (filePath, fileName) => {
     try {
-      const fullUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const fullUrl = filePath.startsWith('http') ? filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${filePath}`;
       const response = await fetch(fullUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -45,7 +45,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Download failed', err);
-      const fallbackUrl = filePath.startsWith('http') ? filePath : `http://localhost:5000${filePath}`;
+      const fallbackUrl = filePath.startsWith('http') ? filePath : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${filePath}`;
       window.open(fallbackUrl, '_blank');
     }
   };
@@ -55,11 +55,11 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const scriptsRes = await axios.get('http://localhost:5000/api/scripts', { headers });
+      const scriptsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts`, { headers });
       const myScripts = scriptsRes.data.filter(s =>
         s.assignedActors?.some(actor => actor.email === user.email)
       );
-      const eventsRes = await axios.get('http://localhost:5000/api/events', { headers });
+      const eventsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, { headers });
 
       setScripts(myScripts);
       
@@ -157,7 +157,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                 {nextCall.posterUrl && (
                   <>
                     <img
-                      src={nextCall.posterUrl.startsWith('http') ? nextCall.posterUrl : `http://localhost:5000${nextCall.posterUrl}`}
+                      src={nextCall.posterUrl.startsWith('http') ? nextCall.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${nextCall.posterUrl}`}
                       alt="Event Poster"
                       className="absolute inset-0 w-full h-full object-cover z-0"
                     />
@@ -621,7 +621,7 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const meRes = await axios.get('http://localhost:5000/api/auth/me', { headers });
+      const meRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, { headers });
       const currentUser = meRes.data.user;
       setUser(currentUser);
 
@@ -634,11 +634,11 @@ const Dashboard = () => {
       }
 
       const [prodRes, talentRes, userRes, eventRes, salesRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/productions', { headers }),
-        axios.get('http://localhost:5000/api/talents', { headers }),
-        axios.get('http://localhost:5000/api/users', { headers }),
-        axios.get('http://localhost:5000/api/events', { headers }),
-        axios.get('http://localhost:5000/api/sales', { headers })
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, { headers }),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, { headers })
       ]);
 
       // Calculate total revenue from PAID sales

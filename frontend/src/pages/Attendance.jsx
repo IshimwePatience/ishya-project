@@ -14,15 +14,15 @@ const Attendance = () => {
   const fetchLogs = async () => {
     try {
       const token = localStorage.getItem('token');
-      const meRes = await axios.get('http://localhost:5000/api/auth/me', {
+      const meRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const role = meRes.data.user.role;
       setUserRole(role);
 
       const endpoint = (role === 'Admin' || role === 'Staff')
-        ? 'http://localhost:5000/api/attendance/all'
-        : 'http://localhost:5000/api/attendance/my';
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/all`
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/my`;
 
       const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` }
@@ -77,7 +77,7 @@ const Attendance = () => {
           const { latitude, longitude } = position.coords;
           const combinedLocation = await reverseGeocode(latitude, longitude);
           
-          await axios.post('http://localhost:5000/api/attendance/check-in', {
+          await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/check-in`, {
             location: combinedLocation
           }, {
             headers: { Authorization: `Bearer ${token}` }
@@ -111,7 +111,7 @@ const Attendance = () => {
           const { latitude, longitude } = position.coords;
           const combinedLocation = await reverseGeocode(latitude, longitude);
           
-          await axios.patch('http://localhost:5000/api/attendance/update-location', {
+          await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/update-location`, {
             location: combinedLocation
           }, {
             headers: { Authorization: `Bearer ${token}` }
@@ -136,7 +136,7 @@ const Attendance = () => {
   const handleCheckOut = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/attendance/check-out/${id || activeAttendance?.id}`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/check-out/${id || activeAttendance?.id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchLogs();

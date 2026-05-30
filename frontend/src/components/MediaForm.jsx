@@ -43,7 +43,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/productions/categories', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/categories`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCategories(response.data);
@@ -55,7 +55,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchProductions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/productions', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProductions(response.data);
@@ -82,7 +82,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchPackageData = async (targetProductionId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/media', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -157,7 +157,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/media/${ep.id}`, {
+        await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${ep.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setEpisodes(episodes.filter((_, i) => i !== index));
@@ -177,7 +177,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:5000/api/upload/media', uploadData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
       const url = res.data.url;
@@ -199,7 +199,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:5000/api/upload/media', uploadData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
       const url = res.data.url;
@@ -224,13 +224,13 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       // 1. Handle Poster/Trailer Updates
       if (packageAssets.poster.url) {
         const posterPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Poster`, filePath: packageAssets.poster.url, fileType: 'Poster', format: packageAssets.poster.format, category: formData.category };
-        if (assetIds.poster) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.poster}`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
-        else requests.push(axios.post('http://localhost:5000/api/media', posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        if (assetIds.poster) requests.push(axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${assetIds.poster}`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        else requests.push(axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`, posterPayload, { headers: { Authorization: `Bearer ${token}` } }));
       }
       if (packageAssets.trailer.url) {
         const trailerPayload = { ...formData, fileName: `${episodes[0]?.fileName || 'Media'} - Trailer`, filePath: packageAssets.trailer.url, fileType: 'Trailer', format: packageAssets.trailer.format, category: formData.category };
-        if (assetIds.trailer) requests.push(axios.put(`http://localhost:5000/api/media/${assetIds.trailer}`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
-        else requests.push(axios.post('http://localhost:5000/api/media', trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        if (assetIds.trailer) requests.push(axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${assetIds.trailer}`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
+        else requests.push(axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`, trailerPayload, { headers: { Authorization: `Bearer ${token}` } }));
       }
 
       // 2. Handle All Episodes
@@ -248,9 +248,9 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         };
 
         if (ep.id) {
-          requests.push(axios.put(`http://localhost:5000/api/media/${ep.id}`, epPayload, { headers: { Authorization: `Bearer ${token}` } }));
+          requests.push(axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${ep.id}`, epPayload, { headers: { Authorization: `Bearer ${token}` } }));
         } else {
-          requests.push(axios.post('http://localhost:5000/api/media', epPayload, { headers: { Authorization: `Bearer ${token}` } }));
+          requests.push(axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`, epPayload, { headers: { Authorization: `Bearer ${token}` } }));
         }
       });
 

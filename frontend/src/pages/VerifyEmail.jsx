@@ -20,7 +20,7 @@ const VerifyEmail = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/verify-email', { email, code });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/verify-email`, { email, code });
       const { user, accessToken, refreshToken } = response.data;
       const fromFlow = location.state?.from || 'register';
 
@@ -51,7 +51,7 @@ const VerifyEmail = () => {
 
   const handleResend = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/resend-verify', { email });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/resend-verify`, { email });
       setSuccess('New code sent to your email.');
       setError('');
     } catch (err) {

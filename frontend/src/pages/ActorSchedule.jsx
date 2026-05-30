@@ -19,7 +19,7 @@ const ActorSchedule = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/events', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const actorEvents = response.data.filter(e => {
@@ -88,7 +88,7 @@ const ActorSchedule = () => {
                 {event.posterUrl && (
                   <>
                     <img
-                      src={event.posterUrl.startsWith('http') ? event.posterUrl : `http://localhost:5000${event.posterUrl}`}
+                      src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`}
                       alt="Event Poster"
                       className="absolute inset-0 w-full h-full object-cover z-0"
                     />

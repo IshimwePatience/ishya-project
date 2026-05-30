@@ -21,11 +21,11 @@ const PartnerRequests = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       // 1. Fetch Partner Account Signups
-      const partnerRes = await axios.get('http://localhost:5000/api/partner-requests', { headers });
+      const partnerRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests`, { headers });
       setRequests(partnerRes.data);
 
       // 2. Fetch Sales (Filter on paymentStatus === 'Pending' && saleType === 'Licensing' for movie requests)
-      const salesRes = await axios.get('http://localhost:5000/api/sales', { headers });
+      const salesRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, { headers });
       setLicensingRequests(salesRes.data);
 
       setLoading(false);
@@ -59,7 +59,7 @@ const PartnerRequests = () => {
   const handleApprovePartner = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/partner-requests/${id}/approve`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -71,7 +71,7 @@ const PartnerRequests = () => {
   const handleRejectPartner = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/partner-requests/${id}/reject`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -84,7 +84,7 @@ const PartnerRequests = () => {
     if (!window.confirm('Delete this request permanently?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/partner-requests/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -97,7 +97,7 @@ const PartnerRequests = () => {
   const handleApproveLicense = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/sales/${id}/approve`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -111,7 +111,7 @@ const PartnerRequests = () => {
     if (!pricingLicense || licensePrice <= 0) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/sales/${pricingLicense.id}/set-price`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${pricingLicense.id}/set-price`, {
         amount: parseFloat(licensePrice)
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -128,7 +128,7 @@ const PartnerRequests = () => {
     if (!window.confirm('Reject and remove this licensing request?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/sales/${id}/reject`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();

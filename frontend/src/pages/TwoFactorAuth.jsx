@@ -19,7 +19,7 @@ const TwoFactorAuth = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/verify-2fa', { email, code });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/verify-2fa`, { email, code });
       const { user, accessToken, refreshToken } = response.data;
 
       localStorage.setItem('token', accessToken);

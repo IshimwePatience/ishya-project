@@ -113,7 +113,7 @@ const DashboardLayout = ({ children }) => {
       setIsSearching(true);
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:5000/api/search?q=${encodeURIComponent(searchQuery)}`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/search?q=${encodeURIComponent(searchQuery)}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setSearchResults(res.data);
@@ -273,7 +273,7 @@ const DashboardLayout = ({ children }) => {
       }
 
       try {
-        const res = await axios.get('http://localhost:5000/api/auth/me', {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data.user);
@@ -303,7 +303,7 @@ const DashboardLayout = ({ children }) => {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await axios.get('http://localhost:5000/api/notifications', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications(res.data);
@@ -318,7 +318,7 @@ const DashboardLayout = ({ children }) => {
     fetchNotifications();
 
     const token = localStorage.getItem('token');
-    const socket = io('http://localhost:5000', {
+    const socket = io(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`, {
       auth: { token }
     });
 
@@ -361,7 +361,7 @@ const DashboardLayout = ({ children }) => {
   const markAsRead = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.patch(`http://localhost:5000/api/notifications/${id}/read`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/${id}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications((prev) =>
@@ -375,7 +375,7 @@ const DashboardLayout = ({ children }) => {
   const markAllAsRead = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.patch('http://localhost:5000/api/notifications/read-all', {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/read-all`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications((prev) =>
@@ -390,7 +390,7 @@ const DashboardLayout = ({ children }) => {
     if (e) e.stopPropagation();
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:5000/api/notifications/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications((prev) => prev.filter((n) => n.id !== id));

@@ -28,7 +28,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchProductions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/productions', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProductions(response.data);
@@ -40,7 +40,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchTalents = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/talents', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTalents(response.data);
@@ -64,7 +64,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/upload/script', uploadData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/script`, uploadData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}` 
@@ -99,11 +99,11 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/scripts/${initialData.id}`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/scripts', formData, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

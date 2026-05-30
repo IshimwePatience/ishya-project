@@ -22,7 +22,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/productions/categories');
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/categories`);
         setCategories(res.data);
       } catch (err) {
         console.error('Failed to fetch categories');
@@ -39,11 +39,11 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/productions/${initialData.id}`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/productions', formData, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

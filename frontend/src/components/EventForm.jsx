@@ -31,7 +31,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchProductions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/productions', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProductions(response.data);
@@ -52,7 +52,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/upload/poster', formDataUpload, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/poster`, formDataUpload, {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -74,11 +74,11 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/events/${initialData.id}`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/events', formData, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -304,7 +304,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             {formData.posterUrl ? (
               <div className="relative w-40 aspect-video rounded-sm overflow-hidden border border-white/10 group/img">
                 <img
-                  src={formData.posterUrl.startsWith('http') ? formData.posterUrl : `http://localhost:5000${formData.posterUrl}`}
+                  src={formData.posterUrl.startsWith('http') ? formData.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${formData.posterUrl}`}
                   alt="Event poster preview"
                   className="w-full h-full object-cover"
                 />

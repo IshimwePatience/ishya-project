@@ -21,7 +21,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
   const fetchRoles = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users/roles', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/roles`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRoles(response.data);
@@ -38,11 +38,11 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/users/${initialData.id}`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/users', formData, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

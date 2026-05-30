@@ -34,9 +34,9 @@ const PublicShowcase = () => {
   const fetchPublicData = async () => {
     try {
       setLoading(true);
-      const prodRes = await axios.get('http://localhost:5000/api/productions');
+      const prodRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`);
       setProductions(prodRes.data);
-      const mediaRes = await axios.get('http://localhost:5000/api/media');
+      const mediaRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`);
       setMedia(mediaRes.data.filter(m => m.isPublic));
       setLoading(false);
     } catch (err) {

@@ -34,8 +34,8 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
         const [prodRes, buyerRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/productions', { headers }),
-          axios.get('http://localhost:5000/api/sales/buyers', { headers })
+          axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, { headers }),
+          axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers`, { headers })
         ]);
         setProductions(prodRes.data);
         setBuyers(buyerRes.data);
@@ -56,9 +56,9 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       const headers = { Authorization: `Bearer ${token}` };
       
       if (initialData) {
-        await axios.put(`http://localhost:5000/api/sales/${initialData.id}`, formData, { headers });
+        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${initialData.id}`, formData, { headers });
       } else {
-        await axios.post('http://localhost:5000/api/sales', formData, { headers });
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, formData, { headers });
       }
       onSuccess();
     } catch (err) {
