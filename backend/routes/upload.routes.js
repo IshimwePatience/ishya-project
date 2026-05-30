@@ -3,20 +3,20 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const { authMiddleware } = require('../middleware/auth');
+const { createClient } = require('@supabase/supabase-js');
+const WebSocket = require('ws');
+global.WebSocket = WebSocket;
 
-// Configure storage for general media (Posters, Trailers, Movies)
-const mediaStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
-  }
-});
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+// Configure memory storage
+const storage = multer.memoryStorage();
 
 const uploadMedia = multer({ 
-  storage: mediaStorage,
+  storage: storage,
   limits: { fileSize: 500 * 1024 * 1024 }, // 500MB limit for movies/trailers
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp|jfif|avif|mp4|webm|mov|avi|mkv/;
@@ -31,19 +31,8 @@ const uploadMedia = multer({
   }
 });
 
-// Configure storage for scripts
-const scriptStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/scripts/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `script-${uniqueSuffix}${path.extname(file.originalname)}`);
-  }
-});
-
 const uploadScript = multer({
-  storage: scriptStorage,
+  storage: storage,
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit for scripts
   fileFilter: (req, file, cb) => {
     const filetypes = /pdf|docx|doc|txt|rtf/;
@@ -55,31 +44,68 @@ const uploadScript = multer({
   }
 });
 
-// Single asset upload (Laptop to Server)
-router.post('/media', authMiddleware, uploadMedia.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
+const uploadToSupabase = async (file, folderPath) => {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  const fileName = `${folderPath}/${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`;
+  
+  const { data, error } = await supabase.storage
+    .from('ishya-uploads')
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: false
+    });
+
+  if (error) {
+    throw error;
   }
-  const fileUrl = `http://localhost:5000/uploads/${req.file.filename}`;
-  res.json({ url: fileUrl });
+
+  const { data: publicUrlData } = supabase.storage
+    .from('ishya-uploads')
+    .getPublicUrl(fileName);
+
+  return publicUrlData.publicUrl;
+};
+
+// Single asset upload (Laptop to Server)
+router.post('/media', authMiddleware, uploadMedia.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const publicUrl = await uploadToSupabase(req.file, 'media');
+    res.json({ url: publicUrl });
+  } catch (error) {
+    console.error('Supabase upload error:', error);
+    res.status(500).json({ message: 'Failed to upload to Supabase' });
+  }
 });
 
 // Legacy poster route
-router.post('/poster', authMiddleware, uploadMedia.single('poster'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
+router.post('/poster', authMiddleware, uploadMedia.single('poster'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const publicUrl = await uploadToSupabase(req.file, 'posters');
+    res.json({ url: publicUrl });
+  } catch (error) {
+    console.error('Supabase upload error:', error);
+    res.status(500).json({ message: 'Failed to upload to Supabase' });
   }
-  const fileUrl = `http://localhost:5000/uploads/${req.file.filename}`;
-  res.json({ url: fileUrl });
 });
 
 // Script upload (Laptop to Server)
-router.post('/script', authMiddleware, uploadScript.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
+router.post('/script', authMiddleware, uploadScript.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const publicUrl = await uploadToSupabase(req.file, 'scripts');
+    res.json({ url: publicUrl, fileName: req.file.originalname });
+  } catch (error) {
+    console.error('Supabase upload error:', error);
+    res.status(500).json({ message: 'Failed to upload to Supabase' });
   }
-  const fileUrl = `http://localhost:5000/uploads/scripts/${req.file.filename}`;
-  res.json({ url: fileUrl, fileName: req.file.originalname });
 });
 
 module.exports = router;
