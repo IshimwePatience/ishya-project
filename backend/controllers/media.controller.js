@@ -178,20 +178,17 @@ exports.downloadMediaFile = async (req, res) => {
       return res.status(404).json({ message: 'Media file not found' });
     }
 
-    // Build the full path
-    let cleanPath = mediaFile.filePath;
-    if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
-      try {
-        const urlObj = new URL(cleanPath);
-        cleanPath = urlObj.pathname;
-      } catch (e) {
-        const index = cleanPath.indexOf('/uploads/');
-        if (index !== -1) {
-          cleanPath = cleanPath.substring(index);
-        }
-      }
+    // If the file is hosted on Supabase (or external), just redirect to it!
+    if (mediaFile.filePath.startsWith('http://') || mediaFile.filePath.startsWith('https://')) {
+      // Add ?download= to force browser download if supported by Supabase
+      const downloadUrl = mediaFile.filePath.includes('?') 
+        ? `${mediaFile.filePath}&download=` 
+        : `${mediaFile.filePath}?download=`;
+      return res.redirect(downloadUrl);
     }
-    cleanPath = cleanPath.replace(/^\//, ''); // remove leading slash if any
+
+    // Otherwise, handle local files (fallback)
+    let cleanPath = mediaFile.filePath.replace(/^\//, '');
     const fullPath = path.resolve(__dirname, '..', cleanPath);
 
     if (!fs.existsSync(fullPath)) {
@@ -304,29 +301,42 @@ exports.downloadZip = async (req, res) => {
     archive.pipe(res);
 
     for (const mediaFile of mediaFiles) {
-      let cleanPath = mediaFile.filePath;
-      if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+      if (mediaFile.filePath.startsWith('http://') || mediaFile.filePath.startsWith('https://')) {
+        // Stream the remote file into the ZIP archive
         try {
-          const urlObj = new URL(cleanPath);
-          cleanPath = urlObj.pathname;
-        } catch (e) {
-          const index = cleanPath.indexOf('/uploads/');
-          if (index !== -1) {
-            cleanPath = cleanPath.substring(index);
+          const axios = require('axios');
+          const response = await axios({
+            method: 'GET',
+            url: mediaFile.filePath,
+            responseType: 'stream'
+          });
+          
+          const urlObj = new URL(mediaFile.filePath);
+          const ext = path.extname(urlObj.pathname) || '.bin';
+          let baseName = mediaFile.fileName || 'asset';
+          if (baseName.endsWith(ext)) {
+            baseName = path.basename(baseName, ext);
           }
+          const fileInZipName = `${baseName}${ext}`;
+          
+          archive.append(response.data, { name: fileInZipName });
+        } catch (downloadErr) {
+          console.error(`Failed to fetch remote file ${mediaFile.filePath} for ZIP:`, downloadErr.message);
         }
-      }
-      cleanPath = cleanPath.replace(/^\//, '');
-      const fullPath = path.resolve(__dirname, '..', cleanPath);
+      } else {
+        // Local fallback
+        let cleanPath = mediaFile.filePath.replace(/^\//, '');
+        const fullPath = path.resolve(__dirname, '..', cleanPath);
 
-      if (fs.existsSync(fullPath)) {
-        const ext = path.extname(fullPath);
-        let baseName = mediaFile.fileName || 'asset';
-        if (baseName.endsWith(ext)) {
-          baseName = path.basename(baseName, ext);
+        if (fs.existsSync(fullPath)) {
+          const ext = path.extname(fullPath);
+          let baseName = mediaFile.fileName || 'asset';
+          if (baseName.endsWith(ext)) {
+            baseName = path.basename(baseName, ext);
+          }
+          const fileInZipName = `${baseName}${ext}`;
+          archive.file(fullPath, { name: fileInZipName });
         }
-        const fileInZipName = `${baseName}${ext}`;
-        archive.file(fullPath, { name: fileInZipName });
       }
     }
 
