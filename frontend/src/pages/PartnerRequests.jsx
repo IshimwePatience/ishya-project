@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, Mail, Phone, User, Check, X, Trash2, Clock, Film, Calendar, FileText } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 
 const PartnerRequests = () => {
   const location = useLocation();
@@ -155,7 +156,31 @@ const PartnerRequests = () => {
 
   return (
     <div className="space-y-8">
-      <PageHeader title="Partner & Distribution Portal" />
+      <PageHeader 
+        title="Partner & Distribution Portal" 
+        actions={
+          <ReportDropdown 
+            title="Ishya Partners & Licensing Report" 
+            columns={['Company', 'Contact', 'Type', 'Status', 'Date']} 
+            data={[
+              ...requests.map(r => ({
+                Company: r.name,
+                Contact: `${r.contactPerson} (${r.email})`,
+                Type: 'Account Request',
+                Status: r.status,
+                Date: new Date(r.createdAt).toLocaleDateString()
+              })),
+              ...licensingRequests.map(l => ({
+                Company: l.user?.name || l.companyName || 'Unknown',
+                Contact: l.user?.email || 'Unknown',
+                Type: `License: ${l.production?.title || 'Unknown'}`,
+                Status: l.paymentStatus,
+                Date: new Date(l.createdAt).toLocaleDateString()
+              }))
+            ]}
+          />
+        }
+      />
 
       {/* Modern Tabs Navigation */}
       <div className="flex border-b border-white/5 gap-2">

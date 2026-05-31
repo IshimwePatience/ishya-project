@@ -4,6 +4,7 @@ import { Receipt, Search, Plus, TrendingDown, DollarSign, ExternalLink } from 'l
 import axios from 'axios';
 import ExpenseForm from '../components/ExpenseForm';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState([]);
@@ -86,17 +87,30 @@ const Expenses = () => {
         </div>
       ) : (
         <>
-      <PageHeader 
-        title="Expenses" 
-        actions={
-          <button 
-            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            onClick={() => setIsFormOpen(true)}
-          >
-            <Plus size={16} /> Record Expense
-          </button>
-        }
-      />
+          <PageHeader 
+            title="Expenses" 
+            actions={
+              <>
+                <ReportDropdown 
+                  title="Ishya Expenses Report" 
+                  columns={['Category', 'Amount', 'Date', 'Description', 'Production']} 
+                  data={expenses.map(e => ({
+                    Category: e.category,
+                    Amount: `${Number(e.amount).toLocaleString()} RWF`,
+                    Date: new Date(e.expenseDate).toLocaleDateString(),
+                    Description: e.description || '-',
+                    Production: e.production?.title || 'General'
+                  }))}
+                />
+                <button 
+                  className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+                  onClick={() => setIsFormOpen(true)}
+                >
+                  <Plus size={16} /> Record Expense
+                </button>
+              </>
+            }
+          />
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

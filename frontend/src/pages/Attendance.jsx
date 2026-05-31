@@ -3,6 +3,7 @@ import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 
 const Attendance = () => {
   const [logs, setLogs] = useState([]);
@@ -178,25 +179,43 @@ const Attendance = () => {
     <div className="space-y-8 pb-20">
       <PageHeader 
         title={isManagement ? "Attendance Registry" : "My Attendance"} 
-        actions={!isManagement && (
-          activeAttendance ? (
-            <button
-              onClick={() => handleCheckOut()}
-              className="flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-sm font-bold transition-all text-sm"
-            >
-              <LogOutIcon size={16} />
-              <span>End session</span>
-            </button>
-          ) : (
-            <button
-              onClick={handleCheckIn}
-              className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm font-bold transition-all text-sm shadow-xl"
-            >
-              <CheckCircle2 size={16} />
-              <span>Start session</span>
-            </button>
-          )
-        )}
+        actions={
+          <div className="flex items-center gap-3">
+            {isManagement && (
+              <ReportDropdown 
+                title="Ishya Attendance Report" 
+                columns={['User', 'Role', 'Status', 'Check In', 'Check Out', 'Hours']} 
+                data={logs.map(log => ({
+                  User: log.user?.name || log.user?.email || 'Unknown',
+                  Role: log.user?.role?.name || 'User',
+                  Status: log.status,
+                  'Check In': new Date(log.checkIn).toLocaleString(),
+                  'Check Out': log.checkOut ? new Date(log.checkOut).toLocaleString() : '-',
+                  Hours: log.totalHours ? Number(log.totalHours).toFixed(2) : '-'
+                }))}
+              />
+            )}
+            {!isManagement && (
+              activeAttendance ? (
+                <button
+                  onClick={() => handleCheckOut()}
+                  className="flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-sm font-bold transition-all text-sm"
+                >
+                  <LogOutIcon size={16} />
+                  <span>End session</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleCheckIn}
+                  className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm font-bold transition-all text-sm shadow-xl"
+                >
+                  <CheckCircle2 size={16} />
+                  <span>Start session</span>
+                </button>
+              )
+            )}
+          </div>
+        }
       />
 
       {!isManagement && (

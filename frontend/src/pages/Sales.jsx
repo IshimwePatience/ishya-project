@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import SaleForm from '../components/SaleForm';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 
 // ── Animated counter ──────────────────────────────────────────────────────────
 const Counter = ({ to, duration = 1.4 }) => {
@@ -147,7 +148,22 @@ const Sales = () => {
         </div>
       ) : (
         <>
-          <PageHeader title="Sales & Revenue" />
+          <PageHeader 
+              title="Sales & Revenue" 
+              actions={
+                <ReportDropdown 
+                  title="Ishya Sales & Revenue Report" 
+                  columns={['Transaction', 'Client', 'Amount', 'Status', 'Date']} 
+                  data={sales.map(s => ({
+                    Transaction: s.saleType,
+                    Client: s.user?.name || s.user?.email || 'Guest',
+                    Amount: `${Number(s.amount).toLocaleString()} RWF`,
+                    Status: s.paymentStatus,
+                    Date: new Date(s.createdAt).toLocaleDateString()
+                  }))}
+                />
+              }
+            />
 
           {/* ── Total Revenue Banner ── */}
           <motion.div

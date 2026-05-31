@@ -17,6 +17,7 @@ import axios from 'axios';
 
 import UserForm from '../components/UserForm';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 
 const UserManagement = () => {
   const location = useLocation();
@@ -152,7 +153,22 @@ const UserManagement = () => {
         </div>
       ) : (
         <>
-      <PageHeader title="User Management" />
+            <PageHeader 
+              title="User Management" 
+              actions={
+                <ReportDropdown 
+                  title="Ishya Users & Partners Report" 
+                  columns={['Name', 'Email', 'Role', 'Status', 'Phone']} 
+                  data={users.map(u => ({
+                    Name: `${u.firstName} ${u.lastName}`,
+                    Email: u.email,
+                    Role: u.role?.name || 'User',
+                    Status: u.status,
+                    Phone: u.phone || '-'
+                  }))}
+                />
+              }
+            />
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-sm text-sm font-bold">

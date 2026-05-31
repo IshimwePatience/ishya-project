@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, Mail, User, ChevronRight, ChevronDown } from 'luci
 import axios from 'axios';
 import TalentForm from '../components/TalentForm';
 import PageHeader from '../components/PageHeader';
+import ReportDropdown from '../components/ReportDropdown';
 import usePreferences from '../hooks/usePreferences';
 
 const Talents = () => {
@@ -121,12 +122,25 @@ const Talents = () => {
         viewMode={viewMode}
         setViewMode={setViewMode}
         actions={
-          <button
-            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            onClick={() => setIsFormOpen(true)}
-          >
-            <Plus size={16} /> Register talent
-          </button>
+          <>
+            <ReportDropdown 
+              title="Ishya Talent Roster Report" 
+              columns={['Name', 'Email', 'Role', 'Status', 'Productions']} 
+              data={talents.map(t => ({
+                Name: `${t.firstName} ${t.lastName}`,
+                Email: t.email,
+                Role: t.role?.name || 'Talent',
+                Status: t.status,
+                Productions: t.productions?.map(p => p.title).join(', ') || '-'
+              }))}
+            />
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              onClick={() => setIsFormOpen(true)}
+            >
+              <Plus size={16} /> Register talent
+            </button>
+          </>
         }
       />
 
