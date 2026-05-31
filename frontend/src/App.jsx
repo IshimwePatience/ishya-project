@@ -37,7 +37,7 @@ function App() {
         if (parsed.theme) {
           document.documentElement.setAttribute('data-theme', parsed.theme);
         }
-      } catch (e) {}
+      } catch (e) { }
     } else {
       const guestTheme = localStorage.getItem('guest_theme');
       if (guestTheme) {
@@ -49,7 +49,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PublicEvents />} />
+        <Route path="/" element={<PublicShowcase />} />
         <Route path="/showcase" element={<PublicShowcase />} />
         <Route path="/showcase/:prodId" element={<PublicShowcase />} />
         <Route path="/events" element={<PublicEvents />} />
