@@ -29,6 +29,23 @@ import ActorSchedule from './pages/ActorSchedule';
 import DashboardLayout from './components/DashboardLayout';
 
 function App() {
+  React.useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const parsed = JSON.parse(user);
+        if (parsed.theme) {
+          document.documentElement.setAttribute('data-theme', parsed.theme);
+        }
+      } catch (e) {}
+    } else {
+      const guestTheme = localStorage.getItem('guest_theme');
+      if (guestTheme) {
+        document.documentElement.setAttribute('data-theme', guestTheme);
+      }
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>

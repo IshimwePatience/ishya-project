@@ -20,7 +20,9 @@ import {
   Clock,
   Check,
   Trash2,
-  Inbox
+  Inbox,
+  Sun,
+  Moon
 } from 'lucide-react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -289,6 +291,32 @@ const DashboardLayout = ({ children }) => {
 
     fetchSession();
   }, [navigate]);
+
+  const handleThemeToggle = async () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    if (user) {
+      const updatedUser = { ...user, theme: newTheme };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
+            theme: newTheme
+          }, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+        }
+      } catch (err) {
+        console.error('Failed to save theme preference', err);
+      }
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -886,6 +914,19 @@ const DashboardLayout = ({ children }) => {
 
         {/* RIGHT: Bell + Avatar — like Plex */}
         <div className="flex items-center gap-1 shrink-0">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={handleThemeToggle}
+            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text/55 hover:text-theme-text hover:bg-theme-input-bg transition-all duration-150"
+            title="Toggle Theme"
+          >
+            {user?.theme === 'light' || document.documentElement.getAttribute('data-theme') === 'light' ? (
+              <Moon size={17} />
+            ) : (
+              <Sun size={17} />
+            )}
+          </button>
+
           <div className="notif-container relative">
             <button
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
