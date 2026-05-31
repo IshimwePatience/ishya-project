@@ -24,7 +24,9 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/roles`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setRoles(response.data);
+      const allowedRoles = ['Admin', 'Partner', 'Public Visitor', 'Actor/Talent'];
+      const filteredRoles = response.data.filter(role => allowedRoles.includes(role.name));
+      setRoles(filteredRoles);
     } catch (err) {
       console.error('Failed to fetch roles');
     }
