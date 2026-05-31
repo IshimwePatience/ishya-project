@@ -46,7 +46,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
         axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`)
       ]);
 
-      setProductions(prodRes.data);
+      const validProductions = prodRes.data.filter(prod => 
+        prod.mediaFiles && prod.mediaFiles.some(m => m.isPublic)
+      );
+      setProductions(validProductions);
       setCategories(catRes.data);
       setContinueWatching(watchRes.data);
       if (priceRes.data?.price) {
