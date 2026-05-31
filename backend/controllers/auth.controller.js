@@ -1,7 +1,7 @@
 const { User, Role, PendingUser, SystemSetting, Sale } = require('../models');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { sendEmail } = require('../utils/mailer');
+const { sendOTPEmail, sendEmail } = require('../utils/mailer');
 const { Op } = require('sequelize');
 
 const generateTokens = (user) => {
@@ -50,12 +50,11 @@ exports.register = async (req, res) => {
       expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
     });
 
-    await sendEmail(
-      pendingUser.email,
-      'Verify Your ISHYA Account',
-      `Your verification code is: ${verifyCode}`,
-      `<h2>Welcome to ISHYA</h2><p>Your verification code is: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
-    );
+    await sendOTPEmail({
+      to: pendingUser.email,
+      name: pendingUser.firstName,
+      otp: verifyCode
+    });
 
     res.status(201).json({
       message: 'Registration initiated. Check your email for the verification code.',
