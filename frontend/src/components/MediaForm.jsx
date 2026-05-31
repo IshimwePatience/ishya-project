@@ -315,7 +315,59 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
       </div>
 
+      {/* 2. Structure Toggle */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50">Structure</label>
+        </div>
+        <div className="w-full md:w-2/3 flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setHasSeasons(false)}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-white/40 border-white/10 hover:border-white/20'}`}
+          >
+            Standalone Movie
+          </button>
+          <button
+            type="button"
+            onClick={() => setHasSeasons(true)}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-white/40 border-white/10 hover:border-white/20'}`}
+          >
+            Has Seasons
+          </button>
+        </div>
+      </div>
 
+      {/* Category Selection */}
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50">Category / Genre</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <input
+            type="text"
+            placeholder="e.g. Action, Comedy, Drama..."
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* 3. Description */}
+      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50">Description</label>
+        </div>
+        <div className="w-full md:w-2/3">
+          <textarea
+            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white h-32 resize-none"
+            placeholder="Tell us more about this media package..."
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          />
+        </div>
+      </div>
 
       {/* 4. Episode Management */}
       <div className="py-8 px-4 space-y-6">

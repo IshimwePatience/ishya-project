@@ -6,6 +6,7 @@ import axios from 'axios';
 import ProductionForm from '../components/ProductionForm';
 import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
+import ReportDropdown from '../components/ReportDropdown';
 
 const Productions = () => {
   const location = useLocation();
@@ -123,12 +124,25 @@ const Productions = () => {
         viewMode={viewMode}
         setViewMode={setViewMode}
         actions={
-          <button
-            className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
-            onClick={() => setIsFormOpen(true)}
-          >
-            <Plus size={16} /> New project
-          </button>
+          <>
+            <ReportDropdown 
+              title="Ishya Productions Report" 
+              columns={['Title', 'Category', 'Status', 'Budget', 'Dates']} 
+              data={productions.map(p => ({
+                Title: p.title,
+                Category: p.category?.name || 'Uncategorized',
+                Status: p.status,
+                Budget: p.budget || '-',
+                Dates: p.startDate ? new Date(p.startDate).toLocaleDateString() : '-'
+              }))}
+            />
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              onClick={() => setIsFormOpen(true)}
+            >
+              <Plus size={16} /> New project
+            </button>
+          </>
         }
       />
 

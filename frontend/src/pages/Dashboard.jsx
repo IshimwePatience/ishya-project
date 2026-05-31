@@ -17,6 +17,7 @@ import PageHeader from '../components/PageHeader';
 import usePreferences from '../hooks/usePreferences';
 import PublicVisitorDashboard from './PublicVisitorDashboard';
 import PartnerDashboard from './PartnerDashboard';
+import ReportDropdown from '../components/ReportDropdown';
 
 const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
@@ -503,6 +504,18 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
         setZoom={setZoom}
         viewMode={viewMode}
         setViewMode={setViewMode}
+        actions={
+          <ReportDropdown 
+            title="Ishya Studio Overview Report" 
+            columns={['Metric', 'Value']} 
+            data={[
+              { Metric: 'Total Revenue', Value: `${Number(stats.totalRevenue || 0).toLocaleString()} RWF` },
+              { Metric: 'Productions', Value: stats.productionsCount },
+              { Metric: 'Troupe Members', Value: stats.talentsCount },
+              { Metric: 'System Users', Value: stats.usersCount || 0 }
+            ]}
+          />
+        }
       />
 
       {/* 🚀 STAT CARDS GRID */}

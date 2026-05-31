@@ -4,6 +4,7 @@ import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, L
 import axios from 'axios';
 import EventForm from '../components/EventForm';
 import PublicEvents from './PublicEvents';
+import ReportDropdown from '../components/ReportDropdown';
 
 const Events = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -113,14 +114,27 @@ const Events = () => {
               <h1 className="text-2xl font-black text-white tracking-tight">Channel content</h1>
               <p className="text-[13px] text-white/40 mt-1 font-medium">Manage your theatrical events, schedules, and live performances</p>
             </div>
-            {isAdminOrStaff && (
-              <button
-                className="bg-[#3ea6ff] hover:bg-[#3ea6ff]/90 text-black px-4 py-2 text-[13px] font-bold rounded-sm flex items-center gap-2 transition-all shadow-md"
-                onClick={() => setIsFormOpen(true)}
-              >
-                <Plus size={16} strokeWidth={3} /> CREATE EVENT
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              <ReportDropdown 
+                title="Ishya Events Report" 
+                columns={['Title', 'Type', 'Status', 'Venue', 'Date']} 
+                data={filteredEvents.map(e => ({
+                  Title: e.title,
+                  Type: e.type,
+                  Status: e.status,
+                  Venue: e.venue,
+                  Date: new Date(e.startTime).toLocaleDateString()
+                }))}
+              />
+              {isAdminOrStaff && (
+                <button
+                  className="bg-[#3ea6ff] hover:bg-[#3ea6ff]/90 text-black px-4 py-2 text-[13px] font-bold rounded-sm flex items-center gap-2 transition-all shadow-md"
+                  onClick={() => setIsFormOpen(true)}
+                >
+                  <Plus size={16} strokeWidth={3} /> CREATE EVENT
+                </button>
+              )}
+            </div>
           </div>
 
           {/* YouTube Studio Styled Layout */}
