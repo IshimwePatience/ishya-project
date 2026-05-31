@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, Filter, Play, CheckCircle2, AlertTriangle, Users } from 'lucide-react';
 import axios from 'axios';
 import EventForm from '../components/EventForm';
+import PublicEvents from './PublicEvents';
 
 const Events = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
