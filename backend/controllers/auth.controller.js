@@ -50,14 +50,21 @@ exports.register = async (req, res) => {
       expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
     });
 
-    await sendOTPEmail({
-      to: pendingUser.email,
-      name: pendingUser.firstName,
-      otp: verifyCode
-    });
+    try {
+      await sendOTPEmail({
+        to: pendingUser.email,
+        name: pendingUser.firstName,
+        otp: verifyCode
+      });
+    } catch (err) {
+      console.warn(`\n=== [RENDER FIREWALL BLOCKED REGISTRATION EMAIL] ===`);
+      console.warn(`Render Free Tier blocks outbound SMTP connections.`);
+      console.warn(`Your OTP code for ${pendingUser.email} is: ${verifyCode}`);
+      console.warn(`=====================================================\n`);
+    }
 
     res.status(201).json({
-      message: 'Registration initiated. Check your email for the verification code.',
+      message: 'Registration initiated. Check your email (or Render logs) for the verification code.',
       email: pendingUser.email
     });
   } catch (error) {
@@ -156,13 +163,19 @@ exports.resendVerify = async (req, res) => {
       user.emailVerifyExpires = new Date(Date.now() + 10 * 60 * 1000);
       await user.save();
 
-      await sendEmail(
-        user.email,
-        'Your New ISHYA Verification Code',
-        `Your new code is: ${verifyCode}`,
-        `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
-      );
-      return res.json({ message: 'New code sent to your email' });
+      try {
+        await sendEmail(
+          user.email,
+          'Your New ISHYA Verification Code',
+          `Your new code is: ${verifyCode}`,
+          `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
+        );
+      } catch (err) {
+        console.warn(`\n=== [RENDER FIREWALL BLOCKED RESEND EMAIL] ===`);
+        console.warn(`OTP code for ${user.email} is: ${verifyCode}`);
+        console.warn(`==============================================\n`);
+      }
+      return res.json({ message: 'New code sent to your email (or Render Logs)' });
     }
 
     // Check PendingUser table
@@ -176,14 +189,20 @@ exports.resendVerify = async (req, res) => {
     pending.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     await pending.save();
 
-    await sendEmail(
-      pending.email,
-      'Your New ISHYA Verification Code',
-      `Your new code is: ${verifyCode}`,
-      `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
-    );
+    try {
+      await sendEmail(
+        pending.email,
+        'Your New ISHYA Verification Code',
+        `Your new code is: ${verifyCode}`,
+        `<h2>New Verification Code</h2><p>Your code: <strong style="font-size:24px">${verifyCode}</strong></p><p>Valid for 10 minutes.</p>`
+      );
+    } catch (err) {
+      console.warn(`\n=== [RENDER FIREWALL BLOCKED RESEND EMAIL] ===`);
+      console.warn(`OTP code for ${pending.email} is: ${verifyCode}`);
+      console.warn(`==============================================\n`);
+    }
 
-    res.json({ message: 'New code sent to your email' });
+    res.json({ message: 'New code sent to your email (or Render Logs)' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -216,17 +235,23 @@ exports.login = async (req, res) => {
       user.twoFactorExpires = new Date(Date.now() + 10 * 60 * 1000);
       await user.save();
 
-      await sendEmail(
-        user.email,
-        'Your ISHYA Verification Code',
-        `Your code is: ${otp}`,
-        `<h1>Security Verification</h1><p>Your verification code is: <strong>${otp}</strong></p><p>Valid for 10 minutes.</p>`
-      );
+      try {
+        await sendEmail(
+          user.email,
+          'Your ISHYA Verification Code',
+          `Your code is: ${otp}`,
+          `<h1>Security Verification</h1><p>Your verification code is: <strong>${otp}</strong></p><p>Valid for 10 minutes.</p>`
+        );
+      } catch (err) {
+        console.warn(`\n=== [RENDER FIREWALL BLOCKED 2FA EMAIL] ===`);
+        console.warn(`2FA code for ${user.email} is: ${otp}`);
+        console.warn(`===========================================\n`);
+      }
 
       return res.json({
         requires2FA: true,
         email: user.email,
-        message: 'Verification code sent to email'
+        message: 'Verification code sent to email (or Render Logs)'
       });
     }
 

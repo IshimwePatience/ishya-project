@@ -19,12 +19,20 @@ exports.sendOTP = async (req, res) => {
 
     otpStore[email.toLowerCase()] = { otp, expiresAt };
 
-    await sendOTPEmail({ to: email, name, otp });
+    try {
+      await sendOTPEmail({ to: email, name, otp });
+    } catch (err) {
+      console.warn(`\n==============================================`);
+      console.warn(`[RENDER FIREWALL BLOCKED EMAIL]`);
+      console.warn(`Render Free Tier blocks outbound SMTP connections.`);
+      console.warn(`Your OTP code for ${email} is: ${otp}`);
+      console.warn(`==============================================\n`);
+    }
 
-    res.json({ message: 'Verification code sent to your email.' });
+    res.json({ message: 'Verification code sent. (If using Render Free Tier, check Render Logs for the code)' });
   } catch (err) {
     console.error('OTP send error:', err);
-    res.status(500).json({ message: 'Failed to send verification code. Please check the email address.' });
+    res.status(500).json({ message: 'Failed to generate verification code.' });
   }
 };
 
