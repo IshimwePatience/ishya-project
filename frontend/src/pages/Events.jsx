@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, Filter, Play, CheckCircle2, AlertTriangle, Users } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, ListFilter, Play, CheckCircle2, AlertTriangle, Users } from 'lucide-react';
 import axios from 'axios';
 import EventForm from '../components/EventForm';
 import PublicEvents from './PublicEvents';
@@ -144,7 +144,7 @@ const Events = () => {
 
             {/* Filter Bar */}
             <div className="flex items-center px-6 py-3 border-b border-white/10 bg-[#282828] gap-4">
-              <Filter size={18} className="text-[#aaaaaa]" />
+              <ListFilter size={18} className="text-[#aaaaaa]" />
               <input 
                 type="text" 
                 placeholder="Filter events..." 

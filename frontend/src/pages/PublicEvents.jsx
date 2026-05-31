@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, ChevronRight, ArrowLeft, Search, Film, Users, Settings, X, Play, Clock, CheckCircle2, Filter } from 'lucide-react';
+import { Calendar, MapPin, ChevronRight, ArrowLeft, Search, Film, Users, Settings, X, Play, Clock, CheckCircle2, ListFilter } from 'lucide-react';
 import axios from 'axios';
 import PublicNavbar from '../components/PublicNavbar';
 import PaypalButton from '../components/PaypalButton';
@@ -251,7 +251,7 @@ const PublicEvents = ({ isDashboard }) => {
           <div className="bg-[#1f1f1f] border border-white/10 rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative mt-4">
             {/* Filter Bar */}
             <div className="flex items-center px-6 py-3 border-b border-white/10 bg-[#282828] gap-4">
-              <Filter size={18} className="text-[#aaaaaa]" />
+              <ListFilter size={18} className="text-[#aaaaaa]" />
               <input 
                 type="text" 
                 placeholder="Filter performances..." 
