@@ -56,6 +56,11 @@ exports.createTalent = async (req, res) => {
     }
 
     const talent = await Talent.create({ ...talentData, userId });
+
+    if (talentData.productions && Array.isArray(talentData.productions)) {
+      await talent.setProductions(talentData.productions);
+    }
+
     res.status(201).json(talent);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -97,6 +102,11 @@ exports.updateTalent = async (req, res) => {
     }
     
     await talent.update(talentData);
+
+    if (talentData.productions && Array.isArray(talentData.productions)) {
+      await talent.setProductions(talentData.productions);
+    }
+
     res.json(talent);
   } catch (error) {
     res.status(400).json({ message: error.message });

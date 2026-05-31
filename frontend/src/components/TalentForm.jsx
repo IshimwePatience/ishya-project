@@ -13,8 +13,35 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
     bio: initialData?.bio || '',
     profilePic: initialData?.profilePic || '',
     createAccount: false,
-    password: ''
+    createAccount: false,
+    password: '',
+    productions: initialData?.productions?.map(p => p.id) || []
   });
+  
+  const [productionsList, setProductionsList] = useState([]);
+
+  useEffect(() => {
+    const fetchProductions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`);
+        setProductionsList(response.data);
+      } catch(err) {
+        console.error('Failed to fetch productions', err);
+      }
+    };
+    fetchProductions();
+  }, []);
+
+  const toggleProduction = (prodId) => {
+    setFormData(prev => {
+      const current = prev.productions || [];
+      if (current.includes(prodId)) {
+        return { ...prev, productions: current.filter(id => id !== prodId) };
+      } else {
+        return { ...prev, productions: [...current, prodId] };
+      }
+    });
+  };
   
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -201,6 +228,32 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-white min-h-[100px] resize-none text-xs" placeholder="Professional background..." value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} />
+        </div>
+      </div>
+
+      {/* Assigned Productions */}
+      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+        <div className="w-full md:w-1/3 mb-2 md:mb-0">
+          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Assigned Productions</label>
+          <p className="text-[10px] text-white/30 mt-1">Select all projects this talent is part of</p>
+        </div>
+        <div className="w-full md:w-2/3">
+          <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto no-scrollbar pr-2">
+            {productionsList.map(prod => (
+              <label key={prod.id} className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition-all ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d]/10 border-[#e5a00d]/30 text-[#e5a00d]' : 'bg-[#161616] border-white/10 text-white/60 hover:border-white/30 hover:text-white'}`}>
+                <input 
+                  type="checkbox" 
+                  className="hidden" 
+                  checked={formData.productions?.includes(prod.id)} 
+                  onChange={() => toggleProduction(prod.id)}
+                />
+                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d] border-[#e5a00d]' : 'border-white/20'}`}>
+                  {formData.productions?.includes(prod.id) && <Check size={12} className="text-black" />}
+                </div>
+                <span className="text-xs font-semibold truncate">{prod.title}</span>
+              </label>
+            ))}
+          </div>
         </div>
       </div>
 
