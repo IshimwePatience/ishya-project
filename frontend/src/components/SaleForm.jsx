@@ -68,7 +68,7 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl">
+    <form onSubmit={handleSubmit} className="space-y-0 text-theme-text max-w-4xl">
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
           <AlertCircle className="text-red-400 shrink-0" size={18} />
@@ -77,15 +77,15 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Production Selection */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Production</label>
-          <p className="text-[11px] text-white/20 mt-1">Select the project being licensed/sold</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Production</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">Select the project being licensed/sold</p>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
@@ -98,15 +98,15 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Partner Selection */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Licensing Partner</label>
-          <p className="text-[11px] text-white/20 mt-1">The company or individual buying rights</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Licensing Partner</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">The company or individual buying rights</p>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.buyerId}
             onChange={(e) => setFormData({ ...formData, buyerId: e.target.value })}
           >
@@ -119,14 +119,14 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Sale Type */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Agreement Type</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Agreement Type</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.saleType}
             onChange={(e) => setFormData({ ...formData, saleType: e.target.value })}
           >
@@ -138,15 +138,15 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Amount Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Contract Amount (RWF)</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contract Amount (RWF)</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             required
             type="number"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="0"
             value={formData.amount}
             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -155,15 +155,15 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Expiry Date Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Contract Expiry</label>
-          <p className="text-[11px] text-white/20 mt-1">When the licensing rights end</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contract Expiry</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">When the licensing rights end</p>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="date"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white appearance-none cursor-pointer"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text appearance-none cursor-pointer"
             value={formData.expiryDate}
             onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
           />
@@ -171,14 +171,14 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Status Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Payment Status</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Payment Status</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.paymentStatus}
             onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value })}
           >
@@ -201,7 +201,7 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white"
+          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

@@ -89,10 +89,10 @@ const Cinema = () => {
   if (!media) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
-        <h2 className="text-white font-bold">Media Not Found</h2>
+        <h2 className="text-theme-text font-bold">Media Not Found</h2>
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-white/10 text-white rounded-full hover:bg-white hover:text-black transition-all"
+          className="px-6 py-2 bg-theme-input-bg-hover text-theme-text rounded-full hover:bg-white hover:text-black transition-all"
         >
           Go Back
         </button>
@@ -104,7 +104,7 @@ const Cinema = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-[#121212] flex flex-col overflow-y-auto no-scrollbar select-none"
+      className="min-h-screen bg-theme-surface flex flex-col overflow-y-auto no-scrollbar select-none"
     >
       {/* Immersive Header */}
       <div className="h-20 px-10 flex items-center justify-between bg-transparent fixed top-0 w-full z-50">
@@ -116,7 +116,7 @@ const Cinema = () => {
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-[#e5a00d] hover:bg-[#e5a00d] text-black hover:text-black border border-white/10 rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
+          className="px-6 py-2 bg-[#e5a00d] hover:bg-[#e5a00d] text-black hover:text-black border border-theme-border rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
         >
           <X size={14} /> Exit
         </button>
@@ -126,20 +126,20 @@ const Cinema = () => {
       <div className="flex-1 flex items-center justify-center p-4 md:p-12 pt-40">
         {user?.role?.toLowerCase().trim() === 'public visitor' && user?.subscriptionStatus !== 'active' ? (
           /* Lock Screen */
-          <div className="w-full max-w-xl bg-black/60 border border-white/5 p-8 md:p-12 text-center rounded-sm relative group shadow-[0_0_100px_rgba(229,160,13,0.05)] space-y-6 animate-in zoom-in-95 duration-500">
+          <div className="w-full max-w-xl bg-black/60 border border-theme-border-light p-8 md:p-12 text-center rounded-sm relative group shadow-[0_0_100px_rgba(229,160,13,0.05)] space-y-6 animate-in zoom-in-95 duration-500">
             <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/20 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto animate-pulse">
               <Lock size={28} />
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-2xl font-black text-white font-sans tracking-tight">Subscription Required</h3>
-              <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed font-sans">
+              <h3 className="text-2xl font-black text-theme-text font-sans tracking-tight">Subscription Required</h3>
+              <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed font-sans">
                 This cinema title is exclusive to <span className="text-[#e5a00d] font-bold">Ishya Monthly</span> subscribers. Subscribe below to instantly unlock access.
               </p>
             </div>
 
-            <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs max-w-sm mx-auto font-sans">
-              <span className="text-white/45">Monthly Membership Rate:</span>
+            <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs max-w-sm mx-auto font-sans">
+              <span className="text-theme-text/45">Monthly Membership Rate:</span>
               <span className="text-base font-black text-[#e5a00d]">{Number(subPrice).toLocaleString()} RWF/mo</span>
             </div>
 
@@ -168,7 +168,7 @@ const Cinema = () => {
             initialTime={resumeTime}
           />
         ) : (
-          <div className="w-full max-w-6xl aspect-video bg-[#121212] border border-white/5 relative group shadow-[0_0_100px_rgba(229,160,13,0.05)]">
+          <div className="w-full max-w-6xl aspect-video bg-theme-surface border border-theme-border-light relative group shadow-[0_0_100px_rgba(229,160,13,0.05)]">
             <iframe
               src={media.filePath}
               className="w-full h-full"

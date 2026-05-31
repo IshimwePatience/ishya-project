@@ -27,7 +27,7 @@ const RevenueCard = ({ label, sublabel, amount, color, pct, delay = 0 }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5, ease: 'easeOut' }}
-    className="bg-[#121212] p-7 rounded-sm border border-white/5 hover:bg-white/[0.03] transition-all group relative overflow-hidden"
+    className="bg-theme-surface p-7 rounded-sm border border-theme-border-light hover:bg-white/[0.03] transition-all group relative overflow-hidden"
   >
     {/* Left accent bar */}
     <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${color}`} />
@@ -35,14 +35,14 @@ const RevenueCard = ({ label, sublabel, amount, color, pct, delay = 0 }) => (
     <div className={`text-[11px] font-black mb-1 ${color.replace('bg-', 'text-')}`}>
       {label}
     </div>
-    <div className="text-[11px] text-white/30 mb-5">{sublabel}</div>
+    <div className="text-[11px] text-theme-text-muted-dark mb-5">{sublabel}</div>
 
-    <div className="text-2xl font-black text-white tracking-tight">
-      <Counter to={amount} /> <span className="text-base font-bold text-white/40">RWF</span>
+    <div className="text-2xl font-black text-theme-text tracking-tight">
+      <Counter to={amount} /> <span className="text-base font-bold text-theme-text-muted">RWF</span>
     </div>
 
     {/* Mini % bar */}
-    <div className="mt-5 h-[2px] bg-white/5 rounded-full overflow-hidden">
+    <div className="mt-5 h-[2px] bg-theme-input-bg rounded-full overflow-hidden">
       <motion.div
         className={`h-full ${color}`}
         initial={{ width: 0 }}
@@ -50,7 +50,7 @@ const RevenueCard = ({ label, sublabel, amount, color, pct, delay = 0 }) => (
         transition={{ delay: delay + 0.3, duration: 0.8, ease: 'easeOut' }}
       />
     </div>
-    <div className="mt-2 text-[10px] text-white/20 font-medium">
+    <div className="mt-2 text-[10px] text-theme-text-muted-dark font-medium">
       {pct.toFixed(1)}% of total revenue
     </div>
   </motion.div>
@@ -127,17 +127,17 @@ const Sales = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
-            <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
-              <button onClick={() => setIsFormOpen(false)} className="hover:text-white transition-colors">Revenue</button>
-              <span className="text-white/20">/</span>
+          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-theme-border-light">
+            <nav className="flex items-center gap-2 text-xs font-medium text-theme-text-muted">
+              <button onClick={() => setIsFormOpen(false)} className="hover:text-theme-text transition-colors">Revenue</button>
+              <span className="text-theme-text-muted-dark">/</span>
               <span>{editingSale ? 'Edit Agreement' : 'Log Agreement'}</span>
             </nav>
             <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl font-bold text-theme-text tracking-tight">
                 {editingSale ? 'Edit Sale Record' : 'New Sale Agreement'}
               </h2>
-              <p className="text-white/40 text-sm mt-1">Record and manage licensing income</p>
+              <p className="text-theme-text-muted text-sm mt-1">Record and manage licensing income</p>
             </div>
           </div>
           <SaleForm
@@ -170,27 +170,27 @@ const Sales = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-[#0e0e0e] border border-white/5 rounded-sm px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="bg-[#0e0e0e] border border-theme-border-light rounded-sm px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
             <div>
-              <div className="text-[11px] font-bold text-white/30 mb-2">Total Gross Revenue</div>
-              <div className="text-4xl font-black text-white tracking-tight">
-                {loading ? '—' : <><Counter to={summary.totalRevenue || 0} /> <span className="text-xl text-white/30">RWF</span></>}
+              <div className="text-[11px] font-bold text-theme-text-muted-dark mb-2">Total Gross Revenue</div>
+              <div className="text-4xl font-black text-theme-text tracking-tight">
+                {loading ? '—' : <><Counter to={summary.totalRevenue || 0} /> <span className="text-xl text-theme-text-muted-dark">RWF</span></>}
               </div>
-              <div className="text-[11px] text-white/20 mt-2">{summary.paidSalesCount || 0} paid transactions</div>
+              <div className="text-[11px] text-theme-text-muted-dark mt-2">{summary.paidSalesCount || 0} paid transactions</div>
             </div>
 
             {/* Stacked bar */}
             <div className="w-full md:w-80">
-              <div className="flex h-2 rounded-full overflow-hidden gap-[2px] bg-white/5">
+              <div className="flex h-2 rounded-full overflow-hidden gap-[2px] bg-theme-input-bg">
                 <motion.div className="bg-blue-500 h-full"   initial={{ width: 0 }} animate={{ width: `${licensePct}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
                 <motion.div className="bg-[#e5a00d] h-full"  initial={{ width: 0 }} animate={{ width: `${ticketPct}%` }}  transition={{ duration: 1, delay: 0.15, ease: 'easeOut' }} />
                 <motion.div className="bg-purple-500 h-full" initial={{ width: 0 }} animate={{ width: `${subPct}%` }}     transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }} />
               </div>
               <div className="flex gap-5 mt-3">
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />Licenses</div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-[#e5a00d] inline-block" />Tickets</div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />Subscriptions</div>
+                <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />Licenses</div>
+                <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-[#e5a00d] inline-block" />Tickets</div>
+                <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />Subscriptions</div>
               </div>
             </div>
           </motion.div>
@@ -205,13 +205,13 @@ const Sales = () => {
           {/* ── Transactions List ── */}
           <section className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white tracking-tight">Recent Transactions</h3>
-              <div className="text-[11px] font-medium text-white/40">Live Ledger</div>
+              <h3 className="text-lg font-bold text-theme-text tracking-tight">Recent Transactions</h3>
+              <div className="text-[11px] font-medium text-theme-text-muted">Live Ledger</div>
             </div>
 
-            <div className="border-t border-white/5">
+            <div className="border-t border-theme-border-light">
               {loading ? (
-                [1,2,3,4].map(i => <div key={i} className="h-12 border-b border-white/5 animate-pulse" />)
+                [1,2,3,4].map(i => <div key={i} className="h-12 border-b border-theme-border-light animate-pulse" />)
               ) : sales.length > 0 ? (
                 sales.map((sale) => {
                   const isLicense = ['Licensing','Full ownership sale','Broadcast rights','Script sale'].includes(sale.saleType);
@@ -222,30 +222,30 @@ const Sales = () => {
                   const typeLabel = isLicense ? 'License' : isTicket ? 'Ticket' : 'Subscription';
 
                   return (
-                    <div key={sale.id} className="group flex items-center justify-between py-4 border-b border-white/5 transition-all">
+                    <div key={sale.id} className="group flex items-center justify-between py-4 border-b border-theme-border-light transition-all">
                       <div className="flex items-center gap-5">
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">
+                            <span className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors">
                               {sale.production?.title || 'Unknown'}
                             </span>
                             <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-sm border ${badgeColor}`}>
                               {typeLabel}
                             </span>
                           </div>
-                          <div className="text-[11px] text-white/30 font-medium flex items-center gap-2 mt-1 flex-wrap">
+                          <div className="text-[11px] text-theme-text-muted-dark font-medium flex items-center gap-2 mt-1 flex-wrap">
                             {isTicket ? (
                               <>
-                                <span className="text-white/50 font-bold capitalize">{sale.ticketTier || 'regular'} ×{sale.ticketQuantity || 1}</span>
-                                <span className="w-1 h-1 bg-white/10 rounded-full" />
+                                <span className="text-theme-text-muted font-bold capitalize">{sale.ticketTier || 'regular'} ×{sale.ticketQuantity || 1}</span>
+                                <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
                                 <span>{sale.buyerName || 'Guest'}</span>
-                                <span className="w-1 h-1 bg-white/10 rounded-full" />
+                                <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
                                 <span className="italic">{sale.buyerEmail}</span>
                               </>
                             ) : (
                               <>
                                 <span>{sale.buyer?.name || 'Partner'}</span>
-                                <span className="w-1 h-1 bg-white/10 rounded-full" />
+                                <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
                                 <span>Expires {sale.expiryDate ? new Date(sale.expiryDate).toLocaleDateString() : 'N/A'}</span>
                               </>
                             )}
@@ -253,7 +253,7 @@ const Sales = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm font-bold text-white tracking-tight">
+                        <div className="text-sm font-bold text-theme-text tracking-tight">
                           {Number(sale.amount || 0).toLocaleString()} RWF
                         </div>
                         <div className={`text-[11px] font-medium ${sale.paymentStatus === 'Paid' ? 'text-green-400' : 'text-yellow-400'}`}>
@@ -264,7 +264,7 @@ const Sales = () => {
                   );
                 })
               ) : (
-                <div className="py-20 text-center text-white/10 font-medium">Ledger empty</div>
+                <div className="py-20 text-center text-theme-text-muted-dark font-medium">Ledger empty</div>
               )}
             </div>
           </section>

@@ -157,7 +157,7 @@ const Attendance = () => {
       const [_, lat, lng] = coordMatch;
       return (
         <div className="flex flex-col items-start gap-1">
-          <span className="text-white font-medium">{address}</span>
+          <span className="text-theme-text font-medium">{address}</span>
           <a 
             href={`https://www.google.com/maps?q=${lat},${lng}`} 
             target="_blank" 
@@ -170,7 +170,7 @@ const Attendance = () => {
         </div>
       );
     }
-    return <span className="text-white font-medium">{locStr}</span>;
+    return <span className="text-theme-text font-medium">{locStr}</span>;
   };
 
   const isManagement = userRole === 'Admin' || userRole === 'Staff';
@@ -199,7 +199,7 @@ const Attendance = () => {
               activeAttendance ? (
                 <button
                   onClick={() => handleCheckOut()}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-sm font-bold transition-all text-sm"
+                  className="flex items-center gap-2 px-6 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-theme-text rounded-sm font-bold transition-all text-sm"
                 >
                   <LogOutIcon size={16} />
                   <span>End session</span>
@@ -220,19 +220,19 @@ const Attendance = () => {
 
       {!isManagement && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+          <div className="p-8 bg-theme-surface border border-theme-border-light rounded-sm relative overflow-hidden group">
             <div className="relative z-10">
-              <div className="text-xs font-medium text-white/20 mb-4">Active status</div>
-              <div className={`text-2xl font-bold ${activeAttendance ? 'text-green-400' : 'text-white/40'}`}>
+              <div className="text-xs font-medium text-theme-text-muted-dark mb-4">Active status</div>
+              <div className={`text-2xl font-bold ${activeAttendance ? 'text-green-400' : 'text-theme-text-muted'}`}>
                 {activeAttendance ? 'Check-in active' : 'Off duty'}
               </div>
             </div>
-            <Clock className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+            <Clock className="absolute -bottom-4 -right-4 text-theme-text/[0.02] group-hover:text-theme-text/[0.05] transition-colors" size={120} />
           </div>
 
-          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+          <div className="p-8 bg-theme-surface border border-theme-border-light rounded-sm relative overflow-hidden group">
             <div className="relative z-10">
-              <div className="text-xs font-medium text-white/20 mb-4 flex justify-between items-center">
+              <div className="text-xs font-medium text-theme-text-muted-dark mb-4 flex justify-between items-center">
                 <span>Live location</span>
                 {activeAttendance && (
                   <button 
@@ -244,51 +244,51 @@ const Attendance = () => {
                   </button>
                 )}
               </div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-theme-text">
                 {formatLocation(activeAttendance ? activeAttendance.location : logs[0]?.location)}
               </div>
             </div>
-            <MapPin className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+            <MapPin className="absolute -bottom-4 -right-4 text-theme-text/[0.02] group-hover:text-theme-text/[0.05] transition-colors" size={120} />
           </div>
 
-          <div className="p-8 bg-[#121212] border border-white/5 rounded-sm relative overflow-hidden group">
+          <div className="p-8 bg-theme-surface border border-theme-border-light rounded-sm relative overflow-hidden group">
             <div className="relative z-10">
-              <div className="text-xs font-medium text-white/20 mb-4">Monthly sessions</div>
-              <div className="text-2xl font-bold text-white">{logs.length}</div>
+              <div className="text-xs font-medium text-theme-text-muted-dark mb-4">Monthly sessions</div>
+              <div className="text-2xl font-bold text-theme-text">{logs.length}</div>
             </div>
-            <Calendar className="absolute -bottom-4 -right-4 text-white/[0.02] group-hover:text-white/[0.05] transition-colors" size={120} />
+            <Calendar className="absolute -bottom-4 -right-4 text-theme-text/[0.02] group-hover:text-theme-text/[0.05] transition-colors" size={120} />
           </div>
         </div>
       )}
 
       <div className="space-y-6 pt-6">
-        <h3 className="text-sm font-semibold text-white/40 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-theme-text-muted flex items-center gap-2">
           <ArrowRight size={14} /> {isManagement ? "All logs" : "History"}
         </h3>
 
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map(i => <div key={i} className="h-16 bg-white/5 animate-pulse rounded-sm" />)}
+            {[1, 2, 3].map(i => <div key={i} className="h-16 bg-theme-input-bg animate-pulse rounded-sm" />)}
           </div>
         ) : logs.length > 0 ? (
           <div className="space-y-2">
             {logs.map((log) => (
-              <div key={log.id} className="flex items-center justify-between p-6 bg-[#121212] border border-white/5 rounded-sm group hover:bg-white/[0.02] transition-all">
+              <div key={log.id} className="flex items-center justify-between p-6 bg-theme-surface border border-theme-border-light rounded-sm group hover:bg-theme-input-bg transition-all">
                 <div className="flex items-center gap-6">
-                  <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-white/10' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
+                  <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-theme-input-bg-hover' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
                   <div>
-                    <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors">
+                    <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors">
                       {isManagement ? `${log.user?.firstName} ${log.user?.lastName}` : new Date(log.checkIn).toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </div>
-                    <div className="text-[11px] text-white/30 font-medium mt-1 flex items-center gap-2">
+                    <div className="text-[11px] text-theme-text-muted-dark font-medium mt-1 flex items-center gap-2">
                       {isManagement && `${new Date(log.checkIn).toLocaleDateString()} • `} {formatLocation(log.location)} • {log.event?.title || 'Production call'}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-12 text-right">
                   <div className="space-y-1">
-                    <div className="text-[10px] font-medium text-white/20 mb-1">In / Out</div>
-                    <div className="text-xs font-semibold text-white/60 tabular-nums">
+                    <div className="text-[10px] font-medium text-theme-text-muted-dark mb-1">In / Out</div>
+                    <div className="text-xs font-semibold text-theme-text-muted tabular-nums">
                       {new Date(log.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       {log.checkOut ? ` — ${new Date(log.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ' — Present'}
                     </div>
@@ -307,7 +307,7 @@ const Attendance = () => {
           </div>
         ) : (
           <div className="py-20 text-center">
-            <p className="text-white/20 text-sm font-medium italic">No attendance records found.</p>
+            <p className="text-theme-text-muted-dark text-sm font-medium italic">No attendance records found.</p>
           </div>
         )}
       </div>

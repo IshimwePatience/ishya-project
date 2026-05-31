@@ -264,13 +264,13 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
 
   const UploadSlot = ({ label, type, value, icon }) => (
-    <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4 group hover:bg-white/[0.02] transition-all">
+    <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light px-4 group hover:bg-theme-input-bg transition-all">
       <div className="w-full md:w-1/3 mb-2 md:mb-0 flex items-center gap-2">
         {icon}
-        <label className="text-sm font-semibold text-white/50">{label}</label>
+        <label className="text-sm font-semibold text-theme-text-muted">{label}</label>
       </div>
       <div className="w-full md:w-2/3 flex items-center gap-4">
-        <div className="flex-1 text-[11px] text-white/20 truncate bg-black/20 px-4 py-3 rounded-sm border border-white/5">
+        <div className="flex-1 text-[11px] text-theme-text-muted-dark truncate bg-black/20 px-4 py-3 rounded-sm border border-theme-border-light">
           {value || 'No file selected...'}
         </div>
         <input
@@ -287,7 +287,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl pb-20">
+    <form onSubmit={handleSubmit} className="space-y-0 text-theme-text max-w-4xl pb-20">
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
           <AlertCircle className="text-red-400 shrink-0" size={18} />
@@ -296,14 +296,14 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* 1. Select Project */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Select Project</label>
+          <label className="text-sm font-semibold text-theme-text-muted">Select Project</label>
         </div>
         <div className="w-full md:w-2/3">
           <select
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
@@ -316,22 +316,22 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* 2. Structure Toggle */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Structure</label>
+          <label className="text-sm font-semibold text-theme-text-muted">Structure</label>
         </div>
         <div className="w-full md:w-2/3 flex items-center gap-4">
           <button
             type="button"
             onClick={() => setHasSeasons(false)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-white/40 border-white/10 hover:border-white/20'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Standalone Movie
           </button>
           <button
             type="button"
             onClick={() => setHasSeasons(true)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-white/40 border-white/10 hover:border-white/20'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Has Seasons
           </button>
@@ -339,15 +339,15 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Category Selection */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Category / Genre</label>
+          <label className="text-sm font-semibold text-theme-text-muted">Category / Genre</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             type="text"
             placeholder="e.g. Action, Comedy, Drama..."
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           />
@@ -355,13 +355,13 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* 3. Description */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 px-4">
+      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Description</label>
+          <label className="text-sm font-semibold text-theme-text-muted">Description</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white h-32 resize-none"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text h-32 resize-none"
             placeholder="Tell us more about this media package..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -371,8 +371,8 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
       {/* 4. Episode Management */}
       <div className="py-8 px-4 space-y-6">
-        <div className="flex items-center justify-between border-b border-white/5 pb-4">
-          <h3 className="text-sm font-medium text-white flex items-center gap-2">
+        <div className="flex items-center justify-between border-b border-theme-border-light pb-4">
+          <h3 className="text-sm font-medium text-theme-text flex items-center gap-2">
             <Play size={16} className="text-[#e5a00d]" />
             {hasSeasons ? 'Series Episodes' : 'Main Content'}
           </h3>
@@ -380,7 +380,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
             <button
               type="button"
               onClick={addEpisodeSlot}
-              className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-medium rounded-sm border border-white/5 transition-all"
+              className="px-4 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover text-theme-text text-[10px] font-medium rounded-sm border border-theme-border-light transition-all"
             >
               <Plus size={14} className="inline mr-1" /> Add Episode
             </button>
@@ -389,12 +389,12 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
         <div className="space-y-4">
           {episodes.map((ep, index) => (
-            <div key={index} className="bg-white/[0.02] border border-white/5 rounded-sm p-6 space-y-4 relative group">
+            <div key={index} className="bg-theme-input-bg border border-theme-border-light rounded-sm p-6 space-y-4 relative group">
               {hasSeasons && episodes.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeEpisodeSlot(index)}
-                  className="absolute top-4 right-4 text-white/20 hover:text-red-500 transition-colors"
+                  className="absolute top-4 right-4 text-theme-text-muted-dark hover:text-red-500 transition-colors"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -402,11 +402,11 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-medium text-white/30">Title</label>
+                  <label className="text-[10px] font-medium text-theme-text-muted-dark">Title</label>
                   <input
                     type="text"
                     placeholder="e.g. Episode Title"
-                    className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                    className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                     value={ep.fileName}
                     onChange={(e) => {
                       const newEps = [...episodes];
@@ -418,10 +418,10 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                 {hasSeasons && (
                   <div className="flex gap-4">
                     <div className="w-1/2 space-y-2">
-                      <label className="text-[10px] font-medium text-white/30">Season</label>
+                      <label className="text-[10px] font-medium text-theme-text-muted-dark">Season</label>
                       <input
                         type="number"
-                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                        className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                         value={ep.season}
                         onChange={(e) => {
                           const newEps = [...episodes];
@@ -431,10 +431,10 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                       />
                     </div>
                     <div className="w-1/2 space-y-2">
-                      <label className="text-[10px] font-medium text-white/30">Episode</label>
+                      <label className="text-[10px] font-medium text-theme-text-muted-dark">Episode</label>
                       <input
                         type="number"
-                        className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-white"
+                        className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                         value={ep.episodeNumber}
                         onChange={(e) => {
                           const newEps = [...episodes];
@@ -448,7 +448,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
               </div>
 
               <div className="flex flex-col md:flex-row items-center gap-4 pt-2">
-                <div className="w-full md:flex-1 bg-black/40 border border-white/5 rounded-sm px-4 py-3 text-[10px] text-white/30 truncate italic">
+                <div className="w-full md:flex-1 bg-black/40 border border-theme-border-light rounded-sm px-4 py-3 text-[10px] text-theme-text-muted-dark truncate italic">
                   {ep.filePath || 'No video file selected...'}
                 </div>
                 <input
@@ -459,7 +459,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                 />
                 <label
                   htmlFor={`upload-ep-${index}`}
-                  className="w-full md:w-auto px-8 py-3 bg-white/5 hover:bg-[#e5a00d] hover:text-black text-white/60 text-[10px] font-black rounded-sm cursor-pointer transition-all border border-white/10 uppercase text-center"
+                  className="w-full md:w-auto px-8 py-3 bg-theme-input-bg hover:bg-[#e5a00d] hover:text-black text-theme-text-muted text-[10px] font-black rounded-sm cursor-pointer transition-all border border-theme-border uppercase text-center"
                 >
                   {ep.filePath ? 'Change Video' : 'Upload Video'}
                 </label>
@@ -478,15 +478,15 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       {/* 5. Visibility */}
 
       {/* 8. Visibility */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50">Visibility</label>
+          <label className="text-sm font-semibold text-theme-text-muted">Visibility</label>
         </div>
         <div className="w-full md:w-2/3">
           <button
             type="button"
             onClick={() => setFormData({ ...formData, isPublic: !formData.isPublic })}
-            className={`flex items-center gap-3 px-6 py-3 rounded-sm border transition-all text-xs font-semibold ${formData.isPublic ? 'bg-[#e5a00d]/10 border-[#e5a00d]/20 text-[#e5a00d]' : 'bg-white/5 border-white/10 text-white/40'}`}
+            className={`flex items-center gap-3 px-6 py-3 rounded-sm border transition-all text-xs font-semibold ${formData.isPublic ? 'bg-[#e5a00d]/10 border-[#e5a00d]/20 text-[#e5a00d]' : 'bg-theme-input-bg border-theme-border text-theme-text-muted'}`}
           >
             {formData.isPublic ? <Globe size={14} /> : <Lock size={14} />}
             <span>{formData.isPublic ? 'Publicly Visible' : 'Private (Dashboard Only)'}</span>
@@ -506,7 +506,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm font-semibold text-white/40 hover:text-white"
+          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-semibold text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

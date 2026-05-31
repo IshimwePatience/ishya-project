@@ -3,15 +3,15 @@ import { LayoutGrid } from 'lucide-react';
 
 const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) => {
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-white/5 pb-6 mb-10">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-theme-border-light pb-6 mb-10">
       <div className="flex items-center gap-4">
-        <h2 className="text-xl font-medium text-white/90 tracking-tight">{title}</h2>
+        <h2 className="text-xl font-medium text-theme-text/90 tracking-tight">{title}</h2>
       </div>
 
       <div className="flex items-center gap-6">
         {/* Custom Actions */}
         {actions && (
-          <div className="flex items-center gap-4 mr-2 pr-6 border-r border-white/5">
+          <div className="flex items-center gap-4 mr-2 pr-6 border-r border-theme-border-light">
             {actions}
           </div>
         )}
@@ -27,7 +27,7 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
                 max="100" 
                 value={zoom || 50} 
                 onChange={(e) => setZoom?.(parseInt(e.target.value))}
-                className="w-20 h-[2px] bg-white/10 accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
+                className="w-20 h-[2px] bg-theme-input-bg-hover accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
               />
             </div>
           )}
@@ -36,7 +36,7 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
           {setViewMode && (
             <div 
               onClick={() => setViewMode?.(viewMode === 'grid' ? 'list' : 'grid')}
-              className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-white/20 hover:text-white'}`}
+              className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-theme-text-muted-dark hover:text-theme-text'}`}
             >
               <LayoutGrid size={18} strokeWidth={2.5} />
             </div>

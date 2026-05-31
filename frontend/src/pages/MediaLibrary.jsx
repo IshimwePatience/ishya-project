@@ -259,7 +259,7 @@ const MediaLibrary = () => {
           actions={
             <button
               onClick={() => navigate('/dashboard/media')}
-              className="text-white/40 hover:text-white transition-all text-sm font-medium flex items-center gap-2"
+              className="text-theme-text-muted hover:text-theme-text transition-all text-sm font-medium flex items-center gap-2"
             >
               {isPartner ? "Back to Catalog" : "Back to Library"}
             </button>
@@ -268,7 +268,7 @@ const MediaLibrary = () => {
 
         <div className="max-w-4xl mx-auto space-y-12 text-center">
           {/* Poster */}
-          <div className="relative max-w-sm mx-auto shadow-2xl border border-white/5 rounded-sm overflow-hidden group/poster">
+          <div className="relative max-w-sm mx-auto shadow-2xl border border-theme-border-light rounded-sm overflow-hidden group/poster">
             {poster?.filePath ? (
               <>
                 <img src={poster.filePath} alt={bestTitle} className="w-full h-auto" />
@@ -285,31 +285,31 @@ const MediaLibrary = () => {
                         <Download size={14} /> Download Poster
                       </button>
                       {openDownloadDropdown === poster.id && (
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
-                          <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                          <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                             Format Options
                           </div>
                           <button
                             onClick={() => { triggerDownload(poster.id); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             Original
                           </button>
                           <button
                             onClick={() => { triggerDownload(poster.id, 'png'); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             PNG Image
                           </button>
                           <button
                             onClick={() => { triggerDownload(poster.id, 'jpg'); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             JPG Image
                           </button>
                           <button
                             onClick={() => { triggerDownload(poster.id, 'jpeg'); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             JPEG Image
                           </button>
@@ -320,7 +320,7 @@ const MediaLibrary = () => {
                 )}
               </>
             ) : (
-              <div className="aspect-[2/3] bg-[#121212] flex items-center justify-center text-white/10">
+              <div className="aspect-[2/3] bg-theme-surface flex items-center justify-center text-theme-text-muted-dark">
                 <Film size={64} />
               </div>
             )}
@@ -328,7 +328,7 @@ const MediaLibrary = () => {
 
           <div className="space-y-12">
             <div className="space-y-6">
-              <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto font-medium italic">
+              <p className="text-lg text-theme-text-muted leading-relaxed max-w-2xl mx-auto font-medium italic">
                 {selectedProduction.description || "No description provided for this production."}
               </p>
 
@@ -336,7 +336,7 @@ const MediaLibrary = () => {
                 <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
                   <button
                     onClick={() => navigate(`/watch/${trailer.id}`)}
-                    className="px-10 py-4 border border-white/20 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all cursor-pointer"
+                    className="px-10 py-4 border border-theme-border hover:bg-white hover:text-black text-theme-text text-xs font-bold rounded-sm transition-all cursor-pointer"
                   >
                     Watch Trailer
                   </button>
@@ -347,30 +347,30 @@ const MediaLibrary = () => {
                           e.stopPropagation();
                           setOpenDownloadDropdown(openDownloadDropdown === trailer.id ? null : trailer.id);
                         }}
-                        className="px-10 py-4 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer border-none flex items-center justify-center"
+                        className="px-10 py-4 bg-theme-input-bg border border-theme-border hover:bg-white hover:text-black text-theme-text text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer border-none flex items-center justify-center"
                       >
                         <Download size={14} /> Download Trailer
                       </button>
                       {openDownloadDropdown === trailer.id && (
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
-                          <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                          <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                             Format Options
                           </div>
                           <button
                             onClick={() => { triggerDownload(trailer.id); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             Original
                           </button>
                           <button
                             onClick={() => { triggerDownload(trailer.id, 'mp4'); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             MP4 Video
                           </button>
                           <button
                             onClick={() => { triggerDownload(trailer.id, 'webm'); setOpenDownloadDropdown(null); }}
-                            className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                            className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                           >
                             WebM Video
                           </button>
@@ -382,9 +382,9 @@ const MediaLibrary = () => {
               )}
             </div>
 
-            <div className="w-full text-left space-y-8 pt-10 border-t border-white/5">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h3 className="text-xl font-medium text-white">
+            <div className="w-full text-left space-y-8 pt-10 border-t border-theme-border-light">
+              <div className="flex items-center justify-between border-b border-theme-border pb-4">
+                <h3 className="text-xl font-medium text-theme-text">
                   {selectedProduction?.type === 'Series' || selectedProduction?.type === 'TV Show' ? 'Episodes' : 'Media Assets'}
                   {isPartner && !selectedProduction.isLicensed && (
                     <span className="ml-3 text-[10px] bg-red-500/10 text-red-500 border border-red-500/20 px-2.5 py-0.5 rounded-full tracking-normal font-semibold">
@@ -392,7 +392,7 @@ const MediaLibrary = () => {
                     </span>
                   )}
                 </h3>
-                <span className="text-xs text-white/40 font-medium">{content.length} Items</span>
+                <span className="text-xs text-theme-text-muted font-medium">{content.length} Items</span>
               </div>
 
               <div className="grid gap-3">
@@ -401,13 +401,13 @@ const MediaLibrary = () => {
                   .map((item, idx) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/5 group"
+                    className="flex items-center justify-between p-4 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-lg transition-all border border-theme-border-light group"
                   >
                     <div className="flex items-center gap-6">
-                      <span className="text-white/20 font-medium text-xl italic">{String(idx + 1).padStart(2, '0')}</span>
+                      <span className="text-theme-text-muted-dark font-medium text-xl italic">{String(idx + 1).padStart(2, '0')}</span>
                       <div>
-                        <div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">{item.fileName}</div>
-                        <div className="text-[11px] text-white/40 mt-1 font-medium">
+                        <div className="text-sm font-medium text-theme-text group-hover:text-blue-400 transition-colors">{item.fileName}</div>
+                        <div className="text-[11px] text-theme-text-muted mt-1 font-medium">
                           {(selectedProduction?.type === 'Series' || selectedProduction?.type === 'TV Show') && (item.fileType === 'Episode' || item.fileType === 'Full Movie')
                             ? `Season ${item.season || 1} • Episode ${item.episodeNumber || 1}`
                             : item.fileType}
@@ -416,7 +416,7 @@ const MediaLibrary = () => {
                     </div>
                     <div className="flex items-center gap-4">
                       {!isPartner && (
-                        <button onClick={() => handleEdit(item)} className="p-2 text-white/20 hover:text-white transition-colors">
+                        <button onClick={() => handleEdit(item)} className="p-2 text-theme-text-muted-dark hover:text-theme-text transition-colors">
                           <Edit2 size={16} />
                         </button>
                       )}
@@ -425,7 +425,7 @@ const MediaLibrary = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => navigate(`/watch/${item.id}`)}
-                              className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
+                              className="w-10 h-10 bg-blue-600 text-theme-text rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
                               title="Play file"
                             >
                               <Play size={16} fill="currentColor" className="ml-0.5" />
@@ -436,31 +436,31 @@ const MediaLibrary = () => {
                                   e.stopPropagation();
                                   setOpenDownloadDropdown(openDownloadDropdown === item.id ? null : item.id);
                                 }}
-                                className="w-10 h-10 bg-white/5 border border-white/10 hover:bg-white hover:text-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20 cursor-pointer border-none flex items-center justify-center"
+                                className="w-10 h-10 bg-theme-input-bg border border-theme-border hover:bg-white hover:text-black text-theme-text rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20 cursor-pointer border-none flex items-center justify-center"
                                 title="Download master file"
                               >
                                 <Download size={16} />
                               </button>
                               {openDownloadDropdown === item.id && (
-                                <div className="absolute right-0 top-full mt-2 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-white">
-                                  <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                <div className="absolute right-0 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                                  <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                     Format Options
                                   </div>
                                   <button
                                     onClick={() => { triggerDownload(item.id); setOpenDownloadDropdown(null); }}
-                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                    className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                   >
                                     Original
                                   </button>
                                   <button
                                     onClick={() => { triggerDownload(item.id, 'mp4'); setOpenDownloadDropdown(null); }}
-                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                    className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                   >
                                     MP4 Video
                                   </button>
                                   <button
                                     onClick={() => { triggerDownload(item.id, 'webm'); setOpenDownloadDropdown(null); }}
-                                    className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                    className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                   >
                                     WebM Video
                                   </button>
@@ -469,7 +469,7 @@ const MediaLibrary = () => {
                             </div>
                           </div>
                         ) : (
-                          <div className="w-10 h-10 bg-white/5 text-white/20 rounded-full flex items-center justify-center cursor-not-allowed border border-white/5" title="License Required">
+                          <div className="w-10 h-10 bg-theme-input-bg text-theme-text-muted-dark rounded-full flex items-center justify-center cursor-not-allowed border border-theme-border-light" title="License Required">
                             <Lock size={16} />
                           </div>
                         )
@@ -477,7 +477,7 @@ const MediaLibrary = () => {
                         /* Admin View: original single Play button, no download access */
                         <button
                           onClick={() => navigate(`/watch/${item.id}`)}
-                          className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
+                          className="w-10 h-10 bg-blue-600 text-theme-text rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
                         >
                           <Play size={16} fill="currentColor" className="ml-0.5" />
                         </button>
@@ -485,8 +485,8 @@ const MediaLibrary = () => {
                     </div>
                   </div>
                 )) : (
-                  <div className="py-20 text-center border border-dashed border-white/5 rounded-sm">
-                    <p className="text-white/20 text-sm font-medium italic">No media assets assigned to this production.</p>
+                  <div className="py-20 text-center border border-dashed border-theme-border-light rounded-sm">
+                    <p className="text-theme-text-muted-dark text-sm font-medium italic">No media assets assigned to this production.</p>
                   </div>
                 )}
               </div>
@@ -494,17 +494,17 @@ const MediaLibrary = () => {
 
             {/* License Section — only visible to Partners */}
             {isPartner && !selectedProduction.isLicensed && (
-              <div className="pt-12 border-t border-white/5 text-center space-y-6">
+              <div className="pt-12 border-t border-theme-border-light text-center space-y-6">
                 {!isApprovedPartner ? (
                   /* NOT APPROVED — must register via Distributors Sign-up first */
                   <div className="space-y-4">
-                    <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto">
-                      <Briefcase size={24} className="text-white/30" />
+                    <div className="w-14 h-14 rounded-full bg-theme-input-bg border border-theme-border flex items-center justify-center mx-auto">
+                      <Briefcase size={24} className="text-theme-text-muted-dark" />
                     </div>
-                    <p className="text-white/40 text-sm italic max-w-lg mx-auto">
+                    <p className="text-theme-text-muted text-sm italic max-w-lg mx-auto">
                       You need to be an approved distributor before requesting a license.
                     </p>
-                    <p className="text-xs text-white/20 max-w-sm mx-auto leading-relaxed">
+                    <p className="text-xs text-theme-text-muted-dark max-w-sm mx-auto leading-relaxed">
                       Submit your organization via the <span className="text-[#e5a00d] font-semibold">Distributors Sign-up</span> form and wait for admin approval. Once approved, you can request licenses for any production.
                     </p>
                   </div>
@@ -513,18 +513,18 @@ const MediaLibrary = () => {
                   <div className="space-y-6 max-w-md mx-auto">
                     {Number(pendingRequest?.amount) > 0 ? (
                       /* Price Set: Partner can complete checkout to unlock */
-                      <div className="space-y-6 bg-white/[0.02] border border-white/5 rounded-sm p-6 text-center shadow-xl animate-in fade-in duration-300">
+                      <div className="space-y-6 bg-theme-input-bg border border-theme-border-light rounded-sm p-6 text-center shadow-xl animate-in fade-in duration-300">
                         <div className="w-12 h-12 rounded-full bg-[#e5a00d]/10 border border-[#e5a00d]/20 text-[#e5a00d] flex items-center justify-center mx-auto">
                           <Briefcase size={22} />
                         </div>
                         <div className="space-y-2">
-                          <h4 className="text-sm font-bold text-white font-sans">License Price Quoted</h4>
-                          <p className="text-xs text-white/40 leading-relaxed font-sans">
+                          <h4 className="text-sm font-bold text-theme-text font-sans">License Price Quoted</h4>
+                          <p className="text-xs text-theme-text-muted leading-relaxed font-sans">
                             K Kigali operations team has approved this request. Complete checkout below to unlock full masters and marketing assets.
                           </p>
                         </div>
-                        <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
-                          <span className="text-white/45">Licensing Fee:</span>
+                        <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs font-sans">
+                          <span className="text-theme-text/45">Licensing Fee:</span>
                           <span className="text-lg font-black text-[#e5a00d]">{Number(pendingRequest.amount).toLocaleString()} RWF</span>
                         </div>
                         <div className="pt-2">
@@ -538,12 +538,12 @@ const MediaLibrary = () => {
                     ) : (
                       /* Standard Pending Review (no price set yet) */
                       <div className="space-y-4">
-                        <p className="text-white/40 text-sm italic max-w-lg mx-auto font-sans">
+                        <p className="text-theme-text-muted text-sm italic max-w-lg mx-auto font-sans">
                           Your distribution request has been submitted. Our operations team is reviewing your credentials.
                         </p>
                         <button
                           disabled
-                          className="px-12 py-5 bg-[#222] text-white/40 font-medium rounded-sm border border-white/5 flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed font-sans"
+                          className="px-12 py-5 bg-[#222] text-theme-text-muted font-medium rounded-sm border border-theme-border-light flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed font-sans"
                         >
                           <Clock size={18} className="text-[#e5a00d] animate-pulse" /> License Pending Review
                         </button>
@@ -556,7 +556,7 @@ const MediaLibrary = () => {
                 ) : (
                   /* APPROVED + NO PENDING — can request */
                   <div className="space-y-4">
-                    <p className="text-white/40 text-sm italic max-w-lg mx-auto">
+                    <p className="text-theme-text-muted text-sm italic max-w-lg mx-auto">
                       Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
                     </p>
                     <button
@@ -579,11 +579,11 @@ const MediaLibrary = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="bg-[#121212] border border-white/10 rounded-sm p-8 max-w-lg w-full relative shadow-2xl space-y-6 font-sans text-white text-left"
+                    className="bg-theme-surface border border-theme-border rounded-sm p-8 max-w-lg w-full relative shadow-2xl space-y-6 font-sans text-theme-text text-left"
                   >
                     <button
                       onClick={() => { setShowLicenseModal(false); setLicenseSuccess(false); }}
-                      className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
+                      className="absolute top-4 right-4 text-theme-text-muted hover:text-theme-text transition-colors border-none bg-transparent cursor-pointer text-lg font-bold"
                     >
                       ✕
                     </button>
@@ -593,14 +593,14 @@ const MediaLibrary = () => {
                       <div className="text-center space-y-6 py-6">
                         <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
                         <div className="space-y-3">
-                          <h3 className="text-xl font-bold tracking-tight text-white">License Request Logged</h3>
-                          <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
-                            Your request for <span className="text-white font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile?.name}</span>.
+                          <h3 className="text-xl font-bold tracking-tight text-theme-text">License Request Logged</h3>
+                          <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed">
+                            Your request for <span className="text-theme-text font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile?.name}</span>.
                           </p>
-                          <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-white/70">
-                            <div>• <span className="font-semibold text-white">Distributor:</span> {partnerProfile?.name}</div>
-                            <div>• <span className="font-semibold text-white">Channel Type:</span> {partnerProfile?.type}</div>
-                            <div>• <span className="font-semibold text-white">Representative:</span> {partnerProfile?.contactPerson}</div>
+                          <div className="bg-[#1c1c1c] border border-theme-border-light rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-theme-text/70">
+                            <div>• <span className="font-semibold text-theme-text">Distributor:</span> {partnerProfile?.name}</div>
+                            <div>• <span className="font-semibold text-theme-text">Channel Type:</span> {partnerProfile?.type}</div>
+                            <div>• <span className="font-semibold text-theme-text">Representative:</span> {partnerProfile?.contactPerson}</div>
                             <div className="text-[#e5a00d] pt-1 font-semibold flex items-center gap-1.5">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] animate-ping inline-block" />
                               Pending Admin Signoff & Contract Generation
@@ -609,7 +609,7 @@ const MediaLibrary = () => {
                         </div>
                         <button
                           onClick={() => { setShowLicenseModal(false); setLicenseSuccess(false); }}
-                          className="px-6 py-2.5 bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-sm text-xs font-semibold tracking-normal transition-all"
+                          className="px-6 py-2.5 bg-theme-input-bg border border-theme-border text-theme-text hover:bg-theme-input-bg-hover rounded-sm text-xs font-semibold tracking-normal transition-all"
                         >
                           Close Portal
                         </button>
@@ -619,14 +619,14 @@ const MediaLibrary = () => {
                       <div className="space-y-6 text-center py-2">
                         <Briefcase className="text-[#e5a00d] mx-auto" size={38} />
                         <div className="space-y-2">
-                          <h3 className="text-xl font-bold tracking-tight text-white">Request Distribution License</h3>
-                          <p className="text-xs text-white/40 max-w-sm mx-auto leading-relaxed">
-                            Submit a distribution license request for <span className="text-white font-semibold">{selectedProduction.title}</span>.
+                          <h3 className="text-xl font-bold tracking-tight text-theme-text">Request Distribution License</h3>
+                          <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed">
+                            Submit a distribution license request for <span className="text-theme-text font-semibold">{selectedProduction.title}</span>.
                           </p>
                         </div>
 
-                        <div className="bg-[#1c1c1c] border border-white/5 rounded-sm p-6 text-left text-xs space-y-3 text-white/50 max-w-sm mx-auto">
-                          <div className="flex justify-between border-b border-white/5 pb-3.5 text-white">
+                        <div className="bg-[#1c1c1c] border border-theme-border-light rounded-sm p-6 text-left text-xs space-y-3 text-theme-text-muted max-w-sm mx-auto">
+                          <div className="flex justify-between border-b border-theme-border-light pb-3.5 text-theme-text">
                             <span className="font-semibold tracking-normal text-[10px]">Verified Partner Identity</span>
                             <span className="text-[#e5a00d] font-semibold flex items-center gap-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" /> Approved
@@ -634,15 +634,15 @@ const MediaLibrary = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Distributor:</span>
-                            <span className="text-white font-semibold">{partnerProfile?.name}</span>
+                            <span className="text-theme-text font-semibold">{partnerProfile?.name}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Platform/Channel:</span>
-                            <span className="text-white font-semibold">{partnerProfile?.type}</span>
+                            <span className="text-theme-text font-semibold">{partnerProfile?.type}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Representative:</span>
-                            <span className="text-white font-semibold">{partnerProfile?.contactPerson}</span>
+                            <span className="text-theme-text font-semibold">{partnerProfile?.contactPerson}</span>
                           </div>
                         </div>
 
@@ -655,7 +655,7 @@ const MediaLibrary = () => {
                           </button>
                           <button
                             onClick={() => setShowLicenseModal(false)}
-                            className="flex-1 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-sm font-semibold transition-all text-xs tracking-normal cursor-pointer"
+                            className="flex-1 py-3 bg-theme-input-bg border border-theme-border hover:bg-theme-input-bg-hover text-theme-text rounded-sm font-semibold transition-all text-xs tracking-normal cursor-pointer"
                           >
                             Cancel
                           </button>
@@ -676,12 +676,12 @@ const MediaLibrary = () => {
     <div className="space-y-6 pb-20">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
+          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-theme-border-light">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-semibold text-theme-text">
                 {editingAsset ? "Edit Asset" : "Add to Library"}
               </h2>
-              <p className="text-sm text-white/40 mt-1">Manage asset details and visibility settings.</p>
+              <p className="text-sm text-theme-text-muted mt-1">Manage asset details and visibility settings.</p>
             </div>
           </div>
 
@@ -728,7 +728,7 @@ const MediaLibrary = () => {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="aspect-[2/3] bg-white/5 animate-pulse rounded-sm" />
+                <div key={i} className="aspect-[2/3] bg-theme-input-bg animate-pulse rounded-sm" />
               ))}
             </div>
           ) : posters.length > 0 ? (
@@ -761,13 +761,13 @@ const MediaLibrary = () => {
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
-                          <div className="absolute inset-0 bg-[#121212]/50 border border-white/5 rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3.5 group-hover/card:-translate-y-3.5 shadow-xl" />
+                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3.5 group-hover/card:-translate-y-3.5 shadow-xl" />
                           {/* Layer 1: middle */}
-                          <div className="absolute inset-0 bg-[#121212]/80 border border-white/5 rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
+                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
                         </>
                       )}
                       {/* Main Poster Card */}
-                      <div className="relative w-full h-full bg-[#121212] border border-white/5 rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-white/20">
+                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border">
                         {a.filePath ? (
                           <img
                             src={a.filePath}
@@ -775,7 +775,7 @@ const MediaLibrary = () => {
                             className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-700"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-black/20 text-white/10 group-hover/card:text-white/40 transition-all">
+                          <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">
                             {getIcon(a.fileType)}
                           </div>
                         )}
@@ -783,7 +783,7 @@ const MediaLibrary = () => {
                         {/* Type tag (Series or Movie) */}
                         <div className="absolute top-3 left-3 z-10">
                           {isSeries ? (
-                            <div className="bg-indigo-600/90 text-white text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-indigo-600/90 text-theme-text text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Tv size={10} /> Series
                             </div>
                           ) : (
@@ -795,7 +795,7 @@ const MediaLibrary = () => {
 
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
                           <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
-                            <Play size={20} className="text-white fill-white ml-1" />
+                            <Play size={20} className="text-theme-text fill-white ml-1" />
                           </div>
                         </div>
 
@@ -803,13 +803,13 @@ const MediaLibrary = () => {
                           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
                             <button
                               onClick={(e) => { e.stopPropagation(); handleEdit(a); }}
-                              className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-white rounded-sm transition-all"
+                              className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-theme-text rounded-sm transition-all"
                             >
                               <Edit2 size={12} />
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDelete(a.id); }}
-                              className="p-1.5 bg-black/60 hover:bg-red-500 text-white rounded-sm transition-all"
+                              className="p-1.5 bg-black/60 hover:bg-red-500 text-theme-text rounded-sm transition-all"
                             >
                               <Trash2 size={12} />
                             </button>
@@ -819,10 +819,10 @@ const MediaLibrary = () => {
                     </div>
 
                     <div className="space-y-1">
-                      <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors leading-snug">
+                      <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors leading-snug">
                         {cardTitle}
                       </div>
-                      <p className="text-[10px] text-white/40 font-medium tracking-normal">
+                      <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
                         {isSeries ? (
                           <span className="text-indigo-400 font-semibold">Series • Multi-Season</span>
                         ) : (
@@ -836,7 +836,7 @@ const MediaLibrary = () => {
             </div>
           ) : (
             <div className="py-32 text-center">
-              <p className="text-white/20 text-sm font-medium">
+              <p className="text-theme-text-muted-dark text-sm font-medium">
                 {isPartner ? "No productions available in the catalog yet" : "Your library is empty"}
               </p>
               {!isPartner && (

@@ -62,6 +62,7 @@ const Login = () => {
       } else {
         localStorage.setItem('token', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        document.documentElement.setAttribute('data-theme', response.data.user.theme || 'dark');
         
         if (response.data.user.role === 'Partner') {
           navigate('/dashboard/library');
@@ -83,7 +84,7 @@ const Login = () => {
   const SocialButton = ({ icon: Icon, children, onClick, className = "" }) => (
     <button
       onClick={onClick}
-      className={`w-full py-4 px-6 border border-white/10 rounded-sm flex items-center justify-center gap-3 font-medium hover:bg-white/5 transition-all mb-4 ${className}`}
+      className={`w-full py-4 px-6 border border-theme-border rounded-sm flex items-center justify-center gap-3 font-medium hover:bg-theme-input-bg transition-all mb-4 ${className}`}
     >
       {Icon && <Icon size={20} />}
       <span>{children}</span>
@@ -91,7 +92,7 @@ const Login = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white flex flex-col items-center pt-12 px-4">
+    <div className="min-h-screen bg-theme-surface text-theme-text flex flex-col items-center pt-12 px-4">
       {/* Header */}
       <div className="flex flex-col items-center mb-20 text-center">
         <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -121,9 +122,9 @@ const Login = () => {
               </button>
 
               <div className="flex items-center gap-4 my-8">
-                <div className="flex-1 h-[1px] bg-white/10"></div>
+                <div className="flex-1 h-[1px] bg-theme-input-bg-hover"></div>
                 <span className="text-xs font-medium text-gray-500">or with</span>
-                <div className="flex-1 h-[1px] bg-white/10"></div>
+                <div className="flex-1 h-[1px] bg-theme-input-bg-hover"></div>
               </div>
 
               <SocialButton icon={Mail} onClick={() => setShowEmailForm(true)}>
@@ -131,7 +132,7 @@ const Login = () => {
               </SocialButton>
 
               <div className="mt-12 text-center space-y-6">
-                <a href="#" className="text-sm text-gray-400 hover:text-white underline underline-offset-4 decoration-gray-600">
+                <a href="#" className="text-sm text-gray-400 hover:text-theme-text underline underline-offset-4 decoration-gray-600">
                   Continue with your work mail - SSO login
                 </a>
 
@@ -141,7 +142,7 @@ const Login = () => {
 
                 <div className="pt-2 text-sm text-gray-400">
                   Are you a TV channel or distributor? <br />
-                  <Link to="/partner-join" className="text-white hover:text-primary font-bold underline underline-offset-4 decoration-gray-700">Partner with us</Link>
+                  <Link to="/partner-join" className="text-theme-text hover:text-primary font-bold underline underline-offset-4 decoration-gray-700">Partner with us</Link>
                 </div>
 
                 <div className="pt-8">
@@ -158,7 +159,7 @@ const Login = () => {
             >
               <button
                 onClick={() => setShowEmailForm(false)}
-                className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 text-sm font-bold transition-colors"
+                className="flex items-center gap-2 text-gray-400 hover:text-theme-text mb-8 text-sm font-bold transition-colors"
               >
                 <ArrowLeft size={16} /> Back to options
               </button>
@@ -174,7 +175,7 @@ const Login = () => {
                   <label className="text-sm font-bold text-gray-400 ml-1">Email address</label>
                   <input
                     type="email"
-                    className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all text-white placeholder-gray-600"
+                    className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all text-theme-text placeholder-gray-600"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -185,14 +186,14 @@ const Login = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center px-1">
                     <label className="text-sm font-bold text-gray-400">Password</label>
-                    <Link to="/forgot-password" size="sm" className="text-xs text-gray-500 hover:text-white">
+                    <Link to="/forgot-password" size="sm" className="text-xs text-gray-500 hover:text-theme-text">
                       Forgot?
                     </Link>
                   </div>
                   <div className="relative">
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all pr-12 text-white placeholder-gray-600"
+                      className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all pr-12 text-theme-text placeholder-gray-600"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -201,7 +202,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-theme-text"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>

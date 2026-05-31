@@ -89,12 +89,12 @@ const Talents = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center mb-10 pb-6 border-b border-white/5">
+          <div className="flex items-center mb-10 pb-6 border-b border-theme-border-light">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-semibold text-theme-text">
                 {editingTalent ? `Edit ${editingTalent.firstName} ${editingTalent.lastName}` : "Register new talent"}
               </h2>
-              <p className="text-sm text-white/40 mt-1">
+              <p className="text-sm text-theme-text-muted mt-1">
                 {editingTalent ? "Update performer details or specialties." : "Add a new performer or crew member."}
               </p>
             </div>
@@ -155,7 +155,7 @@ const Talents = () => {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-sm" />
+                <div key={i} className="aspect-square bg-theme-input-bg animate-pulse rounded-sm" />
               ))}
             </div>
           ) : Object.keys(groupedTalents).length > 0 ? (
@@ -171,7 +171,7 @@ const Talents = () => {
                 return (
                   <div key={groupName} className="space-y-4">
                     <div 
-                      className="flex items-center gap-2 cursor-pointer text-white hover:text-[#e5a00d] transition-colors border-b border-white/5 pb-2"
+                      className="flex items-center gap-2 cursor-pointer text-theme-text hover:text-[#e5a00d] transition-colors border-b border-theme-border-light pb-2"
                       onClick={() => toggleGroup(groupName)}
                     >
                       <motion.div
@@ -182,7 +182,7 @@ const Talents = () => {
                         <ChevronDown size={20} />
                       </motion.div>
                       <h3 className="text-lg font-semibold">{groupName}</h3>
-                      <span className="text-xs font-medium text-white/40 bg-white/5 px-2 py-0.5 rounded-full ml-2">
+                      <span className="text-xs font-medium text-theme-text-muted bg-theme-input-bg px-2 py-0.5 rounded-full ml-2">
                         {groupTalents.length}
                       </span>
                     </div>
@@ -215,7 +215,7 @@ const Talents = () => {
                               >
                                 <div className="relative group/card">
                                   <div 
-                                    className="rounded-full bg-white/5 border border-white/5 overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300"
+                                    className="rounded-full bg-theme-input-bg border border-theme-border-light overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300"
                                     style={{
                                       width: `${64 + (zoom - 50) * 0.8}px`,
                                       height: `${64 + (zoom - 50) * 0.8}px`
@@ -227,7 +227,7 @@ const Talents = () => {
                                       <User 
                                         size={32 + (zoom - 50) * 0.4} 
                                         strokeWidth={1.5} 
-                                        className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300" 
+                                        className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300" 
                                       />
                                     )}
                                   </div>
@@ -235,7 +235,7 @@ const Talents = () => {
                                   <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
                                      <button 
                                        onClick={(e) => { e.stopPropagation(); setEditingTalent(talent); setIsFormOpen(true); }}
-                                       className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white shadow-lg"
+                                       className="p-1.5 bg-theme-input-bg-hover hover:bg-white/20 rounded-sm transition-all text-theme-text shadow-lg"
                                        title="Edit"
                                      >
                                        <Edit2 size={10} />
@@ -250,8 +250,8 @@ const Talents = () => {
                                   </div>
                                 </div>
                                 <div className="space-y-1">
-                                  <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{talent.firstName} {talent.lastName}</div>
-                                  <div className="text-[11px] text-white/40 font-medium">
+                                  <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{talent.firstName} {talent.lastName}</div>
+                                  <div className="text-[11px] text-theme-text-muted font-medium">
                                     {talent.specialty}
                                   </div>
                                 </div>
@@ -267,7 +267,7 @@ const Talents = () => {
             </div>
           ) : (
             <div className="py-20 text-center">
-              <p className="text-white/20 text-sm font-medium">No talent found</p>
+              <p className="text-theme-text-muted-dark text-sm font-medium">No talent found</p>
             </div>
           )}
         </>

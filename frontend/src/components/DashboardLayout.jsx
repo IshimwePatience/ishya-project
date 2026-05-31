@@ -31,11 +31,11 @@ const SidebarLink = ({ to, icon: Icon, label, active }) => (
   <Link
     to={to}
     className={`flex items-center gap-3 px-8 py-2 transition-all duration-200 relative group ${active
-      ? 'text-white'
-      : 'text-white/60 hover:text-white'
+      ? 'text-theme-text'
+      : 'text-theme-text-muted hover:text-theme-text'
       }`}
   >
-    <Icon size={18} className={active ? 'text-[#e5a00d]' : 'group-hover:text-white transition-colors'} />
+    <Icon size={18} className={active ? 'text-[#e5a00d]' : 'group-hover:text-theme-text transition-colors'} />
     <span className={`text-sm ${active ? 'font-medium' : 'font-normal'}`}>{label}</span>
   </Link>
 );
@@ -47,7 +47,7 @@ const SidebarGroup = ({ label, items, location }) => {
     <div className="mb-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-white uppercase tracking-widest hover:text-white transition-colors group"
+        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-theme-text uppercase tracking-widest hover:text-theme-text transition-colors group"
       >
         <span>{label}</span>
         <ChevronDown
@@ -168,17 +168,17 @@ const DashboardLayout = ({ children }) => {
 
   const getHistoryIcon = (type) => {
     switch (type) {
-      case 'productions': return <Film size={14} className="text-white/45" />;
-      case 'scripts': return <FileText size={14} className="text-white/45" />;
-      case 'mediaFiles': return <Library size={14} className="text-white/45" />;
-      case 'talents': return <Users size={14} className="text-white/45" />;
-      case 'buyers': return <Briefcase size={14} className="text-white/45" />;
-      case 'buyerRequests': return <Bell size={14} className="text-white/45" />;
-      case 'events': return <Calendar size={14} className="text-white/45" />;
-      case 'expenses': return <Receipt size={14} className="text-white/45" />;
-      case 'sales': return <Wallet size={14} className="text-white/45" />;
-      case 'users': return <ShieldCheck size={14} className="text-white/45" />;
-      default: return <Film size={14} className="text-white/45" />;
+      case 'productions': return <Film size={14} className="text-theme-text/45" />;
+      case 'scripts': return <FileText size={14} className="text-theme-text/45" />;
+      case 'mediaFiles': return <Library size={14} className="text-theme-text/45" />;
+      case 'talents': return <Users size={14} className="text-theme-text/45" />;
+      case 'buyers': return <Briefcase size={14} className="text-theme-text/45" />;
+      case 'buyerRequests': return <Bell size={14} className="text-theme-text/45" />;
+      case 'events': return <Calendar size={14} className="text-theme-text/45" />;
+      case 'expenses': return <Receipt size={14} className="text-theme-text/45" />;
+      case 'sales': return <Wallet size={14} className="text-theme-text/45" />;
+      case 'users': return <ShieldCheck size={14} className="text-theme-text/45" />;
+      default: return <Film size={14} className="text-theme-text/45" />;
     }
   };
 
@@ -278,6 +278,7 @@ const DashboardLayout = ({ children }) => {
         });
         setUser(res.data.user);
         localStorage.setItem('user', JSON.stringify(res.data.user));
+        document.documentElement.setAttribute('data-theme', res.data.user.theme || 'dark');
         setLoading(false);
       } catch (err) {
         console.error('Session error', err);
@@ -430,14 +431,14 @@ const DashboardLayout = ({ children }) => {
       case 'new_movie':
         return <Film size={14} className="text-blue-400" />;
       default:
-        return <Bell size={14} className="text-white/60" />;
+        return <Bell size={14} className="text-theme-text-muted" />;
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center">
-        <div className="text-sm font-medium text-white/40 animate-pulse">
+      <div className="min-h-screen bg-theme-bg flex items-center justify-center">
+        <div className="text-sm font-medium text-theme-text-muted animate-pulse">
           Initializing Ishya...
         </div>
       </div>
@@ -543,9 +544,9 @@ const DashboardLayout = ({ children }) => {
   const isPublic = user?.role?.toLowerCase().trim() === 'public visitor';
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#1a1a1a] text-white font-sans selection:bg-[#e5a00d] selection:text-black">
+    <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 bg-[#121212] border-b border-white/5 flex items-center px-10 fixed top-0 w-full z-40 gap-3 font-sans">
+      <header className="h-16 bg-theme-surface border-b border-theme-border-light flex items-center px-10 fixed top-0 w-full z-40 gap-3 font-sans">
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-8 shrink-0">
           <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
@@ -556,7 +557,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
+                  location.pathname === '/dashboard' ? 'font-semibold text-theme-text' : 'font-normal text-theme-text/55 hover:text-theme-text'
                 }`}
               >
                 Catalog
@@ -564,7 +565,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard/events')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard/events' ? 'font-semibold text-white' : 'font-normal text-white/55 hover:text-white'
+                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-text' : 'font-normal text-theme-text/55 hover:text-theme-text'
                 }`}
               >
                 Events
@@ -575,12 +576,12 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="absolute left-1/2 -translate-x-1/2 w-[480px] z-50">
-          <div className="flex items-center gap-2 bg-white/5 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-white/10 transition-all focus-within:bg-white/10">
+          <div className="flex items-center gap-2 bg-theme-input-bg rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-theme-input-bg-hover transition-all focus-within:bg-theme-input-bg-hover">
             <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-white w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
+              className="bg-transparent border-none outline-none text-sm text-theme-text w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
@@ -588,7 +589,7 @@ const DashboardLayout = ({ children }) => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="bg-transparent border-none text-white/40 hover:text-white text-xs cursor-pointer p-0 shrink-0 font-bold"
+                className="bg-transparent border-none text-theme-text-muted hover:text-theme-text text-xs cursor-pointer p-0 shrink-0 font-bold"
               >
                 ✕
               </button>
@@ -596,17 +597,17 @@ const DashboardLayout = ({ children }) => {
           </div>
 
           {showSearchResults && searchQuery.trim() && (
-            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
               {isSearching ? (
-                <div className="p-8 text-center text-xs text-white/40 font-medium animate-pulse">
+                <div className="p-8 text-center text-xs text-theme-text-muted font-medium animate-pulse">
                   Searching secure vault...
                 </div>
               ) : Object.keys(searchResults).every(key => !searchResults[key] || searchResults[key].length === 0) ? (
-                <div className="p-8 text-center text-xs text-white/40 font-medium">
+                <div className="p-8 text-center text-xs text-theme-text-muted font-medium">
                   No matching results found
                 </div>
               ) : (
-                <div className="divide-y divide-white/5">
+                <div className="divide-y divide-theme-border-light">
                   {/* Category: Productions */}
                   {searchResults.productions?.length > 0 && (
                     <div className="p-4">
@@ -616,12 +617,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('productions', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Film size={14} className="text-white/45 group-hover:text-white" />
+                            <Film size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
-                              <div className="text-[10px] text-white/40 truncate">{item.genre} • {item.type} • {item.status}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">{item.genre} • {item.type} • {item.status}</div>
                             </div>
                           </div>
                         ))}
@@ -638,12 +639,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('scripts', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <FileText size={14} className="text-white/45 group-hover:text-white" />
+                            <FileText size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
-                              <div className="text-[10px] text-white/40 truncate">Version {item.version} • {item.fileType || 'Document'}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">Version {item.version} • {item.fileType || 'Document'}</div>
                             </div>
                           </div>
                         ))}
@@ -660,12 +661,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('mediaFiles', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Library size={14} className="text-white/45 group-hover:text-white" />
+                            <Library size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.fileName}</div>
-                              <div className="text-[10px] text-white/40 truncate">Type: {item.fileType || 'Asset'}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.fileName}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">Type: {item.fileType || 'Asset'}</div>
                             </div>
                           </div>
                         ))}
@@ -682,12 +683,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('talents', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <UserIcon size={14} className="text-white/45 group-hover:text-white" />
+                            <UserIcon size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
-                              <div className="text-[10px] text-white/40 truncate">{item.specialty || 'Talent'} • {item.email}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">{item.specialty || 'Talent'} • {item.email}</div>
                             </div>
                           </div>
                         ))}
@@ -704,12 +705,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('buyers', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Briefcase size={14} className="text-white/45 group-hover:text-white" />
+                            <Briefcase size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.name}</div>
-                              <div className="text-[10px] text-white/40 truncate">{item.type} • Contact: {item.contactPerson}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">{item.type} • Contact: {item.contactPerson}</div>
                             </div>
                           </div>
                         ))}
@@ -726,12 +727,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('buyerRequests', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Bell size={14} className="text-white/45 group-hover:text-white" />
+                            <Bell size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.name}</div>
-                              <div className="text-[10px] text-white/40 truncate">Status: {item.status} • Representative: {item.contactPerson}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">Status: {item.status} • Representative: {item.contactPerson}</div>
                             </div>
                           </div>
                         ))}
@@ -748,12 +749,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('events', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Calendar size={14} className="text-white/45 group-hover:text-white" />
+                            <Calendar size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.title}</div>
-                              <div className="text-[10px] text-white/40 truncate">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
                             </div>
                           </div>
                         ))}
@@ -770,12 +771,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('expenses', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Receipt size={14} className="text-white/45 group-hover:text-white" />
+                            <Receipt size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.description}</div>
-                              <div className="text-[10px] text-white/40 truncate">Category: {item.category} • Amount: ${Number(item.amount).toLocaleString()}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.description}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">Category: {item.category} • Amount: ${Number(item.amount).toLocaleString()}</div>
                             </div>
                           </div>
                         ))}
@@ -792,12 +793,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('sales', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Wallet size={14} className="text-white/45 group-hover:text-white" />
+                            <Wallet size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">License: {item.production?.title || 'Production'}</div>
-                              <div className="text-[10px] text-white/40 truncate">Type: {item.saleType} • Partner: {item.buyer?.name || 'Buyer'} • Amount: ${Number(item.amount).toLocaleString()}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">License: {item.production?.title || 'Production'}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">Type: {item.saleType} • Partner: {item.buyer?.name || 'Buyer'} • Amount: ${Number(item.amount).toLocaleString()}</div>
                             </div>
                           </div>
                         ))}
@@ -814,12 +815,12 @@ const DashboardLayout = ({ children }) => {
                           <div
                             key={item.id}
                             onClick={() => handleSearchResultClick('users', item)}
-                            className="flex items-center gap-3 p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                            className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <ShieldCheck size={14} className="text-white/45 group-hover:text-white" />
+                            <ShieldCheck size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
-                              <div className="text-[10px] text-white/40 truncate">{item.email}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-[10px] text-theme-text-muted truncate">{item.email}</div>
                             </div>
                           </div>
                         ))}
@@ -832,13 +833,13 @@ const DashboardLayout = ({ children }) => {
           )}
 
           {showSearchResults && !searchQuery.trim() && recentSearches.length > 0 && (
-            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
               <div className="p-4">
-                <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
+                <div className="flex items-center justify-between mb-3 border-b border-theme-border-light pb-2">
                   <span className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider">Recent Searches</span>
                   <button
                     onClick={clearSearchHistory}
-                    className="bg-transparent border-none text-[10px] text-white/40 hover:text-white cursor-pointer transition-colors"
+                    className="bg-transparent border-none text-[10px] text-theme-text-muted hover:text-theme-text cursor-pointer transition-colors"
                   >
                     Clear All
                   </button>
@@ -848,17 +849,17 @@ const DashboardLayout = ({ children }) => {
                     <div
                       key={`${item.type}-${item.id}`}
                       onClick={() => handleSearchResultClick(item.type, item)}
-                      className="flex items-center justify-between p-2 rounded hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                      className="flex items-center justify-between p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="shrink-0 w-6 h-6 rounded-full bg-white/5 flex items-center justify-center">
+                        <div className="shrink-0 w-6 h-6 rounded-full bg-theme-input-bg flex items-center justify-center">
                           {getHistoryIcon(item.type)}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs font-semibold text-white group-hover:text-[#E5A00D] truncate">
+                          <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">
                             {item.title}
                           </div>
-                          <div className="text-[10px] text-white/40 truncate">
+                          <div className="text-[10px] text-theme-text-muted truncate">
                             {item.type.charAt(0).toUpperCase() + item.type.slice(1)} {item.sublabel ? `• ${item.sublabel}` : ''}
                           </div>
                         </div>
@@ -868,7 +869,7 @@ const DashboardLayout = ({ children }) => {
                           e.stopPropagation();
                           removeFromSearchHistory(item);
                         }}
-                        className="bg-transparent border-none text-white/30 hover:text-red-400 p-1.5 rounded cursor-pointer transition-colors opacity-0 group-hover:opacity-100 flex items-center justify-center shrink-0"
+                        className="bg-transparent border-none text-theme-text-muted-dark hover:text-red-400 p-1.5 rounded cursor-pointer transition-colors opacity-0 group-hover:opacity-100 flex items-center justify-center shrink-0"
                       >
                         ✕
                       </button>
@@ -888,7 +889,7 @@ const DashboardLayout = ({ children }) => {
           <div className="notif-container relative">
             <button
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-white/55 hover:text-white hover:bg-white/5 transition-all duration-150"
+              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text/55 hover:text-theme-text hover:bg-theme-input-bg transition-all duration-150"
             >
               <Bell size={17} />
               {unreadCount > 0 && (
@@ -897,11 +898,11 @@ const DashboardLayout = ({ children }) => {
             </button>
 
             {isNotifDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-96 bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-white/10 shadow-2xl rounded-lg overflow-hidden z-50 flex flex-col max-h-[480px]">
+              <div className="absolute right-0 top-full mt-2 w-96 bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-hidden z-50 flex flex-col max-h-[480px]">
                 {/* Header */}
-                <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between shrink-0">
+                <div className="px-4 py-3 border-b border-theme-border-light flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-white">Notifications</span>
+                    <span className="text-sm font-bold text-theme-text">Notifications</span>
                     {unreadCount > 0 && (
                       <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#E5A00D]/20 text-[#E5A00D] rounded-full">
                         {unreadCount} new
@@ -919,14 +920,14 @@ const DashboardLayout = ({ children }) => {
                 </div>
 
                 {/* List */}
-                <div className="flex-1 overflow-y-auto divide-y divide-white/5 max-h-[360px] no-scrollbar">
+                <div className="flex-1 overflow-y-auto divide-y divide-theme-border-light max-h-[360px] no-scrollbar">
                   {notifications.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/30 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-theme-input-bg flex items-center justify-center text-theme-text-muted-dark mb-3">
                         <Inbox size={18} />
                       </div>
-                      <p className="text-xs text-white/50 font-medium">All caught up!</p>
-                      <p className="text-[10px] text-white/30 mt-1">You have no new notifications.</p>
+                      <p className="text-xs text-theme-text-muted font-medium">All caught up!</p>
+                      <p className="text-[10px] text-theme-text-muted-dark mt-1">You have no new notifications.</p>
                     </div>
                   ) : (
                     notifications.map((notif) => (
@@ -938,21 +939,21 @@ const DashboardLayout = ({ children }) => {
                         }`}
                       >
                         {/* Icon Column */}
-                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="w-7 h-7 rounded-full bg-theme-input-bg flex items-center justify-center shrink-0 mt-0.5">
                           {getNotifIcon(notif.type)}
                         </div>
 
                         {/* Content Column */}
                         <div className="flex-1 min-w-0 pr-8">
                           <div className="flex items-baseline justify-between gap-2">
-                            <span className={`text-xs truncate ${!notif.isRead ? 'font-semibold text-white' : 'font-medium text-white/80'}`}>
+                            <span className={`text-xs truncate ${!notif.isRead ? 'font-semibold text-theme-text' : 'font-medium text-theme-text/80'}`}>
                               {notif.title}
                             </span>
-                            <span className="text-[9px] text-white/30 shrink-0">
+                            <span className="text-[9px] text-theme-text-muted-dark shrink-0">
                               {formatTime(notif.createdAt)}
                             </span>
                           </div>
-                          <p className="text-[11px] text-white/50 line-clamp-2 mt-1 leading-normal">
+                          <p className="text-[11px] text-theme-text-muted line-clamp-2 mt-1 leading-normal">
                             {notif.message}
                           </p>
                         </div>
@@ -966,7 +967,7 @@ const DashboardLayout = ({ children }) => {
                                 markAsRead(notif.id);
                               }}
                               title="Mark as read"
-                              className="w-6.5 h-6.5 rounded bg-[#1a1a1a] hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white border border-white/5 transition-all cursor-pointer"
+                              className="w-6.5 h-6.5 rounded bg-theme-bg hover:bg-theme-input-bg-hover flex items-center justify-center text-theme-text-muted hover:text-theme-text border border-theme-border-light transition-all cursor-pointer"
                             >
                               <Check size={12} />
                             </button>
@@ -974,7 +975,7 @@ const DashboardLayout = ({ children }) => {
                           <button
                             onClick={(e) => deleteNotification(notif.id, e)}
                             title="Delete notification"
-                            className="w-6.5 h-6.5 rounded bg-[#1a1a1a] hover:bg-red-950 flex items-center justify-center text-white/60 hover:text-red-400 border border-white/5 transition-all cursor-pointer"
+                            className="w-6.5 h-6.5 rounded bg-theme-bg hover:bg-red-950 flex items-center justify-center text-theme-text-muted hover:text-red-400 border border-theme-border-light transition-all cursor-pointer"
                           >
                             <Trash2 size={12} />
                           </button>
@@ -986,8 +987,8 @@ const DashboardLayout = ({ children }) => {
 
                 {/* Footer */}
                 {notifications.length > 0 && (
-                  <div className="px-4 py-2 bg-white/[0.01] border-t border-white/5 flex items-center justify-center shrink-0">
-                    <span className="text-[9px] text-white/35 uppercase tracking-wider font-bold">
+                  <div className="px-4 py-2 bg-white/[0.01] border-t border-theme-border-light flex items-center justify-center shrink-0">
+                    <span className="text-[9px] text-theme-text/35 uppercase tracking-wider font-bold">
                       Notifications Panel
                     </span>
                   </div>
@@ -998,7 +999,7 @@ const DashboardLayout = ({ children }) => {
 
           {/* Avatar + dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-white/5">
+            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-input-bg">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
                 {user?.profilePic ? (
                   <img src={user.profilePic} alt="Avatar" className="w-full h-full object-cover" />
@@ -1010,14 +1011,14 @@ const DashboardLayout = ({ children }) => {
             </button>
 
             {/* Dropdown */}
-            <div className="absolute right-0 top-full mt-2 w-64 bg-[#1a1a1a] border border-white/10 shadow-2xl rounded-sm py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-              <div className="px-4 py-3 border-b border-white/5 mb-1">
-                <div className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</div>
-                <div className="text-[10px] text-white/40 font-medium truncate">{user?.role}</div>
+            <div className="absolute right-0 top-full mt-2 w-64 bg-theme-bg border border-theme-border shadow-2xl rounded-sm py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <div className="px-4 py-3 border-b border-theme-border-light mb-1">
+                <div className="text-sm font-bold text-theme-text truncate">{user?.firstName} {user?.lastName}</div>
+                <div className="text-[10px] text-theme-text-muted font-medium truncate">{user?.role}</div>
               </div>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/60 hover:text-white hover:bg-white/5 transition-all text-sm text-left"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-theme-text-muted hover:text-theme-text hover:bg-theme-input-bg transition-all text-sm text-left"
               >
                 <LogOut size={15} /> Sign Out
               </button>
@@ -1029,7 +1030,7 @@ const DashboardLayout = ({ children }) => {
       <div className="flex flex-1 pt-16">
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className="w-72 bg-[#121212] flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-30 border-r border-white/5">
+          <aside className="w-72 bg-theme-surface flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-30 border-r border-theme-border-light">
             <div className="flex-1 overflow-y-auto no-scrollbar py-2">
               {menuGroups.map((group) => (
                 <SidebarGroup
@@ -1040,10 +1041,10 @@ const DashboardLayout = ({ children }) => {
               ))}
             </div>
 
-            <div className="p-4 border-t border-white/5">
+            <div className="p-4 border-t border-theme-border-light">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-6 py-2.5 text-white/40 hover:text-white hover:bg-white/5 transition-all group rounded-sm"
+                className="w-full flex items-center gap-3 px-6 py-2.5 text-theme-text-muted hover:text-theme-text hover:bg-theme-input-bg transition-all group rounded-sm"
               >
                 <LogOut size={18} />
                 <span className="font-medium text-sm">Sign Out</span>

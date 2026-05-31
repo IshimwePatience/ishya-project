@@ -94,7 +94,7 @@ const UserManagement = () => {
       case 'Admin': return 'bg-white text-black';
       case 'Production Manager': return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
       case 'Finance Officer': return 'bg-green-500/10 text-green-400 border border-green-500/20';
-      default: return 'bg-white/5 text-gray-400 border border-white/10';
+      default: return 'bg-theme-input-bg text-gray-400 border border-theme-border';
     }
   };
 
@@ -125,17 +125,17 @@ const UserManagement = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
-            <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
-              <button onClick={() => setIsFormOpen(false)} className="hover:text-white transition-colors">Registry</button>
-              <span className="text-white/20">/</span>
+          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-theme-border-light">
+            <nav className="flex items-center gap-2 text-xs font-medium text-theme-text-muted">
+              <button onClick={() => setIsFormOpen(false)} className="hover:text-theme-text transition-colors">Registry</button>
+              <span className="text-theme-text-muted-dark">/</span>
               <span>Edit User</span>
             </nav>
             <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl font-bold text-theme-text tracking-tight">
                 Edit user
               </h2>
-              <p className="text-white/40 text-sm mt-1">Manage administrative access and roles</p>
+              <p className="text-theme-text-muted text-sm mt-1">Manage administrative access and roles</p>
             </div>
           </div>
           <UserForm
@@ -180,7 +180,7 @@ const UserManagement = () => {
           <div className="flex justify-end mb-8">
             <div className="relative min-w-[200px]">
               <select
-                className="w-full px-4 py-2 bg-[#121212] rounded-sm border border-white/5 outline-none text-sm font-medium text-white cursor-pointer"
+                className="w-full px-4 py-2 bg-theme-surface rounded-sm border border-theme-border-light outline-none text-sm font-medium text-theme-text cursor-pointer"
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
               >
@@ -196,24 +196,24 @@ const UserManagement = () => {
           {/* User List */}
           <section className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white tracking-tight">Access Registry</h3>
-              <div className="text-[11px] font-medium text-white/40">Active permissions</div>
+              <h3 className="text-lg font-bold text-theme-text tracking-tight">Access Registry</h3>
+              <div className="text-[11px] font-medium text-theme-text-muted">Active permissions</div>
             </div>
 
-            <div className="border-t border-white/5">
+            <div className="border-t border-theme-border-light">
               {loading ? (
-                [1, 2, 3, 4].map(i => <div key={i} className="h-12 border-b border-white/5 animate-pulse" />)
+                [1, 2, 3, 4].map(i => <div key={i} className="h-12 border-b border-theme-border-light animate-pulse" />)
               ) : filteredUsers.map((user) => (
-                <div key={user.id} className="group flex items-center justify-between py-4 border-b border-white/5 transition-all">
+                <div key={user.id} className="group flex items-center justify-between py-4 border-b border-theme-border-light transition-all">
                   <div className="flex items-center gap-6">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-white group-hover:text-[#e5a00d] transition-colors border border-white/10">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors border border-theme-border">
                       {user.firstName[0]}{user.lastName[0]}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors">{user.firstName} {user.lastName}</div>
-                      <div className="text-[11px] text-white/40 font-medium flex items-center gap-4 mt-1">
+                      <div className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors">{user.firstName} {user.lastName}</div>
+                      <div className="text-[11px] text-theme-text-muted font-medium flex items-center gap-4 mt-1">
                         <span>{user.email}</span>
-                        <span className="w-1 h-1 bg-white/10 rounded-full" />
+                        <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
                         <span className={`${user.role?.name === 'Admin' ? 'text-[#e5a00d]' : ''}`}>{user.role?.name || 'No Role'}</span>
                       </div>
                     </div>
@@ -222,23 +222,23 @@ const UserManagement = () => {
                     <div className="flex items-center gap-10">
                       <div className="flex items-center gap-2">
                         <div className={`w-1.5 h-1.5 rounded-full ${user.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`} />
-                        <span className="text-[11px] font-medium text-white/40">{user.status}</span>
+                        <span className="text-[11px] font-medium text-theme-text-muted">{user.status}</span>
                       </div>
                       <div className="text-[11px] font-medium min-w-[60px]">
-                        {user.isVerified ? <span className="text-green-400 font-bold">Verified</span> : <span className="text-white/20">Pending</span>}
+                        {user.isVerified ? <span className="text-green-400 font-bold">Verified</span> : <span className="text-theme-text-muted-dark">Pending</span>}
                       </div>
                     </div>
                     <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity pr-2">
                       <button
                         onClick={() => handleEdit(user)}
-                        className="text-white/20 hover:text-white transition-all"
+                        className="text-theme-text-muted-dark hover:text-theme-text transition-all"
                         title="Edit"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => handleDelete(user.id)}
-                        className="text-white/20 hover:text-red-400 transition-all"
+                        className="text-theme-text-muted-dark hover:text-red-400 transition-all"
                         title="Delete"
                       >
                         <Trash2 size={14} />

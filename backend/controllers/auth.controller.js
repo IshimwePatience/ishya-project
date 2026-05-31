@@ -349,6 +349,7 @@ exports.me = async (req, res) => {
       isTwoFactorEnabled: req.user.isTwoFactorEnabled,
       subscriptionStatus: req.user.subscriptionStatus,
       subscriptionExpiresAt: req.user.subscriptionExpiresAt,
+      theme: req.user.theme || 'dark',
       notificationPrefs: req.user.notificationPrefs || {
         emailAlerts: true,
         browserAlerts: true,
@@ -364,7 +365,7 @@ exports.updateProfile = async (req, res) => {
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const { firstName, lastName, phone, profilePic, notificationPrefs, isTwoFactorEnabled } = req.body;
+    const { firstName, lastName, phone, profilePic, notificationPrefs, isTwoFactorEnabled, theme } = req.body;
 
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
@@ -372,6 +373,7 @@ exports.updateProfile = async (req, res) => {
     if (profilePic !== undefined) user.profilePic = profilePic;
     if (notificationPrefs !== undefined) user.notificationPrefs = notificationPrefs;
     if (isTwoFactorEnabled !== undefined) user.isTwoFactorEnabled = isTwoFactorEnabled;
+    if (theme !== undefined) user.theme = theme;
 
     await user.save();
 
@@ -385,7 +387,8 @@ exports.updateProfile = async (req, res) => {
         phone: user.phone,
         profilePic: user.profilePic,
         isTwoFactorEnabled: user.isTwoFactorEnabled,
-        notificationPrefs: user.notificationPrefs
+        notificationPrefs: user.notificationPrefs,
+        theme: user.theme
       }
     });
   } catch (error) {

@@ -1,6 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700;900&display=swap');
 @import "tailwindcss";
 
+:root, [data-theme="dark"] {
+  --theme-bg: #1a1a1a;
+  --theme-surface: #121212;
+  --theme-surface-hover: #222222;
+  --theme-text: #ffffff;
+  --theme-text-muted: rgba(255, 255, 255, 0.4);
+  --theme-text-muted-dark: rgba(255, 255, 255, 0.2);
+  --theme-border: rgba(255, 255, 255, 0.1);
+  --theme-border-light: rgba(255, 255, 255, 0.05);
+  --theme-input-bg: rgba(255, 255, 255, 0.05);
+  --theme-input-bg-hover: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+  --theme-bg: #f9fafb;
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f3f4f6;
+  --theme-text: #111827;
+  --theme-text-muted: rgba(0, 0, 0, 0.5);
+  --theme-text-muted-dark: rgba(0, 0, 0, 0.3);
+  --theme-border: rgba(0, 0, 0, 0.15);
+  --theme-border-light: rgba(0, 0, 0, 0.08);
+  --theme-input-bg: rgba(0, 0, 0, 0.04);
+  --theme-input-bg-hover: rgba(0, 0, 0, 0.08);
+}
+
 @theme {
   --font-sans: "Inter", sans-serif;
   --font-display: "Inter", sans-serif;
@@ -8,12 +34,19 @@
   --color-primary-dark: #cc8e0b;
   --color-secondary: #ffffff;
   --color-accent: #e5a00d; 
-  --color-background: #1a1a1a; 
-  --color-surface: #121212; 
-  --color-text: #ffffff;
-  --color-text-muted: rgba(255, 255, 255, 0.4);
   --color-brown: #121212;
   --color-brown-light: #222222;
+  
+  --color-theme-bg: var(--theme-bg);
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-surface-hover: var(--theme-surface-hover);
+  --color-theme-text: var(--theme-text);
+  --color-theme-text-muted: var(--theme-text-muted);
+  --color-theme-text-muted-dark: var(--theme-text-muted-dark);
+  --color-theme-border: var(--theme-border);
+  --color-theme-border-light: var(--theme-border-light);
+  --color-theme-input-bg: var(--theme-input-bg);
+  --color-theme-input-bg-hover: var(--theme-input-bg-hover);
 }
 
 @utility plex-heading {
@@ -50,12 +83,12 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #1a1a1a;
+  background-color: var(--theme-bg);
 }
 
 @layer base {
   body {
-    @apply bg-[#1a1a1a] text-white font-sans antialiased;
+    @apply bg-theme-bg text-theme-text font-sans antialiased;
   }
 }
 

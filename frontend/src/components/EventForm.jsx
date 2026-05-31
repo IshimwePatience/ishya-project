@@ -90,7 +90,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl">
+    <form onSubmit={handleSubmit} className="space-y-0 text-theme-text max-w-4xl">
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
           <AlertCircle className="text-red-400 shrink-0" size={18} />
@@ -99,16 +99,16 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Title Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Event title</label>
-          <p className="text-[11px] text-white/20 mt-1">The name of the rehearsal or show</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event title</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">The name of the rehearsal or show</p>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             required
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Final Rehearsal - Act 1"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -117,14 +117,14 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Event Type Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Event type</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event type</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
@@ -144,22 +144,22 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
       {/* Ticket Prices Fields (Only shown for Performance) */}
       {formData.type === 'Performance' && (
-        <div className="py-6 border-b border-white/5 px-4 animate-in slide-in-from-top-2 duration-300 space-y-4">
+        <div className="py-6 border-b border-theme-border-light px-4 animate-in slide-in-from-top-2 duration-300 space-y-4">
           <div className="mb-2">
             <h4 className="text-xs font-bold text-[#e5a00d] uppercase tracking-wider">Performance Ticket Pricing</h4>
-            <p className="text-[11px] text-white/20 mt-1">Configure admission rates for each class level. Set to 0.00 for free admission.</p>
+            <p className="text-[11px] text-theme-text-muted-dark mt-1">Configure admission rates for each class level. Set to 0.00 for free admission.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Regular price */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-white/50">Regular Ticket (RWF)</label>
+              <label className="text-xs font-semibold text-theme-text-muted">Regular Ticket (RWF)</label>
               <input 
                 required
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.ticketPrice}
                 onChange={(e) => setFormData({...formData, ticketPrice: parseFloat(e.target.value) || 0})}
@@ -168,13 +168,13 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
             {/* VIP price */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-white/50">VIP Ticket (RWF)</label>
+              <label className="text-xs font-semibold text-theme-text-muted">VIP Ticket (RWF)</label>
               <input 
                 required
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.vipPrice}
                 onChange={(e) => setFormData({...formData, vipPrice: parseFloat(e.target.value) || 0})}
@@ -183,13 +183,13 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
             {/* VVIP price */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-white/50">VVIP Ticket (RWF)</label>
+              <label className="text-xs font-semibold text-theme-text-muted">VVIP Ticket (RWF)</label>
               <input 
                 required
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.vvipPrice}
                 onChange={(e) => setFormData({...formData, vvipPrice: parseFloat(e.target.value) || 0})}
@@ -198,13 +198,13 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
             {/* Table price */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-white/50">Table Booking (RWF)</label>
+              <label className="text-xs font-semibold text-theme-text-muted">Table Booking (RWF)</label>
               <input 
                 required
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white text-xs placeholder:text-white/10"
+                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.tablePrice}
                 onChange={(e) => setFormData({...formData, tablePrice: parseFloat(e.target.value) || 0})}
@@ -215,14 +215,14 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Linked Project Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Linked project</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Linked project</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
@@ -235,15 +235,15 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Start Time Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Start time</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Start time</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             required
             type="datetime-local"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.startTime}
             onChange={(e) => setFormData({...formData, startTime: e.target.value})}
           />
@@ -251,15 +251,15 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* End Time Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">End time</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">End time</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             required
             type="datetime-local"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.endTime}
             onChange={(e) => setFormData({...formData, endTime: e.target.value})}
           />
@@ -267,16 +267,16 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Venue Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Venue</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Venue</label>
         </div>
         <div className="w-full md:w-2/3">
           <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={16} />
             <input 
               type="text"
-              className="w-full bg-[#161616] border border-white/10 rounded-sm pl-12 pr-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+              className="w-full bg-[#161616] border border-theme-border rounded-sm pl-12 pr-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
               placeholder="e.g. Ishya Theatre Hall"
               value={formData.venue}
               onChange={(e) => setFormData({...formData, venue: e.target.value})}
@@ -286,10 +286,10 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Event Picture Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4 animate-in slide-in-from-top-2 duration-300">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4 animate-in slide-in-from-top-2 duration-300">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Event Picture / Banner</label>
-          <p className="text-[11px] text-white/20 mt-1">Upload an image for public display or ticketing display</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event Picture / Banner</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">Upload an image for public display or ticketing display</p>
         </div>
         <div className="w-full md:w-2/3 space-y-3">
           <input
@@ -302,7 +302,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           
           <div className="flex items-center gap-4">
             {formData.posterUrl ? (
-              <div className="relative w-40 aspect-video rounded-sm overflow-hidden border border-white/10 group/img">
+              <div className="relative w-40 aspect-video rounded-sm overflow-hidden border border-theme-border group/img">
                 <img
                   src={formData.posterUrl.startsWith('http') ? formData.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${formData.posterUrl}`}
                   alt="Event poster preview"
@@ -321,7 +321,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-sm text-xs font-bold text-white transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-6 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover border border-theme-border rounded-sm text-xs font-bold text-theme-text transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {uploading ? (
                   <>
@@ -338,10 +338,10 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             )}
             
             <div className="flex-1 relative">
-              <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={14} />
+              <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={14} />
               <input
                 type="text"
-                className="w-full bg-[#161616] border border-white/10 rounded-sm pl-10 pr-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10 text-xs"
+                className="w-full bg-[#161616] border border-theme-border rounded-sm pl-10 pr-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark text-xs"
                 placeholder="Or paste direct image URL..."
                 value={formData.posterUrl}
                 onChange={(e) => setFormData({ ...formData, posterUrl: e.target.value })}
@@ -352,13 +352,13 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Description Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Description</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Description</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-white/10 text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text"
             placeholder="What needs to happen..."
             value={formData.description}
             onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -378,7 +378,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white"
+          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

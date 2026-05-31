@@ -56,7 +56,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl">
+    <form onSubmit={handleSubmit} className="space-y-0 text-theme-text max-w-4xl">
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
           <AlertCircle className="text-red-400 shrink-0" size={18} />
@@ -65,30 +65,30 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Name Fields */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">First name</label>
+          <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">First name</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             required
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.firstName}
             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
           />
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">Last name</label>
+          <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Last name</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             required
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.lastName}
             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
           />
@@ -96,15 +96,15 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Email Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">Email address</label>
+          <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Email address</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             required
             type="email"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -112,14 +112,14 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Role Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">User role</label>
+          <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">User role</label>
         </div>
         <div className="w-full md:w-2/3">
             <select
               required
-              className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+              className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
               value={formData.roleId || ''}
               onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
             >
@@ -132,13 +132,13 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Status Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">Account status</label>
+          <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Account status</label>
         </div>
         <div className="w-full md:w-2/3">
           <select
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
           >
@@ -160,7 +160,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm font-bold text-white/40 hover:text-white"
+          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-bold text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

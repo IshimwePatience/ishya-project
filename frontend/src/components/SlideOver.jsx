@@ -22,17 +22,17 @@ const SlideOver = ({ isOpen, onClose, title, children }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0d0d0d] border-l border-white/10 z-[110] shadow-2xl flex flex-col"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0d0d0d] border-l border-theme-border z-[110] shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-[#0d0d0d]">
+            <div className="p-6 border-b border-theme-border-light flex justify-between items-center bg-[#0d0d0d]">
               <div>
-                <h3 className="text-xl font-bold text-white leading-tight">{title}</h3>
+                <h3 className="text-xl font-bold text-theme-text leading-tight">{title}</h3>
                 <div className="w-12 h-1 bg-white mt-2"></div>
               </div>
               <button 
                 onClick={onClose}
-                className="p-2 hover:bg-white/5 rounded-sm transition-colors text-gray-500 hover:text-white"
+                className="p-2 hover:bg-theme-input-bg rounded-sm transition-colors text-gray-500 hover:text-theme-text"
               >
                 <X size={24} />
               </button>

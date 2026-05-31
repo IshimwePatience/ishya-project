@@ -46,7 +46,7 @@ const ActorSchedule = () => {
     const now = new Date();
     const start = new Date(startTime);
     const end = new Date(endTime);
-    if (now > end) return { label: 'Completed', color: 'text-white/40' };
+    if (now > end) return { label: 'Completed', color: 'text-theme-text-muted' };
     if (now >= start && now <= end) return { label: 'In Progress', color: 'text-green-400' };
     return { label: 'Upcoming', color: 'text-[#e5a00d]' };
   };
@@ -70,7 +70,7 @@ const ActorSchedule = () => {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 bg-white/5 animate-pulse rounded-sm" />
+            <div key={i} className="h-24 bg-theme-input-bg animate-pulse rounded-sm" />
           ))}
         </div>
       ) : events.length > 0 ? (
@@ -117,7 +117,7 @@ const ActorSchedule = () => {
           })}
         </div>
       ) : (
-        <div className="py-20 flex flex-col items-center justify-center text-center opacity-40 bg-[#121212] border border-white/5 rounded-sm">
+        <div className="py-20 flex flex-col items-center justify-center text-center opacity-40 bg-theme-surface border border-theme-border-light rounded-sm">
           <CalendarIcon size={48} className="mb-4 opacity-50" />
           <p className="text-sm font-semibold">No schedule found.</p>
         </div>

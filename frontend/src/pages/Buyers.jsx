@@ -53,17 +53,17 @@ const Buyers = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-white/5">
-            <nav className="flex items-center gap-2 text-xs font-medium text-white/40">
-              <button onClick={() => setIsFormOpen(false)} className="hover:text-white transition-colors">Partners</button>
-              <span className="text-white/20">/</span>
+          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-theme-border-light">
+            <nav className="flex items-center gap-2 text-xs font-medium text-theme-text-muted">
+              <button onClick={() => setIsFormOpen(false)} className="hover:text-theme-text transition-colors">Partners</button>
+              <span className="text-theme-text-muted-dark">/</span>
               <span>Edit Partner</span>
             </nav>
             <div>
-              <h2 className="text-2xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl font-bold text-theme-text tracking-tight">
                 Edit Partner
               </h2>
-              <p className="text-white/40 text-sm mt-1">Manage licensing and distribution relationships</p>
+              <p className="text-theme-text-muted text-sm mt-1">Manage licensing and distribution relationships</p>
             </div>
           </div>
           <PartnerForm 
@@ -87,7 +87,7 @@ const Buyers = () => {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-10">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-sm" />
+                <div key={i} className="aspect-square bg-theme-input-bg animate-pulse rounded-sm" />
               ))}
             </div>
           ) : filteredBuyers.length > 0 ? (
@@ -104,12 +104,12 @@ const Buyers = () => {
                     <Building2 
                       size={84} 
                       strokeWidth={1.5} 
-                      className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300" 
+                      className="text-theme-text-muted-dark group-hover:text-[#e5a00d] transition-all duration-300" 
                     />
                   </div>
                   <div className="space-y-1">
-                    <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{buyer.name}</div>
-                    <div className="text-[11px] text-white/40 font-medium">
+                    <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{buyer.name}</div>
+                    <div className="text-[11px] text-theme-text-muted font-medium">
                       {buyer.type || 'Partner'}
                     </div>
                   </div>
@@ -118,7 +118,7 @@ const Buyers = () => {
             </div>
           ) : (
             <div className="py-20 text-center">
-              <p className="text-white/20 text-sm font-medium">No partners found</p>
+              <p className="text-theme-text-muted-dark text-sm font-medium">No partners found</p>
             </div>
           )}
         </>

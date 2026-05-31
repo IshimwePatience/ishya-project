@@ -93,12 +93,12 @@ const Productions = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
+          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-theme-border-light">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-semibold text-theme-text">
                 {editingProduction ? "Edit production" : "New production"}
               </h2>
-              <p className="text-sm text-white/40 mt-1">Manage project details and settings.</p>
+              <p className="text-sm text-theme-text-muted mt-1">Manage project details and settings.</p>
             </div>
           </div>
 
@@ -157,12 +157,12 @@ const Productions = () => {
             <div className="flex justify-end items-center gap-4 mb-12">
               <button
                 onClick={goBack}
-                className="text-white/40 hover:text-white transition-all flex items-center gap-2 text-sm font-medium"
+                className="text-theme-text-muted hover:text-theme-text transition-all flex items-center gap-2 text-sm font-medium"
               >
                 Back
               </button>
-              <div className="w-px h-3 bg-white/10" />
-              <div className="text-sm font-medium text-white">{activeCategory}</div>
+              <div className="w-px h-3 bg-theme-input-bg-hover" />
+              <div className="text-sm font-medium text-theme-text">{activeCategory}</div>
             </div>
           )}
  
@@ -170,7 +170,7 @@ const Productions = () => {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-sm" />
+                <div key={i} className="aspect-square bg-theme-input-bg animate-pulse rounded-sm" />
               ))}
             </div>
           ) : (
@@ -178,7 +178,7 @@ const Productions = () => {
               {currentView === 'folders' ? (
                 <section className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-white">Categories</h3>
+                    <h3 className="text-lg font-semibold text-theme-text">Categories</h3>
                   </div>
                   <div 
                     className="grid gap-x-6 gap-y-10"
@@ -196,12 +196,12 @@ const Productions = () => {
                           <Folder
                             size={64 + (zoom - 50) * 0.8}
                             strokeWidth={1.5}
-                            className="text-white/10 group-hover:text-[#e5a00d] transition-all duration-300"
+                            className="text-theme-text-muted-dark group-hover:text-[#e5a00d] transition-all duration-300"
                           />
                         </div>
                         <div className="space-y-1">
-                          <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{catName}</div>
-                          <div className="text-[11px] text-white/40 font-medium">
+                          <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{catName}</div>
+                          <div className="text-[11px] text-theme-text-muted font-medium">
                             {groupedProductions[catName].length} Items
                           </div>
                         </div>
@@ -213,8 +213,8 @@ const Productions = () => {
                 <section className="space-y-8">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold text-white">{activeCategory}</h3>
-                      <p className="text-white/40 text-sm mt-1">Recently added</p>
+                      <h3 className="text-xl font-semibold text-theme-text">{activeCategory}</h3>
+                      <p className="text-theme-text-muted text-sm mt-1">Recently added</p>
                     </div>
                   </div>
  
@@ -236,13 +236,13 @@ const Productions = () => {
                             <FileText
                               size={64 + (zoom - 50) * 0.8}
                               strokeWidth={1}
-                              className="text-white/10 group-hover/card:text-[#e5a00d] transition-all duration-300"
+                              className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300"
                             />
                             {/* Top Right Actions */}
                             <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
                                <button 
                                  onClick={(e) => { e.stopPropagation(); handleEdit(prod); }}
-                                 className="p-1.5 bg-white/10 hover:bg-white/20 rounded-sm transition-all text-white shadow-lg"
+                                 className="p-1.5 bg-theme-input-bg-hover hover:bg-white/20 rounded-sm transition-all text-theme-text shadow-lg"
                                  title="Edit"
                                >
                                  <Edit2 size={10} />
@@ -257,15 +257,15 @@ const Productions = () => {
                             </div>
                           </div>
                           <div className="space-y-1">
-                            <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{prod.title}</div>
-                            <div className="text-[11px] text-white/40 font-medium">
+                            <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{prod.title}</div>
+                            <div className="text-[11px] text-theme-text-muted font-medium">
                               {prod.year || '2026'} • {prod.status || 'Ready'}
                             </div>
                           </div>
                         </motion.div>
                       ))}
                     {displayedProductions.length === 0 && (
-                      <div className="col-span-full py-20 text-center text-white/10 text-sm font-medium">No productions in this category</div>
+                      <div className="col-span-full py-20 text-center text-theme-text-muted-dark text-sm font-medium">No productions in this category</div>
                     )}
                   </div>
                 </section>

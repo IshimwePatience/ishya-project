@@ -38,7 +38,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white flex flex-col items-center pt-16 px-4 pb-20">
+    <div className="min-h-screen bg-theme-surface text-theme-text flex flex-col items-center pt-16 px-4 pb-20">
       {/* Header */}
       <div className="flex flex-col items-center mb-16 text-center">
         <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -72,7 +72,7 @@ const ResetPassword = () => {
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Email Address</label>
               <input
                 type="email"
-                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+                className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -85,7 +85,7 @@ const ResetPassword = () => {
           <div className="space-y-4">
             <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] text-center block w-full">6-Digit Code</label>
             <input
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-white text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
               placeholder="000000"
               maxLength={6}
               value={code}
@@ -94,19 +94,19 @@ const ResetPassword = () => {
             />
           </div>
 
-          <div className="space-y-4 pt-4 border-t border-white/5">
+          <div className="space-y-4 pt-4 border-t border-theme-border-light">
             <div className="space-y-2">
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">New Password</label>
               <div className="relative">
                 <input
                   type="password"
-                  className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+                  className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-white/10" size={16} />
+                <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={16} />
               </div>
             </div>
 
@@ -114,7 +114,7 @@ const ResetPassword = () => {
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Confirm New Password</label>
               <input
                 type="password"
-                className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+                className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -126,7 +126,7 @@ const ResetPassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-white text-black font-black rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl uppercase tracking-[0.3em] text-[10px] group mt-8"
+            className="w-full py-5 bg-white text-black font-black rounded-sm hover:bg-brown hover:text-theme-text transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl uppercase tracking-[0.3em] text-[10px] group mt-8"
           >
             {loading ? 'Updating Password...' : 'Reset Password'}
             {!loading && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}

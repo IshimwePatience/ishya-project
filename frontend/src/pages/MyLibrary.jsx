@@ -134,7 +134,7 @@ const MyLibrary = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40 space-y-4">
-        <div className="text-white/10 animate-pulse text-xs font-bold tracking-widest">Accessing Secure Vault...</div>
+        <div className="text-theme-text-muted-dark animate-pulse text-xs font-bold tracking-widest">Accessing Secure Vault...</div>
       </div>
     );
   }
@@ -152,7 +152,7 @@ const MyLibrary = () => {
 
       {productions.length === 0 ? (
         <div className="py-40 text-center">
-          <p className="text-sm font-medium text-white/20">No active licenses found</p>
+          <p className="text-sm font-medium text-theme-text-muted-dark">No active licenses found</p>
         </div>
       ) : (
         <div
@@ -175,7 +175,7 @@ const MyLibrary = () => {
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={viewMode === 'list' ? { x: 4 } : {}}
                 className={viewMode === 'list'
-                  ? "bg-[#121212] border border-white/5 rounded-sm overflow-hidden group hover:border-white/10 transition-all p-5 flex items-center justify-between"
+                  ? "bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden group hover:border-theme-border transition-all p-5 flex items-center justify-between"
                   : "group cursor-pointer flex flex-col"
                 }
               >
@@ -184,7 +184,7 @@ const MyLibrary = () => {
                   <div className="flex items-center gap-8 w-full justify-between">
                     <div className="flex items-center gap-8">
                       {/* Poster Thumbnail */}
-                      <div className="bg-white/5 overflow-hidden flex-shrink-0 relative shadow-2xl w-24 h-36 rounded-sm">
+                      <div className="bg-theme-input-bg overflow-hidden flex-shrink-0 relative shadow-2xl w-24 h-36 rounded-sm">
                         {prod.poster ? (
                           <img
                             src={prod.poster}
@@ -193,18 +193,18 @@ const MyLibrary = () => {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Film size={24} className="text-white/10" />
+                            <Film size={24} className="text-theme-text-muted-dark" />
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Play size={20} className="text-white fill-white" />
+                          <Play size={20} className="text-theme-text fill-white" />
                         </div>
                       </div>
 
                       {/* Details */}
                       <div className="space-y-3">
                         <div>
-                          <h4 className="text-xl font-bold text-white group-hover:text-[#e5a00d] transition-colors tracking-tight flex items-center gap-2">
+                          <h4 className="text-xl font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors tracking-tight flex items-center gap-2">
                             {prod.title}
                             {isSeries ? (
                               <span className="text-[10px] bg-indigo-600/20 text-indigo-400 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-500/10">
@@ -216,7 +216,7 @@ const MyLibrary = () => {
                               </span>
                             )}
                           </h4>
-                          <p className="text-xs text-white/40 mt-1 font-medium tracking-normal">
+                          <p className="text-xs text-theme-text-muted mt-1 font-medium tracking-normal">
                             {isSeries ? (
                               <span>
                                 {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
@@ -228,7 +228,7 @@ const MyLibrary = () => {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4">
-                          <div className="flex items-center gap-1.5 text-[10px] text-white/20 font-bold tracking-normal">
+                          <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark font-bold tracking-normal">
                             <Clock size={12} /> Access Expires: {new Date(prod.expiryDate || Date.now() + 15552000000).toLocaleDateString()}
                           </div>
                         </div>
@@ -251,7 +251,7 @@ const MyLibrary = () => {
                             navigate(`/watch/${videoId}`);
                           }
                         }}
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white/60 text-[10px] font-black tracking-tight rounded-sm hover:bg-white/10 transition-all border border-white/5 cursor-pointer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-theme-input-bg text-theme-text-muted text-[10px] font-black tracking-tight rounded-sm hover:bg-theme-input-bg-hover transition-all border border-theme-border-light cursor-pointer"
                       >
                         <Play size={14} fill="currentColor" /> Watch Now
                       </button>
@@ -265,13 +265,13 @@ const MyLibrary = () => {
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
-                          <div className="absolute inset-0 bg-[#121212]/50 border border-white/5 rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
+                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
                           {/* Layer 1: middle */}
-                          <div className="absolute inset-0 bg-[#121212]/80 border border-white/5 rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
+                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
                         </>
                       )}
                       {/* Main Poster Card */}
-                      <div className="relative w-full h-full bg-[#121212] border border-white/5 rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-white/20">
+                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border">
                         {prod.poster ? (
                           <img
                             src={prod.poster}
@@ -279,7 +279,7 @@ const MyLibrary = () => {
                             className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-700"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-black/20 text-white/10 group-hover/card:text-white/40 transition-all">
+                          <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">
                             <Film size={40} />
                           </div>
                         )}
@@ -287,7 +287,7 @@ const MyLibrary = () => {
                         {/* Type tag (Series or Movie) */}
                         <div className="absolute top-3 left-3 z-10">
                           {isSeries ? (
-                            <div className="bg-indigo-600/90 text-white text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-indigo-600/90 text-theme-text text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Tv size={10} /> Series
                             </div>
                           ) : (
@@ -299,7 +299,7 @@ const MyLibrary = () => {
 
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
                           <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
-                            <Play size={20} className="text-white fill-white ml-1" />
+                            <Play size={20} className="text-theme-text fill-white ml-1" />
                           </div>
                         </div>
                       </div>
@@ -308,10 +308,10 @@ const MyLibrary = () => {
                     {/* Metadata & Title stacked cleanly below the card */}
                     <div className="space-y-2">
                       <div className="space-y-0.5">
-                        <div className="text-sm font-semibold text-white group-hover:text-[#e5a00d] transition-colors leading-snug">
+                        <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors leading-snug">
                           {prod.title}
                         </div>
-                        <p className="text-[10px] text-white/40 font-medium tracking-normal">
+                        <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
                           {isSeries ? (
                             <span className="text-indigo-400 font-semibold">
                               {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
@@ -349,18 +349,18 @@ const MyLibrary = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#121212] border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col rounded-sm shadow-2xl relative"
+            className="bg-theme-surface border border-theme-border w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col rounded-sm shadow-2xl relative"
           >
             {/* ZIP Packaging Loader Overlay */}
             {zipProgress && (
               <div className="absolute inset-0 bg-black/85 backdrop-blur-md z-[110] flex flex-col items-center justify-center p-6 text-center space-y-6">
-                <div className="w-16 h-16 rounded-full border-4 border-white/5 border-t-[#e5a00d] animate-spin" />
+                <div className="w-16 h-16 rounded-full border-4 border-theme-border-light border-t-[#e5a00d] animate-spin" />
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium text-white">Packaging Assets</h3>
-                  <p className="text-sm text-white/60 max-w-sm">{zipProgress.text}</p>
+                  <h3 className="text-lg font-medium text-theme-text">Packaging Assets</h3>
+                  <p className="text-sm text-theme-text-muted max-w-sm">{zipProgress.text}</p>
                 </div>
                 {zipProgress.percent >= 0 && (
-                  <div className="w-64 bg-white/10 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-64 bg-theme-input-bg-hover h-1.5 rounded-full overflow-hidden">
                     <div
                       className="bg-[#e5a00d] h-full transition-all duration-300"
                       style={{ width: `${zipProgress.percent}%` }}
@@ -371,22 +371,22 @@ const MyLibrary = () => {
             )}
 
             {/* Modal Header */}
-            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-[#161616]">
+            <div className="p-8 border-b border-theme-border-light flex items-center justify-between bg-[#161616]">
               <div className="space-y-1">
-                <h2 className="text-2xl font-medium text-white tracking-normal">{selectedProduction.title}</h2>
+                <h2 className="text-2xl font-medium text-theme-text tracking-normal">{selectedProduction.title}</h2>
                 <div className="flex items-center gap-3">
                   <p className="text-xs text-[#e5a00d] font-medium flex items-center gap-1.5">
                     <ShieldCheck size={12} /> Master Asset Pool
                   </p>
-                  <span className="text-white/10">•</span>
-                  <p className="text-xs text-white/40 font-medium flex items-center gap-1.5">
+                  <span className="text-theme-text-muted-dark">•</span>
+                  <p className="text-xs text-theme-text-muted font-medium flex items-center gap-1.5">
                     <Clock size={12} /> Verified Access
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedProduction(null)}
-                className="text-white/40 hover:text-white transition-colors p-2 text-sm font-medium"
+                className="text-theme-text-muted hover:text-theme-text transition-colors p-2 text-sm font-medium"
               >
                 Close Window
               </button>
@@ -422,8 +422,8 @@ const MyLibrary = () => {
                       return (
                         <>
                           {/* Column Header */}
-                          <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                            <div className="flex items-center gap-2 text-white font-semibold">
+                          <div className="flex items-center justify-between border-b border-theme-border-light pb-3">
+                            <div className="flex items-center gap-2 text-theme-text font-semibold">
                               <FileVideo size={18} className="text-[#e5a00d]" />
                               <span>{isSeries ? 'Series Episodes' : 'Feature Movie Presentation'}</span>
                             </div>
@@ -459,10 +459,10 @@ const MyLibrary = () => {
                                   const isOpen = activeSeason[seasonName];
 
                                   return (
-                                    <div key={seasonNum} className="border border-white/5 bg-white/2.5 rounded-sm overflow-hidden">
+                                    <div key={seasonNum} className="border border-theme-border-light bg-theme-surface rounded-sm overflow-hidden">
                                       {/* Accordion Header */}
                                       <div
-                                        className="p-4 bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-between cursor-pointer select-none"
+                                        className="p-4 bg-theme-input-bg hover:bg-theme-input-bg-hover transition-colors flex items-center justify-between cursor-pointer select-none"
                                         onClick={() => {
                                           setActiveSeason(prev => ({
                                             ...prev,
@@ -475,8 +475,8 @@ const MyLibrary = () => {
                                             size={16}
                                             className={`text-[#e5a00d] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
                                           />
-                                          <span className="font-semibold text-white">Season {seasonNum}</span>
-                                          <span className="text-xs text-white/40 font-normal">({seasonEpisodes.length} Episodes)</span>
+                                          <span className="font-semibold text-theme-text">Season {seasonNum}</span>
+                                          <span className="text-xs text-theme-text-muted font-normal">({seasonEpisodes.length} Episodes)</span>
                                         </div>
                                         <button
                                           onClick={(e) => {
@@ -491,9 +491,9 @@ const MyLibrary = () => {
 
                                       {/* Accordion Content */}
                                       {isOpen && (
-                                        <div className="p-4 bg-black/20 divide-y divide-white/5 space-y-3">
+                                        <div className="p-4 bg-black/20 divide-y divide-theme-border-light space-y-3">
                                           {seasonEpisodes.map((file, idx) => (
-                                            <div key={idx} className="flex items-center justify-between py-2 border-transparent hover:border-white/10 transition-all">
+                                            <div key={idx} className="flex items-center justify-between py-2 border-transparent hover:border-theme-border transition-all">
                                               <div className="flex items-center gap-3">
                                                 <button
                                                   onClick={() => {
@@ -505,8 +505,8 @@ const MyLibrary = () => {
                                                   <Play size={14} fill="currentColor" className="ml-0.5" />
                                                 </button>
                                                 <div className="space-y-0.5">
-                                                  <p className="text-sm font-medium text-white">{file.fileName || `Episode ${file.episodeNumber || idx + 1}`}</p>
-                                                  <p className="text-xs text-white/40 font-normal mt-0.5">Episode {file.episodeNumber || idx + 1} • {file.format || 'ProRes/4K'}</p>
+                                                  <p className="text-sm font-medium text-theme-text">{file.fileName || `Episode ${file.episodeNumber || idx + 1}`}</p>
+                                                  <p className="text-xs text-theme-text-muted font-normal mt-0.5">Episode {file.episodeNumber || idx + 1} • {file.format || 'ProRes/4K'}</p>
                                                 </div>
                                               </div>
                                               <div className="relative">
@@ -515,30 +515,30 @@ const MyLibrary = () => {
                                                     e.stopPropagation();
                                                     setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                                   }}
-                                                  className="p-1.5 bg-white/5 text-white/60 hover:bg-[#e5a00d] hover:text-black rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
+                                                  className="p-1.5 bg-theme-input-bg text-theme-text-muted hover:bg-[#e5a00d] hover:text-black rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
                                                 >
                                                   <Download size={14} />
                                                 </button>
                                                 {openDownloadDropdown === file.id && (
-                                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
-                                                    <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                                    <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                                       Format Options
                                                     </div>
                                                     <button
                                                       onClick={() => { triggerDownload(file.id); setOpenDownloadDropdown(null); }}
-                                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                                     >
                                                       Original
                                                     </button>
                                                     <button
                                                       onClick={() => { triggerDownload(file.id, 'mp4'); setOpenDownloadDropdown(null); }}
-                                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                                     >
                                                       MP4 Video
                                                     </button>
                                                     <button
                                                       onClick={() => { triggerDownload(file.id, 'webm'); setOpenDownloadDropdown(null); }}
-                                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                                     >
                                                       WebM Video
                                                     </button>
@@ -553,7 +553,7 @@ const MyLibrary = () => {
                                   );
                                 })}
                                 {episodes.length === 0 && (
-                                  <p className="text-white/20 text-xs italic">No series episodes uploaded yet.</p>
+                                  <p className="text-theme-text-muted-dark text-xs italic">No series episodes uploaded yet.</p>
                                 )}
                               </div>
                             ) : (
@@ -567,8 +567,8 @@ const MyLibrary = () => {
                                           <Film className="text-[#e5a00d]" size={20} />
                                           <span className="text-[10px] bg-[#e5a00d]/20 text-[#e5a00d] font-bold tracking-normal px-2 py-0.5 rounded-sm">Feature Presentation</span>
                                         </div>
-                                        <h4 className="text-lg font-semibold text-white pt-1">{file.fileName || 'Full Movie Master'}</h4>
-                                        <p className="text-xs text-white/40">Digital Negative • 24.5GB • {file.format || 'ProRes/4K'}</p>
+                                        <h4 className="text-lg font-semibold text-theme-text pt-1">{file.fileName || 'Full Movie Master'}</h4>
+                                        <p className="text-xs text-theme-text-muted">Digital Negative • 24.5GB • {file.format || 'ProRes/4K'}</p>
                                       </div>
                                       
                                       <div className="relative">
@@ -582,25 +582,25 @@ const MyLibrary = () => {
                                           <Download size={20} />
                                         </button>
                                         {openDownloadDropdown === file.id && (
-                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
-                                            <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                            <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                               Format Options
                                             </div>
                                             <button
                                               onClick={() => { triggerDownload(file.id); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               Original
                                             </button>
                                             <button
                                               onClick={() => { triggerDownload(file.id, 'mp4'); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               MP4 Video
                                             </button>
                                             <button
                                               onClick={() => { triggerDownload(file.id, 'webm'); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               WebM Video
                                             </button>
@@ -614,7 +614,7 @@ const MyLibrary = () => {
                                           const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                           if (id) navigate(`/watch/${id}`);
                                         }}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-[#e5a00d]/20 text-white font-semibold text-sm rounded-sm border border-white/10 hover:border-[#e5a00d]/30 transition-all cursor-pointer"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-theme-input-bg hover:bg-[#e5a00d]/20 text-theme-text font-semibold text-sm rounded-sm border border-theme-border hover:border-[#e5a00d]/30 transition-all cursor-pointer"
                                       >
                                         <Play size={16} fill="currentColor" /> Watch Full Feature Film
                                       </button>
@@ -622,7 +622,7 @@ const MyLibrary = () => {
                                   </div>
                                 ))}
                                 {movieMasters.length === 0 && (
-                                  <p className="text-white/20 text-xs italic">No feature movie master files uploaded yet.</p>
+                                  <p className="text-theme-text-muted-dark text-xs italic">No feature movie master files uploaded yet.</p>
                                 )}
                               </div>
                             )}
@@ -631,13 +631,13 @@ const MyLibrary = () => {
                           {/* Official Trailers */}
                           {trailers.length > 0 && (
                             <div className="space-y-6 pt-6">
-                              <div className="flex items-center gap-2 text-white font-semibold border-b border-white/5 pb-3">
+                              <div className="flex items-center gap-2 text-theme-text font-semibold border-b border-theme-border-light pb-3">
                                 <FileVideo size={18} className="text-[#e5a00d]" />
                                 <span>Official Trailers</span>
                               </div>
                               <div className="grid grid-cols-1 gap-3 pt-2">
                                 {trailers.map((file, idx) => (
-                                  <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
+                                  <div key={idx} className="bg-theme-input-bg p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-theme-border transition-all">
                                     <div className="flex items-center gap-3">
                                       <button
                                         onClick={() => {
@@ -649,8 +649,8 @@ const MyLibrary = () => {
                                         <Play size={16} fill="currentColor" className="ml-0.5" />
                                       </button>
                                       <div className="space-y-0.5">
-                                        <p className="text-sm font-medium text-white">{file.fileName || 'Official Trailer'}</p>
-                                        <p className="text-xs text-white/40 font-normal mt-0.5">Promo Video • {file.format || 'WEBM'}</p>
+                                        <p className="text-sm font-medium text-theme-text">{file.fileName || 'Official Trailer'}</p>
+                                        <p className="text-xs text-theme-text-muted font-normal mt-0.5">Promo Video • {file.format || 'WEBM'}</p>
                                       </div>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -660,30 +660,30 @@ const MyLibrary = () => {
                                             e.stopPropagation();
                                             setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                           }}
-                                          className="p-2 border border-white/10 text-white hover:bg-white hover:text-black transition-colors rounded-sm cursor-pointer bg-transparent flex items-center justify-center"
+                                          className="p-2 border border-theme-border text-theme-text hover:bg-white hover:text-black transition-colors rounded-sm cursor-pointer bg-transparent flex items-center justify-center"
                                         >
                                           <Download size={16} />
                                         </button>
                                         {openDownloadDropdown === file.id && (
-                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
-                                            <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                            <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                               Format Options
                                             </div>
                                             <button
                                               onClick={() => { triggerDownload(file.id); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               Original
                                             </button>
                                             <button
                                               onClick={() => { triggerDownload(file.id, 'mp4'); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               MP4 Video
                                             </button>
                                             <button
                                               onClick={() => { triggerDownload(file.id, 'webm'); setOpenDownloadDropdown(null); }}
-                                              className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                              className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                             >
                                               WebM Video
                                             </button>
@@ -709,15 +709,15 @@ const MyLibrary = () => {
 
                     return (
                       <>
-                        <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                          <div className="flex items-center gap-2 text-white font-semibold">
+                        <div className="flex items-center justify-between border-b border-theme-border-light pb-3">
+                          <div className="flex items-center gap-2 text-theme-text font-semibold">
                             <ImageIcon size={18} className="text-[#e5a00d]" />
                             <span>Marketing & Press Kit</span>
                           </div>
                           {marketingFiles.length > 0 && (
                             <button
                               onClick={() => handleDownloadZip(marketingFiles, `${selectedProduction.title} - Press Kit`)}
-                              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white text-white/80 hover:text-black text-[10px] font-bold rounded-sm transition-all border border-white/10 cursor-pointer"
+                              className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-input-bg hover:bg-white text-theme-text/80 hover:text-black text-[10px] font-bold rounded-sm transition-all border border-theme-border cursor-pointer"
                             >
                               <Download size={12} /> Download Press Kit (ZIP)
                             </button>
@@ -726,18 +726,18 @@ const MyLibrary = () => {
 
                         <div className="space-y-3 pt-2">
                           {marketingFiles.map((file, idx) => (
-                            <div key={idx} className="bg-white/5 p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-white/10 transition-all">
+                            <div key={idx} className="bg-theme-input-bg p-4 rounded-sm flex items-center justify-between border border-transparent hover:border-theme-border transition-all">
                               <div className="flex items-center gap-3">
                                 {file.url ? (
                                   <img src={file.url} alt={file.fileName} className="w-10 h-10 object-cover rounded-sm bg-black/40" />
                                 ) : (
                                   <div className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center">
-                                    <ImageIcon size={16} className="text-white/60" />
+                                    <ImageIcon size={16} className="text-theme-text-muted" />
                                   </div>
                                 )}
                                 <div className="space-y-0.5">
-                                  <p className="text-sm font-medium text-white">{file.fileName || file.name || 'Marketing Asset'}</p>
-                                  <p className="text-xs text-white/40 font-normal mt-0.5">{file.type || 'Poster'} • {file.format || 'PNG/JPG'}</p>
+                                  <p className="text-sm font-medium text-theme-text">{file.fileName || file.name || 'Marketing Asset'}</p>
+                                  <p className="text-xs text-theme-text-muted font-normal mt-0.5">{file.type || 'Poster'} • {file.format || 'PNG/JPG'}</p>
                                 </div>
                               </div>
                               <div className="relative">
@@ -746,36 +746,36 @@ const MyLibrary = () => {
                                     e.stopPropagation();
                                     setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                   }}
-                                  className="p-2 border border-white/10 text-white hover:bg-white hover:text-black transition-colors rounded-sm bg-transparent flex items-center justify-center cursor-pointer"
+                                  className="p-2 border border-theme-border text-theme-text hover:bg-white hover:text-black transition-colors rounded-sm bg-transparent flex items-center justify-center cursor-pointer"
                                 >
                                   <Download size={16} />
                                 </button>
                                 {openDownloadDropdown === file.id && (
-                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-white/10 rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
-                                    <div className="px-3 py-1 text-[9px] font-bold text-white/40 uppercase tracking-wider border-b border-white/5 mb-1">
+                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                    <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                       Format Options
                                     </div>
                                     <button
                                       onClick={() => { triggerDownload(file.id); setOpenDownloadDropdown(null); }}
-                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                     >
                                       Original
                                     </button>
                                     <button
                                       onClick={() => { triggerDownload(file.id, 'png'); setOpenDownloadDropdown(null); }}
-                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                     >
                                       PNG Image
                                     </button>
                                     <button
                                       onClick={() => { triggerDownload(file.id, 'jpg'); setOpenDownloadDropdown(null); }}
-                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                     >
                                       JPG Image
                                     </button>
                                     <button
                                       onClick={() => { triggerDownload(file.id, 'jpeg'); setOpenDownloadDropdown(null); }}
-                                      className="w-full px-3 py-1.5 hover:bg-white/5 text-xs text-white/80 hover:text-white transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
+                                      className="w-full px-3 py-1.5 hover:bg-theme-input-bg text-xs text-theme-text/80 hover:text-theme-text transition-colors text-left flex items-center gap-2 border-none bg-transparent cursor-pointer"
                                     >
                                       JPEG Image
                                     </button>
@@ -785,7 +785,7 @@ const MyLibrary = () => {
                             </div>
                           ))}
                           {marketingFiles.length === 0 && (
-                            <p className="text-white/20 text-xs italic">No marketing assets uploaded yet.</p>
+                            <p className="text-theme-text-muted-dark text-xs italic">No marketing assets uploaded yet.</p>
                           )}
                         </div>
                       </>
@@ -800,18 +800,18 @@ const MyLibrary = () => {
                   <ShieldCheck size={20} />
                   <h3>License Compliance</h3>
                 </div>
-                <p className="text-white/60 text-sm leading-relaxed max-w-2xl">
+                <p className="text-theme-text-muted text-sm leading-relaxed max-w-2xl">
                   This production is licensed for broadcast on your platform until the agreed expiration date.
                   Distribution or sharing of master files with 3rd parties is strictly prohibited under the terms of your contract.
                 </p>
                 <div className="pt-2 flex items-center gap-6">
                   <div className="space-y-1">
-                    <p className="text-xs text-white/40 font-normal">Contract Status</p>
+                    <p className="text-xs text-theme-text-muted font-normal">Contract Status</p>
                     <p className="text-sm text-green-400 font-medium">Active & Verified</p>
                   </div>
-                  <div className="space-y-1 border-l border-white/10 pl-6">
-                    <p className="text-xs text-white/40 font-normal">Usage Rights</p>
-                    <p className="text-sm text-white font-medium italic">Unlimited Broadcast</p>
+                  <div className="space-y-1 border-l border-theme-border pl-6">
+                    <p className="text-xs text-theme-text-muted font-normal">Usage Rights</p>
+                    <p className="text-sm text-theme-text font-medium italic">Unlimited Broadcast</p>
                   </div>
                 </div>
               </div>

@@ -103,7 +103,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-theme-text flex items-center gap-2">
               <FileText size={14} className="text-[#e5a00d]" /> My assigned scripts
             </h3>
             <div className="flex items-center gap-4">
@@ -112,7 +112,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                   Show more
                 </Link>
               )}
-              <span className="text-xs text-white/20">{scripts.length} files</span>
+              <span className="text-xs text-theme-text-muted-dark">{scripts.length} files</span>
             </div>
           </div>
 
@@ -127,18 +127,18 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                 <div
                   key={i}
                   onClick={() => script.filePath && handleDownload(script.filePath, script.title)}
-                  className="bg-[#121212] border border-white/5 p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all cursor-pointer"
+                  className="bg-theme-surface border border-theme-border-light p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-3 bg-black rounded-sm text-white/40 group-hover:text-[#e5a00d] transition-colors">
+                    <div className="p-3 bg-black rounded-sm text-theme-text-muted group-hover:text-[#e5a00d] transition-colors">
                       <FileText size={20} />
                     </div>
                     <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-2 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity">
                       DOWNLOAD
                     </div>
                   </div>
-                  <h4 className="text-sm font-bold text-white mb-1">{script.title}</h4>
-                  <p className="text-xs text-white/40">v{script.version} • {script.production?.title || 'Main Production'}</p>
+                  <h4 className="text-sm font-bold text-theme-text mb-1">{script.title}</h4>
+                  <p className="text-xs text-theme-text-muted">v{script.version} • {script.production?.title || 'Main Production'}</p>
                 </div>
               ))}
             </div>
@@ -151,7 +151,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 
         <div className="space-y-10">
           <section className="space-y-6">
-            <h3 className="text-sm font-semibold text-white">Next call time</h3>
+            <h3 className="text-sm font-semibold text-theme-text">Next call time</h3>
             {nextCall ? (
               <div className="relative p-6 rounded-sm shadow-lg overflow-hidden min-h-[140px] flex flex-col justify-end">
                 <div className="absolute inset-0 bg-[#e5a00d] z-0" />
@@ -181,8 +181,8 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                 </div>
               </div>
             ) : (
-              <div className="bg-[#121212] border border-white/5 p-6 rounded-sm shadow-lg text-center py-10">
-                <div className="text-xs font-semibold text-white/40 italic">
+              <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm shadow-lg text-center py-10">
+                <div className="text-xs font-semibold text-theme-text-muted italic">
                   No immediate calls scheduled
                 </div>
               </div>
@@ -194,13 +194,13 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
               <div className="flex gap-6">
                 <button 
                   onClick={() => setActiveEventTab('upcoming')}
-                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'upcoming' ? 'text-white border-[#e5a00d]' : 'text-white/40 border-transparent hover:text-white/80'}`}
+                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'upcoming' ? 'text-theme-text border-[#e5a00d]' : 'text-theme-text-muted border-transparent hover:text-theme-text/80'}`}
                 >
                   Upcoming
                 </button>
                 <button 
                   onClick={() => setActiveEventTab('recent')}
-                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'recent' ? 'text-white border-[#e5a00d]' : 'text-white/40 border-transparent hover:text-white/80'}`}
+                  className={`text-sm font-semibold transition-colors border-b-2 pb-1 ${activeEventTab === 'recent' ? 'text-theme-text border-[#e5a00d]' : 'text-theme-text-muted border-transparent hover:text-theme-text/80'}`}
                 >
                   Recent
                 </button>
@@ -213,19 +213,19 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
             <div className="space-y-3">
               {(activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).length > 0 ? (
                 (activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).map((event, i) => (
-                  <div key={i} className="p-4 bg-[#121212] border border-white/5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors rounded-sm">
-                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-white/5">
+                  <div key={i} className="p-4 bg-theme-surface border border-theme-border-light flex items-center gap-4 hover:bg-theme-input-bg transition-colors rounded-sm">
+                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-theme-border-light">
                       <span className="text-[9px] font-bold uppercase">{new Date(event.startTime).toLocaleString('default', { month: 'short' })}</span>
                       <span className="text-sm font-bold">{new Date(event.startTime).getDate()}</span>
                     </div>
                     <div className="flex-1">
-                      <div className="text-sm font-semibold text-white truncate max-w-[160px]">{event.title}</div>
-                      <div className="text-[11px] text-white/40 mt-0.5">{event.type || 'Event'} • {event.venue || 'Main Studio'}</div>
+                      <div className="text-sm font-semibold text-theme-text truncate max-w-[160px]">{event.title}</div>
+                      <div className="text-[11px] text-theme-text-muted mt-0.5">{event.type || 'Event'} • {event.venue || 'Main Studio'}</div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="py-8 flex flex-col items-center justify-center text-center opacity-40 border border-white/5 bg-[#121212] rounded-sm">
+                <div className="py-8 flex flex-col items-center justify-center text-center opacity-40 border border-theme-border-light bg-theme-surface rounded-sm">
                   <p className="text-xs font-semibold">No {activeEventTab} events found.</p>
                 </div>
               )}
@@ -241,22 +241,22 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 const BarChart = ({ data, zoom }) => {
   const maxVal = Math.max(...data.map(d => d.value), 100);
   return (
-    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
       <div className="flex items-center justify-between">
-        <h4 className="text-[11px] font-bold text-white uppercase tracking-widest">
+        <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
           Production Budgets
         </h4>
-        <span className="text-[10px] text-white/30 font-bold uppercase font-mono">Budget (RWF)</span>
+        <span className="text-[10px] text-theme-text-muted-dark font-bold uppercase font-mono">Budget (RWF)</span>
       </div>
-      <div className="h-44 flex items-end gap-5 pt-6 border-b border-white/5 pb-2">
+      <div className="h-44 flex items-end gap-5 pt-6 border-b border-theme-border-light pb-2">
         {data.length === 0 ? (
-          <div className="w-full h-full flex items-center justify-center text-xs text-white/20 italic">No budget data available</div>
+          <div className="w-full h-full flex items-center justify-center text-xs text-theme-text-muted-dark italic">No budget data available</div>
         ) : (
           data.map((d, i) => {
             const pct = Math.max((d.value / maxVal) * 100, 4); // Min 4% height to be visible
             return (
               <div key={i} className="flex-1 flex flex-col items-center gap-2.5 group relative h-full justify-end">
-                <div className="w-full bg-white/2.5 hover:bg-white/5 transition-all rounded-sm relative flex items-end h-full">
+                <div className="w-full bg-theme-surface hover:bg-theme-input-bg transition-all rounded-sm relative flex items-end h-full">
                   <motion.div 
                     initial={{ height: 0 }}
                     animate={{ height: `${pct}%` }}
@@ -264,11 +264,11 @@ const BarChart = ({ data, zoom }) => {
                     className="w-full bg-gradient-to-t from-[#e5a00d] to-[#f5c842] rounded-sm shadow-[0_0_12px_rgba(229,160,13,0.2)]"
                   />
                   {/* Glassmorphic interactive Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#161616] border border-white/10 text-[9px] font-bold text-[#e5a00d] px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#161616] border border-theme-border text-[9px] font-bold text-[#e5a00d] px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
                     {Number(d.value).toLocaleString()} RWF
                   </div>
                 </div>
-                <span className="text-[9px] font-semibold text-white/40 group-hover:text-white transition-colors truncate w-14 text-center">{d.label}</span>
+                <span className="text-[9px] font-semibold text-theme-text-muted group-hover:text-theme-text transition-colors truncate w-14 text-center">{d.label}</span>
               </div>
             );
           })
@@ -292,8 +292,8 @@ const DoughnutChart = ({ data }) => {
   const chartTotal = data.length > 0 ? total : 4;
 
   return (
-    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
-      <h4 className="text-[11px] font-bold text-white uppercase tracking-widest">
+    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+      <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
         Talent Specialty Roster
       </h4>
       <div className="flex items-center gap-6 pt-3">
@@ -330,11 +330,11 @@ const DoughnutChart = ({ data }) => {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-lg font-black text-white"
+              className="text-lg font-black text-theme-text"
             >
               {chartTotal}
             </motion.span>
-            <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider">Troupe</span>
+            <span className="text-[8px] text-theme-text-muted font-bold uppercase tracking-wider">Troupe</span>
           </div>
         </div>
         
@@ -352,9 +352,9 @@ const DoughnutChart = ({ data }) => {
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                  <span className="truncate text-white/60 font-semibold">{d.label || 'Other'}</span>
+                  <span className="truncate text-theme-text-muted font-semibold">{d.label || 'Other'}</span>
                 </div>
-                <span className="text-white font-mono shrink-0">{d.count} ({Math.round((d.count / chartTotal) * 100)}%)</span>
+                <span className="text-theme-text font-mono shrink-0">{d.count} ({Math.round((d.count / chartTotal) * 100)}%)</span>
               </motion.div>
             );
           })}
@@ -395,8 +395,8 @@ const AreaChart = ({ data }) => {
     : '';
 
   return (
-    <div className="bg-[#121212] border border-white/5 p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
-      <h4 className="text-[11px] font-bold text-white uppercase tracking-widest">
+    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
+      <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
         System Role Allocation
       </h4>
       <div className="relative pt-3">
@@ -476,7 +476,7 @@ const AreaChart = ({ data }) => {
         {/* X Axis Labels */}
         <div className="flex justify-between px-2.5 pt-3">
           {chartData.map((d, i) => (
-            <span key={i} className="text-[9px] font-black text-white/40 tracking-wider uppercase">{d.label}</span>
+            <span key={i} className="text-[9px] font-black text-theme-text-muted tracking-wider uppercase">{d.label}</span>
           ))}
         </div>
       </div>
@@ -492,7 +492,7 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
       case 'Rehearsal': return 'border-red-500/20 text-red-400 bg-red-500/5';
       case 'Filming': return 'border-blue-500/20 text-blue-400 bg-blue-500/5';
       case 'Performance': return 'border-green-500/20 text-green-400 bg-green-500/5';
-      default: return 'border-white/10 text-white/60 bg-white/5';
+      default: return 'border-theme-border text-theme-text-muted bg-theme-input-bg';
     }
   };
 
@@ -546,19 +546,19 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
         {/* Right Column: Upcoming Troupe Meetings & Schedules */}
         <div className="space-y-6">
           <div className="p-6 space-y-6">
-            <h3 className="text-xs font-bold text-white uppercase tracking-widest border-b border-white/5 pb-3">
+            <h3 className="text-xs font-bold text-theme-text uppercase tracking-widest border-b border-theme-border-light pb-3">
               Upcoming Meetings & Calls
             </h3>
             
             <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
               {events.length === 0 ? (
-                <div className="text-center py-16 text-white/30 text-xs italic">
+                <div className="text-center py-16 text-theme-text-muted-dark text-xs italic">
                   No upcoming meetings scheduled.
                 </div>
               ) : (
                 events.map((event) => (
-                  <div key={event.id} className="p-4 bg-white/2.5 border border-white/5 rounded-sm flex items-start gap-4 hover:bg-white/[0.04] transition-colors relative group">
-                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm shrink-0 border border-white/5">
+                  <div key={event.id} className="p-4 bg-theme-surface border border-theme-border-light rounded-sm flex items-start gap-4 hover:bg-theme-input-bg transition-colors relative group">
+                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm shrink-0 border border-theme-border-light">
                       <span className="text-[8px] font-black uppercase tracking-wider">
                         {new Date(event.startTime).toLocaleString('default', { month: 'short' })}
                       </span>
@@ -573,11 +573,11 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
                           {event.type}
                         </span>
                         {event.venue && (
-                          <span className="text-[9px] text-white/30 truncate max-w-[100px]">{event.venue}</span>
+                          <span className="text-[9px] text-theme-text-muted-dark truncate max-w-[100px]">{event.venue}</span>
                         )}
                       </div>
-                      <h4 className="text-xs font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">{event.title}</h4>
-                      <p className="text-[9px] text-white/40 leading-normal truncate">{event.description || 'No overview provided.'}</p>
+                      <h4 className="text-xs font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate">{event.title}</h4>
+                      <p className="text-[9px] text-theme-text-muted leading-normal truncate">{event.description || 'No overview provided.'}</p>
                     </div>
                   </div>
                 ))
@@ -593,11 +593,11 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
 // Simple Stat Card Renderer
 const StatCard = ({ label, value, zoom }) => (
   <div
-    className="bg-[#121212] rounded-sm border border-white/5 group hover:bg-white/5 transition-all p-6"
+    className="bg-theme-surface rounded-sm border border-theme-border-light group hover:bg-theme-input-bg transition-all p-6"
     style={{ padding: `${1.5 * (zoom / 50)}rem` }}
   >
-    <div className="text-xs font-semibold text-white/20 mb-1.5">{label}</div>
-    <div className="text-3xl font-black text-white tabular-nums tracking-tight">{value}</div>
+    <div className="text-xs font-semibold text-theme-text-muted-dark mb-1.5">{label}</div>
+    <div className="text-3xl font-black text-theme-text tabular-nums tracking-tight">{value}</div>
   </div>
 );
 
@@ -710,7 +710,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-40">
-        <div className="text-white/10 animate-pulse text-xs font-bold">Initializing Dashboard...</div>
+        <div className="text-theme-text-muted-dark animate-pulse text-xs font-bold">Initializing Dashboard...</div>
       </div>
     );
   }

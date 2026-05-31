@@ -34,23 +34,23 @@ const ReportDropdown = ({ title, columns, data }) => {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+        className="p-2 hover:bg-theme-input-bg-hover rounded-full transition-colors"
         title="Download Reports"
       >
-        <MoreVertical className="text-white" size={20} />
+        <MoreVertical className="text-theme-text" size={20} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#1f1f1f] border border-white/10 rounded-md shadow-2xl py-1 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-[#1f1f1f] border border-theme-border rounded-md shadow-2xl py-1 z-50">
           <button
             onClick={handleDownloadPDF}
-            className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
           >
             <FileText size={16} className="text-red-400" /> Download PDF
           </button>
           <button
             onClick={handleDownloadExcel}
-            className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
           >
             <FileSpreadsheet size={16} className="text-green-400" /> Download Excel
           </button>

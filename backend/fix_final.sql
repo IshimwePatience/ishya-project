@@ -1,0 +1,1 @@
+UPDATE "Users" SET "profilePic" = REPLACE("profilePic", 'http://localhost:5000https://', 'https://') WHERE "profilePic" LIKE 'http://localhost:5000https://%'; UPDATE "Talents" SET "profilePic" = REPLACE("profilePic", 'http://localhost:5000https://', 'https://') WHERE "profilePic" LIKE 'http://localhost:5000https://%';

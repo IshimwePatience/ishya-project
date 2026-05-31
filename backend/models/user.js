@@ -70,6 +70,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'inactive'
     },
     subscriptionExpiresAt: DataTypes.DATE,
+    theme: {
+      type: DataTypes.STRING,
+      defaultValue: 'dark',
+    },
     notificationPrefs: {
       type: DataTypes.JSONB,
       defaultValue: {

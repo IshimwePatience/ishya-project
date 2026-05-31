@@ -201,7 +201,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-40">
           <button 
             onClick={handleReplay}
-            className="p-6 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white transition-all transform hover:scale-110 active:scale-95"
+            className="p-6 bg-theme-input-bg-hover hover:bg-white/20 rounded-full border border-theme-border text-theme-text transition-all transform hover:scale-110 active:scale-95"
           >
             <RotateCcw size={48} className="animate-in fade-in zoom-in duration-300" />
           </button>
@@ -241,18 +241,18 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex items-center justify-between text-white pb-1">
+        <div className="flex items-center justify-between text-theme-text pb-1">
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-4">
-              <button onClick={togglePlay} className="hover:text-white/80 transition-colors">
+              <button onClick={togglePlay} className="hover:text-theme-text/80 transition-colors">
                 {isPlaying ? <Pause size={22} fill="currentColor" /> : <Play size={22} fill="currentColor" />}
               </button>
-              <button className="hover:text-white/80 transition-colors">
+              <button className="hover:text-theme-text/80 transition-colors">
                 <SkipForward size={20} fill="currentColor" />
               </button>
               
               <div className="flex items-center gap-2 group/volume">
-                <button onClick={toggleMute} className="hover:text-white/80 transition-colors">
+                <button onClick={toggleMute} className="hover:text-theme-text/80 transition-colors">
                   {isMuted || volume === 0 ? <VolumeX size={22} /> : <Volume2 size={22} />}
                 </button>
                 <input
@@ -267,15 +267,15 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
               </div>
             </div>
 
-            <div className="text-[12px] font-medium text-white/90">
+            <div className="text-[12px] font-medium text-theme-text/90">
               {formatTime(currentTime)} / {formatTime(duration)}
             </div>
 
             {/* Likes / Unlikes (YouTube Style) */}
-            <div className="flex items-center ml-4 bg-white/10 rounded-full px-1 py-0.5 gap-0.5">
+            <div className="flex items-center ml-4 bg-theme-input-bg-hover rounded-full px-1 py-0.5 gap-0.5">
               <button 
                 onClick={() => handleToggleLike('like')}
-                className={`flex items-center gap-1.5 px-3 hover:bg-white/10 py-1 rounded-l-full transition-colors ${stats.userInteraction === 'like' ? 'text-blue-400' : ''}`}
+                className={`flex items-center gap-1.5 px-3 hover:bg-theme-input-bg-hover py-1 rounded-l-full transition-colors ${stats.userInteraction === 'like' ? 'text-blue-400' : ''}`}
               >
                 <ThumbsUp size={16} fill={stats.userInteraction === 'like' ? 'currentColor' : 'none'} />
                 <span className="text-[11px] font-bold">{stats.likes}</span>
@@ -283,7 +283,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
               <div className="w-px h-3 bg-white/20" />
               <button 
                 onClick={() => handleToggleLike('unlike')}
-                className={`flex items-center gap-1.5 px-3 hover:bg-white/10 py-1 rounded-r-full transition-colors ${stats.userInteraction === 'unlike' ? 'text-red-400' : ''}`}
+                className={`flex items-center gap-1.5 px-3 hover:bg-theme-input-bg-hover py-1 rounded-r-full transition-colors ${stats.userInteraction === 'unlike' ? 'text-red-400' : ''}`}
               >
                 <ThumbsDown size={16} fill={stats.userInteraction === 'unlike' ? 'currentColor' : 'none'} />
                 <span className="text-[11px] font-bold">{stats.unlikes}</span>
@@ -294,12 +294,12 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
           <div className="flex items-center gap-5">
             <button 
               onClick={() => setIsTheaterMode(!isTheaterMode)}
-              className={`hover:text-white/80 transition-colors ${isTheaterMode ? 'text-[#e5a00d]' : ''}`}
+              className={`hover:text-theme-text/80 transition-colors ${isTheaterMode ? 'text-[#e5a00d]' : ''}`}
             >
               <RectangleHorizontal size={22} />
             </button>
 
-            <button onClick={toggleFullscreen} className="hover:text-white/80 transition-colors">
+            <button onClick={toggleFullscreen} className="hover:text-theme-text/80 transition-colors">
               {isFullscreen ? <Minimize size={22} /> : <Maximize size={22} />}
             </button>
           </div>

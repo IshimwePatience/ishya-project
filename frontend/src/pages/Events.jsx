@@ -85,14 +85,14 @@ const Events = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center justify-between mb-10 pb-6 border-b border-white/5">
+          <div className="flex items-center justify-between mb-10 pb-6 border-b border-theme-border-light">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-semibold text-theme-text">
                 {editingEvent ? "Edit event details" : "Schedule new event"}
               </h2>
-              <p className="text-sm text-white/40 mt-1">Provide all details for your cast and crew.</p>
+              <p className="text-sm text-theme-text-muted mt-1">Provide all details for your cast and crew.</p>
             </div>
-            <button onClick={() => { setIsFormOpen(false); setEditingEvent(null); }} className="text-sm font-bold text-white/40 hover:text-white">Cancel</button>
+            <button onClick={() => { setIsFormOpen(false); setEditingEvent(null); }} className="text-sm font-bold text-theme-text-muted hover:text-theme-text">Cancel</button>
           </div>
           <EventForm
             initialData={editingEvent}
@@ -111,8 +111,8 @@ const Events = () => {
         <>
           <div className="flex flex-col md:flex-row justify-between items-end gap-4 pb-4">
             <div>
-              <h1 className="text-2xl font-black text-white tracking-tight">Channel content</h1>
-              <p className="text-[13px] text-white/40 mt-1 font-medium">Manage your theatrical events, schedules, and live performances</p>
+              <h1 className="text-2xl font-black text-theme-text tracking-tight">Channel content</h1>
+              <p className="text-[13px] text-theme-text-muted mt-1 font-medium">Manage your theatrical events, schedules, and live performances</p>
             </div>
             <div className="flex items-center gap-3">
               <ReportDropdown 
@@ -138,15 +138,15 @@ const Events = () => {
           </div>
 
           {/* YouTube Studio Styled Layout */}
-          <div className="bg-[#1f1f1f] border border-white/10 rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative">
+          <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative">
             
             {/* Tabs */}
-            <div className="flex items-center gap-6 px-6 border-b border-white/10 bg-[#282828] overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-6 px-6 border-b border-theme-border bg-[#282828] overflow-x-auto no-scrollbar">
               {tabs.map(tab => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-4 text-[13px] font-semibold transition-all relative flex-shrink-0 ${activeTab === tab ? 'text-[#3ea6ff]' : 'text-[#aaaaaa] hover:text-white'}`}
+                  className={`py-4 text-[13px] font-semibold transition-all relative flex-shrink-0 ${activeTab === tab ? 'text-[#3ea6ff]' : 'text-[#aaaaaa] hover:text-theme-text'}`}
                 >
                   {tab}
                   {activeTab === tab && (
@@ -157,19 +157,19 @@ const Events = () => {
             </div>
 
             {/* Filter Bar */}
-            <div className="flex items-center px-6 py-3 border-b border-white/10 bg-[#282828] gap-4">
+            <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
               <ListFilter size={18} className="text-[#aaaaaa]" />
               <input 
                 type="text" 
                 placeholder="Filter events..." 
-                className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder:text-[#aaaaaa] font-medium"
+                className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
             {/* Table Header */}
-            <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-3 border-b border-white/10 text-[12px] font-bold text-[#aaaaaa]">
+            <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
               <div>Event</div>
               <div>Type</div>
               <div>Status</div>
@@ -180,7 +180,7 @@ const Events = () => {
             <div className="flex-1 overflow-y-auto bg-[#1f1f1f]">
               {loading ? (
                 <div className="flex flex-col items-center justify-center h-full text-[#aaaaaa] space-y-3 opacity-50 p-20">
-                  <div className="w-8 h-8 border-2 border-t-[#3ea6ff] border-white/10 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-2 border-t-[#3ea6ff] border-theme-border rounded-full animate-spin"></div>
                   <span className="text-[13px] font-medium">Loading events...</span>
                 </div>
               ) : filteredEvents.length === 0 ? (
@@ -190,11 +190,11 @@ const Events = () => {
                 </div>
               ) : (
                 filteredEvents.map(event => (
-                  <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-4 border-b border-white/5 hover:bg-[#2c2c2c] transition-colors items-start">
+                  <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-start">
                     
                     {/* Event Column with Image & Hover Actions */}
                     <div className="flex items-start gap-4 pr-4 overflow-hidden">
-                      <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-white/10">
+                      <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-theme-border">
                         {event.posterUrl ? (
                           <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover opacity-80" />
                         ) : event.type === 'Performance' ? (
@@ -212,7 +212,7 @@ const Events = () => {
                         )}
                       </div>
                       <div className="flex flex-col h-[68px] min-w-0">
-                        <h3 className="text-[14px] font-medium text-white truncate w-full leading-tight" title={event.title}>
+                        <h3 className="text-[14px] font-medium text-theme-text truncate w-full leading-tight" title={event.title}>
                           {event.title}
                         </h3>
                         <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
@@ -222,7 +222,7 @@ const Events = () => {
                         {/* Hover Actions (YouTube Style) */}
                         {isAdminOrStaff && (
                           <div className="mt-auto flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => handleEdit(event)} className="text-[#aaaaaa] hover:text-white transition-colors" title="Edit">
+                            <button onClick={() => handleEdit(event)} className="text-[#aaaaaa] hover:text-theme-text transition-colors" title="Edit">
                               <Edit2 size={16} />
                             </button>
                             <button onClick={() => handleDelete(event.id)} className="text-[#aaaaaa] hover:text-red-400 transition-colors" title="Delete">
@@ -235,7 +235,7 @@ const Events = () => {
 
                     {/* Type Column */}
                     <div className="flex items-center h-[68px]">
-                       <span className={`text-[12px] px-2 py-0.5 rounded-sm font-medium ${event.type === 'Performance' ? 'bg-[#3ea6ff]/10 text-[#3ea6ff]' : event.type === 'Rehearsal' ? 'bg-orange-500/10 text-orange-400' : 'bg-white/10 text-white/70'}`}>
+                       <span className={`text-[12px] px-2 py-0.5 rounded-sm font-medium ${event.type === 'Performance' ? 'bg-[#3ea6ff]/10 text-[#3ea6ff]' : event.type === 'Rehearsal' ? 'bg-orange-500/10 text-orange-400' : 'bg-theme-input-bg-hover text-theme-text/70'}`}>
                          {event.type}
                        </span>
                     </div>
@@ -251,7 +251,7 @@ const Events = () => {
                           <AlertTriangle size={14} className="text-red-400" /> Cancelled
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1.5 text-[13px] text-white font-medium">
+                        <span className="flex items-center gap-1.5 text-[13px] text-theme-text font-medium">
                           <div className="w-2 h-2 rounded-full bg-green-400"></div> Scheduled
                         </span>
                       )}
@@ -259,7 +259,7 @@ const Events = () => {
 
                     {/* Date Column */}
                     <div className="flex flex-col justify-center h-[68px]">
-                       <span className="text-[13px] text-white font-medium">
+                       <span className="text-[13px] text-theme-text font-medium">
                          {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                        </span>
                        <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
@@ -272,7 +272,7 @@ const Events = () => {
             </div>
             
             {/* Table Footer */}
-            <div className="px-6 py-4 border-t border-white/10 bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
+            <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
               Rows per page: {filteredEvents.length}
             </div>
           </div>

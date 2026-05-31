@@ -61,7 +61,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-0 text-white max-w-4xl">
+    <form onSubmit={handleSubmit} className="space-y-0 text-theme-text max-w-4xl">
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-sm flex items-start gap-3">
           <AlertCircle className="text-red-400 shrink-0" size={18} />
@@ -70,16 +70,16 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Name Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Partner name</label>
-          <p className="text-[11px] text-white/20 mt-1">Official business or individual name</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Partner name</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">Official business or individual name</p>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             required
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Netflix, Rwanda TV"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -88,15 +88,15 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Type Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Partner type</label>
-          <p className="text-[11px] text-white/20 mt-1">Classification for licensing</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Partner type</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">Classification for licensing</p>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           >
@@ -108,15 +108,15 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Contact Person Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Contact person</label>
-          <p className="text-[11px] text-white/20 mt-1">Primary point of contact</p>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contact person</label>
+          <p className="text-[11px] text-theme-text-muted-dark mt-1">Primary point of contact</p>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Name of representative"
             value={formData.contactPerson}
             onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
@@ -125,14 +125,14 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Email Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Email address</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Email address</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="email"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="partner@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -141,14 +141,14 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Phone Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Phone number</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Phone number</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="+250..."
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -157,13 +157,13 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Address Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-white/5 group transition-colors hover:bg-white/[0.02] px-4">
+      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
-          <label className="text-sm font-semibold text-white/50 group-hover:text-white/80 transition-colors">Business address</label>
+          <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Business address</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[100px] resize-none text-white placeholder:text-white/10"
+            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[100px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Physical or office location..."
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -184,7 +184,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <button 
             type="button"
             onClick={onCancel}
-            className="px-8 py-3 bg-white/5 hover:bg-white/10 rounded-sm border border-white/10 transition-all text-sm text-white/40 hover:text-white cursor-pointer"
+            className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text cursor-pointer"
           >
             Cancel
           </button>
