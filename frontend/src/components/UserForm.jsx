@@ -115,15 +115,10 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
           <label className="text-sm font-bold text-white/50 group-hover:text-white/80 transition-colors">User role</label>
         </div>
         <div className="w-full md:w-2/3">
-          {initialData ? (
-            <div className="px-4 py-3 bg-white/5 border border-white/5 rounded-sm text-sm font-bold text-[#e5a00d]">
-              {initialData.role?.name || 'Assigned Role'}
-            </div>
-          ) : (
             <select
               required
               className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-white"
-              value={formData.roleId}
+              value={formData.roleId || ''}
               onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
             >
               <option value="" disabled className="bg-[#111111]">Select role</option>
@@ -131,7 +126,6 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
                 <option key={role.id} value={role.id} className="bg-[#111111]">{role.name}</option>
               ))}
             </select>
-          )}
         </div>
       </div>
 
