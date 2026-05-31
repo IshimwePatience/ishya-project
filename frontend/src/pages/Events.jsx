@@ -8,6 +8,10 @@ const Events = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const isAdminOrStaff = user?.role === 'Admin' || user?.role === 'Staff';
   
+  if (!isAdminOrStaff) {
+    return <PublicEvents isDashboard={true} />;
+  }
+  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -176,7 +180,9 @@ const Events = () => {
                     {/* Event Column with Image & Hover Actions */}
                     <div className="flex items-start gap-4 pr-4 overflow-hidden">
                       <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-white/10">
-                        {event.type === 'Performance' ? (
+                        {event.posterUrl ? (
+                          <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover opacity-80" />
+                        ) : event.type === 'Performance' ? (
                           <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
                             <Play size={24} className="text-[#3ea6ff]/50" />
                           </div>
