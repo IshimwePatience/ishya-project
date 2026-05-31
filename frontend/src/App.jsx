@@ -49,7 +49,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PublicShowcase />} />
+        <Route path="/" element={<PublicEvents />} />
         <Route path="/showcase" element={<PublicShowcase />} />
         <Route path="/showcase/:prodId" element={<PublicShowcase />} />
         <Route path="/events" element={<PublicEvents />} />

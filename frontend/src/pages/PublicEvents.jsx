@@ -365,9 +365,9 @@ const PublicEvents = ({ isDashboard }) => {
             >
 
               <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">
-                Live <span className="bg-gradient-to-r from-[#e5a00d] to-[#f5c842] bg-clip-text text-transparent">Schedule</span>
+                Live <span className="bg-gradient-to-r from-[white] to-[#f5c842] bg-clip-text text-transparent">Schedule</span>
               </h1>
-              <p className="text-base md:text-lg text-theme-text-muted font-medium leading-relaxed max-w-2xl pt-2 border-l-2 border-[#e5a00d] pl-5">
+              <p className="text-base md:text-lg text-theme-text-muted font-medium leading-relaxed max-w-2xl pt-2 border-l-2 border-[white] pl-5">
                 Witness Ishya's theatrical masterpieces live on stage. Track every moment of the Ishya experience globally.
               </p>
             </motion.header>
@@ -436,7 +436,7 @@ const PublicEvents = ({ isDashboard }) => {
                           <div className="flex flex-col gap-4 w-full md:w-auto mt-6 md:mt-0 items-center md:items-end">
                             <div className="text-center md:text-right">
                               <span className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest block mb-1">Ticket Price</span>
-                              <span className="text-2xl md:text-3xl font-black text-[#e5a00d]">
+                              <span className="text-2xl md:text-3xl font-black text-[white]">
                                 {Number(currentShow.ticketPrice) > 0 ? `${Number(currentShow.ticketPrice).toLocaleString()} RWF` : 'FREE ENTRY'}
                               </span>
                             </div>
@@ -560,7 +560,7 @@ const PublicEvents = ({ isDashboard }) => {
                 {/* Event Highlights Overlay */}
                 <div className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end text-left space-y-3">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-[#e5a00d] text-black text-[9px] font-black uppercase tracking-wider rounded-sm">
+                    <span className="px-2 py-0.5 bg-[white] text-black text-[9px] font-black uppercase tracking-wider rounded-sm">
                       {bookingShow.type}
                     </span>
                     <span className="text-[10px] text-theme-text-muted font-bold tracking-wider font-mono">
@@ -574,19 +574,19 @@ const PublicEvents = ({ isDashboard }) => {
 
                   <div className="space-y-2 pt-1 text-xs text-theme-text/80 font-sans font-medium">
                     <div className="flex items-center gap-3">
-                      <Calendar size={14} className="text-[#e5a00d] shrink-0" />
+                      <Calendar size={14} className="text-[white] shrink-0" />
                       <span>
                         {new Date(bookingShow.startTime).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Clock size={14} className="text-[#e5a00d] shrink-0" />
+                      <Clock size={14} className="text-[white] shrink-0" />
                       <span>
                         {new Date(bookingShow.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <MapPin size={14} className="text-[#e5a00d] shrink-0" />
+                      <MapPin size={14} className="text-[white] shrink-0" />
                       <span className="truncate">{bookingShow.venue}</span>
                     </div>
                   </div>
@@ -621,7 +621,7 @@ const PublicEvents = ({ isDashboard }) => {
                       {/* Premium Ticket Stub */}
                       <div className="border border-theme-border rounded-sm bg-theme-surface overflow-hidden shadow-2xl text-left relative font-mono">
                         {/* Golden header */}
-                        <div className="bg-[#e5a00d] text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center font-sans">
+                        <div className="bg-[white] text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center font-sans">
                           <span>Ishya Live Pass</span>
                           <span>{ticketDetails.tier?.toUpperCase()} x{ticketDetails.quantity}</span>
                         </div>
@@ -655,7 +655,7 @@ const PublicEvents = ({ isDashboard }) => {
                             </div>
                             <div>
                               <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Total Paid</span>
-                              <span className="font-bold text-[#e5a00d] block truncate font-sans">
+                              <span className="font-bold text-[white] block truncate font-sans">
                                 {ticketDetails.amount > 0 ? `${Number(ticketDetails.amount).toLocaleString()} RWF` : 'FREE ENTRY'}
                               </span>
                             </div>
@@ -684,7 +684,7 @@ const PublicEvents = ({ isDashboard }) => {
                           <input
                             type="text"
                             required
-                            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-theme-text text-xs font-sans"
+                            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[white] outline-none text-theme-text text-xs font-sans"
                             placeholder="Kevine Mugisha"
                             value={buyerName}
                             onChange={(e) => setBuyerName(e.target.value)}
@@ -699,7 +699,7 @@ const PublicEvents = ({ isDashboard }) => {
                               required
                               disabled={otpVerified}
                               className={`flex-1 bg-[#161616] border rounded-sm px-4 py-3 outline-none text-theme-text text-xs font-sans transition-colors ${
-                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-theme-border focus:border-[#e5a00d]'
+                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-theme-border focus:border-[white]'
                               }`}
                               placeholder="kevine@example.rw"
                               value={buyerEmail}
@@ -710,7 +710,7 @@ const PublicEvents = ({ isDashboard }) => {
                                 type="button"
                                 disabled={!buyerEmail || !buyerName || otpLoading}
                                 onClick={handleSendOTP}
-                                className="px-4 py-3 bg-[#e5a00d] text-black text-[10px] font-black uppercase tracking-wider rounded-sm hover:bg-[#ffb414] disabled:opacity-30 transition-all whitespace-nowrap cursor-pointer"
+                                className="px-4 py-3 bg-[white] text-black text-[10px] font-black uppercase tracking-wider rounded-sm hover:bg-[white] disabled:opacity-30 transition-all whitespace-nowrap cursor-pointer"
                               >
                                 {otpLoading && !otpSent ? '...' : otpSent ? 'Resend' : 'Verify'}
                               </button>
@@ -728,9 +728,9 @@ const PublicEvents = ({ isDashboard }) => {
                           <motion.div
                             initial={{ opacity: 0, y: -8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="space-y-2 p-4 bg-[#0d0d0d] border border-[#e5a00d]/20 rounded-sm"
+                            className="space-y-2 p-4 bg-[#0d0d0d] border border-[white]/20 rounded-sm"
                           >
-                            <p className="text-[10px] font-bold text-[#e5a00d] uppercase tracking-wider">
+                            <p className="text-[10px] font-bold text-[white] uppercase tracking-wider">
                               Enter the 6-digit code sent to {buyerEmail}
                             </p>
                             <div className="flex gap-2">
@@ -741,7 +741,7 @@ const PublicEvents = ({ isDashboard }) => {
                                 placeholder="● ● ● ● ● ●"
                                 value={otpCode}
                                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                                className="flex-1 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text text-sm font-mono font-bold tracking-[0.5em] focus:border-[#e5a00d] outline-none text-center"
+                                className="flex-1 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text text-sm font-mono font-bold tracking-[0.5em] focus:border-[white] outline-none text-center"
                               />
                               <button
                                 type="button"
@@ -773,12 +773,12 @@ const PublicEvents = ({ isDashboard }) => {
                                 onClick={() => setTicketTier('regular')}
                                 className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                   ticketTier === 'regular'
-                                    ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-theme-text'
+                                    ? 'border-[white] bg-[white]/5 text-theme-text'
                                     : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
                                 }`}
                               >
                                 <div className="text-[9px] font-bold uppercase tracking-wider">Regular</div>
-                                <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                <div className="text-xs font-black text-[white] mt-1">
                                   {Number(bookingShow.ticketPrice) > 0 ? `${Number(bookingShow.ticketPrice).toLocaleString()} RWF` : 'FREE'}
                                 </div>
                               </button>
@@ -790,12 +790,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vip'
-                                      ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-theme-text'
+                                      ? 'border-[white] bg-[white]/5 text-theme-text'
                                       : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-blue-400">VIP Pass</div>
-                                  <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                  <div className="text-xs font-black text-[white] mt-1">
                                     {Number(bookingShow.vipPrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -808,12 +808,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vvip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vvip'
-                                      ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-theme-text'
+                                      ? 'border-[white] bg-[white]/5 text-theme-text'
                                       : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-purple-400">VVIP Pass</div>
-                                  <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                  <div className="text-xs font-black text-[white] mt-1">
                                     {Number(bookingShow.vvipPrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -826,12 +826,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('table')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'table'
-                                      ? 'border-[#e5a00d] bg-[#e5a00d]/5 text-theme-text'
+                                      ? 'border-[white] bg-[white]/5 text-theme-text'
                                       : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-yellow-500">Table (Group)</div>
-                                  <div className="text-xs font-black text-[#e5a00d] mt-1">
+                                  <div className="text-xs font-black text-[white] mt-1">
                                     {Number(bookingShow.tablePrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -868,7 +868,7 @@ const PublicEvents = ({ isDashboard }) => {
 
                       <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs font-sans">
                         <span className="text-theme-text-muted">Total Amount:</span>
-                        <span className="text-lg font-black text-[#e5a00d]">
+                        <span className="text-lg font-black text-[white]">
                           {totalBookingAmount > 0 ? `${totalBookingAmount.toLocaleString()} RWF` : 'FREE ENTRY'}
                         </span>
                       </div>
@@ -884,7 +884,7 @@ const PublicEvents = ({ isDashboard }) => {
                             </div>
                           ) : (
                             <div className="space-y-2 animate-in fade-in duration-300">
-                              <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
+                              <span className="text-[9px] font-black text-[white] uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
                               <PaypalButton
                                 amount={(totalBookingAmount / 1300).toFixed(2)}
                                 onSuccess={handlePaidBookingSuccess}
@@ -905,7 +905,7 @@ const PublicEvents = ({ isDashboard }) => {
                         <button
                           type="submit"
                           disabled={isSubmittingBooking || !otpVerified}
-                          className="w-full py-3 bg-[#e5a00d] hover:bg-[#ffb414] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer disabled:opacity-30 font-sans"
+                          className="w-full py-3 bg-[white] hover:bg-[white] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer disabled:opacity-30 font-sans"
                         >
                           {isSubmittingBooking ? 'Securing Pass...' : !otpVerified ? 'Verify Your Email First' : 'Confirm Free Booking'}
                         </button>
