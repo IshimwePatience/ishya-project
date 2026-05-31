@@ -6,6 +6,10 @@ const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: parseInt(process.env.EMAIL_PORT) || 465,
   secure: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT) === 465 : true,
+  family: 4, // Force IPv4 to avoid ENETUNREACH on Render's IPv6 network
+  connectionTimeout: 10000, // Timeout after 10 seconds to avoid 2-minute hangs
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
