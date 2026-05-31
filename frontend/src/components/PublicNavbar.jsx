@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, ChevronRight, Menu, Film, Users, Settings, Sun, Moon } from 'lucide-react';
+import { Search, X, ChevronRight, Menu, Film, Users, Settings } from 'lucide-react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import logoImg from '../assets/images/ubuntu.png';
@@ -163,27 +163,7 @@ const PublicNavbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleThemeToggle = () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      storedUser.theme = newTheme;
-      localStorage.setItem('user', JSON.stringify(storedUser));
-      const token = localStorage.getItem('token');
-      if (token) {
-        axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
-          theme: newTheme
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        }).catch(err => console.error('Failed to save theme preference', err));
-      }
-    } else {
-      localStorage.setItem('guest_theme', newTheme);
-    }
-  };
+
 
   const fetchProductions = async () => {
     try {
@@ -230,17 +210,6 @@ const PublicNavbar = () => {
         </div>
 
         <div className="flex items-center gap-4 md:gap-8">
-          <button
-            onClick={handleThemeToggle}
-            className="flex items-center justify-center p-2 text-theme-text hover:bg-theme-input-bg rounded-md transition-all"
-            title="Toggle Theme"
-          >
-            {document.documentElement.getAttribute('data-theme') === 'light' ? (
-              <Moon size={18} />
-            ) : (
-              <Sun size={18} />
-            )}
-          </button>
 
           <button
             onClick={() => setIsSearchOpen(true)}
