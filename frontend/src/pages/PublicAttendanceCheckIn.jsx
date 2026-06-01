@@ -70,7 +70,8 @@ const PublicAttendanceCheckIn = () => {
             token,
             email,
             lat: latitude,
-            lng: longitude
+            lng: longitude,
+            accuracy: position.coords.accuracy
           });
 
           setAttendance(res.data.attendance);

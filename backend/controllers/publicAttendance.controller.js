@@ -34,7 +34,7 @@ exports.getRule = async (req, res) => {
 
 exports.checkIn = async (req, res) => {
   try {
-    const { token, email, lat, lng } = req.body;
+  const { token, email, lat, lng, accuracy } = req.body;
     
     // 1. Get Rule
     const rule = await AttendanceRule.findOne({ where: { publicToken: token, isActive: true } });
@@ -70,9 +70,9 @@ exports.checkIn = async (req, res) => {
       return res.status(400).json({ message: 'Location data is required for check-in.' });
     }
     
-    const distance = getDistance(lat, lng, rule.targetLat, rule.targetLng);
+    const distance = getDistance(parseFloat(lat), parseFloat(lng), parseFloat(rule.targetLat), parseFloat(rule.targetLng));
     if (distance > rule.radius) {
-      return res.status(400).json({ message: `Check-in rejected: You are outside the allowed location radius. Distance: ${Math.round(distance)}m (Allowed: ${rule.radius}m)` });
+      return res.status(400).json({ message: `Check-in rejected: You are outside the allowed location radius. Distance: ${Math.round(distance)}m (Allowed: ${rule.radius}m). [Browser Accuracy Margin: ±${Math.round(accuracy)}m]` });
     }
 
     // 5. Create/Update Attendance
