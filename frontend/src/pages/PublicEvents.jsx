@@ -260,7 +260,7 @@ const PublicEvents = ({ isDashboard }) => {
                     <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl">
                       <div className="w-full aspect-video bg-black/50 relative overflow-hidden">
                         {firstEvent.posterUrl ? (
-                          <img src={firstEvent.posterUrl.startsWith('http') ? firstEvent.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${firstEvent.posterUrl}`} alt={firstEvent.title} className="w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-500" />
+                          <img src={firstEvent.posterUrl.startsWith('http') ? firstEvent.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${firstEvent.posterUrl}`} alt={firstEvent.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                         ) : (
                           <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
                             <Play size={48} className="text-[#3ea6ff]/50" />
@@ -347,7 +347,7 @@ const PublicEvents = ({ isDashboard }) => {
                             <div className="flex items-center gap-4 pr-4 overflow-hidden">
                               <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-theme-border">
                                 {event.posterUrl ? (
-                                  <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover opacity-80" />
+                                  <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover" />
                                 ) : (
                                   <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
                                     <Play size={24} className="text-[#3ea6ff]/50" />

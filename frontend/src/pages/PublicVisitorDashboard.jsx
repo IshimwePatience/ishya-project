@@ -197,7 +197,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     <img
                       src={getPoster(prod)}
                       alt={prod.title}
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                     />
 
                     {/* Real Progress Bar - ONLY for Continue Watching row */}
@@ -216,9 +216,9 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                       </div>
                     )}
 
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text scale-75 group-hover:scale-100 transition-transform">
-                        {isContinue ? <Play size={24} fill="currentColor" className="ml-1" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg">
+                        {isContinue ? <Play size={20} fill="currentColor" className="ml-1" /> : <Play size={20} fill="currentColor" className="ml-1" />}
                       </div>
                     </div>
                   </div>
@@ -434,11 +434,11 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                       <img
                         src={getPoster(prod)}
                         alt={prod.title}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                       />
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text scale-75 group-hover:scale-100 transition-transform">
-                          <Play size={24} fill="currentColor" className="ml-1" />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg">
+                          <Play size={20} fill="currentColor" className="ml-1" />
                         </div>
                       </div>
                     </div>
