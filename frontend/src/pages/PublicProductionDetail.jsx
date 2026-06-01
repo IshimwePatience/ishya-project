@@ -92,7 +92,7 @@ const PublicProductionDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-theme-bg flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-[#e5a00d] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -106,7 +106,7 @@ const PublicProductionDetail = () => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-theme-bg text-theme-text relative font-sans"
+      className="min-h-screen bg-black text-white relative font-sans"
     >
       {/* Hidden videos to fetch duration dynamically from the files */}
       <div style={{ display: 'none' }}>
@@ -132,7 +132,7 @@ const PublicProductionDetail = () => {
       {/* Fixed Back Button */}
       <button 
         onClick={() => navigate('/dashboard')}
-        className="fixed top-8 left-8 z-[100] w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-theme-border flex items-center justify-center text-theme-text hover:bg-white hover:text-black transition-all shadow-2xl group"
+        className="fixed top-8 left-8 z-[100] w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-2xl group"
       >
         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
       </button>
@@ -149,7 +149,7 @@ const PublicProductionDetail = () => {
         <div className="flex flex-col md:flex-row gap-12 items-start">
           {/* Left: Poster */}
           <div className="flex-shrink-0 w-full md:w-[320px] lg:w-[380px]">
-            <div className="rounded-xl overflow-hidden shadow-2xl border border-theme-border-light ring-1 ring-white/10">
+            <div className="rounded-xl overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10">
               <img 
                 src={getPoster(production)} 
                 alt={production.title} 
@@ -161,15 +161,15 @@ const PublicProductionDetail = () => {
           {/* Right: Content Section */}
           <div className="flex-1 space-y-8 pt-4">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-theme-text">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
                 {production.title}
               </h1>
-              <p className="text-theme-text-muted text-sm font-medium">
+              <p className="text-gray-400 text-sm font-medium">
                 {production.director ? `Directed by ${production.director}` : 'Director TBA'}
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 text-[13px] font-semibold text-theme-text/80">
-                <span className="px-1.5 py-0.5 bg-theme-input-bg-hover rounded-sm text-[11px] font-bold">{production.rating || 'G'}</span>
+              <div className="flex flex-wrap items-center gap-4 text-[13px] font-semibold text-white/80">
+                <span className="px-1.5 py-0.5 bg-white/10 rounded-sm text-[11px] font-bold">{production.rating || 'G'}</span>
                 <span>{production.releaseDate ? new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Coming Soon'}</span>
                 <span className="w-1 h-1 bg-white/20 rounded-full" />
                 <span>{production.mediaFiles?.find(m => m.category)?.category || production.genre || 'General'}</span>
@@ -205,19 +205,19 @@ const PublicProductionDetail = () => {
                 </button>
               )}
 
-              <button className="p-3 bg-theme-input-bg-hover hover:bg-white/20 rounded-full transition-all border border-theme-border-light">
-                <Check size={20} className="text-theme-text-muted" />
+              <button className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/5">
+                <Check size={20} className="text-gray-400" />
               </button>
               
 
-              <button className="p-3 bg-theme-input-bg-hover hover:bg-white/20 rounded-full transition-all border border-theme-border-light">
-                <Info size={20} className="text-theme-text-muted" />
+              <button className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/5">
+                <Info size={20} className="text-gray-400" />
               </button>
             </div>
 
             {/* Description */}
             <div className="pt-6 max-w-3xl">
-              <p className="text-[15px] text-theme-text/90 leading-[1.6] font-normal">
+              <p className="text-[15px] text-white/90 leading-[1.6] font-normal">
                 {production.description || "No description available for this title."}
               </p>
             </div>
@@ -225,12 +225,12 @@ const PublicProductionDetail = () => {
             {/* Episodes Section - ONLY for Series */}
             {production.type === 'Series' && (
               <div className="pt-10 space-y-6">
-                <div className="flex items-center justify-between border-b border-theme-border-light pb-4">
-                  <h3 className="text-xl font-bold text-theme-text flex items-center gap-3">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-3">
                     <Film size={20} className="text-[#e5a00d]" />
                     Episodes
                   </h3>
-                  <span className="text-[11px] font-bold text-theme-text-muted uppercase tracking-widest bg-theme-input-bg px-3 py-1 rounded-full border border-theme-border">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/10">
                     Season 1
                   </span>
                 </div>
@@ -243,7 +243,7 @@ const PublicProductionDetail = () => {
                       <div 
                         key={ep.id}
                         onClick={() => navigate(`/watch/${ep.id}`)}
-                        className="flex items-center gap-6 p-4 rounded-xl bg-theme-input-bg hover:bg-white/[0.06] border border-theme-border-light hover:border-theme-border cursor-pointer transition-all group"
+                        className="flex items-center gap-6 p-4 rounded-xl bg-white/5 hover:bg-white/[0.06] border border-white/5 hover:border-white/10 cursor-pointer transition-all group"
                       >
                         <div className="w-12 h-12 flex-shrink-0 bg-black/40 rounded-lg flex items-center justify-center text-[#e5a00d] group-hover:scale-110 transition-transform">
                           <Play size={20} fill="currentColor" />
@@ -253,16 +253,16 @@ const PublicProductionDetail = () => {
                             <span className="text-[10px] font-black text-[#e5a00d]">EP {ep.episodeNumber || '1'}</span>
                             {(videoDurations[ep.id] || getDuration(ep)) && (
                               <>
-                                <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
-                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(videoDurations[ep.id] || getDuration(ep))}</span>
+                                <span className="w-1 h-1 bg-white/10 rounded-full" />
+                                <span className="text-xs font-bold text-gray-400 truncate">{formatDuration(videoDurations[ep.id] || getDuration(ep))}</span>
                               </>
                             )}
                           </div>
-                          <h4 className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate">
+                          <h4 className="text-sm font-bold text-white group-hover:text-[#e5a00d] transition-colors truncate">
                             {ep.fileName}
                           </h4>
                         </div>
-                        <div className="text-[10px] font-bold text-theme-text-muted-dark group-hover:text-theme-text-muted transition-colors px-3 py-1 border border-theme-border-light rounded-full">
+                        <div className="text-[10px] font-bold text-gray-500 group-hover:text-gray-400 transition-colors px-3 py-1 border border-white/5 rounded-full">
                           WATCH
                         </div>
                       </div>
@@ -272,13 +272,13 @@ const PublicProductionDetail = () => {
             )}
 
             {/* Community Section (Replacing Cast with Likes) */}
-            <div className="grid grid-cols-1 gap-6 pt-12 border-t border-theme-border-light">
+            <div className="grid grid-cols-1 gap-6 pt-12 border-t border-white/5">
                <div className="space-y-4">
                   <div className="flex items-center gap-4">
-                    <h3 className="text-lg font-bold text-theme-text">Likes</h3>
-                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-theme-input-bg rounded-full border border-theme-border">
+                    <h3 className="text-lg font-bold text-white">Likes</h3>
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white/5 rounded-full border border-white/10">
                       <Star size={12} className="fill-[#e5a00d] text-[#e5a00d]" />
-                      <span className="text-[11px] font-bold text-theme-text-muted">{stats.likes || 0}</span>
+                      <span className="text-[11px] font-bold text-gray-400">{stats.likes || 0}</span>
                     </div>
                   </div>
                </div>

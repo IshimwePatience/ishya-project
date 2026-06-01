@@ -191,17 +191,17 @@ const PublicAttendanceCheckIn = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-theme-text flex items-center justify-center p-6 font-sans">
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6 font-sans">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-[#111] border border-theme-border rounded-xl shadow-2xl p-8 relative overflow-hidden"
+        className="w-full max-w-md bg-[#111] border border-white/10 rounded-xl shadow-2xl p-8 relative overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-theme-accent" />
         
         <div className="text-center mb-8">
           <h1 className="text-2xl font-black tracking-tight mb-2">Talent Check-in</h1>
-          <p className="text-theme-text-muted text-sm">Secure Geofenced Attendance</p>
+          <p className="text-gray-400 text-sm">Secure Geofenced Attendance</p>
         </div>
 
         {errorMsg && status !== 'checked-out' && (
@@ -213,9 +213,9 @@ const PublicAttendanceCheckIn = () => {
 
         {status === 'setup' && rule && (
           <form onSubmit={handleCheckIn} className="space-y-6">
-            <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-theme-border-light relative aspect-video flex items-center justify-center">
+            <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-white/5 relative aspect-video flex items-center justify-center">
               {!videoStream ? (
-                <div className="flex flex-col items-center gap-2 text-theme-text-muted p-6 text-center">
+                <div className="flex flex-col items-center gap-2 text-gray-400 p-6 text-center">
                   <Camera size={32} className="opacity-50" />
                   <p className="text-xs">Waiting for camera permissions...</p>
                 </div>
@@ -238,26 +238,26 @@ const PublicAttendanceCheckIn = () => {
               )}
             </div>
 
-            <div className="bg-[#1a1a1a] p-4 rounded-lg space-y-3 mb-6 border border-theme-border-light">
-              <div className="flex items-center gap-3 text-sm text-theme-text/80">
+            <div className="bg-[#1a1a1a] p-4 rounded-lg space-y-3 mb-6 border border-white/5">
+              <div className="flex items-center gap-3 text-sm text-white/80">
                 <Clock size={16} className="text-theme-accent" />
                 <span>Call Time: <strong className="text-white">{rule.startTime}</strong></span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-theme-text/80">
+              <div className="flex items-center gap-3 text-sm text-white/80">
                 <MapPin size={16} className="text-theme-accent" />
                 <span>Radius: <strong className="text-white">{rule.radius}m</strong></span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Your Email Address</label>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Your Email Address</label>
               <input
                 type="email"
                 required
                 placeholder="talent@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full bg-[#0a0a0a] border border-theme-border rounded px-4 py-3 text-sm focus:border-theme-accent outline-none transition-colors"
+                className="w-full bg-[#0a0a0a] border border-white/10 rounded px-4 py-3 text-sm focus:border-theme-accent outline-none transition-colors"
                 disabled={recording}
               />
             </div>
@@ -276,7 +276,7 @@ const PublicAttendanceCheckIn = () => {
                 </>
               )}
             </button>
-            <p className="text-[11px] text-theme-text-muted text-center pt-2">
+            <p className="text-[11px] text-gray-400 text-center pt-2">
               A 3-second video will be recorded to verify your identity.
             </p>
           </form>
@@ -285,7 +285,7 @@ const PublicAttendanceCheckIn = () => {
         {status === 'loading' && rule && (
           <div className="py-12 flex flex-col items-center justify-center space-y-4">
             <div className="w-8 h-8 border-2 border-theme-accent border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-theme-text-muted">Verifying identity and acquiring GPS...</p>
+            <p className="text-sm text-gray-400">Verifying identity and acquiring GPS...</p>
           </div>
         )}
 
@@ -295,7 +295,7 @@ const PublicAttendanceCheckIn = () => {
               <CheckCircle size={32} />
             </div>
             <h2 className="text-xl font-bold mb-2">Checked In Successfully!</h2>
-            <p className="text-sm text-theme-text-muted mb-8">
+            <p className="text-sm text-gray-400 mb-8">
               Keep this tab open. Do not close your browser. You will be checked out if you leave the {rule.radius}m radius.
             </p>
             
@@ -312,7 +312,7 @@ const PublicAttendanceCheckIn = () => {
               <LogOut size={32} />
             </div>
             <h2 className="text-xl font-bold mb-2">Attendance Completed</h2>
-            <p className="text-sm text-theme-text-muted">{errorMsg}</p>
+            <p className="text-sm text-gray-400">{errorMsg}</p>
           </div>
         )}
       </motion.div>

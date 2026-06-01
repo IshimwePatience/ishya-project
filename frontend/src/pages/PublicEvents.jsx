@@ -235,7 +235,7 @@ const PublicEvents = ({ isDashboard }) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="text-sm font-medium text-theme-text animate-pulse">Loading Ishya Schedule...</div>
+        <div className="text-sm font-medium text-white animate-pulse">Loading Ishya Schedule...</div>
       </div>
     );
   }
@@ -243,7 +243,7 @@ const PublicEvents = ({ isDashboard }) => {
   const currentShow = publicPerformances[currentIndex];
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-theme-text font-sans selection:bg-white selection:text-black ${isDashboard ? 'rounded-lg overflow-hidden' : ''}`}>
+    <div className={`min-h-screen bg-[#050505] text-white font-sans selection:bg-white selection:text-black ${isDashboard ? 'rounded-lg overflow-hidden' : ''}`}>
       {!isDashboard && <PublicNavbar />}
 
       <div className={`${isDashboard ? 'pt-8' : 'pt-32 md:pt-40'} px-6 md:px-20 pb-20 overflow-hidden`}>
@@ -257,7 +257,7 @@ const PublicEvents = ({ isDashboard }) => {
                 {/* Left side: Featured First Event */}
                 {firstEvent && (
                   <div className="w-full lg:w-1/3 flex flex-col shrink-0">
-                    <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl">
+                    <div className="bg-[#1f1f1f] border border-white/10 rounded-lg overflow-hidden flex flex-col shadow-2xl">
                       <div className="w-full aspect-video bg-black/50 relative overflow-hidden">
                         {firstEvent.posterUrl ? (
                           <img src={firstEvent.posterUrl.startsWith('http') ? firstEvent.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${firstEvent.posterUrl}`} alt={firstEvent.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
@@ -269,7 +269,7 @@ const PublicEvents = ({ isDashboard }) => {
                       </div>
                       <div className="p-6 flex flex-col gap-4">
                         <div>
-                          <h3 className="text-xl font-bold text-theme-text leading-tight mb-1">
+                          <h3 className="text-xl font-bold text-white leading-tight mb-1">
                             {firstEvent.title}
                           </h3>
                           <p className="text-[13px] text-[#aaaaaa] flex items-center gap-1.5 mt-2">
@@ -277,9 +277,9 @@ const PublicEvents = ({ isDashboard }) => {
                           </p>
                         </div>
                         
-                        <div className="flex items-center justify-between border-t border-theme-border-light pt-4 mt-2">
+                        <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-2">
                           <div className="flex flex-col">
-                            <span className="text-[14px] text-theme-text font-bold">
+                            <span className="text-[14px] text-white font-bold">
                               {new Date(firstEvent.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                             <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5 font-medium">
@@ -309,14 +309,14 @@ const PublicEvents = ({ isDashboard }) => {
 
                 {/* Right side: Remaining Events Table */}
                 <div className={`w-full ${firstEvent ? 'lg:w-2/3' : ''} flex flex-col`}>
-                  <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
+                  <div className="bg-[#1f1f1f] border border-white/10 rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
                     {/* Filter Bar */}
-                    <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
+                    <div className="flex items-center px-6 py-3 border-b border-white/10 bg-[#282828] gap-4">
                       <ListFilter size={18} className="text-[#aaaaaa]" />
                       <input 
                         type="text" 
                         placeholder="Filter events..." 
-                        className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
+                        className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder:text-[#aaaaaa] font-medium"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -325,7 +325,7 @@ const PublicEvents = ({ isDashboard }) => {
                     {/* Table Header */}
                     <div className="overflow-x-auto w-full">
                       <div className="min-w-[650px]">
-                        <div className="grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
+                        <div className="grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-white/10 text-[12px] font-bold text-[#aaaaaa]">
                       <div>Event</div>
                       <div>Status</div>
                       <div className="flex items-center gap-1">Date & Time <Calendar size={12}/></div>
@@ -341,11 +341,11 @@ const PublicEvents = ({ isDashboard }) => {
                         </div>
                       ) : (
                         otherEvents.map(event => (
-                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
+                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-white/5 hover:bg-[#2c2c2c] transition-colors items-center">
                             
                             {/* Event Column */}
                             <div className="flex items-center gap-4 pr-4 overflow-hidden">
-                              <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-theme-border">
+                              <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-white/10">
                                 {event.posterUrl ? (
                                   <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover" />
                                 ) : (
@@ -355,7 +355,7 @@ const PublicEvents = ({ isDashboard }) => {
                                 )}
                               </div>
                               <div className="flex flex-col min-w-0">
-                                <h3 className="text-[14px] font-medium text-theme-text truncate w-full leading-tight" title={event.title}>
+                                <h3 className="text-[14px] font-medium text-white truncate w-full leading-tight" title={event.title}>
                                   {event.title}
                                 </h3>
                                 <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
@@ -366,14 +366,14 @@ const PublicEvents = ({ isDashboard }) => {
 
                             {/* Status Column */}
                             <div>
-                              <span className="flex items-center gap-1.5 text-[13px] text-theme-text font-medium">
+                              <span className="flex items-center gap-1.5 text-[13px] text-white font-medium">
                                 <div className="w-2 h-2 rounded-full bg-green-400"></div> Scheduled
                               </span>
                             </div>
 
                             {/* Date Column */}
                             <div className="flex flex-col justify-center">
-                               <span className="text-[13px] text-theme-text font-medium">
+                               <span className="text-[13px] text-white font-medium">
                                  {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                                </span>
                                <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
@@ -407,7 +407,7 @@ const PublicEvents = ({ isDashboard }) => {
                   </div>
                     
                     {/* Table Footer */}
-                    <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
+                    <div className="px-6 py-4 border-t border-white/10 bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
                       Events
                     </div>
                   </div>
@@ -432,19 +432,19 @@ const PublicEvents = ({ isDashboard }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: 15 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="relative bg-[#0c0c0c] border border-theme-border rounded-sm w-full max-w-5xl h-[92vh] md:h-[82vh] flex flex-col md:flex-row overflow-hidden shadow-[0_0_100px_rgba(229,160,13,0.15)] z-10"
+              className="relative bg-[#0c0c0c] border border-white/10 rounded-sm w-full max-w-5xl h-[92vh] md:h-[82vh] flex flex-col md:flex-row overflow-hidden shadow-[0_0_100px_rgba(229,160,13,0.15)] z-10"
             >
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setBookingShow(null)}
-                className="absolute top-4 right-4 z-30 text-theme-text-muted hover:text-theme-text transition-colors border-none bg-theme-surface/80 hover:bg-[#1c1c1c] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-sm"
+                className="absolute top-4 right-4 z-30 text-gray-400 hover:text-white transition-colors border-none bg-[#111]/80 hover:bg-[#1c1c1c] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-sm"
               >
                 ✕
               </button>
 
               {/* LEFT COLUMN: Show Info & Visual poster (Full height on md, Top banner on mobile) */}
-              <div className="relative w-full md:w-[42%] h-[180px] md:h-full shrink-0 border-b md:border-b-0 md:border-r border-theme-border overflow-hidden">
+              <div className="relative w-full md:w-[42%] h-[180px] md:h-full shrink-0 border-b md:border-b-0 md:border-r border-white/10 overflow-hidden">
                 {/* Poster Background */}
                 <div className="absolute inset-0 bg-[#0e0e0e]">
                   {bookingShow.posterUrl ? (
@@ -455,7 +455,7 @@ const PublicEvents = ({ isDashboard }) => {
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-black via-[#161616] to-[#0e0e0e] flex items-center justify-center opacity-30">
-                      <Calendar size={60} className="text-theme-text-muted-dark" />
+                      <Calendar size={60} className="text-gray-500" />
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black via-black/40 to-transparent z-10" />
@@ -484,7 +484,7 @@ const PublicEvents = ({ isDashboard }) => {
                     </div>
                   </div>
 
-                  <p className="text-[11px] leading-relaxed text-theme-text-muted max-w-sm hidden md:block pt-3 border-t border-theme-border font-sans">
+                  <p className="text-[11px] leading-relaxed text-gray-400 max-w-sm hidden md:block pt-3 border-t border-white/10 font-sans">
                     {bookingShow.description || "Secure your pass to this exceptional show. Select your ticketing tier, enter your receipt details, and checkout instantly."}
                   </p>
                 </div>
@@ -493,10 +493,10 @@ const PublicEvents = ({ isDashboard }) => {
               {/* RIGHT COLUMN: Interactive Form (Scrollable body) */}
               <div className="flex-1 h-full flex flex-col min-h-0 bg-[#070707] text-left">
                 {/* Header title inside right form */}
-                <div className="p-6 md:p-8 pb-3 border-b border-theme-border-light flex items-center justify-between shrink-0">
+                <div className="p-6 md:p-8 pb-3 border-b border-white/5 flex items-center justify-between shrink-0">
                   <div>
-                    <h4 className="text-sm md:text-base font-black text-theme-text uppercase tracking-tight font-sans">Ticketing Desk</h4>
-                    <p className="text-[9px] text-theme-text-muted tracking-wider uppercase font-semibold font-mono">Secure Transaction Ledger</p>
+                    <h4 className="text-sm md:text-base font-black text-white uppercase tracking-tight font-sans">Ticketing Desk</h4>
+                    <p className="text-[9px] text-gray-400 tracking-wider uppercase font-semibold font-mono">Secure Transaction Ledger</p>
                   </div>
                 </div>
 
@@ -507,47 +507,47 @@ const PublicEvents = ({ isDashboard }) => {
                     <div className="space-y-6 py-4 text-center max-w-md mx-auto">
                       <div className="w-12 h-12 bg-green-500/10 border border-green-500/30 text-green-400 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
                       <div className="space-y-2">
-                        <h3 className="text-xl font-black tracking-tight text-theme-text font-sans">Booking Confirmed!</h3>
-                        <p className="text-xs text-theme-text-muted font-sans">Your ticket has been secured. Show this pass at the gate.</p>
+                        <h3 className="text-xl font-black tracking-tight text-white font-sans">Booking Confirmed!</h3>
+                        <p className="text-xs text-gray-400 font-sans">Your ticket has been secured. Show this pass at the gate.</p>
                       </div>
 
                       {/* Premium Ticket Stub */}
-                      <div className="border border-theme-border rounded-sm bg-theme-surface overflow-hidden shadow-2xl text-left relative font-mono">
+                      <div className="border border-white/10 rounded-sm bg-[#111] overflow-hidden shadow-2xl text-left relative font-mono">
                         {/* Golden header */}
                         <div className="bg-[white] text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center font-sans">
                           <span>Ishya Live Pass</span>
                           <span>{ticketDetails.tier?.toUpperCase()} x{ticketDetails.quantity}</span>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs text-theme-text/70">
+                        <div className="p-5 space-y-4 text-xs text-white/70">
                           <div>
-                            <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Show / Event</span>
-                            <span className="font-bold text-theme-text text-sm font-sans">{ticketDetails.showTitle}</span>
+                            <span className="text-[9px] text-gray-500 uppercase block font-sans">Show / Event</span>
+                            <span className="font-bold text-white text-sm font-sans">{ticketDetails.showTitle}</span>
                           </div>
 
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Date</span>
-                              <span className="font-bold text-theme-text font-sans">{new Date(ticketDetails.startTime).toLocaleDateString()}</span>
+                              <span className="text-[9px] text-gray-500 uppercase block font-sans">Date</span>
+                              <span className="font-bold text-white font-sans">{new Date(ticketDetails.startTime).toLocaleDateString()}</span>
                             </div>
                             <div>
-                              <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Time</span>
-                              <span className="font-bold text-theme-text font-sans">{new Date(ticketDetails.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                              <span className="text-[9px] text-gray-500 uppercase block font-sans">Time</span>
+                              <span className="font-bold text-white font-sans">{new Date(ticketDetails.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                           </div>
 
                           <div>
-                            <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Venue</span>
-                            <span className="font-bold text-theme-text font-sans">{ticketDetails.venue}</span>
+                            <span className="text-[9px] text-gray-500 uppercase block font-sans">Venue</span>
+                            <span className="font-bold text-white font-sans">{ticketDetails.venue}</span>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-theme-border-light">
+                          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
                             <div>
-                              <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Attendee</span>
-                              <span className="font-bold text-theme-text truncate block font-sans">{ticketDetails.buyerName}</span>
+                              <span className="text-[9px] text-gray-500 uppercase block font-sans">Attendee</span>
+                              <span className="font-bold text-white truncate block font-sans">{ticketDetails.buyerName}</span>
                             </div>
                             <div>
-                              <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Total Paid</span>
+                              <span className="text-[9px] text-gray-500 uppercase block font-sans">Total Paid</span>
                               <span className="font-bold text-[white] block truncate font-sans">
                                 {ticketDetails.amount > 0 ? `${Number(ticketDetails.amount).toLocaleString()} RWF` : 'FREE ENTRY'}
                               </span>
@@ -556,14 +556,14 @@ const PublicEvents = ({ isDashboard }) => {
                         </div>
 
                         {/* Decorative side cutouts for ticket look */}
-                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-r border-theme-border" />
-                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-l border-theme-border" />
+                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-r border-white/10" />
+                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-l border-white/10" />
                       </div>
 
                       <button
                         type="button"
                         onClick={() => setBookingShow(null)}
-                        className="w-full py-3 bg-theme-input-bg border border-theme-border text-theme-text hover:bg-theme-input-bg-hover text-xs font-bold rounded-sm transition-colors cursor-pointer uppercase tracking-wider font-sans"
+                        className="w-full py-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 text-xs font-bold rounded-sm transition-colors cursor-pointer uppercase tracking-wider font-sans"
                       >
                         Close & Finish
                       </button>
@@ -573,11 +573,11 @@ const PublicEvents = ({ isDashboard }) => {
                     <form onSubmit={handleFreeBooking} className="space-y-6">
                       <div className="space-y-4">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider block font-sans">Full Name</label>
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Full Name</label>
                           <input
                             type="text"
                             required
-                            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[white] outline-none text-theme-text text-xs font-sans"
+                            className="w-full bg-[#161616] border border-white/10 rounded-sm px-4 py-3 focus:border-[white] outline-none text-white text-xs font-sans"
                             placeholder="Kevine Mugisha"
                             value={buyerName}
                             onChange={(e) => setBuyerName(e.target.value)}
@@ -585,14 +585,14 @@ const PublicEvents = ({ isDashboard }) => {
                         </div>
 
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider block font-sans">Email Address</label>
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Email Address</label>
                           <div className="flex gap-2">
                             <input
                               type="email"
                               required
                               disabled={otpVerified}
-                              className={`flex-1 bg-[#161616] border rounded-sm px-4 py-3 outline-none text-theme-text text-xs font-sans transition-colors ${
-                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-theme-border focus:border-[white]'
+                              className={`flex-1 bg-[#161616] border rounded-sm px-4 py-3 outline-none text-white text-xs font-sans transition-colors ${
+                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-white/10 focus:border-[white]'
                               }`}
                               placeholder="kevine@example.rw"
                               value={buyerEmail}
@@ -634,7 +634,7 @@ const PublicEvents = ({ isDashboard }) => {
                                 placeholder="● ● ● ● ● ●"
                                 value={otpCode}
                                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                                className="flex-1 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text text-sm font-mono font-bold tracking-[0.5em] focus:border-[white] outline-none text-center"
+                                className="flex-1 bg-[#161616] border border-white/10 rounded-sm px-4 py-3 text-white text-sm font-mono font-bold tracking-[0.5em] focus:border-[white] outline-none text-center"
                               />
                               <button
                                 type="button"
@@ -658,7 +658,7 @@ const PublicEvents = ({ isDashboard }) => {
                         {/* Tier Selection */}
                         {bookingShow && (Number(bookingShow.ticketPrice) > 0 || Number(bookingShow.vipPrice) > 0 || Number(bookingShow.vvipPrice) > 0 || Number(bookingShow.tablePrice) > 0) && (
                           <div className="space-y-2 pt-2">
-                            <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider block font-sans">Select Ticket Class</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Select Ticket Class</label>
                             <div className="grid grid-cols-2 gap-2">
                               {/* Regular option */}
                               <button
@@ -666,8 +666,8 @@ const PublicEvents = ({ isDashboard }) => {
                                 onClick={() => setTicketTier('regular')}
                                 className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                   ticketTier === 'regular'
-                                    ? 'border-[white] bg-[white]/5 text-theme-text'
-                                    : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                    ? 'border-[white] bg-[white]/5 text-white'
+                                    : 'border-white/10 bg-[#161616]/40 hover:border-white/10 text-gray-400'
                                 }`}
                               >
                                 <div className="text-[9px] font-bold uppercase tracking-wider">Regular</div>
@@ -683,8 +683,8 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vip'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-[white] bg-[white]/5 text-white'
+                                      : 'border-white/10 bg-[#161616]/40 hover:border-white/10 text-gray-400'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-blue-400">VIP Pass</div>
@@ -701,8 +701,8 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vvip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vvip'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-[white] bg-[white]/5 text-white'
+                                      : 'border-white/10 bg-[#161616]/40 hover:border-white/10 text-gray-400'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-purple-400">VVIP Pass</div>
@@ -719,8 +719,8 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('table')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'table'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-[white] bg-[white]/5 text-white'
+                                      : 'border-white/10 bg-[#161616]/40 hover:border-white/10 text-gray-400'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-yellow-500">Table (Group)</div>
@@ -735,32 +735,32 @@ const PublicEvents = ({ isDashboard }) => {
 
                         {/* Quantity selector */}
                         <div className="space-y-2 pt-2">
-                          <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-wider block font-sans">Ticket Quantity</label>
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Ticket Quantity</label>
                           <div className="flex items-center gap-3">
                             <button
                               type="button"
                               onClick={() => setTicketQuantity(prev => Math.max(1, prev - 1))}
-                              className="w-10 h-10 bg-theme-input-bg border border-theme-border rounded-sm flex items-center justify-center text-theme-text hover:bg-theme-input-bg-hover text-lg cursor-pointer transition-colors"
+                              className="w-10 h-10 bg-white/5 border border-white/10 rounded-sm flex items-center justify-center text-white hover:bg-white/10 text-lg cursor-pointer transition-colors"
                             >
                               -
                             </button>
-                            <div className="w-16 h-10 bg-[#161616] border border-theme-border rounded-sm flex items-center justify-center text-theme-text font-bold text-sm">
+                            <div className="w-16 h-10 bg-[#161616] border border-white/10 rounded-sm flex items-center justify-center text-white font-bold text-sm">
                               {ticketQuantity}
                             </div>
                             <button
                               type="button"
                               onClick={() => setTicketQuantity(prev => Math.min(10, prev + 1))}
-                              className="w-10 h-10 bg-theme-input-bg border border-theme-border rounded-sm flex items-center justify-center text-theme-text hover:bg-theme-input-bg-hover text-lg cursor-pointer transition-colors"
+                              className="w-10 h-10 bg-white/5 border border-white/10 rounded-sm flex items-center justify-center text-white hover:bg-white/10 text-lg cursor-pointer transition-colors"
                             >
                               +
                             </button>
-                            <span className="text-[10px] text-theme-text-muted-dark italic ml-2">Max 10 per booking</span>
+                            <span className="text-[10px] text-gray-500 italic ml-2">Max 10 per booking</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs font-sans">
-                        <span className="text-theme-text-muted">Total Amount:</span>
+                      <div className="p-4 bg-white/5 border border-white/5 rounded-sm flex justify-between items-center text-xs font-sans">
+                        <span className="text-gray-400">Total Amount:</span>
                         <span className="text-lg font-black text-[white]">
                           {totalBookingAmount > 0 ? `${totalBookingAmount.toLocaleString()} RWF` : 'FREE ENTRY'}
                         </span>
@@ -770,7 +770,7 @@ const PublicEvents = ({ isDashboard }) => {
                         /* Paid Checkout via PayPal buttons */
                         <div className="space-y-4">
                           {(!buyerName || !buyerEmail || !otpVerified) ? (
-                            <div className="p-3 bg-[#111] border border-theme-border-light text-center text-[11px] text-theme-text-muted font-medium rounded-sm font-sans">
+                            <div className="p-3 bg-[#111] border border-white/5 text-center text-[11px] text-gray-400 font-medium rounded-sm font-sans">
                               {!buyerName || !buyerEmail
                                 ? 'Please enter your Name and Email to activate checkout.'
                                 : 'Please verify your email address above to proceed.'}
@@ -786,7 +786,7 @@ const PublicEvents = ({ isDashboard }) => {
                               <button
                                 type="button"
                                 onClick={() => setBookingShow(null)}
-                                className="w-full py-3 mt-3 bg-theme-input-bg border border-theme-border hover:bg-theme-input-bg-hover text-theme-text text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider block"
+                                className="w-full py-3 mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-colors cursor-pointer text-center uppercase tracking-wider block"
                               >
                                 Cancel Checkout
                               </button>
@@ -812,7 +812,7 @@ const PublicEvents = ({ isDashboard }) => {
         )}
       </AnimatePresence>
 
-      <footer className="bg-theme-surface border-t border-theme-border-light py-12 px-6 text-center text-xs text-theme-text-muted font-normal font-sans tracking-wide">
+      <footer className="bg-[#111] border-t border-white/5 py-12 px-6 text-center text-xs text-gray-400 font-normal font-sans tracking-wide">
         © {new Date().getFullYear()} Ishya Studios. All rights reserved.
       </footer>
     </div>
