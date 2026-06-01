@@ -46,7 +46,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
         axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`)
       ]);
 
-      const validProductions = prodRes.data.filter(prod => 
+      const validProductions = prodRes.data.filter(prod =>
         prod.mediaFiles && prod.mediaFiles.some(m => m.isPublic)
       );
       setProductions(validProductions);
@@ -64,11 +64,11 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
 
   const getSubscriptionDetails = () => {
     if (!user) return { status: 'inactive', daysLeft: 0, bannerType: 'danger' };
-    
+
     if (user.subscriptionStatus === 'active' && user.subscriptionExpiresAt) {
       const diffTime = new Date(user.subscriptionExpiresAt) - new Date();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
+
       if (diffDays <= 0) {
         return { status: 'expired', daysLeft: 0, bannerType: 'danger' };
       } else if (diffDays <= 5) {
@@ -323,7 +323,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="fixed top-16 left-0 right-0 z-30 py-4 px-8 bg-[#0c0c0c] border-b border-theme-border-light shadow-xl flex justify-center">
+      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-8 bg-theme-surface flex justify-center">
         <div className="w-full max-w-[1600px]">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
             {genres.map(genre => (
@@ -331,8 +331,8 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 key={genre}
                 onClick={() => setSelectedGenre(genre)}
                 className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${selectedGenre === genre
-                    ? 'bg-white text-black border-white'
-                    : 'bg-theme-input-bg text-theme-text-muted border-theme-border-light hover:border-theme-border hover:text-theme-text hover:bg-theme-input-bg-hover'
+                  ? 'bg-white text-black border-white'
+                  : 'bg-theme-input-bg text-theme-text-muted border-theme-border-light hover:border-theme-border hover:text-theme-text hover:bg-theme-input-bg-hover'
                   }`}
               >
                 {genre}
@@ -358,7 +358,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 .filter(p => p.createdAt && new Date(p.createdAt) >= thirtyDaysAgo)
                 .reverse()
                 .slice(0, 12);
-              
+
               if (recentProductions.length === 0) return null;
               return <MovieRow title="Recently Added" items={recentProductions} />;
             })()}
