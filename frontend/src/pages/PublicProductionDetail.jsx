@@ -27,11 +27,23 @@ const PublicProductionDetail = () => {
   const [loading, setLoading] = useState(true);
   const resumeTime = new URLSearchParams(location.search).get('resume');
 
-  const formatDuration = (seconds) => {
-    if (!seconds) return '';
-    const num = Number(seconds);
-    const h = Math.floor(num / 3600);
-    const m = Math.floor((num % 3600) / 60);
+  const getDuration = (mediaFile) => {
+    if (!mediaFile) return null;
+    if (mediaFile.duration) return mediaFile.duration;
+    if (mediaFile.metaData?.duration) return mediaFile.metaData.duration;
+    return null;
+  };
+
+  const formatDuration = (val) => {
+    if (!val) return '';
+    if (typeof val === 'string' && (val.toLowerCase().includes('h') || val.toLowerCase().includes('m') || val.includes(':'))) return val;
+    
+    const num = Number(val);
+    if (isNaN(num)) return val;
+
+    const seconds = num < 1000 ? num * 60 : num;
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
     if (h > 0) return `${h}h ${m}m`;
     return `${m}m`;
   };
@@ -136,10 +148,10 @@ const PublicProductionDetail = () => {
                 <span>{production.releaseDate ? new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Coming Soon'}</span>
                 <span className="w-1 h-1 bg-white/20 rounded-full" />
                 <span>{production.mediaFiles?.find(m => m.category)?.category || production.genre || 'General'}</span>
-                {production.type !== 'Series' && movieAsset?.duration && (
+                {production.type !== 'Series' && (getDuration(movieAsset) || production.duration) && (
                   <>
                     <span className="w-1 h-1 bg-white/20 rounded-full" />
-                    <span>{formatDuration(movieAsset.duration)}</span>
+                    <span>{formatDuration(getDuration(movieAsset) || production.duration)}</span>
                   </>
                 )}
               </div>
@@ -214,10 +226,10 @@ const PublicProductionDetail = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
                             <span className="text-[10px] font-black text-[#e5a00d]">EP {ep.episodeNumber || '1'}</span>
-                            {ep.duration && (
+                            {getDuration(ep) && (
                               <>
                                 <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
-                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(ep.duration)}</span>
+                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(getDuration(ep))}</span>
                               </>
                             )}
                           </div>
