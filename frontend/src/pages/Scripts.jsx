@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users, Sparkles, X, Activity, User as UserIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users, Sparkles, X, Activity, User as UserIcon, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
 import PageHeader from '../components/PageHeader';
@@ -63,7 +63,18 @@ const Scripts = () => {
       setAiReviewScript({ ...aiReviewScript, aiReview: response.data.review });
       setAiGenerating(false);
     } catch (err) {
-      setAiError(err.response?.data?.message || 'Failed to generate review.');
+      let errorMessage = err.response?.data?.message || 'Failed to generate review.';
+      try {
+        if (errorMessage.includes('{')) {
+          const jsonStr = errorMessage.substring(errorMessage.indexOf('{'));
+          const parsed = JSON.parse(jsonStr);
+          if (parsed.error && parsed.error.message) {
+            errorMessage = parsed.error.message;
+          }
+        }
+      } catch(e) {}
+      
+      setAiError(errorMessage);
       setAiGenerating(false);
     }
   };
@@ -289,8 +300,12 @@ const Scripts = () => {
 
               <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
                 {aiError && (
-                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded text-sm mb-6">
-                    {aiError}
+                  <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-5 rounded-lg text-sm mb-6 flex items-start gap-4 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                    <AlertTriangle size={20} className="shrink-0 mt-0.5 text-red-500" />
+                    <div>
+                      <h4 className="font-bold text-red-500 mb-1">Analysis Failed</h4>
+                      <p className="opacity-90 leading-relaxed font-medium">{aiError}</p>
+                    </div>
                   </div>
                 )}
 
