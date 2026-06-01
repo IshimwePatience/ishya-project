@@ -31,7 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     authorId: DataTypes.INTEGER,
-    copyrightInfo: DataTypes.TEXT
+    copyrightInfo: DataTypes.TEXT,
+    aiReview: {
+      type: DataTypes.JSON,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'Script',

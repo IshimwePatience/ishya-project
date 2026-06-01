@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users, Sparkles, X, Activity, User as UserIcon } from 'lucide-react';
 import axios from 'axios';
 import ScriptForm from '../components/ScriptForm';
 import PageHeader from '../components/PageHeader';
@@ -14,6 +14,10 @@ const Scripts = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingScript, setEditingScript] = useState(null);
   const [error, setError] = useState('');
+  
+  const [aiReviewScript, setAiReviewScript] = useState(null);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState('');
 
   const [userRole, setUserRole] = useState('');
   
@@ -43,6 +47,24 @@ const Scripts = () => {
     } catch (err) {
       setError('Failed to fetch scripts.');
       setLoading(false);
+    }
+  };
+
+  const handleGenerateAiReview = async (scriptId) => {
+    setAiGenerating(true);
+    setAiError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${scriptId}/ai-review`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Update local state
+      setScripts(scripts.map(s => s.id === scriptId ? { ...s, aiReview: response.data.review } : s));
+      setAiReviewScript({ ...aiReviewScript, aiReview: response.data.review });
+      setAiGenerating(false);
+    } catch (err) {
+      setAiError(err.response?.data?.message || 'Failed to generate review.');
+      setAiGenerating(false);
     }
   };
 
@@ -182,24 +204,33 @@ const Scripts = () => {
                       className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300" 
                     />
                     {/* Top Right Actions */}
-                    {isManagement && (
-                      <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
-                         <button 
-                           onClick={(e) => { e.stopPropagation(); handleEdit(script); }}
-                           className="p-1.5 bg-theme-input-bg-hover hover:bg-white/20 rounded-sm transition-all text-theme-text"
-                           title="Edit"
-                         >
-                           <Edit2 size={12} />
-                         </button>
-                         <button 
-                           onClick={(e) => { e.stopPropagation(); handleDelete(script.id); }}
-                           className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400"
-                           title="Delete"
-                         >
-                           <Trash2 size={12} />
-                         </button>
-                      </div>
-                    )}
+                    <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); setAiReviewScript(script); }}
+                         className="p-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-sm transition-all text-indigo-400"
+                         title="AI Insights"
+                       >
+                         <Sparkles size={12} />
+                       </button>
+                       {isManagement && (
+                         <>
+                           <button 
+                             onClick={(e) => { e.stopPropagation(); handleEdit(script); }}
+                             className="p-1.5 bg-theme-input-bg-hover hover:bg-white/20 rounded-sm transition-all text-theme-text"
+                             title="Edit"
+                           >
+                             <Edit2 size={12} />
+                           </button>
+                           <button 
+                             onClick={(e) => { e.stopPropagation(); handleDelete(script.id); }}
+                             className="p-1.5 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-all text-red-400"
+                             title="Delete"
+                           >
+                             <Trash2 size={12} />
+                           </button>
+                         </>
+                       )}
+                    </div>
                     {!isManagement && (
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                          <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
@@ -230,6 +261,107 @@ const Scripts = () => {
           )}
         </>
       )}
+
+      {/* AI Insights Modal */}
+      <AnimatePresence>
+        {aiReviewScript && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[#111] border border-theme-border rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-theme-border-light bg-gradient-to-r from-[#111] to-indigo-950/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                    <Sparkles size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">AI Insights</h3>
+                    <p className="text-xs text-theme-text-muted">Analysis for: <span className="font-semibold text-theme-text">{aiReviewScript.title}</span></p>
+                  </div>
+                </div>
+                <button onClick={() => setAiReviewScript(null)} className="text-theme-text-muted hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                {aiError && (
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded text-sm mb-6">
+                    {aiError}
+                  </div>
+                )}
+
+                {aiReviewScript.aiReview ? (
+                  <div className="space-y-8">
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><FileText size={14}/> Summary</h4>
+                      <p className="text-sm text-theme-text leading-relaxed bg-[#1a1a1a] p-4 rounded-lg border border-theme-border-light">
+                        {aiReviewScript.aiReview.summary}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><Activity size={14}/> Tone & Genre</h4>
+                      <div className="inline-block bg-indigo-500/10 text-indigo-300 px-3 py-1.5 rounded-full text-xs font-bold border border-indigo-500/20">
+                        {aiReviewScript.aiReview.tone}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><UserIcon size={14}/> Characters</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {aiReviewScript.aiReview.characters?.map((char, idx) => (
+                          <div key={idx} className="bg-[#1a1a1a] p-3 rounded-lg border border-theme-border-light">
+                            <div className="font-bold text-sm text-white mb-1">{char.name}</div>
+                            <div className="text-xs text-theme-text-muted">{char.description}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><Sparkles size={14}/> AI Feedback</h4>
+                      <p className="text-sm text-theme-text leading-relaxed bg-gradient-to-br from-[#1a1a1a] to-indigo-950/20 p-4 rounded-lg border border-indigo-500/20 italic">
+                        "{aiReviewScript.aiReview.feedback}"
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <div className="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mb-6">
+                      <Sparkles size={32} />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-2">No Insights Generated</h4>
+                    <p className="text-sm text-theme-text-muted max-w-sm mx-auto mb-8">
+                      {isManagement ? "This script hasn't been analyzed yet. Run the AI to extract a plot summary, character list, and feedback." : "The production team hasn't generated AI insights for this script yet."}
+                    </p>
+                    
+                    {isManagement && (
+                      <button 
+                        onClick={() => handleGenerateAiReview(aiReviewScript.id)}
+                        disabled={aiGenerating}
+                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded font-bold transition-all shadow-lg shadow-indigo-500/20"
+                      >
+                        {aiGenerating ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Analyzing PDF...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles size={18} />
+                            Generate Magic Review
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
