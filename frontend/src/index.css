@@ -39,10 +39,9 @@
   --theme-accent-hover: #1a252f;
   --theme-accent-text: #ffffff;
 
-  /* Sidebar Specific (Custom Slate for Light Mode) */
   --theme-sidebar-bg: #202654;
   --theme-sidebar-text: #ffffff;
-  --theme-sidebar-text-muted: rgba(255, 255, 255, 0.6);
+  --theme-sidebar-text-muted: #ffffff;
   --theme-sidebar-hover: rgba(255, 255, 255, 0.1);
   --theme-navbar-bg: #ffffff;
   --theme-navbar-text: #111827;
