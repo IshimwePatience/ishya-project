@@ -11,7 +11,7 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
       <div className="flex items-center gap-6">
         {/* Custom Actions */}
         {actions && (
-          <div className="flex items-center gap-4 mr-2 pr-6 border-r border-theme-border-light">
+          <div className="flex flex-row-reverse items-center gap-4 mr-2 pr-6 border-r border-theme-border-light">
             {actions}
           </div>
         )}
