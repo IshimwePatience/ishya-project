@@ -30,7 +30,7 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
           animate={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="fixed inset-0 z-[200] bg-theme-bg text-theme-text px-6 md:px-10 pt-6 overflow-y-auto pb-20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="fixed inset-0 z-[200] bg-black text-theme-text px-6 md:px-10 pt-6 overflow-y-auto pb-20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           <div className="flex justify-between items-center mb-12">
             <button onClick={onClose} className="flex items-center gap-4 group">
@@ -46,7 +46,7 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
               <input
                 type="text"
                 placeholder="Search movies, events, venues..."
-                className="flex-1 bg-transparent border-b-2 border-theme-border px-0 text-2xl md:text-3xl font-bold tracking-tighter focus:outline-none focus:border-theme-text transition-colors placeholder:text-theme-text-muted-dark"
+                className="flex-1 bg-transparent border-b-2 border-theme-border px-0 text-2xl md:text-3xl font-bold tracking-tighter focus:outline-none focus:border-white transition-colors placeholder:text-theme-text-muted-dark"
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -223,7 +223,7 @@ const PublicNavbar = () => {
 
           <Link
             to="/login"
-            className="hidden md:flex px-6 py-3 border border-theme-border hover:border-theme-text rounded-sm text-sm transition-all bg-theme-input-bg backdrop-blur-md items-center gap-3 group"
+            className="hidden md:flex px-6 py-3 border border-theme-border hover:border-white rounded-sm text-sm transition-all bg-theme-input-bg backdrop-blur-md items-center gap-3 group"
             style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}
           >
             Login <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -246,7 +246,7 @@ const PublicNavbar = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[140] bg-theme-bg pt-24 px-6 lg:hidden"
+            className="fixed inset-0 z-[140] bg-[#0a0a0a] pt-24 px-6 lg:hidden"
           >
             <div className="flex flex-col gap-6">
               <Link to="/" className="text-4xl transition-colors text-theme-text-muted hover:text-theme-text" style={{ fontFamily: 'Lato, sans-serif', fontWeight: 'bold' }}>Catalog</Link>

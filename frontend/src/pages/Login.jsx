@@ -175,7 +175,7 @@ const Login = () => {
                   <label className="text-sm font-bold text-gray-400 ml-1">Email address</label>
                   <input
                     type="email"
-                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all text-theme-text placeholder-gray-600"
+                    className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all text-theme-text placeholder-gray-600"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -193,7 +193,7 @@ const Login = () => {
                   <div className="relative">
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all pr-12 text-theme-text placeholder-gray-600"
+                      className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-primary transition-all pr-12 text-theme-text placeholder-gray-600"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

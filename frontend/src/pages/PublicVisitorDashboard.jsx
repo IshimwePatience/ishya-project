@@ -464,7 +464,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="bg-theme-surface border border-theme-border rounded-sm p-8 max-w-md w-full relative shadow-2xl space-y-6 text-left my-8"
+              className="bg-[#0c0c0c] border border-theme-border rounded-sm p-8 max-w-md w-full relative shadow-2xl space-y-6 text-left my-8"
             >
               <button
                 onClick={() => setShowSubscriptionModal(false)}

@@ -80,7 +80,7 @@ const Cinema = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-theme-bg flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-[#e5a00d] animate-spin" />
       </div>
     );
@@ -88,7 +88,7 @@ const Cinema = () => {
 
   if (!media) {
     return (
-      <div className="min-h-screen bg-theme-bg flex flex-col items-center justify-center space-y-4">
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
         <h2 className="text-theme-text font-bold">Media Not Found</h2>
         <button
           onClick={() => navigate(-1)}

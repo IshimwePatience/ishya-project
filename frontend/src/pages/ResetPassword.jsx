@@ -72,7 +72,7 @@ const ResetPassword = () => {
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Email Address</label>
               <input
                 type="email"
-                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+                className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -85,7 +85,7 @@ const ResetPassword = () => {
           <div className="space-y-4">
             <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] text-center block w-full">6-Digit Code</label>
             <input
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-theme-border transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
               placeholder="000000"
               maxLength={6}
               value={code}
@@ -100,7 +100,7 @@ const ResetPassword = () => {
               <div className="relative">
                 <input
                   type="password"
-                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+                  className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -114,7 +114,7 @@ const ResetPassword = () => {
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Confirm New Password</label>
               <input
                 type="password"
-                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+                className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

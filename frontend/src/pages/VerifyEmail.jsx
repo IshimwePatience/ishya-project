@@ -92,7 +92,7 @@ const VerifyEmail = () => {
           <div className="space-y-4">
             <label className="text-xs font-medium text-gray-500 ml-1">6-digit code</label>
             <input
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-theme-border transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
               placeholder="000000"
               maxLength={6}
               value={code}

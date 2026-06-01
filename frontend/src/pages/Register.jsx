@@ -19,7 +19,7 @@ const CustomDropdown = ({ options, selected, onSelect }) => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 flex items-center justify-between text-theme-text hover:border-theme-border transition-all"
+        className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 flex items-center justify-between text-theme-text hover:border-brown-light transition-all"
       >
         <span className={selected ? "text-theme-text" : "text-gray-600"}>
           {selected || "Select a role"}
@@ -33,7 +33,7 @@ const CustomDropdown = ({ options, selected, onSelect }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-2 bg-brown border border-theme-border rounded-sm shadow-2xl overflow-hidden"
+            className="absolute z-50 w-full mt-2 bg-brown border border-brown-light rounded-sm shadow-2xl overflow-hidden"
           >
             {options.map((option) => (
               <div
@@ -125,7 +125,7 @@ const Register = ({ isInternal = false }) => {
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-400 ml-1">First name</label>
             <input
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
               placeholder="Enter first name"
               value={formData.firstName}
               onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -136,7 +136,7 @@ const Register = ({ isInternal = false }) => {
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-400 ml-1">Last name</label>
             <input
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
               placeholder="Enter last name"
               value={formData.lastName}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
@@ -148,7 +148,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Email address</label>
             <input
               type="email"
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
               placeholder="email@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -169,7 +169,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Password</label>
             <input
               type="password"
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -181,7 +181,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Confirm password</label>
             <input
               type="password"
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-theme-border transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-theme-text placeholder-gray-700"
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
