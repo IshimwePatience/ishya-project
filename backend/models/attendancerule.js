@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   AttendanceRule.init({
     targetLat: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
     targetLng: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
     radius: {

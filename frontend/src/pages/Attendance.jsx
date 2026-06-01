@@ -318,7 +318,8 @@ const Attendance = () => {
                 if (navigator.geolocation) {
                   navigator.geolocation.getCurrentPosition(
                     (pos) => setRuleForm({...ruleForm, targetLat: pos.coords.latitude, targetLng: pos.coords.longitude}),
-                    () => alert("Location access denied")
+                    () => alert("Location access denied"),
+                    { enableHighAccuracy: true }
                   );
                 }
               }} className="px-4 py-2 text-sm text-[#e5a00d] hover:bg-[#e5a00d]/10 rounded border border-[#e5a00d]/30 transition-colors">Use Current Location</button>
