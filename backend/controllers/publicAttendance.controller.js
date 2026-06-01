@@ -34,7 +34,7 @@ exports.getRule = async (req, res) => {
 
 exports.checkIn = async (req, res) => {
   try {
-  const { token, email, lat, lng, accuracy } = req.body;
+  const { token, email, lat, lng, accuracy, videoUrl } = req.body;
     
     // 1. Get Rule
     const rule = await AttendanceRule.findOne({ where: { publicToken: token, isActive: true } });
@@ -93,11 +93,13 @@ exports.checkIn = async (req, res) => {
       return res.json({ message: 'Already checked in.', attendance: existing });
     }
 
+    const status = now > targetTime ? 'Late' : 'Present';
     const attendance = await Attendance.create({
       userId: user.id,
-      checkIn: now,
-      status: now > targetTime ? 'Late' : 'Present',
-      location: `${lat},${lng}`
+      checkIn: new Date(),
+      status,
+      location: `Lat: ${lat}, Lng: ${lng} [Browser Accuracy Margin: ±${Math.round(accuracy)}m]`,
+      checkInVideoUrl: videoUrl
     });
 
     res.status(201).json({ message: 'Check-in successful!', attendance });

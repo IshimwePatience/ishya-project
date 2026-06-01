@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     autoCheckedOut: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    checkInVideoUrl: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     sequelize,
