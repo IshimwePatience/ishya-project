@@ -597,7 +597,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-theme-accent-text">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 bg-theme-navbar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-navbar-text">
+      <header className={`h-16 bg-theme-navbar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 right-0 z-40 gap-3 font-sans text-theme-navbar-text ${isPublic ? 'w-full' : 'w-full md:w-[calc(100%-18rem)]'}`}>
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
@@ -608,8 +608,8 @@ const DashboardLayout = ({ children }) => {
               <Menu size={24} />
             </button>
           )}
-          <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
-            <img src={logoImg} alt="Ishya" className="h-20 md:h-24 w-auto object-contain" />
+          <Link to="/dashboard" className={`flex items-center gap-1.5 no-underline ${!isPublic ? 'md:hidden' : ''}`}>
+            <img src={logoImg} alt="Ishya" className="h-16 md:h-20 w-auto object-contain" />
           </Link>
           {isPublic && (
             <div className="hidden md:flex items-center gap-1">
@@ -1116,7 +1116,12 @@ const DashboardLayout = ({ children }) => {
 
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className={`w-72 sidebar-theme bg-theme-sidebar-bg text-theme-sidebar-text flex flex-col pt-6 fixed md:top-16 top-0 h-[100dvh] md:h-[calc(100vh-64px)] z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <aside className={`w-72 sidebar-theme bg-theme-sidebar-bg text-theme-sidebar-text flex flex-col pt-6 md:pt-0 fixed top-0 h-[100dvh] md:h-screen z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="hidden md:flex items-center justify-center h-20 mb-4 mt-2">
+              <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
+                <img src={logoImg} alt="Ishya" className="h-16 w-auto object-contain" />
+              </Link>
+            </div>
             <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
               <span className="font-bold text-theme-sidebar-text">Menu</span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-sidebar-text-muted hover:text-theme-sidebar-text">
