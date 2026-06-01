@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     endTime: {
       type: DataTypes.TIME, // auto check-out time
-      allowNull: false
+      allowNull: false,
+      defaultValue: '17:00:00'
     },
     lateExtension: {
       type: DataTypes.INTEGER, // grace period in minutes
