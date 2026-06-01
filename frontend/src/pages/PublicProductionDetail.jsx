@@ -42,11 +42,14 @@ const PublicProductionDetail = () => {
     const num = Number(val);
     if (isNaN(num)) return val;
 
-    const seconds = num < 1000 ? num * 60 : num;
+    const seconds = Math.floor(num);
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    
     if (h > 0) return `${h}h ${m}m`;
-    return `${m}m`;
+    if (m > 0) return `${m}m ${s}s`;
+    return `${s}s`;
   };
 
   useEffect(() => {
