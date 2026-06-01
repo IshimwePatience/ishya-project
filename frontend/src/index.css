@@ -16,11 +16,12 @@
   --theme-accent-hover: #ffb414;
   --theme-accent-text: #000000;
 
-  /* Sidebar Specific (Dark Mode Defaults) */
   --theme-sidebar-bg: var(--theme-surface);
   --theme-sidebar-text: var(--theme-text);
   --theme-sidebar-text-muted: var(--theme-text-muted);
   --theme-sidebar-hover: var(--theme-input-bg);
+  --theme-navbar-bg: var(--theme-surface);
+  --theme-navbar-text: var(--theme-text);
 }
 
 [data-theme="light"] {
@@ -39,10 +40,12 @@
   --theme-accent-text: #ffffff;
 
   /* Sidebar Specific (Custom Slate for Light Mode) */
-  --theme-sidebar-bg: #4d5e6d;
+  --theme-sidebar-bg: #202654;
   --theme-sidebar-text: #ffffff;
   --theme-sidebar-text-muted: rgba(255, 255, 255, 0.6);
   --theme-sidebar-hover: rgba(255, 255, 255, 0.1);
+  --theme-navbar-bg: #ffffff;
+  --theme-navbar-text: #111827;
 }
 
 @theme {
@@ -73,6 +76,8 @@
   --color-theme-sidebar-text: var(--theme-sidebar-text);
   --color-theme-sidebar-text-muted: var(--theme-sidebar-text-muted);
   --color-theme-sidebar-hover: var(--theme-sidebar-hover);
+  --color-theme-navbar-bg: var(--theme-navbar-bg);
+  --color-theme-navbar-text: var(--theme-navbar-text);
 }
 
 .sidebar-theme {

@@ -36,11 +36,11 @@ const SidebarLink = ({ to, icon: Icon, label, active }) => (
   <Link
     to={to}
     className={`flex items-center gap-3 px-8 py-2 transition-all duration-200 relative group ${active
-      ? 'text-theme-text'
-      : 'text-theme-text-muted hover:text-theme-text'
+      ? 'text-theme-sidebar-text'
+      : 'text-theme-sidebar-text-muted hover:text-theme-sidebar-text'
       }`}
   >
-    <Icon size={18} className={active ? 'text-theme-accent' : 'group-hover:text-theme-text transition-colors'} />
+    <Icon size={18} className={active ? 'text-theme-accent' : 'group-hover:text-theme-sidebar-text transition-colors'} />
     <span className={`text-sm ${active ? 'font-medium' : 'font-normal'}`}>{label}</span>
   </Link>
 );
@@ -52,7 +52,7 @@ const SidebarGroup = ({ label, items, location }) => {
     <div className="mb-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-theme-text uppercase tracking-widest hover:text-theme-text transition-colors group"
+        className="w-full flex items-center justify-between px-6 py-3 text-[10px] font-bold text-theme-sidebar-text uppercase tracking-widest hover:text-theme-sidebar-text transition-colors group"
       >
         <span>{label}</span>
         <ChevronDown
@@ -597,13 +597,13 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-theme-accent-text">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 bg-theme-sidebar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-sidebar-text">
+      <header className="h-16 bg-theme-navbar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-navbar-text">
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden p-2 text-theme-sidebar-text-muted hover:text-theme-sidebar-text bg-transparent border-none"
+              className="md:hidden p-2 text-theme-text-muted hover:text-theme-navbar-text bg-transparent border-none"
             >
               <Menu size={24} />
             </button>
@@ -616,7 +616,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard' ? 'font-semibold text-theme-sidebar-text' : 'font-normal text-theme-sidebar-text-muted hover:text-theme-sidebar-text'
+                  location.pathname === '/dashboard' ? 'font-semibold text-theme-navbar-text' : 'font-normal text-theme-text-muted hover:text-theme-navbar-text'
                 }`}
               >
                 Catalog
@@ -624,7 +624,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard/events')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-sidebar-text' : 'font-normal text-theme-sidebar-text-muted hover:text-theme-sidebar-text'
+                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-navbar-text' : 'font-normal text-theme-text-muted hover:text-theme-navbar-text'
                 }`}
               >
                 Events
@@ -635,12 +635,12 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
-          <div className="flex items-center gap-2 bg-theme-sidebar-hover rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all focus-within:bg-theme-sidebar-hover/80">
+          <div className="flex items-center gap-2 bg-theme-input-bg rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all focus-within:bg-theme-input-bg/80">
             <Search size={15} color="currentColor" className="shrink-0 opacity-50" />
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-theme-sidebar-text w-full caret-theme-accent h-full p-0 placeholder-theme-sidebar-text-muted"
+              className="bg-transparent border-none outline-none text-sm text-theme-navbar-text w-full caret-theme-accent h-full p-0 placeholder-theme-sidebar-text-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
@@ -648,7 +648,7 @@ const DashboardLayout = ({ children }) => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="bg-transparent border-none text-theme-sidebar-text-muted hover:text-theme-sidebar-text text-xs cursor-pointer p-0 shrink-0 font-bold"
+                className="bg-transparent border-none text-theme-text-muted hover:text-theme-navbar-text text-xs cursor-pointer p-0 shrink-0 font-bold"
               >
                 ✕
               </button>
@@ -678,7 +678,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('productions', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Film size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Film size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.genre} • {item.type} • {item.status}</div>
@@ -700,7 +700,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('scripts', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <FileText size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <FileText size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Version {item.version} • {item.fileType || 'Document'}</div>
@@ -722,7 +722,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('mediaFiles', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Library size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Library size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.fileName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Type: {item.fileType || 'Asset'}</div>
@@ -744,7 +744,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('talents', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <UserIcon size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <UserIcon size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.firstName} {item.lastName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.specialty || 'Talent'} • {item.email}</div>
@@ -766,7 +766,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('buyers', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Briefcase size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Briefcase size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.name}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.type} • Contact: {item.contactPerson}</div>
@@ -788,7 +788,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('buyerRequests', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Bell size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Bell size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.name}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Status: {item.status} • Representative: {item.contactPerson}</div>
@@ -810,7 +810,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('events', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Calendar size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Calendar size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
@@ -832,7 +832,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('expenses', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Receipt size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Receipt size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.description}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Category: {item.category} • Amount: ${Number(item.amount).toLocaleString()}</div>
@@ -854,7 +854,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('sales', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <Wallet size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <Wallet size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">License: {item.production?.title || 'Production'}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Type: {item.saleType} • Partner: {item.buyer?.name || 'Buyer'} • Amount: ${Number(item.amount).toLocaleString()}</div>
@@ -876,7 +876,7 @@ const DashboardLayout = ({ children }) => {
                             onClick={() => handleSearchResultClick('users', item)}
                             className="flex items-center gap-3 p-2 rounded hover:bg-theme-input-bg transition-colors cursor-pointer group"
                           >
-                            <ShieldCheck size={14} className="text-theme-text/45 group-hover:text-theme-text" />
+                            <ShieldCheck size={14} className="text-theme-text/45 group-hover:text-theme-sidebar-text" />
                             <div className="min-w-0 flex-1">
                               <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.firstName} {item.lastName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.email}</div>
@@ -948,7 +948,7 @@ const DashboardLayout = ({ children }) => {
           {/* Theme Toggle Button */}
           <button
             onClick={handleThemeToggle}
-            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover transition-all duration-150"
+            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg transition-all duration-150"
             title="Toggle Theme"
           >
             {user?.theme === 'light' || document.documentElement.getAttribute('data-theme') === 'light' ? (
@@ -961,7 +961,7 @@ const DashboardLayout = ({ children }) => {
           <div className="notif-container relative">
             <button
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover transition-all duration-150"
+              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg transition-all duration-150"
             >
               <Bell size={17} />
               {unreadCount > 0 && (
@@ -1071,7 +1071,7 @@ const DashboardLayout = ({ children }) => {
 
           {/* Avatar + dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-sidebar-hover">
+            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-input-bg">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-theme-accent to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
                 {user?.profilePic ? (
                   <img src={user.profilePic} alt="Avatar" className="w-full h-full object-cover" />
@@ -1116,10 +1116,10 @@ const DashboardLayout = ({ children }) => {
 
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className={`w-72 sidebar-theme bg-theme-surface flex flex-col pt-6 fixed md:top-16 top-0 h-[100dvh] md:h-[calc(100vh-64px)] z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <aside className={`w-72 sidebar-theme bg-theme-sidebar-bg text-theme-sidebar-text flex flex-col pt-6 fixed md:top-16 top-0 h-[100dvh] md:h-[calc(100vh-64px)] z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
-              <span className="font-bold text-theme-text">Menu</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-text-muted hover:text-theme-text">
+              <span className="font-bold text-theme-sidebar-text">Menu</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-sidebar-text-muted hover:text-theme-sidebar-text">
                 <X size={20} />
               </button>
             </div>
@@ -1136,7 +1136,7 @@ const DashboardLayout = ({ children }) => {
             <div className="p-4 border-t border-theme-border-light">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-6 py-2.5 text-theme-text-muted hover:text-theme-text hover:bg-theme-input-bg transition-all group rounded-sm"
+                className="w-full flex items-center gap-3 px-6 py-2.5 text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover transition-all group rounded-sm"
               >
                 <LogOut size={18} />
                 <span className="font-medium text-sm">Sign Out</span>
