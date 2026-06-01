@@ -295,23 +295,23 @@ const Attendance = () => {
           <form onSubmit={handleSaveRule} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="space-y-2">
               <label className="text-xs text-theme-text-muted font-bold uppercase">Target Latitude</label>
-              <input type="number" step="any" required value={ruleForm.targetLat} onChange={e => setRuleForm({...ruleForm, targetLat: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. -1.957" />
+              <input type="number" step="any" required value={ruleForm.targetLat} onChange={e => setRuleForm({...ruleForm, targetLat: e.target.value})} className="w-full bg-theme-input-bg text-theme-text border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. -1.957" />
             </div>
             <div className="space-y-2">
               <label className="text-xs text-theme-text-muted font-bold uppercase">Target Longitude</label>
-              <input type="number" step="any" required value={ruleForm.targetLng} onChange={e => setRuleForm({...ruleForm, targetLng: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. 30.094" />
+              <input type="number" step="any" required value={ruleForm.targetLng} onChange={e => setRuleForm({...ruleForm, targetLng: e.target.value})} className="w-full bg-theme-input-bg text-theme-text border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. 30.094" />
             </div>
             <div className="space-y-2">
               <label className="text-xs text-theme-text-muted font-bold uppercase">Radius (meters)</label>
-              <input type="number" required value={ruleForm.radius} onChange={e => setRuleForm({...ruleForm, radius: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+              <input type="number" required value={ruleForm.radius} onChange={e => setRuleForm({...ruleForm, radius: e.target.value})} className="w-full bg-theme-input-bg text-theme-text border border-theme-border rounded px-3 py-2 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="text-xs text-theme-text-muted font-bold uppercase">Start Time</label>
-              <input type="time" required value={ruleForm.startTime} onChange={e => setRuleForm({...ruleForm, startTime: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+              <input type="time" required value={ruleForm.startTime} onChange={e => setRuleForm({...ruleForm, startTime: e.target.value})} className="w-full bg-theme-input-bg text-theme-text border border-theme-border rounded px-3 py-2 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="text-xs text-theme-text-muted font-bold uppercase">Late Ext (mins)</label>
-              <input type="number" required value={ruleForm.lateExtension} onChange={e => setRuleForm({...ruleForm, lateExtension: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+              <input type="number" required value={ruleForm.lateExtension} onChange={e => setRuleForm({...ruleForm, lateExtension: e.target.value})} className="w-full bg-theme-input-bg text-theme-text border border-theme-border rounded px-3 py-2 text-sm" />
             </div>
             <div className="lg:col-span-5 flex justify-end gap-3 mt-2">
               <button type="button" onClick={() => {
