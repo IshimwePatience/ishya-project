@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, FileText, Users, Sparkles, X, Activity, User as UserIcon, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
@@ -9,15 +9,13 @@ import usePreferences from '../hooks/usePreferences';
 
 const Scripts = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [scripts, setScripts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingScript, setEditingScript] = useState(null);
   const [error, setError] = useState('');
   
-  const [aiReviewScript, setAiReviewScript] = useState(null);
-  const [aiGenerating, setAiGenerating] = useState(false);
-  const [aiError, setAiError] = useState('');
 
   const [userRole, setUserRole] = useState('');
   
@@ -50,35 +48,7 @@ const Scripts = () => {
     }
   };
 
-  const handleGenerateAiReview = async (scriptId) => {
-    setAiGenerating(true);
-    setAiError('');
-    try {
-      const token = sessionStorage.getItem('token');
-      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${scriptId}/ai-review`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      // Update local state
-      setScripts(scripts.map(s => s.id === scriptId ? { ...s, aiReview: response.data.review } : s));
-      setAiReviewScript({ ...aiReviewScript, aiReview: response.data.review });
-      setAiGenerating(false);
-    } catch (err) {
-      let errorMessage = err.response?.data?.message || 'Failed to generate review.';
-      try {
-        if (errorMessage.includes('{')) {
-          const jsonStr = errorMessage.substring(errorMessage.indexOf('{'));
-          const parsed = JSON.parse(jsonStr);
-          if (parsed.error && parsed.error.message) {
-            errorMessage = parsed.error.message;
-          }
-        }
-      } catch(e) {}
-      
-      setAiError(errorMessage);
-      setAiGenerating(false);
-    }
-  };
-
+  
   useEffect(() => {
     if (scripts.length > 0 && location.state?.openId) {
       const scriptId = parseInt(location.state.openId);
@@ -217,7 +187,7 @@ const Scripts = () => {
                     {/* Top Right Actions */}
                     <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
                        <button 
-                         onClick={(e) => { e.stopPropagation(); setAiReviewScript(script); }}
+                         onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/scripts/${script.id}/insights`); }}
                          className="p-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-sm transition-all text-indigo-400"
                          title="AI Insights"
                        >
@@ -273,111 +243,7 @@ const Scripts = () => {
         </>
       )}
 
-      {/* AI Insights Modal */}
-      <AnimatePresence>
-        {aiReviewScript && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#111] border border-theme-border rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col"
-            >
-              <div className="flex items-center justify-between p-6 border-b border-theme-border-light bg-gradient-to-r from-[#111] to-indigo-950/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                    <Sparkles size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-theme-text">AI Insights</h3>
-                    <p className="text-xs text-theme-text-muted">Analysis for: <span className="font-semibold text-theme-text">{aiReviewScript.title}</span></p>
-                  </div>
-                </div>
-                <button onClick={() => setAiReviewScript(null)} className="text-theme-text-muted hover:text-theme-text transition-colors">
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
-                {aiError && (
-                  <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-5 rounded-lg text-sm mb-6 flex items-start gap-4 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
-                    <AlertTriangle size={20} className="shrink-0 mt-0.5 text-red-500" />
-                    <div>
-                      <h4 className="font-bold text-red-500 mb-1">Analysis Failed</h4>
-                      <p className="opacity-90 leading-relaxed font-medium">{aiError}</p>
-                    </div>
-                  </div>
-                )}
-
-                {aiReviewScript.aiReview ? (
-                  <div className="space-y-8">
-                    <div>
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><FileText size={14}/> Summary</h4>
-                      <p className="text-sm text-theme-text leading-relaxed bg-theme-input-bg p-4 rounded-lg border border-theme-border-light">
-                        {aiReviewScript.aiReview.summary}
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><Activity size={14}/> Tone & Genre</h4>
-                      <div className="inline-block bg-indigo-500/10 text-indigo-300 px-3 py-1.5 rounded-full text-xs font-bold border border-indigo-500/20">
-                        {aiReviewScript.aiReview.tone}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><UserIcon size={14}/> Characters</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {aiReviewScript.aiReview.characters?.map((char, idx) => (
-                          <div key={idx} className="bg-theme-input-bg p-3 rounded-lg border border-theme-border-light">
-                            <div className="font-bold text-sm text-theme-text mb-1">{char.name}</div>
-                            <div className="text-xs text-theme-text-muted">{char.description}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><Sparkles size={14}/> AI Feedback</h4>
-                      <p className="text-sm text-theme-text leading-relaxed bg-gradient-to-br from-[#1a1a1a] to-indigo-950/20 p-4 rounded-lg border border-indigo-500/20 italic">
-                        "{aiReviewScript.aiReview.feedback}"
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mb-6">
-                      <Sparkles size={32} />
-                    </div>
-                    <h4 className="text-lg font-bold text-theme-text mb-2">No Insights Generated</h4>
-                    <p className="text-sm text-theme-text-muted max-w-sm mx-auto mb-8">
-                      {isManagement ? "This script hasn't been analyzed yet. Run the AI to extract a plot summary, character list, and feedback." : "The production team hasn't generated AI insights for this script yet."}
-                    </p>
-                    
-                    {isManagement && (
-                      <button 
-                        onClick={() => handleGenerateAiReview(aiReviewScript.id)}
-                        disabled={aiGenerating}
-                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-theme-text rounded font-bold transition-all shadow-lg shadow-indigo-500/20"
-                      >
-                        {aiGenerating ? (
-                          <>
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            Analyzing PDF...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles size={18} />
-                            Generate Magic Review
-                          </>
-                        )}
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </motion.div>
           </div>
-        )}
-      </AnimatePresence>
-    </div>
   );
 };
 

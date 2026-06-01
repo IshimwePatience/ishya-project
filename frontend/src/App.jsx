@@ -16,6 +16,7 @@ import VerifyEmail from './pages/VerifyEmail';
 import UserManagement from './pages/UserManagement';
 import Talents from './pages/Talents';
 import Scripts from './pages/Scripts';
+import ScriptInsights from './pages/ScriptInsights';
 import Sales from './pages/Sales';
 import Expenses from './pages/Expenses';
 import Buyers from './pages/Buyers';
@@ -73,6 +74,7 @@ function App() {
         <Route path="/dashboard/users" element={<DashboardLayout><UserManagement /></DashboardLayout>} />
         <Route path="/dashboard/talents" element={<DashboardLayout><Talents /></DashboardLayout>} />
         <Route path="/dashboard/scripts" element={<DashboardLayout><Scripts /></DashboardLayout>} />
+        <Route path="/dashboard/scripts/:id/insights" element={<DashboardLayout><ScriptInsights /></DashboardLayout>} />
         <Route path="/dashboard/sales" element={<DashboardLayout><Sales /></DashboardLayout>} />
         <Route path="/dashboard/expenses" element={<DashboardLayout><Expenses /></DashboardLayout>} />
         <Route path="/dashboard/buyers" element={<DashboardLayout><Buyers /></DashboardLayout>} />
