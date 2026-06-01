@@ -130,7 +130,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                   className="bg-theme-surface border border-theme-border-light p-6 rounded-sm group hover:border-[#e5a00d]/30 transition-all cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-3 bg-black rounded-sm text-theme-text-muted group-hover:text-[#e5a00d] transition-colors">
+                    <div className="p-3 bg-theme-bg rounded-sm text-theme-text-muted group-hover:text-[#e5a00d] transition-colors">
                       <FileText size={20} />
                     </div>
                     <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-2 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity">
@@ -214,7 +214,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
               {(activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).length > 0 ? (
                 (activeEventTab === 'upcoming' ? upcomingEvents : recentEvents).slice(0, 3).map((event, i) => (
                   <div key={i} className="p-4 bg-theme-surface border border-theme-border-light flex items-center gap-4 hover:bg-theme-input-bg transition-colors rounded-sm">
-                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-theme-border-light">
+                    <div className="w-10 h-10 bg-theme-bg flex flex-col items-center justify-center text-[#e5a00d] rounded-sm border border-theme-border-light">
                       <span className="text-[9px] font-bold uppercase">{new Date(event.startTime).toLocaleString('default', { month: 'short' })}</span>
                       <span className="text-sm font-bold">{new Date(event.startTime).getDate()}</span>
                     </div>
@@ -264,7 +264,7 @@ const BarChart = ({ data, zoom }) => {
                     className="w-full bg-gradient-to-t from-[#e5a00d] to-[#f5c842] rounded-sm shadow-[0_0_12px_rgba(229,160,13,0.2)]"
                   />
                   {/* Glassmorphic interactive Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#161616] border border-theme-border text-[9px] font-bold text-[#e5a00d] px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-theme-input-bg border border-theme-border text-[9px] font-bold text-[#e5a00d] px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
                     {Number(d.value).toLocaleString()} RWF
                   </div>
                 </div>
@@ -558,7 +558,7 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
               ) : (
                 events.map((event) => (
                   <div key={event.id} className="p-4 bg-theme-surface border border-theme-border-light rounded-sm flex items-start gap-4 hover:bg-theme-input-bg transition-colors relative group">
-                    <div className="w-10 h-10 bg-black flex flex-col items-center justify-center text-[#e5a00d] rounded-sm shrink-0 border border-theme-border-light">
+                    <div className="w-10 h-10 bg-theme-bg flex flex-col items-center justify-center text-[#e5a00d] rounded-sm shrink-0 border border-theme-border-light">
                       <span className="text-[8px] font-black uppercase tracking-wider">
                         {new Date(event.startTime).toLocaleString('default', { month: 'short' })}
                       </span>

@@ -285,7 +285,7 @@ const MediaLibrary = () => {
                         <Download size={14} /> Download Poster
                       </button>
                       {openDownloadDropdown === poster.id && (
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
                           <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                             Format Options
                           </div>
@@ -352,7 +352,7 @@ const MediaLibrary = () => {
                         <Download size={14} /> Download Trailer
                       </button>
                       {openDownloadDropdown === trailer.id && (
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
                           <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                             Format Options
                           </div>
@@ -442,7 +442,7 @@ const MediaLibrary = () => {
                                 <Download size={16} />
                               </button>
                               {openDownloadDropdown === item.id && (
-                                <div className="absolute right-0 top-full mt-2 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
+                                <div className="absolute right-0 top-full mt-2 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-50 min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans text-theme-text">
                                   <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                     Format Options
                                   </div>
@@ -597,7 +597,7 @@ const MediaLibrary = () => {
                           <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed">
                             Your request for <span className="text-theme-text font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile?.name}</span>.
                           </p>
-                          <div className="bg-[#1c1c1c] border border-theme-border-light rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-theme-text/70">
+                          <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-theme-text/70">
                             <div>• <span className="font-semibold text-theme-text">Distributor:</span> {partnerProfile?.name}</div>
                             <div>• <span className="font-semibold text-theme-text">Channel Type:</span> {partnerProfile?.type}</div>
                             <div>• <span className="font-semibold text-theme-text">Representative:</span> {partnerProfile?.contactPerson}</div>
@@ -625,7 +625,7 @@ const MediaLibrary = () => {
                           </p>
                         </div>
 
-                        <div className="bg-[#1c1c1c] border border-theme-border-light rounded-sm p-6 text-left text-xs space-y-3 text-theme-text-muted max-w-sm mx-auto">
+                        <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-6 text-left text-xs space-y-3 text-theme-text-muted max-w-sm mx-auto">
                           <div className="flex justify-between border-b border-theme-border-light pb-3.5 text-theme-text">
                             <span className="font-semibold tracking-normal text-[10px]">Verified Partner Identity</span>
                             <span className="text-[#e5a00d] font-semibold flex items-center gap-1">

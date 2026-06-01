@@ -386,7 +386,7 @@ const PartnerRequests = () => {
                         </div>
                       </div>
 
-                      <div className="bg-[#1c1c1c] border border-theme-border-light rounded-sm p-4 text-xs space-y-2 text-theme-text-muted">
+                      <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-4 text-xs space-y-2 text-theme-text-muted">
                         <div className="flex justify-between">
                           <span>Distributor Type:</span>
                           <span className="text-theme-text font-medium">{sale.buyer?.type || 'N/A'}</span>
@@ -528,7 +528,7 @@ const PartnerRequests = () => {
                     required
                     type="number"
                     min="1"
-                    className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-theme-text text-sm font-sans"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-theme-text text-sm font-sans"
                     placeholder="e.g. 500000"
                     value={licensePrice}
                     onChange={(e) => setLicensePrice(e.target.value)}

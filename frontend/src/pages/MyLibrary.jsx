@@ -371,7 +371,7 @@ const MyLibrary = () => {
             )}
 
             {/* Modal Header */}
-            <div className="p-8 border-b border-theme-border-light flex items-center justify-between bg-[#161616]">
+            <div className="p-8 border-b border-theme-border-light flex items-center justify-between bg-theme-input-bg">
               <div className="space-y-1">
                 <h2 className="text-2xl font-medium text-theme-text tracking-normal">{selectedProduction.title}</h2>
                 <div className="flex items-center gap-3">
@@ -520,7 +520,7 @@ const MyLibrary = () => {
                                                   <Download size={14} />
                                                 </button>
                                                 {openDownloadDropdown === file.id && (
-                                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                                  <div className="absolute right-0 top-full mt-1 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
                                                     <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                                       Format Options
                                                     </div>
@@ -582,7 +582,7 @@ const MyLibrary = () => {
                                           <Download size={20} />
                                         </button>
                                         {openDownloadDropdown === file.id && (
-                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                          <div className="absolute right-0 top-full mt-1 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
                                             <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                               Format Options
                                             </div>
@@ -665,7 +665,7 @@ const MyLibrary = () => {
                                           <Download size={16} />
                                         </button>
                                         {openDownloadDropdown === file.id && (
-                                          <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                          <div className="absolute right-0 top-full mt-1 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
                                             <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                               Format Options
                                             </div>
@@ -751,7 +751,7 @@ const MyLibrary = () => {
                                   <Download size={16} />
                                 </button>
                                 {openDownloadDropdown === file.id && (
-                                  <div className="absolute right-0 top-full mt-1 bg-[#161616] border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
+                                  <div className="absolute right-0 top-full mt-1 bg-theme-input-bg border border-theme-border rounded shadow-2xl py-1.5 z-[120] min-w-[140px] text-left animate-in fade-in slide-in-from-top-1 duration-100 font-sans">
                                     <div className="px-3 py-1 text-[9px] font-bold text-theme-text-muted uppercase tracking-wider border-b border-theme-border-light mb-1">
                                       Format Options
                                     </div>

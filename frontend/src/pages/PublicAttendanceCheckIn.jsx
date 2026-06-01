@@ -213,7 +213,7 @@ const PublicAttendanceCheckIn = () => {
 
         {status === 'setup' && rule && (
           <form onSubmit={handleCheckIn} className="space-y-6">
-            <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-theme-border-light relative aspect-video flex items-center justify-center">
+            <div className="bg-theme-input-bg rounded-lg overflow-hidden border border-theme-border-light relative aspect-video flex items-center justify-center">
               {!videoStream ? (
                 <div className="flex flex-col items-center gap-2 text-theme-text-muted p-6 text-center">
                   <Camera size={32} className="opacity-50" />
@@ -238,14 +238,14 @@ const PublicAttendanceCheckIn = () => {
               )}
             </div>
 
-            <div className="bg-[#1a1a1a] p-4 rounded-lg space-y-3 mb-6 border border-theme-border-light">
+            <div className="bg-theme-input-bg p-4 rounded-lg space-y-3 mb-6 border border-theme-border-light">
               <div className="flex items-center gap-3 text-sm text-theme-text/80">
                 <Clock size={16} className="text-theme-accent" />
-                <span>Call Time: <strong className="text-white">{rule.startTime}</strong></span>
+                <span>Call Time: <strong className="text-theme-text">{rule.startTime}</strong></span>
               </div>
               <div className="flex items-center gap-3 text-sm text-theme-text/80">
                 <MapPin size={16} className="text-theme-accent" />
-                <span>Radius: <strong className="text-white">{rule.radius}m</strong></span>
+                <span>Radius: <strong className="text-theme-text">{rule.radius}m</strong></span>
               </div>
             </div>
 

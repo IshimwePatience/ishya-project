@@ -73,7 +73,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             required
             type="text"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Arena Village"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -90,7 +90,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select
             required
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.categoryId}
             onChange={(e) => {
               const catId = e.target.value;
@@ -121,7 +121,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input
             type="number"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="0.00"
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
@@ -137,7 +137,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[120px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[120px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Brief overview of the project..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -153,7 +153,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input
             type="text"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Drama, Musical, Documentary"
             value={formData.genre}
             onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
@@ -169,7 +169,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input
             type="text"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             value={formData.language}
             onChange={(e) => setFormData({ ...formData, language: e.target.value })}
           />
@@ -184,7 +184,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input
             type="date"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text appearance-none cursor-pointer"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text appearance-none cursor-pointer"
             value={formData.releaseDate}
             onChange={(e) => setFormData({ ...formData, releaseDate: e.target.value })}
           />

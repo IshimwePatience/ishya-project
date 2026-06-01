@@ -280,12 +280,12 @@ const Attendance = () => {
               <p className="text-sm text-theme-text-muted">Set up geofencing and strict time policies for Talents.</p>
             </div>
             {activeRule && (
-              <div className="bg-[#1a1a1a] border border-theme-border p-3 rounded-lg flex items-center gap-4">
+              <div className="bg-theme-input-bg border border-theme-border p-3 rounded-lg flex items-center gap-4">
                 <div>
                   <div className="text-[10px] uppercase text-theme-text-muted font-bold mb-1">Active Public Link</div>
                   <div className="text-xs font-mono text-theme-accent">{`${window.location.origin}/attendance/link/${activeRule.publicToken}`}</div>
                 </div>
-                <button onClick={copyToClipboard} className="p-2 bg-theme-border-light hover:bg-theme-border rounded text-white">
+                <button onClick={copyToClipboard} className="p-2 bg-theme-border-light hover:bg-theme-border rounded text-theme-text">
                   {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
                 </button>
               </div>

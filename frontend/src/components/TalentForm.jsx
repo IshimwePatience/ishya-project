@@ -124,7 +124,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3 flex items-center gap-6">
            <div className="relative group/avatar">
-              <div className="w-20 h-20 rounded-full bg-[#161616] border border-theme-border overflow-hidden flex items-center justify-center">
+              <div className="w-20 h-20 rounded-full bg-theme-input-bg border border-theme-border overflow-hidden flex items-center justify-center">
                  {formData.profilePic ? (
                    <img src={formData.profilePic} alt="Preview" className="w-full h-full object-cover" />
                  ) : (
@@ -146,8 +146,8 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Full name</label>
         </div>
         <div className="w-full md:w-2/3 flex gap-4">
-          <input required type="text" className="w-1/2 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="First name" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
-          <input required type="text" className="w-1/2 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Last name" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="First name" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Last name" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
         </div>
       </div>
 
@@ -157,8 +157,8 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contact Info</label>
         </div>
         <div className="w-full md:w-2/3 flex gap-4">
-          <input required type="email" className="w-2/3 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Email (Unique)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-          <input required type="tel" className="w-1/3 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="+250..." value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+          <input required type="email" className="w-2/3 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Email (Unique)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+          <input required type="tel" className="w-1/3 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="+250..." value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
         </div>
       </div>
 
@@ -199,7 +199,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
                 <input 
                   required={formData.createAccount && !initialData?.userId}
                   type="text" 
-                  className="w-full bg-[#161616] border border-theme-border rounded-sm pl-12 pr-4 py-3 text-theme-text text-sm focus:border-[#e5a00d] outline-none transition-all" 
+                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 text-theme-text text-sm focus:border-[#e5a00d] outline-none transition-all" 
                   placeholder={initialData?.userId ? "Leave blank to keep current" : "Enter login password"} 
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -216,7 +216,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Primary role</label>
         </div>
         <div className="w-full md:w-2/3">
-          <select required className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text appearance-none" value={formData.specialty} onChange={(e) => setFormData({...formData, specialty: e.target.value})}>
+          <select required className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text appearance-none" value={formData.specialty} onChange={(e) => setFormData({...formData, specialty: e.target.value})}>
             {specialties.map(spec => <option key={spec} value={spec} className="bg-[#111111]">{spec}</option>)}
           </select>
         </div>
@@ -227,7 +227,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Biography</label>
         </div>
         <div className="w-full md:w-2/3">
-          <textarea className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text min-h-[100px] resize-none text-xs" placeholder="Professional background..." value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} />
+          <textarea className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text min-h-[100px] resize-none text-xs" placeholder="Professional background..." value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} />
         </div>
       </div>
 
@@ -240,7 +240,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto no-scrollbar pr-2">
             {productionsList.map(prod => (
-              <label key={prod.id} className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition-all ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d]/10 border-[#e5a00d]/30 text-[#e5a00d]' : 'bg-[#161616] border-theme-border text-theme-text-muted hover:border-white/30 hover:text-theme-text'}`}>
+              <label key={prod.id} className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition-all ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d]/10 border-[#e5a00d]/30 text-[#e5a00d]' : 'bg-theme-input-bg border-theme-border text-theme-text-muted hover:border-white/30 hover:text-theme-text'}`}>
                 <input 
                   type="checkbox" 
                   className="hidden" 

@@ -132,7 +132,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Sinamenye - Final Draft"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -154,7 +154,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               onChange={handleFileUpload}
             />
-            <div className={`w-full bg-[#161616] border-2 border-dashed ${formData.filePath ? 'border-green-500/30' : 'border-theme-border'} rounded-sm px-6 py-8 flex flex-col items-center justify-center gap-3 transition-all group-hover/upload:border-[#e5a00d]/30`}>
+            <div className={`w-full bg-theme-input-bg border-2 border-dashed ${formData.filePath ? 'border-green-500/30' : 'border-theme-border'} rounded-sm px-6 py-8 flex flex-col items-center justify-center gap-3 transition-all group-hover/upload:border-[#e5a00d]/30`}>
                {uploading ? (
                  <div className="animate-spin text-[#e5a00d]"><Upload size={24} /></div>
                ) : formData.filePath ? (
@@ -182,7 +182,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
@@ -211,7 +211,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
                 className={`p-3 rounded-sm border cursor-pointer transition-all flex items-center justify-between group/item ${
                   formData.talentIds.includes(actor.id) 
                     ? 'bg-[#e5a00d]/10 border-[#e5a00d]/30 text-theme-text' 
-                    : 'bg-[#161616] border-theme-border-light text-theme-text-muted hover:border-theme-border'
+                    : 'bg-theme-input-bg border-theme-border-light text-theme-text-muted hover:border-theme-border'
                 }`}
               >
                 <span className="text-xs font-medium">{actor.firstName} {actor.lastName}</span>
@@ -230,13 +230,13 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3 flex gap-4">
           <input 
             type="text"
-            className="w-1/2 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark font-mono"
+            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark font-mono"
             placeholder="v1.0"
             value={formData.version}
             onChange={(e) => setFormData({...formData, version: e.target.value})}
           />
           <select 
-            className="w-1/2 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.status}
             onChange={(e) => setFormData({...formData, status: e.target.value})}
           >
@@ -254,7 +254,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text text-xs leading-relaxed"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text text-xs leading-relaxed"
             placeholder="Legal ownership details..."
             value={formData.copyrightInfo}
             onChange={(e) => setFormData({...formData, copyrightInfo: e.target.value})}

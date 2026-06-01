@@ -566,7 +566,7 @@ const Settings = () => {
                 }`}
               >
                 <span
-                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-black shadow ring-0 transition duration-200 ease-in-out ${
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-theme-bg shadow ring-0 transition duration-200 ease-in-out ${
                     is2FAEnabled ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
@@ -666,7 +666,7 @@ const Settings = () => {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-black shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-theme-bg shadow ring-0 transition duration-200 ease-in-out ${
                       notifPrefs.emailAlerts ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -687,7 +687,7 @@ const Settings = () => {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-black shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-theme-bg shadow ring-0 transition duration-200 ease-in-out ${
                       notifPrefs.browserAlerts ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -708,7 +708,7 @@ const Settings = () => {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-black shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-theme-bg shadow ring-0 transition duration-200 ease-in-out ${
                       notifPrefs.marketingEmails ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -729,7 +729,7 @@ const Settings = () => {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-black shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-theme-bg shadow ring-0 transition duration-200 ease-in-out ${
                       notifPrefs.troubleshootingAlerts ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />

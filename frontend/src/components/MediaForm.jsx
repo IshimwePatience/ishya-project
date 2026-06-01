@@ -303,7 +303,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select
             required
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
@@ -347,7 +347,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             type="text"
             placeholder="e.g. Action, Comedy, Drama..."
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           />
@@ -361,7 +361,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text h-32 resize-none"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text h-32 resize-none"
             placeholder="Tell us more about this media package..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -406,7 +406,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                   <input
                     type="text"
                     placeholder="e.g. Episode Title"
-                    className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                     value={ep.fileName}
                     onChange={(e) => {
                       const newEps = [...episodes];
@@ -421,7 +421,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                       <label className="text-[10px] font-medium text-theme-text-muted-dark">Season</label>
                       <input
                         type="number"
-                        className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                         value={ep.season}
                         onChange={(e) => {
                           const newEps = [...episodes];
@@ -434,7 +434,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                       <label className="text-[10px] font-medium text-theme-text-muted-dark">Episode</label>
                       <input
                         type="number"
-                        className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
                         value={ep.episodeNumber}
                         onChange={(e) => {
                           const newEps = [...episodes];

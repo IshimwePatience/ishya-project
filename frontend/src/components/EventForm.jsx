@@ -108,7 +108,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Final Rehearsal - Act 1"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -124,7 +124,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
@@ -159,7 +159,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
+                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.ticketPrice}
                 onChange={(e) => setFormData({...formData, ticketPrice: parseFloat(e.target.value) || 0})}
@@ -174,7 +174,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
+                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.vipPrice}
                 onChange={(e) => setFormData({...formData, vipPrice: parseFloat(e.target.value) || 0})}
@@ -189,7 +189,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
+                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.vvipPrice}
                 onChange={(e) => setFormData({...formData, vvipPrice: parseFloat(e.target.value) || 0})}
@@ -204,7 +204,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="number"
                 step="1"
                 min="0"
-                className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
+                className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text text-xs placeholder:text-theme-text-muted-dark"
                 placeholder="0"
                 value={formData.tablePrice}
                 onChange={(e) => setFormData({...formData, tablePrice: parseFloat(e.target.value) || 0})}
@@ -222,7 +222,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
@@ -243,7 +243,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="datetime-local"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.startTime}
             onChange={(e) => setFormData({...formData, startTime: e.target.value})}
           />
@@ -259,7 +259,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="datetime-local"
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
             value={formData.endTime}
             onChange={(e) => setFormData({...formData, endTime: e.target.value})}
           />
@@ -276,7 +276,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={16} />
             <input 
               type="text"
-              className="w-full bg-[#161616] border border-theme-border rounded-sm pl-12 pr-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
               placeholder="e.g. Ishya Theatre Hall"
               value={formData.venue}
               onChange={(e) => setFormData({...formData, venue: e.target.value})}
@@ -341,7 +341,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
               <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={14} />
               <input
                 type="text"
-                className="w-full bg-[#161616] border border-theme-border rounded-sm pl-10 pr-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark text-xs"
+                className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-10 pr-4 py-2.5 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark text-xs"
                 placeholder="Or paste direct image URL..."
                 value={formData.posterUrl}
                 onChange={(e) => setFormData({ ...formData, posterUrl: e.target.value })}
@@ -358,7 +358,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text"
             placeholder="What needs to happen..."
             value={formData.description}
             onChange={(e) => setFormData({...formData, description: e.target.value})}

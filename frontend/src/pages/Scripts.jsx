@@ -289,11 +289,11 @@ const Scripts = () => {
                     <Sparkles size={20} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">AI Insights</h3>
+                    <h3 className="text-lg font-bold text-theme-text">AI Insights</h3>
                     <p className="text-xs text-theme-text-muted">Analysis for: <span className="font-semibold text-theme-text">{aiReviewScript.title}</span></p>
                   </div>
                 </div>
-                <button onClick={() => setAiReviewScript(null)} className="text-theme-text-muted hover:text-white transition-colors">
+                <button onClick={() => setAiReviewScript(null)} className="text-theme-text-muted hover:text-theme-text transition-colors">
                   <X size={20} />
                 </button>
               </div>
@@ -313,7 +313,7 @@ const Scripts = () => {
                   <div className="space-y-8">
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><FileText size={14}/> Summary</h4>
-                      <p className="text-sm text-theme-text leading-relaxed bg-[#1a1a1a] p-4 rounded-lg border border-theme-border-light">
+                      <p className="text-sm text-theme-text leading-relaxed bg-theme-input-bg p-4 rounded-lg border border-theme-border-light">
                         {aiReviewScript.aiReview.summary}
                       </p>
                     </div>
@@ -327,8 +327,8 @@ const Scripts = () => {
                       <h4 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 flex items-center gap-2"><UserIcon size={14}/> Characters</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {aiReviewScript.aiReview.characters?.map((char, idx) => (
-                          <div key={idx} className="bg-[#1a1a1a] p-3 rounded-lg border border-theme-border-light">
-                            <div className="font-bold text-sm text-white mb-1">{char.name}</div>
+                          <div key={idx} className="bg-theme-input-bg p-3 rounded-lg border border-theme-border-light">
+                            <div className="font-bold text-sm text-theme-text mb-1">{char.name}</div>
                             <div className="text-xs text-theme-text-muted">{char.description}</div>
                           </div>
                         ))}
@@ -346,7 +346,7 @@ const Scripts = () => {
                     <div className="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mb-6">
                       <Sparkles size={32} />
                     </div>
-                    <h4 className="text-lg font-bold text-white mb-2">No Insights Generated</h4>
+                    <h4 className="text-lg font-bold text-theme-text mb-2">No Insights Generated</h4>
                     <p className="text-sm text-theme-text-muted max-w-sm mx-auto mb-8">
                       {isManagement ? "This script hasn't been analyzed yet. Run the AI to extract a plot summary, character list, and feedback." : "The production team hasn't generated AI insights for this script yet."}
                     </p>
@@ -355,7 +355,7 @@ const Scripts = () => {
                       <button 
                         onClick={() => handleGenerateAiReview(aiReviewScript.id)}
                         disabled={aiGenerating}
-                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded font-bold transition-all shadow-lg shadow-indigo-500/20"
+                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-theme-text rounded font-bold transition-all shadow-lg shadow-indigo-500/20"
                       >
                         {aiGenerating ? (
                           <>

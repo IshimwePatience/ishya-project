@@ -234,7 +234,7 @@ const PublicEvents = ({ isDashboard }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-theme-bg flex items-center justify-center">
         <div className="text-sm font-medium text-theme-text animate-pulse">Loading Ishya Schedule...</div>
       </div>
     );
@@ -243,7 +243,7 @@ const PublicEvents = ({ isDashboard }) => {
   const currentShow = publicPerformances[currentIndex];
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-theme-text font-sans selection:bg-white selection:text-black ${isDashboard ? 'rounded-lg overflow-hidden' : ''}`}>
+    <div className={`min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-white selection:text-black ${isDashboard ? 'rounded-lg overflow-hidden' : ''}`}>
       {!isDashboard && <PublicNavbar />}
 
       <div className={`${isDashboard ? 'pt-8' : 'pt-32 md:pt-40'} px-6 md:px-20 pb-20 overflow-hidden`}>
@@ -428,13 +428,13 @@ const PublicEvents = ({ isDashboard }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: 15 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="relative bg-[#0c0c0c] border border-theme-border rounded-sm w-full max-w-5xl h-[92vh] md:h-[82vh] flex flex-col md:flex-row overflow-hidden shadow-[0_0_100px_rgba(229,160,13,0.15)] z-10"
+              className="relative bg-theme-surface border border-theme-border rounded-sm w-full max-w-5xl h-[92vh] md:h-[82vh] flex flex-col md:flex-row overflow-hidden shadow-[0_0_100px_rgba(229,160,13,0.15)] z-10"
             >
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setBookingShow(null)}
-                className="absolute top-4 right-4 z-30 text-theme-text-muted hover:text-theme-text transition-colors border-none bg-theme-surface/80 hover:bg-[#1c1c1c] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-sm"
+                className="absolute top-4 right-4 z-30 text-theme-text-muted hover:text-theme-text transition-colors border-none bg-theme-surface/80 hover:bg-theme-input-bg w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-sm"
               >
                 ✕
               </button>
@@ -460,11 +460,11 @@ const PublicEvents = ({ isDashboard }) => {
 
                 {/* Event Highlights Overlay */}
                 <div className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end text-left space-y-3">
-                  <h3 className="text-xl md:text-3xl font-black text-[white] drop-shadow-lg leading-tight font-sans tracking-tight">
+                  <h3 className="text-xl md:text-3xl font-black text-theme-text drop-shadow-lg leading-tight font-sans tracking-tight">
                     {bookingShow.title}
                   </h3>
 
-                  <div className="space-y-2 pt-1 text-xs text-[white] drop-shadow-md font-sans font-medium">
+                  <div className="space-y-2 pt-1 text-xs text-theme-text drop-shadow-md font-sans font-medium">
                     <div className="flex items-center gap-3">
                       <span>
                         {new Date(bookingShow.startTime).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -544,7 +544,7 @@ const PublicEvents = ({ isDashboard }) => {
                             </div>
                             <div>
                               <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Total Paid</span>
-                              <span className="font-bold text-[white] block truncate font-sans">
+                              <span className="font-bold text-theme-text block truncate font-sans">
                                 {ticketDetails.amount > 0 ? `${Number(ticketDetails.amount).toLocaleString()} RWF` : 'FREE ENTRY'}
                               </span>
                             </div>
@@ -552,8 +552,8 @@ const PublicEvents = ({ isDashboard }) => {
                         </div>
 
                         {/* Decorative side cutouts for ticket look */}
-                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-r border-theme-border" />
-                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] rounded-full border-l border-theme-border" />
+                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-theme-surface rounded-full border-r border-theme-border" />
+                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-theme-surface rounded-full border-l border-theme-border" />
                       </div>
 
                       <button
@@ -573,7 +573,7 @@ const PublicEvents = ({ isDashboard }) => {
                           <input
                             type="text"
                             required
-                            className="w-full bg-[#161616] border border-theme-border rounded-sm px-4 py-3 focus:border-[white] outline-none text-theme-text text-xs font-sans"
+                            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-text outline-none text-theme-text text-xs font-sans"
                             placeholder="Kevine Mugisha"
                             value={buyerName}
                             onChange={(e) => setBuyerName(e.target.value)}
@@ -587,8 +587,8 @@ const PublicEvents = ({ isDashboard }) => {
                               type="email"
                               required
                               disabled={otpVerified}
-                              className={`flex-1 bg-[#161616] border rounded-sm px-4 py-3 outline-none text-theme-text text-xs font-sans transition-colors ${
-                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-theme-border focus:border-[white]'
+                              className={`flex-1 bg-theme-input-bg border rounded-sm px-4 py-3 outline-none text-theme-text text-xs font-sans transition-colors ${
+                                otpVerified ? 'border-green-500/50 opacity-60' : 'border-theme-border focus:border-theme-text'
                               }`}
                               placeholder="kevine@example.rw"
                               value={buyerEmail}
@@ -619,7 +619,7 @@ const PublicEvents = ({ isDashboard }) => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-2 p-4 bg-[#0d0d0d] border border-[white]/20 rounded-sm"
                           >
-                            <p className="text-[10px] font-bold text-[white] uppercase tracking-wider">
+                            <p className="text-[10px] font-bold text-theme-text uppercase tracking-wider">
                               Enter the 6-digit code sent to {buyerEmail}
                             </p>
                             <div className="flex gap-2">
@@ -630,7 +630,7 @@ const PublicEvents = ({ isDashboard }) => {
                                 placeholder="● ● ● ● ● ●"
                                 value={otpCode}
                                 onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                                className="flex-1 bg-[#161616] border border-theme-border rounded-sm px-4 py-3 text-theme-text text-sm font-mono font-bold tracking-[0.5em] focus:border-[white] outline-none text-center"
+                                className="flex-1 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text text-sm font-mono font-bold tracking-[0.5em] focus:border-theme-text outline-none text-center"
                               />
                               <button
                                 type="button"
@@ -662,12 +662,12 @@ const PublicEvents = ({ isDashboard }) => {
                                 onClick={() => setTicketTier('regular')}
                                 className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                   ticketTier === 'regular'
-                                    ? 'border-[white] bg-[white]/5 text-theme-text'
-                                    : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                    ? 'border-theme-text bg-[white]/5 text-theme-text'
+                                    : 'border-theme-border bg-theme-input-bg/40 hover:border-theme-border text-theme-text-muted'
                                 }`}
                               >
                                 <div className="text-[9px] font-bold uppercase tracking-wider">Regular</div>
-                                <div className="text-xs font-black text-[white] mt-1">
+                                <div className="text-xs font-black text-theme-text mt-1">
                                   {Number(bookingShow.ticketPrice) > 0 ? `${Number(bookingShow.ticketPrice).toLocaleString()} RWF` : 'FREE'}
                                 </div>
                               </button>
@@ -679,12 +679,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vip'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-theme-text bg-[white]/5 text-theme-text'
+                                      : 'border-theme-border bg-theme-input-bg/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-blue-400">VIP Pass</div>
-                                  <div className="text-xs font-black text-[white] mt-1">
+                                  <div className="text-xs font-black text-theme-text mt-1">
                                     {Number(bookingShow.vipPrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -697,12 +697,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('vvip')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'vvip'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-theme-text bg-[white]/5 text-theme-text'
+                                      : 'border-theme-border bg-theme-input-bg/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-purple-400">VVIP Pass</div>
-                                  <div className="text-xs font-black text-[white] mt-1">
+                                  <div className="text-xs font-black text-theme-text mt-1">
                                     {Number(bookingShow.vvipPrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -715,12 +715,12 @@ const PublicEvents = ({ isDashboard }) => {
                                   onClick={() => setTicketTier('table')}
                                   className={`p-3 border rounded-sm text-left transition-all cursor-pointer ${
                                     ticketTier === 'table'
-                                      ? 'border-[white] bg-[white]/5 text-theme-text'
-                                      : 'border-theme-border bg-[#161616]/40 hover:border-theme-border text-theme-text-muted'
+                                      ? 'border-theme-text bg-[white]/5 text-theme-text'
+                                      : 'border-theme-border bg-theme-input-bg/40 hover:border-theme-border text-theme-text-muted'
                                   }`}
                                 >
                                   <div className="text-[9px] font-bold uppercase tracking-wider text-yellow-500">Table (Group)</div>
-                                  <div className="text-xs font-black text-[white] mt-1">
+                                  <div className="text-xs font-black text-theme-text mt-1">
                                     {Number(bookingShow.tablePrice).toLocaleString()} RWF
                                   </div>
                                 </button>
@@ -740,7 +740,7 @@ const PublicEvents = ({ isDashboard }) => {
                             >
                               -
                             </button>
-                            <div className="w-16 h-10 bg-[#161616] border border-theme-border rounded-sm flex items-center justify-center text-theme-text font-bold text-sm">
+                            <div className="w-16 h-10 bg-theme-input-bg border border-theme-border rounded-sm flex items-center justify-center text-theme-text font-bold text-sm">
                               {ticketQuantity}
                             </div>
                             <button
@@ -757,7 +757,7 @@ const PublicEvents = ({ isDashboard }) => {
 
                       <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs font-sans">
                         <span className="text-theme-text-muted">Total Amount:</span>
-                        <span className="text-lg font-black text-[white]">
+                        <span className="text-lg font-black text-theme-text">
                           {totalBookingAmount > 0 ? `${totalBookingAmount.toLocaleString()} RWF` : 'FREE ENTRY'}
                         </span>
                       </div>
@@ -773,7 +773,7 @@ const PublicEvents = ({ isDashboard }) => {
                             </div>
                           ) : (
                             <div className="space-y-2 animate-in fade-in duration-300">
-                              <span className="text-[9px] font-black text-[white] uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
+                              <span className="text-[9px] font-black text-theme-text uppercase tracking-wider block font-sans">Checkout via Secure PayPal Sandbox:</span>
                               <PaypalButton
                                 amount={(totalBookingAmount / 1300).toFixed(2)}
                                 onSuccess={handlePaidBookingSuccess}

@@ -74,7 +74,7 @@ const PublicShowcase = () => {
 
   const isLoggedIn = !!localStorage.getItem('token');
 
-  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-theme-text font-medium">Initializing Ishya Hub...</div>;
+  if (loading) return <div className="min-h-screen bg-theme-bg flex items-center justify-center text-theme-text font-medium">Initializing Ishya Hub...</div>;
 
   return (
     <div className="min-h-screen bg-theme-surface text-theme-text font-sans selection:bg-white selection:text-black overflow-x-hidden">
@@ -91,7 +91,7 @@ const PublicShowcase = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[300] bg-black flex flex-col p-10 md:p-20"
+            className="fixed inset-0 z-[300] bg-theme-bg flex flex-col p-10 md:p-20"
           >
             <div className="flex items-center justify-between w-full">
               <button
@@ -235,7 +235,7 @@ const PublicShowcase = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="relative px-6 md:px-20 pt-32 pb-20 z-30 min-h-screen bg-[#050505] text-theme-text"
+            className="relative px-6 md:px-20 pt-32 pb-20 z-30 min-h-screen bg-theme-bg text-theme-text"
           >
             {(() => {
               const prodMedia = media.filter(m => m.productionId == selectedProduction.id);

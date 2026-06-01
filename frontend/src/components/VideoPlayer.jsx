@@ -174,7 +174,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
     <div 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className={`relative w-full aspect-video bg-black group overflow-hidden ${isTheaterMode ? 'max-w-none h-[80vh]' : 'max-w-6xl'}`}
+      className={`relative w-full aspect-video bg-theme-bg group overflow-hidden ${isTheaterMode ? 'max-w-none h-[80vh]' : 'max-w-6xl'}`}
     >
       <video
         ref={videoRef}

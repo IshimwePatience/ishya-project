@@ -24,7 +24,8 @@ import {
   Inbox,
   Sun,
   Moon,
-  Menu
+  Menu,
+  X
 } from 'lucide-react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -1088,7 +1089,7 @@ const DashboardLayout = ({ children }) => {
                 <div className="text-[10px] text-theme-text-muted font-medium truncate">{user?.role}</div>
               </div>
               {isPublic && subDetails.status === 'active' && (
-                <div className="px-4 py-2 border-b border-theme-border-light mb-1 flex items-center gap-2 text-xs text-white font-medium font-sans">
+                <div className="px-4 py-2 border-b border-theme-border-light mb-1 flex items-center gap-2 text-xs text-theme-text font-medium font-sans">
                   <CheckCircle size={14} />
                   <span>Monthly Subscription Active (Expires in {subDetails.daysLeft} days)</span>
                 </div>
@@ -1118,7 +1119,7 @@ const DashboardLayout = ({ children }) => {
           <aside className={`w-72 bg-theme-surface flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
               <span className="font-bold text-theme-text">Menu</span>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-text-muted hover:text-white">
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-text-muted hover:text-theme-text">
                 <X size={20} />
               </button>
             </div>
