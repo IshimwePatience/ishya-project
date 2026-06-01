@@ -447,7 +447,7 @@ const PublicEvents = ({ isDashboard }) => {
                     <img
                       src={bookingShow.posterUrl.startsWith('http') ? bookingShow.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${bookingShow.posterUrl}`}
                       alt={bookingShow.title}
-                      className="w-full h-full object-cover opacity-60 md:opacity-40"
+                      className="w-full h-full object-cover opacity-90"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-black via-[#161616] to-[#0e0e0e] flex items-center justify-center opacity-30">
@@ -455,39 +455,27 @@ const PublicEvents = ({ isDashboard }) => {
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black via-black/40 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-black/50 z-10" />
+                  <div className="absolute inset-0 bg-black/20 z-10" />
                 </div>
 
                 {/* Event Highlights Overlay */}
                 <div className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end text-left space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-[white] text-black text-[9px] font-black uppercase tracking-wider rounded-sm">
-                      {bookingShow.type}
-                    </span>
-                    <span className="text-[10px] text-theme-text-muted font-bold tracking-wider font-mono">
-                      Live Event
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl md:text-3xl font-black text-theme-text leading-tight font-sans tracking-tight">
+                  <h3 className="text-xl md:text-3xl font-black text-[white] drop-shadow-lg leading-tight font-sans tracking-tight">
                     {bookingShow.title}
                   </h3>
 
-                  <div className="space-y-2 pt-1 text-xs text-theme-text/80 font-sans font-medium">
+                  <div className="space-y-2 pt-1 text-xs text-[white] drop-shadow-md font-sans font-medium">
                     <div className="flex items-center gap-3">
-                      <Calendar size={14} className="text-[white] shrink-0" />
                       <span>
                         {new Date(bookingShow.startTime).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Clock size={14} className="text-[white] shrink-0" />
                       <span>
                         {new Date(bookingShow.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <MapPin size={14} className="text-[white] shrink-0" />
                       <span className="truncate">{bookingShow.venue}</span>
                     </div>
                   </div>
