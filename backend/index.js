@@ -63,6 +63,7 @@ app.use('/api/media', require('./routes/media.routes'));
 app.use('/api/upload', require('./routes/upload.routes'));
 app.use('/api/partner-requests', require('./routes/buyerRequest.routes'));
 app.use('/api/attendance', require('./routes/attendance.routes'));
+app.use('/api/public-attendance', require('./routes/publicAttendance.routes'));
 app.use('/api/user-preferences', require('./routes/userPreference.routes'));
 app.use('/api/media-interactions', require('./routes/mediaInteraction.routes'));
 app.use('/api/watch-progress', require('./routes/watchprogress.routes'));

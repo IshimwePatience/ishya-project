@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight, Settings, Copy, Check } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/PageHeader';
@@ -11,6 +11,16 @@ const Attendance = () => {
   const [activeAttendance, setActiveAttendance] = useState(null);
   const [userRole, setUserRole] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
+  const [activeRule, setActiveRule] = useState(null);
+  const [showRuleForm, setShowRuleForm] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [ruleForm, setRuleForm] = useState({
+    targetLat: '',
+    targetLng: '',
+    radius: 100,
+    startTime: '09:00',
+    lateExtension: 30
+  });
 
   const fetchLogs = async () => {
     try {
@@ -33,6 +43,15 @@ const Attendance = () => {
       if (role !== 'Admin' && role !== 'Staff') {
         const active = response.data.find(log => !log.checkOut);
         setActiveAttendance(active);
+      }
+
+      if (role === 'Admin' || role === 'Staff') {
+        const ruleRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/rule/active`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(() => null);
+        if (ruleRes && ruleRes.data) {
+          setActiveRule(ruleRes.data);
+        }
       }
 
       setLoading(false);
@@ -146,6 +165,29 @@ const Attendance = () => {
     }
   };
 
+  const handleSaveRule = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/rule`, ruleForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setActiveRule(res.data.rule);
+      setShowRuleForm(false);
+      alert('Attendance rule updated successfully.');
+    } catch (err) {
+      alert('Failed to save rule.');
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (!activeRule) return;
+    const link = `${window.location.origin}/attendance/link/${activeRule.publicToken}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const formatLocation = (locStr) => {
     if (!locStr) return 'Not detected';
     
@@ -182,18 +224,26 @@ const Attendance = () => {
         actions={
           <div className="flex items-center gap-3">
             {isManagement && (
-              <ReportDropdown 
-                title="Ishya Attendance Report" 
-                columns={['User', 'Role', 'Status', 'Check In', 'Check Out', 'Hours']} 
-                data={logs.map(log => ({
-                  User: log.user?.name || log.user?.email || 'Unknown',
-                  Role: log.user?.role?.name || 'User',
-                  Status: log.status,
-                  'Check In': new Date(log.checkIn).toLocaleString(),
-                  'Check Out': log.checkOut ? new Date(log.checkOut).toLocaleString() : '-',
-                  Hours: log.totalHours ? Number(log.totalHours).toFixed(2) : '-'
-                }))}
-              />
+              <>
+                <button
+                  onClick={() => setShowRuleForm(!showRuleForm)}
+                  className="flex items-center gap-2 px-4 py-2 bg-theme-surface border border-theme-border-light hover:bg-theme-input-bg rounded-sm text-sm font-medium transition-all"
+                >
+                  <Settings size={16} /> Rule Setup
+                </button>
+                <ReportDropdown 
+                  title="Ishya Attendance Report" 
+                  columns={['User', 'Role', 'Status', 'Check In', 'Check Out', 'Hours']} 
+                  data={logs.map(log => ({
+                    User: log.user?.name || log.user?.email || 'Unknown',
+                    Role: log.user?.role?.name || 'User',
+                    Status: log.status,
+                    'Check In': new Date(log.checkIn).toLocaleString(),
+                    'Check Out': log.checkOut ? new Date(log.checkOut).toLocaleString() : '-',
+                    Hours: log.totalHours ? Number(log.totalHours).toFixed(2) : '-'
+                  }))}
+                />
+              </>
             )}
             {!isManagement && (
               activeAttendance ? (
@@ -217,6 +267,66 @@ const Attendance = () => {
           </div>
         }
       />
+
+      {isManagement && showRuleForm && (
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="bg-theme-surface border border-theme-border rounded p-6 shadow-xl"
+        >
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-lg font-bold">Public Attendance Configuration</h3>
+              <p className="text-sm text-theme-text-muted">Set up geofencing and strict time policies for Talents.</p>
+            </div>
+            {activeRule && (
+              <div className="bg-[#1a1a1a] border border-theme-border p-3 rounded-lg flex items-center gap-4">
+                <div>
+                  <div className="text-[10px] uppercase text-theme-text-muted font-bold mb-1">Active Public Link</div>
+                  <div className="text-xs font-mono text-theme-accent">{`${window.location.origin}/attendance/link/${activeRule.publicToken}`}</div>
+                </div>
+                <button onClick={copyToClipboard} className="p-2 bg-theme-border-light hover:bg-theme-border rounded text-white">
+                  {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+                </button>
+              </div>
+            )}
+          </div>
+          
+          <form onSubmit={handleSaveRule} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="space-y-2">
+              <label className="text-xs text-theme-text-muted font-bold uppercase">Target Latitude</label>
+              <input type="number" step="any" required value={ruleForm.targetLat} onChange={e => setRuleForm({...ruleForm, targetLat: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. -1.957" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-theme-text-muted font-bold uppercase">Target Longitude</label>
+              <input type="number" step="any" required value={ruleForm.targetLng} onChange={e => setRuleForm({...ruleForm, targetLng: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" placeholder="e.g. 30.094" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-theme-text-muted font-bold uppercase">Radius (meters)</label>
+              <input type="number" required value={ruleForm.radius} onChange={e => setRuleForm({...ruleForm, radius: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-theme-text-muted font-bold uppercase">Start Time</label>
+              <input type="time" required value={ruleForm.startTime} onChange={e => setRuleForm({...ruleForm, startTime: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-theme-text-muted font-bold uppercase">Late Ext (mins)</label>
+              <input type="number" required value={ruleForm.lateExtension} onChange={e => setRuleForm({...ruleForm, lateExtension: e.target.value})} className="w-full bg-[#111] border border-theme-border rounded px-3 py-2 text-sm" />
+            </div>
+            <div className="lg:col-span-5 flex justify-end gap-3 mt-2">
+              <button type="button" onClick={() => {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (pos) => setRuleForm({...ruleForm, targetLat: pos.coords.latitude, targetLng: pos.coords.longitude}),
+                    () => alert("Location access denied")
+                  );
+                }
+              }} className="px-4 py-2 text-sm text-[#e5a00d] hover:bg-[#e5a00d]/10 rounded border border-[#e5a00d]/30 transition-colors">Use Current Location</button>
+              <button type="submit" className="px-6 py-2 text-sm bg-theme-accent text-black font-bold rounded shadow-lg shadow-theme-accent/20 hover:bg-theme-accent/90 transition-colors">Save Rule & Generate Link</button>
+            </div>
+          </form>
+        </motion.div>
+      )}
 
       {!isManagement && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

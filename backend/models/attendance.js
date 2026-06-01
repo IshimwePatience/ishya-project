@@ -31,7 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'Present'
     },
     notes: DataTypes.TEXT,
-    location: DataTypes.STRING
+    location: DataTypes.STRING,
+    autoCheckedOut: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'Attendance',

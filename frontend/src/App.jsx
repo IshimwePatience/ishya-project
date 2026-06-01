@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicShowcase from './pages/PublicShowcase';
 import PublicEvents from './pages/PublicEvents';
 import PublicProductionDetail from './pages/PublicProductionDetail';
+import PublicAttendanceCheckIn from './pages/PublicAttendanceCheckIn';
 import Cinema from './pages/Cinema';
 import Dashboard from './pages/Dashboard';
 import Productions from './pages/Productions';
@@ -54,6 +55,7 @@ function App() {
         <Route path="/showcase/:prodId" element={<PublicShowcase />} />
         <Route path="/events" element={<PublicEvents />} />
         <Route path="/watch/:mediaId" element={<Cinema />} />
+        <Route path="/attendance/link/:token" element={<PublicAttendanceCheckIn />} />
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
