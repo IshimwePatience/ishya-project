@@ -34,7 +34,6 @@ const PublicAttendanceCheckIn = () => {
   const chunksRef = useRef([]);
 
   const watchIdRef = useRef(null);
-  const autoCheckoutIntervalRef = useRef(null);
 
   useEffect(() => {
     const fetchRule = async () => {
@@ -51,7 +50,6 @@ const PublicAttendanceCheckIn = () => {
 
     return () => {
       if (watchIdRef.current !== null) navigator.geolocation.clearWatch(watchIdRef.current);
-      if (autoCheckoutIntervalRef.current !== null) clearInterval(autoCheckoutIntervalRef.current);
       if (videoStream) videoStream.getTracks().forEach(t => t.stop());
     };
   }, [token]);
@@ -77,16 +75,7 @@ const PublicAttendanceCheckIn = () => {
     }
   }, [status, videoStream]);
 
-  const checkTimeForAutoCheckout = async (attendanceId) => {
-    if (!rule || !rule.endTime) return;
-    const now = new Date();
-    const [hours, minutes, seconds] = rule.endTime.split(':');
-    const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hours), parseInt(minutes), parseInt(seconds || 0));
-    
-    if (now >= targetTime) {
-      triggerAutoCheckout(attendanceId, 'The scheduled end time has been reached. You are automatically checked out.');
-    }
-  };
+
 
   const triggerAutoCheckout = async (attendanceId, message) => {
     try {
@@ -94,7 +83,6 @@ const PublicAttendanceCheckIn = () => {
         attendanceId
       });
       if (watchIdRef.current !== null) navigator.geolocation.clearWatch(watchIdRef.current);
-      if (autoCheckoutIntervalRef.current !== null) clearInterval(autoCheckoutIntervalRef.current);
       setStatus('checked-out');
       setErrorMsg(message);
     } catch (e) {
@@ -150,7 +138,6 @@ const PublicAttendanceCheckIn = () => {
               setStatus('checked-in');
               
               startGeofencing(latitude, longitude, newAttendance.id);
-              autoCheckoutIntervalRef.current = setInterval(() => checkTimeForAutoCheckout(newAttendance.id), 60000);
             } catch (err) {
               setStatus('setup');
               setErrorMsg(err.response?.data?.message || 'Check-in failed.');
@@ -254,7 +241,7 @@ const PublicAttendanceCheckIn = () => {
             <div className="bg-[#1a1a1a] p-4 rounded-lg space-y-3 mb-6 border border-theme-border-light">
               <div className="flex items-center gap-3 text-sm text-theme-text/80">
                 <Clock size={16} className="text-theme-accent" />
-                <span>Call Time: <strong className="text-white">{rule.startTime}</strong> to <strong className="text-white">{rule.endTime}</strong></span>
+                <span>Call Time: <strong className="text-white">{rule.startTime}</strong></span>
               </div>
               <div className="flex items-center gap-3 text-sm text-theme-text/80">
                 <MapPin size={16} className="text-theme-accent" />
@@ -309,7 +296,7 @@ const PublicAttendanceCheckIn = () => {
             </div>
             <h2 className="text-xl font-bold mb-2">Checked In Successfully!</h2>
             <p className="text-sm text-theme-text-muted mb-8">
-              Keep this tab open. Do not close your browser. You will be automatically checked out at {rule.endTime} or if you leave the {rule.radius}m radius.
+              Keep this tab open. Do not close your browser. You will be checked out if you leave the {rule.radius}m radius.
             </p>
             
             <div className="bg-yellow-500/10 text-yellow-500 text-xs p-4 rounded-lg flex items-start gap-3 text-left mb-6">

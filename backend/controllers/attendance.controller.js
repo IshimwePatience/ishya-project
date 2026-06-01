@@ -94,7 +94,7 @@ exports.getAllAttendance = async (req, res) => {
 
 exports.setRule = async (req, res) => {
   try {
-    const { targetLat, targetLng, radius, startTime, endTime, lateExtension } = req.body;
+    const { targetLat, targetLng, radius, startTime, lateExtension } = req.body;
     
     // Deactivate existing rules
     await AttendanceRule.update({ isActive: false }, { where: { isActive: true } });
@@ -105,7 +105,6 @@ exports.setRule = async (req, res) => {
       targetLng,
       radius,
       startTime,
-      endTime,
       lateExtension,
       publicToken,
       isActive: true

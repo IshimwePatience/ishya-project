@@ -19,7 +19,6 @@ const Attendance = () => {
     targetLng: '',
     radius: 100,
     startTime: '09:00',
-    endTime: '17:00',
     lateExtension: 30
   });
 
