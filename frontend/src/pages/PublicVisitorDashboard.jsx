@@ -407,9 +407,9 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
+            className="space-y-6"
           >
-            <div className="space-y-3 pt-4">
+            <div className="space-y-3">
               <h1 className="text-4xl md:text-5xl font-black text-theme-text tracking-tight">
                 {selectedGenre} Movies & Shows
               </h1>
@@ -418,7 +418,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10 pt-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
               {productions
                 .filter(p =>
                   p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||

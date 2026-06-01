@@ -27,6 +27,15 @@ const PublicProductionDetail = () => {
   const [loading, setLoading] = useState(true);
   const resumeTime = new URLSearchParams(location.search).get('resume');
 
+  const formatDuration = (seconds) => {
+    if (!seconds) return '';
+    const num = Number(seconds);
+    const h = Math.floor(num / 3600);
+    const m = Math.floor((num % 3600) / 60);
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+  };
+
   useEffect(() => {
     fetchDetail();
     window.scrollTo(0, 0);
@@ -127,6 +136,12 @@ const PublicProductionDetail = () => {
                 <span>{production.releaseDate ? new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Coming Soon'}</span>
                 <span className="w-1 h-1 bg-white/20 rounded-full" />
                 <span>{production.mediaFiles?.find(m => m.category)?.category || production.genre || 'General'}</span>
+                {production.type !== 'Series' && movieAsset?.duration && (
+                  <>
+                    <span className="w-1 h-1 bg-white/20 rounded-full" />
+                    <span>{formatDuration(movieAsset.duration)}</span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -198,9 +213,13 @@ const PublicProductionDetail = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-[10px] font-black text-[#e5a00d] uppercase">EP {ep.episodeNumber || '1'}</span>
-                            <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
-                            <span className="text-xs font-bold text-theme-text-muted truncate">{ep.format || 'HD'}</span>
+                            <span className="text-[10px] font-black text-[#e5a00d]">EP {ep.episodeNumber || '1'}</span>
+                            {ep.duration && (
+                              <>
+                                <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
+                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(ep.duration)}</span>
+                              </>
+                            )}
                           </div>
                           <h4 className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate">
                             {ep.fileName}
@@ -224,17 +243,6 @@ const PublicProductionDetail = () => {
                       <Star size={12} className="fill-[#e5a00d] text-[#e5a00d]" />
                       <span className="text-[11px] font-bold text-theme-text-muted">{stats.likes || 0}</span>
                     </div>
-                  </div>
-                  <div className="flex gap-4 overflow-x-auto no-scrollbar">
-                    {/* Placeholder for User Avatars who liked */}
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="flex-shrink-0 space-y-2 text-center group/like">
-                        <div className="w-16 h-16 rounded-full bg-theme-input-bg border border-theme-border group-hover/like:border-[#e5a00d]/40 transition-all flex items-center justify-center">
-                           <Play size={16} className="text-theme-text-muted-dark group-hover/like:text-[#e5a00d]/40 transition-all" />
-                        </div>
-                        <div className="w-12 h-1.5 bg-theme-input-bg rounded-full mx-auto" />
-                      </div>
-                    ))}
                   </div>
                </div>
             </div>
