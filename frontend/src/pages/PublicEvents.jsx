@@ -323,7 +323,9 @@ const PublicEvents = ({ isDashboard }) => {
                     </div>
 
                     {/* Table Header */}
-                    <div className="grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
+                    <div className="overflow-x-auto w-full">
+                      <div className="min-w-[650px]">
+                        <div className="grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
                       <div>Event</div>
                       <div>Status</div>
                       <div className="flex items-center gap-1">Date & Time <Calendar size={12}/></div>
@@ -401,6 +403,8 @@ const PublicEvents = ({ isDashboard }) => {
                         ))
                       )}
                     </div>
+                   </div>
+                  </div>
                     
                     {/* Table Footer */}
                     <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">

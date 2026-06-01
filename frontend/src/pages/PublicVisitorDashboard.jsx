@@ -181,7 +181,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               return (
                 <div
                   key={isContinue ? item.id : prod.id}
-                  className={`flex-shrink-0 ${isVertical ? 'w-44' : 'w-80'} group cursor-pointer`}
+                  className={`flex-shrink-0 ${isVertical ? 'w-[40vw] sm:w-44' : 'w-[80vw] sm:w-80'} group cursor-pointer`}
                   style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
                     // Only Bypass Detail Page if we are explicitly in the "Continue Watching" row
