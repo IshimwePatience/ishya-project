@@ -1122,7 +1122,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Main Content Area */}
         <main className={`flex-1 ${isPublic ? '' : 'ml-72'}`}>
-          <div className="p-8 max-w-[1600px]">
+          <div className="px-10 py-8 max-w-[1600px]">
             {children}
           </div>
         </main>

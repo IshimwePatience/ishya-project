@@ -323,7 +323,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-8 bg-theme-surface flex justify-center">
+      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-10 bg-theme-surface flex justify-center">
         <div className="w-full max-w-[1600px]">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
             {genres.map(genre => (
