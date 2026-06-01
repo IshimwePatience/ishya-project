@@ -92,7 +92,7 @@ const PublicProductionDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-theme-bg flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-[#e5a00d] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -106,7 +106,7 @@ const PublicProductionDetail = () => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-[#0f1115] text-theme-text relative font-sans"
+      className="min-h-screen bg-theme-bg text-theme-text relative font-sans"
     >
       {/* Hidden videos to fetch duration dynamically from the files */}
       <div style={{ display: 'none' }}>
@@ -142,7 +142,7 @@ const PublicProductionDetail = () => {
           alt="backdrop" 
           className="w-full h-full object-cover opacity-10 blur-[80px] scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-[#0f1115]/95 to-[#0f1115]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-theme-bg/95 to-theme-bg" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-20">
