@@ -269,14 +269,11 @@ const PublicEvents = ({ isDashboard }) => {
                       </div>
                       <div className="p-6 flex flex-col gap-4">
                         <div>
-                          <span className="text-[10px] px-2 py-0.5 rounded-sm font-bold bg-[#3ea6ff]/10 text-[#3ea6ff] uppercase tracking-wider mb-2 inline-block">
-                            {firstEvent.type}
-                          </span>
                           <h3 className="text-xl font-bold text-theme-text leading-tight mb-1">
                             {firstEvent.title}
                           </h3>
                           <p className="text-[13px] text-[#aaaaaa] flex items-center gap-1.5 mt-2">
-                            <MapPin size={14} /> {firstEvent.venue || 'TBA'}
+                            <span className="truncate">{firstEvent.venue || 'TBA'}</span>
                           </p>
                         </div>
                         
@@ -286,7 +283,7 @@ const PublicEvents = ({ isDashboard }) => {
                               {new Date(firstEvent.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                             <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5 font-medium">
-                              <Clock size={12} /> {new Date(firstEvent.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                              {new Date(firstEvent.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                             </span>
                           </div>
                           
@@ -318,7 +315,7 @@ const PublicEvents = ({ isDashboard }) => {
                       <ListFilter size={18} className="text-[#aaaaaa]" />
                       <input 
                         type="text" 
-                        placeholder="Filter performances..." 
+                        placeholder="Filter events..." 
                         className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -326,9 +323,8 @@ const PublicEvents = ({ isDashboard }) => {
                     </div>
 
                     {/* Table Header */}
-                    <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
-                      <div>Performance</div>
-                      <div>Type</div>
+                    <div className="grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
+                      <div>Event</div>
                       <div>Status</div>
                       <div className="flex items-center gap-1">Date & Time <Calendar size={12}/></div>
                       <div className="text-right">Action</div>
@@ -339,11 +335,11 @@ const PublicEvents = ({ isDashboard }) => {
                       {otherEvents.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-[300px] text-[#aaaaaa] space-y-4 opacity-50 p-20">
                           <Play size={48} strokeWidth={1} />
-                          <span className="text-[14px] font-medium">No additional performances found</span>
+                          <span className="text-[14px] font-medium">No additional events found</span>
                         </div>
                       ) : (
                         otherEvents.map(event => (
-                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
+                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
                             
                             {/* Event Column */}
                             <div className="flex items-center gap-4 pr-4 overflow-hidden">
@@ -361,16 +357,9 @@ const PublicEvents = ({ isDashboard }) => {
                                   {event.title}
                                 </h3>
                                 <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
-                                  <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{event.venue || 'TBA'}</span>
+                                  <span className="truncate">{event.venue || 'TBA'}</span>
                                 </p>
                               </div>
-                            </div>
-
-                            {/* Type Column */}
-                            <div>
-                               <span className="text-[12px] px-2 py-0.5 rounded-sm font-medium bg-[#3ea6ff]/10 text-[#3ea6ff]">
-                                 {event.type}
-                               </span>
                             </div>
 
                             {/* Status Column */}
@@ -386,7 +375,7 @@ const PublicEvents = ({ isDashboard }) => {
                                  {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                                </span>
                                <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
-                                 <Clock size={12} /> {new Date(event.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                 {new Date(event.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                </span>
                             </div>
                             
@@ -415,7 +404,7 @@ const PublicEvents = ({ isDashboard }) => {
                     
                     {/* Table Footer */}
                     <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
-                      Performances
+                      Events
                     </div>
                   </div>
                 </div>
@@ -476,7 +465,7 @@ const PublicEvents = ({ isDashboard }) => {
                       {bookingShow.type}
                     </span>
                     <span className="text-[10px] text-theme-text-muted font-bold tracking-wider font-mono">
-                      Live Performance
+                      Live Event
                     </span>
                   </div>
 
@@ -540,7 +529,7 @@ const PublicEvents = ({ isDashboard }) => {
 
                         <div className="p-5 space-y-4 text-xs text-theme-text/70">
                           <div>
-                            <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Show / Performance</span>
+                            <span className="text-[9px] text-theme-text-muted-dark uppercase block font-sans">Show / Event</span>
                             <span className="font-bold text-theme-text text-sm font-sans">{ticketDetails.showTitle}</span>
                           </div>
 
