@@ -239,7 +239,7 @@ const MyLibrary = () => {
                     <div className="flex flex-col gap-2 min-w-[180px] pr-4">
                       <button
                         onClick={() => handleOpenModal(prod)}
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black tracking-tight rounded-sm hover:bg-theme-accent transition-all shadow-xl shadow-black/20 cursor-pointer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-theme-accent-text text-[10px] font-black tracking-tight rounded-sm hover:bg-theme-accent transition-all shadow-xl shadow-black/20 cursor-pointer"
                       >
                         <Download size={14} /> Access Assets
                       </button>
@@ -291,7 +291,7 @@ const MyLibrary = () => {
                               <Tv size={10} /> Series
                             </div>
                           ) : (
-                            <div className="bg-theme-accent/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-theme-accent/95 text-theme-accent-text text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Film size={10} /> Movie
                             </div>
                           )}
@@ -329,7 +329,7 @@ const MyLibrary = () => {
                             e.stopPropagation();
                             handleOpenModal(prod);
                           }}
-                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-theme-accent transition-all shadow-md shadow-black/20 cursor-pointer"
+                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-theme-accent-text text-[10px] font-bold rounded-sm hover:bg-theme-accent transition-all shadow-md shadow-black/20 cursor-pointer"
                         >
                           <Download size={11} /> Access Assets
                         </button>
@@ -431,7 +431,7 @@ const MyLibrary = () => {
                               episodes.length > 0 && (
                                 <button
                                   onClick={() => handleDownloadZip(episodes, `${selectedProduction.title} - All Episodes`)}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-theme-accent-text text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
                                 >
                                   <Download size={12} /> Download All Episodes (ZIP)
                                 </button>
@@ -440,7 +440,7 @@ const MyLibrary = () => {
                               movieMasters.length > 0 && (
                                 <button
                                   onClick={() => handleDownloadZip(movieMasters, `${selectedProduction.title} - All Masters`)}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-theme-accent-text text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
                                 >
                                   <Download size={12} /> Download All Masters (ZIP)
                                 </button>
@@ -483,7 +483,7 @@ const MyLibrary = () => {
                                             e.stopPropagation();
                                             handleDownloadZip(seasonEpisodes, `${selectedProduction.title} - Season ${seasonNum}`);
                                           }}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all cursor-pointer"
+                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-theme-accent-text text-[10px] font-bold rounded-sm transition-all cursor-pointer"
                                         >
                                           <Download size={12} /> Download Season (ZIP)
                                         </button>
@@ -500,7 +500,7 @@ const MyLibrary = () => {
                                                     const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                                     if (id) navigate(`/watch/${id}`);
                                                   }}
-                                                  className="w-8 h-8 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-black transition-all cursor-pointer"
+                                                  className="w-8 h-8 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-theme-accent-text transition-all cursor-pointer"
                                                 >
                                                   <Play size={14} fill="currentColor" className="ml-0.5" />
                                                 </button>
@@ -515,7 +515,7 @@ const MyLibrary = () => {
                                                     e.stopPropagation();
                                                     setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                                   }}
-                                                  className="p-1.5 bg-theme-input-bg text-theme-text-muted hover:bg-theme-accent hover:text-black rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
+                                                  className="p-1.5 bg-theme-input-bg text-theme-text-muted hover:bg-theme-accent hover:text-theme-accent-text rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
                                                 >
                                                   <Download size={14} />
                                                 </button>
@@ -577,7 +577,7 @@ const MyLibrary = () => {
                                             e.stopPropagation();
                                             setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                           }}
-                                          className="p-3 bg-theme-accent text-black hover:bg-white hover:text-black transition-colors rounded-sm shadow-md cursor-pointer border-none flex items-center justify-center"
+                                          className="p-3 bg-theme-accent text-theme-accent-text hover:bg-white hover:text-theme-accent-text transition-colors rounded-sm shadow-md cursor-pointer border-none flex items-center justify-center"
                                         >
                                           <Download size={20} />
                                         </button>
@@ -644,7 +644,7 @@ const MyLibrary = () => {
                                           const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                           if (id) navigate(`/watch/${id}`);
                                         }}
-                                        className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-black transition-all cursor-pointer"
+                                        className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-theme-accent-text transition-all cursor-pointer"
                                       >
                                         <Play size={16} fill="currentColor" className="ml-0.5" />
                                       </button>

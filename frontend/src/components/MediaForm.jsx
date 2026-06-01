@@ -279,7 +279,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           className="hidden"
           onChange={(e) => handleUpload(e.target.files[0], type)}
         />
-        <label htmlFor={`upload-${type}`} className="px-6 py-2 bg-theme-accent text-black text-xs font-semibold rounded-sm cursor-pointer hover:bg-theme-accent-hover transition-all">
+        <label htmlFor={`upload-${type}`} className="px-6 py-2 bg-theme-accent text-theme-accent-text text-xs font-semibold rounded-sm cursor-pointer hover:bg-theme-accent-hover transition-all">
           Upload
         </label>
       </div>
@@ -324,14 +324,14 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           <button
             type="button"
             onClick={() => setHasSeasons(false)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-theme-accent text-black border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-theme-accent text-theme-accent-text border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Standalone Movie
           </button>
           <button
             type="button"
             onClick={() => setHasSeasons(true)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-theme-accent text-black border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-theme-accent text-theme-accent-text border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Has Seasons
           </button>
@@ -459,7 +459,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                 />
                 <label
                   htmlFor={`upload-ep-${index}`}
-                  className="w-full md:w-auto px-8 py-3 bg-theme-input-bg hover:bg-theme-accent hover:text-black text-theme-text-muted text-[10px] font-black rounded-sm cursor-pointer transition-all border border-theme-border uppercase text-center"
+                  className="w-full md:w-auto px-8 py-3 bg-theme-input-bg hover:bg-theme-accent hover:text-theme-accent-text text-theme-text-muted text-[10px] font-black rounded-sm cursor-pointer transition-all border border-theme-border uppercase text-center"
                 >
                   {ep.filePath ? 'Change Video' : 'Upload Video'}
                 </label>
@@ -499,7 +499,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-12 py-3 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-semibold text-sm shadow-xl shadow-theme-accent/10 disabled:opacity-30"
+          className="px-12 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold text-sm shadow-xl shadow-theme-accent/10 disabled:opacity-30"
         >
           {loading ? 'Processing...' : 'Save Package'}
         </button>

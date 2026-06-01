@@ -259,7 +259,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
 
       {/* Actions */}
       <div className="pt-10 flex items-center justify-start gap-4 px-4 pb-20">
-        <button type="submit" disabled={loading || uploading} className="px-10 py-4 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl text-sm">
+        <button type="submit" disabled={loading || uploading} className="px-10 py-4 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl text-sm">
           {loading ? 'Processing...' : (initialData ? 'Update profile' : 'Register and grant access')}
         </button>
         <button type="button" onClick={onCancel} className="px-8 py-4 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-bold text-theme-text-muted hover:text-theme-text">Cancel</button>

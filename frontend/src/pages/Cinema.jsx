@@ -116,7 +116,7 @@ const Cinema = () => {
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-theme-accent hover:bg-theme-accent text-black hover:text-black border border-theme-border rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
+          className="px-6 py-2 bg-theme-accent hover:bg-theme-accent text-theme-accent-text hover:text-theme-accent-text border border-theme-border rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
         >
           <X size={14} /> Exit
         </button>

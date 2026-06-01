@@ -14,6 +14,7 @@
   --theme-input-bg-hover: rgba(255, 255, 255, 0.1);
   --theme-accent: #e5a00d;
   --theme-accent-hover: #ffb414;
+  --theme-accent-text: #000000;
 
   /* Sidebar Specific (Dark Mode Defaults) */
   --theme-sidebar-bg: var(--theme-surface);
@@ -35,6 +36,7 @@
   --theme-input-bg-hover: rgba(0, 0, 0, 0.08);
   --theme-accent: #2c3e50;
   --theme-accent-hover: #1a252f;
+  --theme-accent-text: #ffffff;
 
   /* Sidebar Specific (Custom Slate for Light Mode) */
   --theme-sidebar-bg: #4d5e6d;
@@ -65,6 +67,7 @@
   --color-theme-input-bg-hover: var(--theme-input-bg-hover);
   --color-theme-accent: var(--theme-accent);
   --color-theme-accent-hover: var(--theme-accent-hover);
+  --color-theme-accent-text: var(--theme-accent-text);
 
   --color-theme-sidebar-bg: var(--theme-sidebar-bg);
   --color-theme-sidebar-text: var(--theme-sidebar-text);

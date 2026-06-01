@@ -153,7 +153,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-10 py-3 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl disabled:opacity-30"
+          className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl disabled:opacity-30"
         >
           {loading ? 'Processing...' : (initialData ? 'Update user' : 'Create user')}
         </button>

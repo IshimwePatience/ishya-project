@@ -595,7 +595,7 @@ const DashboardLayout = ({ children }) => {
   const subDetails = getSubscriptionDetails();
 
   return (
-    <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-black">
+    <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-theme-accent-text">
       {/* Top Navigation — Plex-style layout */}
       <header className="h-16 bg-theme-sidebar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-sidebar-text">
         {/* LEFT: Logo & Nav Links */}

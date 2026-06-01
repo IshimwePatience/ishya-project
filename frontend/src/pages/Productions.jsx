@@ -137,7 +137,7 @@ const Productions = () => {
               }))}
             />
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-theme-accent-text rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
               onClick={() => setIsFormOpen(true)}
             >
               <Plus size={16} /> New project

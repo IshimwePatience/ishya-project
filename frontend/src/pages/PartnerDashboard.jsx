@@ -148,7 +148,7 @@ const PartnerDashboard = () => {
                   <div className="flex flex-col gap-2 pr-4">
                     <button 
                       onClick={() => navigate('/dashboard/library')}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-theme-accent text-black text-[10px] font-bold rounded-sm hover:bg-white transition-all"
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-theme-accent text-theme-accent-text text-[10px] font-bold rounded-sm hover:bg-white transition-all"
                     >
                       <Play size={12} fill="currentColor" /> Watch
                     </button>

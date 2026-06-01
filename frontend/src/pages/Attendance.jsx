@@ -257,7 +257,7 @@ const Attendance = () => {
               ) : (
                 <button
                   onClick={handleCheckIn}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm font-bold transition-all text-sm shadow-xl"
+                  className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm font-bold transition-all text-sm shadow-xl"
                 >
                   <CheckCircle2 size={16} />
                   <span>Start session</span>
@@ -323,7 +323,7 @@ const Attendance = () => {
                   );
                 }
               }} className="px-4 py-2 text-sm text-theme-accent hover:bg-theme-accent/10 rounded border border-theme-accent/30 transition-colors">Use Current Location</button>
-              <button type="submit" className="px-6 py-2 text-sm bg-theme-accent text-black font-bold rounded shadow-lg shadow-theme-accent/20 hover:bg-theme-accent/90 transition-colors">Save Rule & Generate Link</button>
+              <button type="submit" className="px-6 py-2 text-sm bg-theme-accent text-theme-accent-text font-bold rounded shadow-lg shadow-theme-accent/20 hover:bg-theme-accent/90 transition-colors">Save Rule & Generate Link</button>
             </div>
           </form>
         </motion.div>

@@ -267,7 +267,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="submit"
           disabled={loading || uploading}
-          className="px-10 py-4 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center gap-3 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-10 py-4 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center gap-3 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {loading ? 'Processing...' : (initialData ? 'Update script' : 'Upload script')}
         </button>

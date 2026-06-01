@@ -177,7 +177,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <button 
             type="submit"
             disabled={loading || !formData.name}
-            className="px-10 py-3 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
+            className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
           >
             {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
           </button>

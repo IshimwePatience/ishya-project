@@ -292,7 +292,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               setShowSubscriptionModal(true);
               setSubSuccess(false);
             }}
-            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-theme-accent-text text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
           >
             Subscribe Now
           </button>
@@ -315,7 +315,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               setShowSubscriptionModal(true);
               setSubSuccess(false);
             }}
-            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-theme-accent-text text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
           >
             Top Up Plan
           </button>
@@ -502,7 +502,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                       setShowSubscriptionModal(false);
                       setSubSuccess(false);
                     }}
-                    className="w-full py-3 bg-theme-accent hover:bg-theme-accent-hover text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
+                    className="w-full py-3 bg-theme-accent hover:bg-theme-accent-hover text-theme-accent-text font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
                   >
                     Start Watching
                   </button>

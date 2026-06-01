@@ -133,7 +133,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
                     <div className="p-3 bg-theme-bg rounded-sm text-theme-text-muted group-hover:text-theme-accent transition-colors">
                       <FileText size={20} />
                     </div>
-                    <div className="bg-theme-accent text-black text-[10px] font-bold px-2 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-theme-accent text-theme-accent-text text-[10px] font-bold px-2 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity">
                       DOWNLOAD
                     </div>
                   </div>

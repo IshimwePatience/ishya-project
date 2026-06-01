@@ -413,7 +413,7 @@ const PartnerRequests = () => {
                             setPricingLicense(sale);
                             setLicensePrice(sale.amount || '');
                           }}
-                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-theme-accent hover:bg-theme-accent-hover text-black rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
+                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-theme-accent hover:bg-theme-accent-hover text-theme-accent-text rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
                         >
                           <Check size={14} /> {Number(sale.amount) > 0 ? 'Update Price' : 'Set Price & Approve'}
                         </button>
@@ -541,7 +541,7 @@ const PartnerRequests = () => {
                 <div className="flex gap-4">
                   <button
                     type="submit"
-                    className="flex-1 py-3 bg-theme-accent text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl font-sans"
+                    className="flex-1 py-3 bg-theme-accent text-theme-accent-text hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl font-sans"
                   >
                     Confirm Quote & Notify
                   </button>

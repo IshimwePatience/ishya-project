@@ -171,7 +171,7 @@ const Scripts = () => {
         setViewMode={setViewMode}
         actions={isManagement && (
           <button
-            className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-black rounded-sm font-bold hover:bg-theme-accent-hover transition-all text-sm shadow-xl"
+            className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-theme-accent-text rounded-sm font-bold hover:bg-theme-accent-hover transition-all text-sm shadow-xl"
             onClick={() => setIsFormOpen(true)}
           >
             <Plus size={16} /> Add script
@@ -244,7 +244,7 @@ const Scripts = () => {
                     </div>
                     {!isManagement && (
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                         <div className="bg-theme-accent text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
+                         <div className="bg-theme-accent text-theme-accent-text text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
                             DOWNLOAD
                          </div>
                       </div>

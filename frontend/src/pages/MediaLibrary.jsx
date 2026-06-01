@@ -280,7 +280,7 @@ const MediaLibrary = () => {
                           e.stopPropagation();
                           setOpenDownloadDropdown(openDownloadDropdown === poster.id ? null : poster.id);
                         }}
-                        className="px-6 py-3 bg-theme-accent text-black hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg border-none"
+                        className="px-6 py-3 bg-theme-accent text-theme-accent-text hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg border-none"
                       >
                         <Download size={14} /> Download Poster
                       </button>
@@ -560,7 +560,7 @@ const MediaLibrary = () => {
                       Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
                     </p>
                     <button
-                      className="px-12 py-5 bg-theme-accent text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-theme-accent/40 flex items-center justify-center gap-3 mx-auto text-sm"
+                      className="px-12 py-5 bg-theme-accent text-theme-accent-text font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-theme-accent/40 flex items-center justify-center gap-3 mx-auto text-sm"
                       onClick={() => setShowLicenseModal(true)}
                     >
                       <Briefcase size={18} /> Request License
@@ -649,7 +649,7 @@ const MediaLibrary = () => {
                         <div className="flex gap-4 max-w-sm mx-auto pt-4">
                           <button
                             onClick={handleRequestDirectLicense}
-                            className="flex-1 py-3 bg-theme-accent text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl shadow-theme-accent/10 cursor-pointer"
+                            className="flex-1 py-3 bg-theme-accent text-theme-accent-text hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl shadow-theme-accent/10 cursor-pointer"
                           >
                             Confirm Request
                           </button>
@@ -710,7 +710,7 @@ const MediaLibrary = () => {
             actions={!isPartner && (
               <button
                 onClick={() => setIsFormOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-theme-accent-text rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
               >
                 <Plus size={16} />
                 <span>Add to Library</span>
@@ -787,7 +787,7 @@ const MediaLibrary = () => {
                               <Tv size={10} /> Series
                             </div>
                           ) : (
-                            <div className="bg-theme-accent/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-theme-accent/95 text-theme-accent-text text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Film size={10} /> Movie
                             </div>
                           )}
