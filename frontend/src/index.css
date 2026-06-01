@@ -73,6 +73,14 @@
   --theme-text-muted-dark: rgba(255, 255, 255, 0.4);
   --theme-input-bg: var(--theme-sidebar-hover);
   --theme-input-bg-hover: rgba(255, 255, 255, 0.15);
+
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-text: var(--theme-text);
+  --color-theme-text-muted: var(--theme-text-muted);
+  --color-theme-text-muted-dark: var(--theme-text-muted-dark);
+  --color-theme-input-bg: var(--theme-input-bg);
+  --color-theme-input-bg-hover: var(--theme-input-bg-hover);
+
   background-color: var(--theme-surface);
   color: var(--theme-text);
 }
