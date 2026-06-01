@@ -25,6 +25,7 @@ const PublicProductionDetail = () => {
   const [production, setProduction] = useState(null);
   const [stats, setStats] = useState({ likes: 0, unlikes: 0 });
   const [loading, setLoading] = useState(true);
+  const [videoDurations, setVideoDurations] = useState({});
   const resumeTime = new URLSearchParams(location.search).get('resume');
 
   const getDuration = (mediaFile) => {
@@ -104,6 +105,27 @@ const PublicProductionDetail = () => {
       animate={{ opacity: 1 }}
       className="min-h-screen bg-[#0f1115] text-theme-text relative font-sans"
     >
+      {/* Hidden videos to fetch duration dynamically from the files */}
+      <div style={{ display: 'none' }}>
+        {production.type !== 'Series' && movieAsset && !getDuration(movieAsset) && (
+          <video 
+            src={movieAsset.filePath} 
+            onLoadedMetadata={(e) => setVideoDurations(prev => ({ ...prev, [movieAsset.id]: e.target.duration }))} 
+            preload="metadata" 
+          />
+        )}
+        {production.type === 'Series' && production.mediaFiles?.map(ep => (
+          !getDuration(ep) && ep.fileType === 'Episode' ? (
+            <video 
+              key={`hidden-vid-${ep.id}`}
+              src={ep.filePath} 
+              onLoadedMetadata={(e) => setVideoDurations(prev => ({ ...prev, [ep.id]: e.target.duration }))} 
+              preload="metadata" 
+            />
+          ) : null
+        ))}
+      </div>
+
       {/* Fixed Back Button */}
       <button 
         onClick={() => navigate('/dashboard')}
@@ -148,10 +170,10 @@ const PublicProductionDetail = () => {
                 <span>{production.releaseDate ? new Date(production.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Coming Soon'}</span>
                 <span className="w-1 h-1 bg-white/20 rounded-full" />
                 <span>{production.mediaFiles?.find(m => m.category)?.category || production.genre || 'General'}</span>
-                {production.type !== 'Series' && (getDuration(movieAsset) || production.duration) && (
+                {production.type !== 'Series' && (videoDurations[movieAsset?.id] || getDuration(movieAsset) || production.duration) && (
                   <>
                     <span className="w-1 h-1 bg-white/20 rounded-full" />
-                    <span>{formatDuration(getDuration(movieAsset) || production.duration)}</span>
+                    <span>{formatDuration(videoDurations[movieAsset?.id] || getDuration(movieAsset) || production.duration)}</span>
                   </>
                 )}
               </div>
@@ -226,10 +248,10 @@ const PublicProductionDetail = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
                             <span className="text-[10px] font-black text-[#e5a00d]">EP {ep.episodeNumber || '1'}</span>
-                            {getDuration(ep) && (
+                            {(videoDurations[ep.id] || getDuration(ep)) && (
                               <>
                                 <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
-                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(getDuration(ep))}</span>
+                                <span className="text-xs font-bold text-theme-text-muted truncate">{formatDuration(videoDurations[ep.id] || getDuration(ep))}</span>
                               </>
                             )}
                           </div>

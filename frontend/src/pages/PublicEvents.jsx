@@ -247,112 +247,181 @@ const PublicEvents = ({ isDashboard }) => {
       {!isDashboard && <PublicNavbar />}
 
       <div className={`${isDashboard ? 'pt-8' : 'pt-32 md:pt-40'} px-6 md:px-20 pb-20 overflow-hidden`}>
-          <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative mt-4">
-            {/* Filter Bar */}
-            <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
-              <ListFilter size={18} className="text-[#aaaaaa]" />
-              <input 
-                type="text" 
-                placeholder="Filter performances..." 
-                className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* Table Header */}
-            <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
-              <div>Performance</div>
-              <div>Type</div>
-              <div>Status</div>
-              <div className="flex items-center gap-1">Date & Time <Calendar size={12}/></div>
-              <div className="text-right">Action</div>
-            </div>
-
-            {/* Table Body */}
-            <div className="flex-1 overflow-y-auto bg-[#1f1f1f]">
-              {publicPerformances.filter(e => e.title?.toLowerCase().includes(searchQuery.toLowerCase()) || e.venue?.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[400px] text-[#aaaaaa] space-y-4 opacity-50 p-20">
-                  <Play size={48} strokeWidth={1} />
-                  <span className="text-[14px] font-medium">No scheduled performances found</span>
-                </div>
-              ) : (
-                publicPerformances.filter(e => e.title?.toLowerCase().includes(searchQuery.toLowerCase()) || e.venue?.toLowerCase().includes(searchQuery.toLowerCase())).map(event => (
-                  <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
-                    
-                    {/* Event Column */}
-                    <div className="flex items-center gap-4 pr-4 overflow-hidden">
-                      <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-theme-border">
-                        {event.posterUrl ? (
-                          <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover opacity-80" />
+          {(() => {
+            const filteredEvents = publicPerformances.filter(e => e.title?.toLowerCase().includes(searchQuery.toLowerCase()) || e.venue?.toLowerCase().includes(searchQuery.toLowerCase()));
+            const firstEvent = filteredEvents[0];
+            const otherEvents = filteredEvents.slice(1);
+            
+            return (
+              <div className="flex flex-col lg:flex-row gap-6 mt-4 items-start">
+                {/* Left side: Featured First Event */}
+                {firstEvent && (
+                  <div className="w-full lg:w-1/3 flex flex-col shrink-0">
+                    <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl">
+                      <div className="w-full aspect-video bg-black/50 relative overflow-hidden">
+                        {firstEvent.posterUrl ? (
+                          <img src={firstEvent.posterUrl.startsWith('http') ? firstEvent.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${firstEvent.posterUrl}`} alt={firstEvent.title} className="w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-500" />
                         ) : (
                           <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
-                            <Play size={24} className="text-[#3ea6ff]/50" />
+                            <Play size={48} className="text-[#3ea6ff]/50" />
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-col min-w-0">
-                        <h3 className="text-[14px] font-medium text-theme-text truncate w-full leading-tight" title={event.title}>
-                          {event.title}
-                        </h3>
-                        <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
-                          <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{event.venue || 'TBA'}</span>
-                        </p>
+                      <div className="p-6 flex flex-col gap-4">
+                        <div>
+                          <span className="text-[10px] px-2 py-0.5 rounded-sm font-bold bg-[#3ea6ff]/10 text-[#3ea6ff] uppercase tracking-wider mb-2 inline-block">
+                            {firstEvent.type}
+                          </span>
+                          <h3 className="text-xl font-bold text-theme-text leading-tight mb-1">
+                            {firstEvent.title}
+                          </h3>
+                          <p className="text-[13px] text-[#aaaaaa] flex items-center gap-1.5 mt-2">
+                            <MapPin size={14} /> {firstEvent.venue || 'TBA'}
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border-t border-theme-border-light pt-4 mt-2">
+                          <div className="flex flex-col">
+                            <span className="text-[14px] text-theme-text font-bold">
+                              {new Date(firstEvent.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                            <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5 font-medium">
+                              <Clock size={12} /> {new Date(firstEvent.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                          </div>
+                          
+                          <button 
+                            onClick={() => {
+                              setBookingShow(firstEvent);
+                              setBuyerName('');
+                              setBuyerEmail('');
+                              setBookingSuccess(false);
+                              setTicketDetails(null);
+                              setTicketTier('regular');
+                              setTicketQuantity(1);
+                            }}
+                            className="px-6 py-2.5 bg-white text-black font-bold text-[13px] hover:bg-gray-200 transition-all rounded-full shadow-lg active:scale-95 whitespace-nowrap"
+                          >
+                            Book Ticket
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                )}
 
-                    {/* Type Column */}
-                    <div>
-                       <span className="text-[12px] px-2 py-0.5 rounded-sm font-medium bg-[#3ea6ff]/10 text-[#3ea6ff]">
-                         {event.type}
-                       </span>
+                {/* Right side: Remaining Events Table */}
+                <div className={`w-full ${firstEvent ? 'lg:w-2/3' : ''} flex flex-col`}>
+                  <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
+                    {/* Filter Bar */}
+                    <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
+                      <ListFilter size={18} className="text-[#aaaaaa]" />
+                      <input 
+                        type="text" 
+                        placeholder="Filter performances..." 
+                        className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
                     </div>
 
-                    {/* Status Column */}
-                    <div>
-                      <span className="flex items-center gap-1.5 text-[13px] text-theme-text font-medium">
-                        <div className="w-2 h-2 rounded-full bg-green-400"></div> Scheduled
-                      </span>
+                    {/* Table Header */}
+                    <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
+                      <div>Performance</div>
+                      <div>Type</div>
+                      <div>Status</div>
+                      <div className="flex items-center gap-1">Date & Time <Calendar size={12}/></div>
+                      <div className="text-right">Action</div>
                     </div>
 
-                    {/* Date Column */}
-                    <div className="flex flex-col justify-center">
-                       <span className="text-[13px] text-theme-text font-medium">
-                         {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                       </span>
-                       <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
-                         <Clock size={12} /> {new Date(event.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                       </span>
+                    {/* Table Body */}
+                    <div className="flex-1 overflow-y-auto bg-[#1f1f1f] max-h-[500px]">
+                      {otherEvents.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-[300px] text-[#aaaaaa] space-y-4 opacity-50 p-20">
+                          <Play size={48} strokeWidth={1} />
+                          <span className="text-[14px] font-medium">No additional performances found</span>
+                        </div>
+                      ) : (
+                        otherEvents.map(event => (
+                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
+                            
+                            {/* Event Column */}
+                            <div className="flex items-center gap-4 pr-4 overflow-hidden">
+                              <div className="w-[120px] h-[68px] bg-black/50 rounded flex-shrink-0 relative overflow-hidden border border-theme-border">
+                                {event.posterUrl ? (
+                                  <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover opacity-80" />
+                                ) : (
+                                  <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
+                                    <Play size={24} className="text-[#3ea6ff]/50" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex flex-col min-w-0">
+                                <h3 className="text-[14px] font-medium text-theme-text truncate w-full leading-tight" title={event.title}>
+                                  {event.title}
+                                </h3>
+                                <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
+                                  <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{event.venue || 'TBA'}</span>
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Type Column */}
+                            <div>
+                               <span className="text-[12px] px-2 py-0.5 rounded-sm font-medium bg-[#3ea6ff]/10 text-[#3ea6ff]">
+                                 {event.type}
+                               </span>
+                            </div>
+
+                            {/* Status Column */}
+                            <div>
+                              <span className="flex items-center gap-1.5 text-[13px] text-theme-text font-medium">
+                                <div className="w-2 h-2 rounded-full bg-green-400"></div> Scheduled
+                              </span>
+                            </div>
+
+                            {/* Date Column */}
+                            <div className="flex flex-col justify-center">
+                               <span className="text-[13px] text-theme-text font-medium">
+                                 {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                               </span>
+                               <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
+                                 <Clock size={12} /> {new Date(event.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                               </span>
+                            </div>
+                            
+                            {/* Action Column */}
+                            <div className="text-right">
+                              <button 
+                                onClick={() => {
+                                  setBookingShow(event);
+                                  setBuyerName('');
+                                  setBuyerEmail('');
+                                  setBookingSuccess(false);
+                                  setTicketDetails(null);
+                                  setTicketTier('regular');
+                                  setTicketQuantity(1);
+                                }}
+                                className="px-4 py-2 bg-white text-black font-bold text-[12px] hover:bg-gray-200 transition-all rounded-sm shadow-md active:scale-95 whitespace-nowrap"
+                              >
+                                Book Ticket
+                              </button>
+                            </div>
+
+                          </div>
+                        ))
+                      )}
                     </div>
                     
-                    {/* Action Column */}
-                    <div className="text-right">
-                      <button 
-                        onClick={() => {
-                          setBookingShow(event);
-                          setBuyerName('');
-                          setBuyerEmail('');
-                          setBookingSuccess(false);
-                          setTicketDetails(null);
-                          setTicketTier('regular');
-                          setTicketQuantity(1);
-                        }}
-                        className="px-4 py-2 bg-white text-black font-bold text-[12px] hover:bg-gray-200 transition-all rounded-sm shadow-md active:scale-95 whitespace-nowrap"
-                      >
-                        Book Ticket
-                      </button>
+                    {/* Table Footer */}
+                    <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
+                      Performances
                     </div>
-
                   </div>
-                ))
-              )}
-            </div>
-            
-            {/* Table Footer */}
-            <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
-              Performances
-            </div>
-          </div>
+                </div>
+              </div>
+            );
+          })()}
       </div>
 
       {/* Booking Checkout Modal */}
