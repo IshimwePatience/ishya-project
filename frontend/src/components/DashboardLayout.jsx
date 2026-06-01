@@ -23,7 +23,8 @@ import {
   Trash2,
   Inbox,
   Sun,
-  Moon
+  Moon,
+  Menu
 } from 'lucide-react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -74,6 +75,7 @@ const SidebarGroup = ({ label, items, location }) => {
 const DashboardLayout = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -594,14 +596,22 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 bg-theme-surface border-b border-theme-border-light flex items-center px-10 fixed top-0 w-full z-40 gap-3 font-sans">
+      <header className="h-16 bg-theme-surface border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans">
         {/* LEFT: Logo & Nav Links */}
-        <div className="flex items-center gap-8 shrink-0">
+        <div className="flex items-center gap-4 md:gap-8 shrink-0">
+          {!isPublic && (
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 text-theme-text-muted hover:text-theme-text bg-transparent border-none"
+            >
+              <Menu size={24} />
+            </button>
+          )}
           <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
-            <img src={logoImg} alt="Ishya" className="h-24 w-auto object-contain" />
+            <img src={logoImg} alt="Ishya" className="h-20 md:h-24 w-auto object-contain" />
           </Link>
           {isPublic && (
-            <div className="flex items-center gap-1">
+            <div className="hidden md:flex items-center gap-1">
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
@@ -623,7 +633,7 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* CENTER: Absolutely Centered Search Bar */}
-        <div ref={searchRef} className="absolute left-1/2 -translate-x-1/2 w-[480px] z-50">
+        <div ref={searchRef} className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
           <div className="flex items-center gap-2 bg-theme-input-bg rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-theme-input-bg-hover transition-all focus-within:bg-theme-input-bg-hover">
             <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
             <input
@@ -1095,9 +1105,23 @@ const DashboardLayout = ({ children }) => {
       </header>
 
       <div className="flex flex-1 pt-16">
+        {/* Mobile Sidebar Overlay */}
+        {!isPublic && isMobileMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className="w-72 bg-theme-surface flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-30 border-r border-theme-border-light">
+          <aside className={`w-72 bg-theme-surface flex flex-col pt-6 fixed h-[calc(100vh-64px)] z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
+              <span className="font-bold text-theme-text">Menu</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-text-muted hover:text-white">
+                <X size={20} />
+              </button>
+            </div>
             <div className="flex-1 overflow-y-auto no-scrollbar py-2">
               {menuGroups.map((group) => (
                 <SidebarGroup
@@ -1121,8 +1145,8 @@ const DashboardLayout = ({ children }) => {
         )}
 
         {/* Main Content Area */}
-        <main className={`flex-1 ${isPublic ? '' : 'ml-72'}`}>
-          <div className="px-10 py-8 max-w-[1600px]">
+        <main className={`flex-1 transition-all duration-300 ${isPublic ? '' : 'md:ml-72'}`}>
+          <div className="px-4 md:px-10 py-6 md:py-8 w-full max-w-[1600px] overflow-x-hidden">
             {children}
           </div>
         </main>

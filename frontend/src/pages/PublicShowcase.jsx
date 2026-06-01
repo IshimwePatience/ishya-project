@@ -192,7 +192,7 @@ const PublicShowcase = () => {
           >
             <div className="max-w-7xl mx-auto space-y-12">
               <h2 className="text-2xl font-black tracking-tight">Featured Premieres</h2>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-y-24 gap-x-12 pt-10">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-y-16 md:gap-y-24 gap-x-6 md:gap-x-12 pt-10">
                 {releasedProductions.length > 0 ? (
                   releasedProductions.slice(0, 10).map((prod, index) => (
                     <motion.div
@@ -204,11 +204,11 @@ const PublicShowcase = () => {
                       }}
                       className="relative group cursor-pointer"
                     >
-                      <span className="absolute -left-8 md:-left-12 bottom-[-10px] text-[100px] md:text-[150px] font-black leading-none select-none text-transparent transition-all group-hover:text-theme-text/5"
+                      <span className="absolute -left-6 sm:-left-8 md:-left-12 bottom-[-5px] md:bottom-[-10px] text-[70px] sm:text-[100px] md:text-[150px] font-black leading-none select-none text-transparent transition-all group-hover:text-theme-text/5"
                         style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)', fontFamily: 'system-ui' }}>
                         {index + 1}
                       </span>
-                      <div className="relative aspect-[2/3] ml-6 md:ml-12 overflow-hidden rounded-md border border-theme-border-light group-hover:border-white/40 transition-all shadow-2xl">
+                      <div className="relative aspect-[2/3] ml-4 sm:ml-6 md:ml-12 overflow-hidden rounded-md border border-theme-border-light group-hover:border-white/40 transition-all shadow-2xl">
                         <img
                           src={getPoster(prod.id)}
                           alt={prod.title}
@@ -250,7 +250,7 @@ const PublicShowcase = () => {
                     <span className="text-theme-text-muted">{displayTitle}</span>
                   </div>
 
-                  <h2 className="text-4xl md:text-7xl font-black text-theme-text tracking-tighter mt-4">
+                  <h2 className="text-3xl sm:text-4xl md:text-7xl font-black text-theme-text tracking-tighter mt-4">
                     {displayTitle}
                   </h2>
                 </div>

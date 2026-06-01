@@ -297,7 +297,8 @@ const PartnerRequests = () => {
             </div>
 
             <div className="bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden">
-              <table className="w-full text-left text-sm">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full min-w-[600px] text-left text-sm">
                 <thead>
                   <tr className="bg-theme-input-bg text-[11px] font-bold text-theme-text-muted tracking-widest">
                     <th className="px-6 py-4">Partner</th>
@@ -345,6 +346,7 @@ const PartnerRequests = () => {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>
@@ -440,7 +442,8 @@ const PartnerRequests = () => {
             </div>
 
             <div className="bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden">
-              <table className="w-full text-left text-sm">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full min-w-[600px] text-left text-sm">
                 <thead>
                   <tr className="bg-theme-input-bg text-[11px] font-bold text-theme-text-muted tracking-widest">
                     <th className="px-6 py-4">Movie / Production</th>
@@ -487,6 +490,7 @@ const PartnerRequests = () => {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>

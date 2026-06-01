@@ -323,7 +323,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-10 bg-theme-surface flex justify-center">
+      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-4 md:px-10 bg-theme-surface flex justify-center">
         <div className="w-full max-w-[1600px]">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
             {genres.map(genre => (
@@ -407,10 +407,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-6 px-4 md:px-0"
           >
             <div className="space-y-3">
-              <h1 className="text-4xl md:text-5xl font-black text-theme-text tracking-tight">
+              <h1 className="text-3xl md:text-5xl font-black text-theme-text tracking-tight">
                 {selectedGenre} Movies & Shows
               </h1>
               <p className="text-theme-text-muted max-w-2xl text-[15px] leading-relaxed">
@@ -418,7 +418,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 md:gap-x-6 gap-y-8 md:gap-y-10">
               {productions
                 .filter(p =>
                   p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
