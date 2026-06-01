@@ -320,22 +320,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             Top Up Plan
           </button>
         </div>
-      ) : (
-        /* Sub Active checkmark */
-        <div className="px-4 py-2.5 bg-green-950/20 border border-green-500/10 rounded-sm flex items-center gap-2 text-xs text-green-400 font-medium font-sans">
-          <CheckCircle size={14} />
-          <span>Monthly Subscription Active (Expires in {subDetails.daysLeft} days)</span>
-        </div>
-      )}
+      ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="space-y-4 sticky top-0 z-30 py-6 -mx-8 -mt-8 px-8">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-theme-text tracking-tight flex items-center gap-2">
-            Browse Movies & Events <ChevronRight size={20} className="text-theme-text-muted-dark" />
-          </h2>
-        </div>
-
+      <section className="space-y-4 sticky top-16 z-30 py-4 -mx-8 px-8 bg-theme-bg/95 backdrop-blur-md border-b border-theme-border-light shadow-sm">
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
           {genres.map(genre => (
             <button

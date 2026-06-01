@@ -19,6 +19,7 @@ import {
   Briefcase,
   Clock,
   Check,
+  CheckCircle,
   Trash2,
   Inbox,
   Sun,
@@ -571,6 +572,25 @@ const DashboardLayout = ({ children }) => {
 
   const isPublic = user?.role?.toLowerCase().trim() === 'public visitor';
 
+  const getSubscriptionDetails = () => {
+    if (!user) return { status: 'inactive', daysLeft: 0 };
+    
+    if (user.subscriptionStatus === 'active' && user.subscriptionExpiresAt) {
+      const diffTime = new Date(user.subscriptionExpiresAt) - new Date();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays <= 0) {
+        return { status: 'expired', daysLeft: 0 };
+      } else if (diffDays <= 5) {
+        return { status: 'expiring_soon', daysLeft: diffDays };
+      }
+      return { status: 'active', daysLeft: diffDays };
+    }
+    return { status: 'inactive', daysLeft: 0 };
+  };
+
+  const subDetails = getSubscriptionDetails();
+
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
@@ -1057,6 +1077,12 @@ const DashboardLayout = ({ children }) => {
                 <div className="text-sm font-bold text-theme-text truncate">{user?.firstName} {user?.lastName}</div>
                 <div className="text-[10px] text-theme-text-muted font-medium truncate">{user?.role}</div>
               </div>
+              {isPublic && subDetails.status === 'active' && (
+                <div className="px-4 py-2 border-b border-theme-border-light mb-1 flex items-center gap-2 text-xs text-white font-medium font-sans">
+                  <CheckCircle size={14} />
+                  <span>Monthly Subscription Active (Expires in {subDetails.daysLeft} days)</span>
+                </div>
+              )}
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-theme-text-muted hover:text-theme-text hover:bg-theme-input-bg transition-all text-sm text-left"
