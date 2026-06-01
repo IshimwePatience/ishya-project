@@ -27,7 +27,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
             <div className="flex items-center justify-between px-8 py-6 border-b border-theme-border-light">
               <div>
                 <h2 className="text-xl font-black uppercase tracking-widest text-theme-text italic">{title}</h2>
-                <div className="h-1 w-12 bg-[#e5a00d] mt-2" />
+                <div className="h-1 w-12 bg-theme-accent mt-2" />
               </div>
               <button 
                 onClick={onClose}

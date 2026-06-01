@@ -37,9 +37,9 @@ const ActorSchedule = () => {
 
   const getTypeIcon = (type) => {
     const t = type?.toLowerCase() || '';
-    if (t === 'filming') return <Video size={14} className="text-[#e5a00d]" />;
-    if (t === 'meeting') return <Users size={14} className="text-[#e5a00d]" />;
-    return <Mic size={14} className="text-[#e5a00d]" />;
+    if (t === 'filming') return <Video size={14} className="text-theme-accent" />;
+    if (t === 'meeting') return <Users size={14} className="text-theme-accent" />;
+    return <Mic size={14} className="text-theme-accent" />;
   };
 
   const getStatus = (startTime, endTime) => {
@@ -48,7 +48,7 @@ const ActorSchedule = () => {
     const end = new Date(endTime);
     if (now > end) return { label: 'Completed', color: 'text-theme-text-muted' };
     if (now >= start && now <= end) return { label: 'In Progress', color: 'text-green-400' };
-    return { label: 'Upcoming', color: 'text-[#e5a00d]' };
+    return { label: 'Upcoming', color: 'text-theme-accent' };
   };
 
   return (
@@ -84,7 +84,7 @@ const ActorSchedule = () => {
             const status = getStatus(event.startTime, event.endTime);
             return (
               <div key={event.id} className="relative p-6 rounded-sm shadow-lg overflow-hidden min-h-[160px] flex flex-col justify-end hover:scale-[1.02] transition-transform cursor-pointer">
-                <div className="absolute inset-0 bg-[#e5a00d] z-0" />
+                <div className="absolute inset-0 bg-theme-accent z-0" />
                 {event.posterUrl && (
                   <>
                     <img
@@ -92,7 +92,7 @@ const ActorSchedule = () => {
                       alt="Event Poster"
                       className="absolute inset-0 w-full h-full object-cover z-0"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#e5a00d] via-[#e5a00d]/90 to-transparent z-0" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-theme-accent via-theme-accent/90 to-transparent z-0" />
                   </>
                 )}
                 <div className="relative z-10 text-black">

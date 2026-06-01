@@ -137,7 +137,7 @@ const Productions = () => {
               }))}
             />
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
               onClick={() => setIsFormOpen(true)}
             >
               <Plus size={16} /> New project
@@ -196,11 +196,11 @@ const Productions = () => {
                           <Folder
                             size={64 + (zoom - 50) * 0.8}
                             strokeWidth={1.5}
-                            className="text-theme-text-muted-dark group-hover:text-[#e5a00d] transition-all duration-300"
+                            className="text-theme-text-muted-dark group-hover:text-theme-accent transition-all duration-300"
                           />
                         </div>
                         <div className="space-y-1">
-                          <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{catName}</div>
+                          <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors truncate w-28 mx-auto">{catName}</div>
                           <div className="text-[11px] text-theme-text-muted font-medium">
                             {groupedProductions[catName].length} Items
                           </div>
@@ -236,7 +236,7 @@ const Productions = () => {
                             <FileText
                               size={64 + (zoom - 50) * 0.8}
                               strokeWidth={1}
-                              className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300"
+                              className="text-theme-text-muted-dark group-hover/card:text-theme-accent transition-all duration-300"
                             />
                             {/* Top Right Actions */}
                             <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
@@ -257,7 +257,7 @@ const Productions = () => {
                             </div>
                           </div>
                           <div className="space-y-1">
-                            <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{prod.title}</div>
+                            <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors truncate w-28 mx-auto">{prod.title}</div>
                             <div className="text-[11px] text-theme-text-muted font-medium">
                               {prod.year || '2026'} • {prod.status || 'Ready'}
                             </div>

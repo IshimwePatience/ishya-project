@@ -109,7 +109,7 @@ const Sales = () => {
       label: 'Ticket Sales',
       sublabel: 'Theatre & live performance bookings',
       amount: summary.ticketRevenue || 0,
-      color: 'bg-[#e5a00d]',
+      color: 'bg-theme-accent',
       pct: ticketPct,
       delay: 0.1
     },
@@ -184,12 +184,12 @@ const Sales = () => {
             <div className="w-full md:w-80">
               <div className="flex h-2 rounded-full overflow-hidden gap-[2px] bg-theme-input-bg">
                 <motion.div className="bg-blue-500 h-full"   initial={{ width: 0 }} animate={{ width: `${licensePct}%` }} transition={{ duration: 1, ease: 'easeOut' }} />
-                <motion.div className="bg-[#e5a00d] h-full"  initial={{ width: 0 }} animate={{ width: `${ticketPct}%` }}  transition={{ duration: 1, delay: 0.15, ease: 'easeOut' }} />
+                <motion.div className="bg-theme-accent h-full"  initial={{ width: 0 }} animate={{ width: `${ticketPct}%` }}  transition={{ duration: 1, delay: 0.15, ease: 'easeOut' }} />
                 <motion.div className="bg-purple-500 h-full" initial={{ width: 0 }} animate={{ width: `${subPct}%` }}     transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }} />
               </div>
               <div className="flex gap-5 mt-3">
                 <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />Licenses</div>
-                <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-[#e5a00d] inline-block" />Tickets</div>
+                <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-theme-accent inline-block" />Tickets</div>
                 <div className="flex items-center gap-1.5 text-[10px] text-theme-text-muted-dark"><span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />Subscriptions</div>
               </div>
             </div>
@@ -217,7 +217,7 @@ const Sales = () => {
                   const isLicense = ['Licensing','Full ownership sale','Broadcast rights','Script sale'].includes(sale.saleType);
                   const isTicket  = sale.saleType === 'Theatre ticket sales';
                   const badgeColor = isLicense ? 'text-blue-400 bg-blue-500/10 border-blue-500/20'
-                    : isTicket ? 'text-[#e5a00d] bg-[#e5a00d]/10 border-[#e5a00d]/20'
+                    : isTicket ? 'text-theme-accent bg-theme-accent/10 border-theme-accent/20'
                     : 'text-purple-400 bg-purple-500/10 border-purple-500/20';
                   const typeLabel = isLicense ? 'License' : isTicket ? 'Ticket' : 'Subscription';
 
@@ -226,7 +226,7 @@ const Sales = () => {
                       <div className="flex items-center gap-5">
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors">
+                            <span className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors">
                               {sale.production?.title || 'Unknown'}
                             </span>
                             <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-sm border ${badgeColor}`}>

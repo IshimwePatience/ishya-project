@@ -171,7 +171,7 @@ const Scripts = () => {
         setViewMode={setViewMode}
         actions={isManagement && (
           <button
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black rounded-sm font-bold hover:bg-[#ffb414] transition-all text-sm shadow-xl"
+            className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-black rounded-sm font-bold hover:bg-theme-accent-hover transition-all text-sm shadow-xl"
             onClick={() => setIsFormOpen(true)}
           >
             <Plus size={16} /> Add script
@@ -212,7 +212,7 @@ const Scripts = () => {
                     <FileText 
                       size={64 + (zoom - 50) * 0.8} 
                       strokeWidth={1} 
-                      className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300" 
+                      className="text-theme-text-muted-dark group-hover/card:text-theme-accent transition-all duration-300" 
                     />
                     {/* Top Right Actions */}
                     <div className="absolute -top-1 -right-1 flex flex-col gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
@@ -244,20 +244,20 @@ const Scripts = () => {
                     </div>
                     {!isManagement && (
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                         <div className="bg-[#e5a00d] text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
+                         <div className="bg-theme-accent text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-xl">
                             DOWNLOAD
                          </div>
                       </div>
                     )}
                   </div>
                   <div className="space-y-1">
-                    <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{script.title}</div>
+                    <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors truncate w-28 mx-auto">{script.title}</div>
                     <div className="text-[11px] text-theme-text-muted font-medium">
                       v{script.version} • {script.fileType}
                     </div>
                     {isManagement && script.assignedActors?.length > 0 && (
                       <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/[0.03] px-2 py-0.5 rounded-sm border border-theme-border-light">
-                        <Users size={10} className="text-[#e5a00d]" />
+                        <Users size={10} className="text-theme-accent" />
                         <span className="text-[10px] text-theme-text-muted font-bold">{script.assignedActors.length} assigned</span>
                       </div>
                     )}

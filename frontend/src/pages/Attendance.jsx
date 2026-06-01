@@ -204,7 +204,7 @@ const Attendance = () => {
             href={`https://www.google.com/maps?q=${lat},${lng}`} 
             target="_blank" 
             rel="noreferrer"
-            className="flex items-center gap-1.5 text-[10px] text-[#e5a00d] hover:underline font-bold uppercase tracking-tighter"
+            className="flex items-center gap-1.5 text-[10px] text-theme-accent hover:underline font-bold uppercase tracking-tighter"
           >
             <MapPin size={10} />
             View exact location on map
@@ -257,7 +257,7 @@ const Attendance = () => {
               ) : (
                 <button
                   onClick={handleCheckIn}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm font-bold transition-all text-sm shadow-xl"
+                  className="flex items-center gap-2 px-6 py-2.5 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm font-bold transition-all text-sm shadow-xl"
                 >
                   <CheckCircle2 size={16} />
                   <span>Start session</span>
@@ -322,7 +322,7 @@ const Attendance = () => {
                     { enableHighAccuracy: true }
                   );
                 }
-              }} className="px-4 py-2 text-sm text-[#e5a00d] hover:bg-[#e5a00d]/10 rounded border border-[#e5a00d]/30 transition-colors">Use Current Location</button>
+              }} className="px-4 py-2 text-sm text-theme-accent hover:bg-theme-accent/10 rounded border border-theme-accent/30 transition-colors">Use Current Location</button>
               <button type="submit" className="px-6 py-2 text-sm bg-theme-accent text-black font-bold rounded shadow-lg shadow-theme-accent/20 hover:bg-theme-accent/90 transition-colors">Save Rule & Generate Link</button>
             </div>
           </form>
@@ -349,7 +349,7 @@ const Attendance = () => {
                   <button 
                     onClick={handleUpdateLocation}
                     disabled={isDetecting}
-                    className="text-[10px] text-[#e5a00d] hover:underline flex items-center gap-1"
+                    className="text-[10px] text-theme-accent hover:underline flex items-center gap-1"
                   >
                     <Clock size={10} /> {isDetecting ? 'Refreshing...' : 'Refresh now'}
                   </button>
@@ -388,7 +388,7 @@ const Attendance = () => {
                 <div className="flex items-center gap-6">
                   <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-theme-input-bg-hover' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
                   <div>
-                    <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors">
+                    <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors">
                       {isManagement ? `${log.user?.firstName} ${log.user?.lastName}` : new Date(log.checkIn).toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </div>
                     <div className="text-[11px] text-theme-text-muted-dark font-medium mt-1 flex items-center gap-2">

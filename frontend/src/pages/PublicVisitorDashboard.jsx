@@ -141,7 +141,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
     return (
       <div className="space-y-4 group/row relative">
         <div className="flex items-center justify-between px-2">
-          <h3 className="text-xl font-bold text-theme-text flex items-center gap-2 hover:text-[#e5a00d] cursor-pointer transition-colors group">
+          <h3 className="text-xl font-bold text-theme-text flex items-center gap-2 hover:text-theme-accent cursor-pointer transition-colors group">
             {title} <ChevronRight size={20} className="mt-0.5 group-hover:translate-x-1 transition-transform" />
           </h3>
         </div>
@@ -204,7 +204,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     {isContinue && actualProgress > 0 && (
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
                         <div
-                          className="h-full bg-[#e5a00d] shadow-[0_0_8px_rgba(229,160,13,0.8)]"
+                          className="h-full bg-theme-accent shadow-[0_0_8px_rgba(229,160,13,0.8)]"
                           style={{ width: `${actualProgress}%` }}
                         />
                       </div>
@@ -223,7 +223,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     </div>
                   </div>
                   <div className="mt-3 space-y-1">
-                    <h4 className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
+                    <h4 className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors truncate">{prod.title}</h4>
                     <p className="text-[10px] text-theme-text-muted font-medium">
                       {isContinue
                         ? `${Math.floor((item.duration - item.currentTime) / 60)}m left`
@@ -283,7 +283,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             <div>
               <h4 className="text-sm font-bold text-theme-text font-sans">No Active Subscription</h4>
               <p className="text-[11px] text-theme-text-muted leading-relaxed font-sans mt-0.5">
-                Subscribe today for just <span className="text-[#e5a00d] font-bold">{Number(subPrice).toLocaleString()} RWF/month</span> to unlock premium Rwandan theater schedules and stream unlimited cinema.
+                Subscribe today for just <span className="text-theme-accent font-bold">{Number(subPrice).toLocaleString()} RWF/month</span> to unlock premium Rwandan theater schedules and stream unlimited cinema.
               </p>
             </div>
           </div>
@@ -292,15 +292,15 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               setShowSubscriptionModal(true);
               setSubSuccess(false);
             }}
-            className="px-6 py-2.5 bg-[#e5a00d] hover:bg-[#ffb414] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
           >
             Subscribe Now
           </button>
         </div>
       ) : subDetails.status === 'expiring_soon' ? (
-        <div className="bg-[#e5a00d]/10 border border-[#e5a00d]/20 p-5 rounded-sm flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
+        <div className="bg-theme-accent/10 border border-theme-accent/20 p-5 rounded-sm flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
           <div className="flex items-center gap-4 text-left">
-            <div className="w-10 h-10 rounded-full bg-[#e5a00d]/15 flex items-center justify-center text-[#e5a00d] shrink-0">
+            <div className="w-10 h-10 rounded-full bg-theme-accent/15 flex items-center justify-center text-theme-accent shrink-0">
               <AlertTriangle size={20} />
             </div>
             <div>
@@ -315,7 +315,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               setShowSubscriptionModal(true);
               setSubSuccess(false);
             }}
-            className="px-6 py-2.5 bg-[#e5a00d] hover:bg-[#ffb414] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
+            className="px-6 py-2.5 bg-theme-accent hover:bg-theme-accent-hover text-black text-xs font-black uppercase tracking-wider rounded-sm transition-all shadow-lg shrink-0 border-none cursor-pointer font-sans"
           >
             Top Up Plan
           </button>
@@ -443,7 +443,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate">{prod.title}</h4>
+                      <h4 className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors truncate">{prod.title}</h4>
                       <p className="text-[10px] text-theme-text-muted font-medium">
                         {new Date(prod.releaseDate).getFullYear()} • {prod.type || 'Movie'}
                       </p>
@@ -476,7 +476,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               {subSuccess ? (
                 /* Subscription Success View */
                 <div className="text-center space-y-6 py-6 font-sans">
-                  <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+                  <div className="w-16 h-16 bg-theme-accent/10 border border-theme-accent/30 text-theme-accent rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
                   <div className="space-y-2">
                     <h3 className="text-xl font-black tracking-tight text-theme-text">Subscription Active!</h3>
                     <p className="text-xs text-theme-text-muted max-w-xs mx-auto leading-relaxed">
@@ -502,7 +502,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                       setShowSubscriptionModal(false);
                       setSubSuccess(false);
                     }}
-                    className="w-full py-3 bg-[#e5a00d] hover:bg-[#ffb414] text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
+                    className="w-full py-3 bg-theme-accent hover:bg-theme-accent-hover text-black font-black text-xs uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
                   >
                     Start Watching
                   </button>
@@ -511,33 +511,33 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 /* Subscription Purchase / Top-up Form View */
                 <div className="space-y-6 font-sans">
                   <div className="space-y-2 text-center">
-                    <Tv className="text-[#e5a00d] mx-auto animate-pulse" size={32} />
+                    <Tv className="text-theme-accent mx-auto animate-pulse" size={32} />
                     <h3 className="text-xl font-black text-theme-text">Ishya Monthly Premium</h3>
                     <p className="text-xs text-theme-text-muted">Unlock exclusive streams and Rwandan masterpieces</p>
                   </div>
 
                   <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-5 space-y-3 text-xs text-theme-text/70">
                     <div className="flex items-center gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-theme-accent shrink-0" />
                       <span>Stream all Full Movies & Episodes in High Quality</span>
                     </div>
                     <div className="flex items-center gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-theme-accent shrink-0" />
                       <span>Access to continue watching and resume streams</span>
                     </div>
                     <div className="flex items-center gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-theme-accent shrink-0" />
                       <span>Frictionless live performance schedule booking</span>
                     </div>
                   </div>
 
                   <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs">
                     <span className="text-theme-text-muted">Monthly Membership Rate:</span>
-                    <span className="text-lg font-black text-[#e5a00d]">{Number(subPrice).toLocaleString()} RWF/mo</span>
+                    <span className="text-lg font-black text-theme-accent">{Number(subPrice).toLocaleString()} RWF/mo</span>
                   </div>
 
                   <div className="space-y-2 pt-2">
-                    <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block">Checkout via Secure PayPal Sandbox:</span>
+                    <span className="text-[9px] font-black text-theme-accent uppercase tracking-wider block">Checkout via Secure PayPal Sandbox:</span>
                     <PaypalButton
                       amount={(parseFloat(subPrice) / 1300).toFixed(2)}
                       onSuccess={handleSubscribeSuccess}

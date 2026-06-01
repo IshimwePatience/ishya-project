@@ -279,7 +279,7 @@ const Settings = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40 space-y-4">
-        <Loader2 className="animate-spin text-[#e5a00d]" size={28} />
+        <Loader2 className="animate-spin text-theme-accent" size={28} />
         <div className="text-theme-text-muted text-xs font-bold tracking-widest animate-pulse">Synchronizing Settings Vault...</div>
       </div>
     );
@@ -322,7 +322,7 @@ const Settings = () => {
                 className="flex items-center justify-between py-6 hover:bg-theme-input-bg transition-all group px-6 cursor-pointer"
               >
                 <div className="flex items-center gap-8">
-                  <div className="text-theme-text/25 group-hover:text-[#e5a00d] transition-colors bg-theme-input-bg p-3 rounded-sm w-11 h-11 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="text-theme-text/25 group-hover:text-theme-accent transition-colors bg-theme-input-bg p-3 rounded-sm w-11 h-11 flex items-center justify-center overflow-hidden shrink-0">
                     {section.id === 'profile' && formData.profilePic ? (
                       <img src={formData.profilePic} alt="Avatar" className="w-full h-full object-cover rounded-sm" />
                     ) : (
@@ -330,11 +330,11 @@ const Settings = () => {
                     )}
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors tracking-tight">{section.title}</h3>
+                    <h3 className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors tracking-tight">{section.title}</h3>
                     <p className="text-xs text-theme-text-muted font-medium mt-1">{section.desc}</p>
                   </div>
                 </div>
-                <button className="text-xs font-bold text-[#e5a00d]/60 group-hover:text-[#e5a00d] transition-all bg-transparent border-none cursor-pointer">
+                <button className="text-xs font-bold text-theme-accent/60 group-hover:text-theme-accent transition-all bg-transparent border-none cursor-pointer">
                   Configure →
                 </button>
               </div>
@@ -375,7 +375,7 @@ const Settings = () => {
             >
               <ChevronLeft size={16} /> Back to Settings
             </button>
-            <span className="text-[10px] font-black bg-[#e5a00d]/10 text-[#e5a00d] px-2.5 py-1 rounded-full uppercase tracking-widest">{user?.role}</span>
+            <span className="text-[10px] font-black bg-theme-accent/10 text-theme-accent px-2.5 py-1 rounded-full uppercase tracking-widest">{user?.role}</span>
           </div>
 
           <form onSubmit={handleProfileSubmit} className="space-y-8">
@@ -385,13 +385,13 @@ const Settings = () => {
                 {formData.profilePic ? (
                   <img src={formData.profilePic} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="text-3xl font-black text-[#e5a00d]">
+                  <div className="text-3xl font-black text-theme-accent">
                     {user?.firstName?.[0]?.toUpperCase() || 'U'}
                   </div>
                 )}
                 {uploadingAvatar ? (
                   <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <Loader2 className="animate-spin text-[#e5a00d]" size={20} />
+                    <Loader2 className="animate-spin text-theme-accent" size={20} />
                   </div>
                 ) : (
                   <div
@@ -425,7 +425,7 @@ const Settings = () => {
                   required
                   value={formData.firstName}
                   onChange={e => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                  className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
                 />
               </div>
               <div className="space-y-2">
@@ -435,7 +435,7 @@ const Settings = () => {
                   required
                   value={formData.lastName}
                   onChange={e => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                  className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
                 />
               </div>
               <div className="space-y-2">
@@ -446,7 +446,7 @@ const Settings = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm pl-11 pr-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                    className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm pl-11 pr-4 py-3 text-sm text-theme-text outline-none transition-colors"
                     placeholder="+1 (555) 000-0000"
                   />
                 </div>
@@ -469,7 +469,7 @@ const Settings = () => {
               <button
                 type="submit"
                 disabled={saving}
-                className="px-6 py-3 bg-[#e5a00d] hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2"
+                className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2"
               >
                 {saving && <Loader2 className="animate-spin" size={14} />}
                 Save Changes
@@ -494,7 +494,7 @@ const Settings = () => {
           <div className="space-y-6">
             <div className="space-y-1">
               <h4 className="text-sm font-bold text-theme-text flex items-center gap-2">
-                <Palette size={16} className="text-[#e5a00d]" /> Appearance Settings
+                <Palette size={16} className="text-theme-accent" /> Appearance Settings
               </h4>
               <p className="text-xs text-theme-text-muted leading-relaxed max-w-md">
                 Customize your viewing experience. These settings are tied to your session and will not affect other users.
@@ -504,12 +504,12 @@ const Settings = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div 
                 onClick={() => handleThemeChange('dark')}
-                className={`border rounded-sm p-6 cursor-pointer transition-all ${themePref === 'dark' ? 'border-[#e5a00d] bg-[#e5a00d]/5' : 'border-theme-border-light bg-theme-input-bg hover:border-theme-border'}`}
+                className={`border rounded-sm p-6 cursor-pointer transition-all ${themePref === 'dark' ? 'border-theme-accent bg-theme-accent/5' : 'border-theme-border-light bg-theme-input-bg hover:border-theme-border'}`}
               >
                 <div className="w-full h-24 bg-theme-surface rounded-sm mb-4 border border-theme-border shadow-inner flex items-center justify-center overflow-hidden">
                   <div className="w-3/4 space-y-2">
                     <div className="h-2 w-1/3 bg-white/20 rounded-full"></div>
-                    <div className="h-2 w-1/2 bg-[#e5a00d]/50 rounded-full"></div>
+                    <div className="h-2 w-1/2 bg-theme-accent/50 rounded-full"></div>
                   </div>
                 </div>
                 <h5 className="text-sm font-bold text-theme-text mb-1">Cinematic Dark Mode</h5>
@@ -518,12 +518,12 @@ const Settings = () => {
 
               <div 
                 onClick={() => handleThemeChange('light')}
-                className={`border rounded-sm p-6 cursor-pointer transition-all ${themePref === 'light' ? 'border-[#e5a00d] bg-[#e5a00d]/5' : 'border-theme-border-light bg-theme-input-bg hover:border-theme-border'}`}
+                className={`border rounded-sm p-6 cursor-pointer transition-all ${themePref === 'light' ? 'border-theme-accent bg-theme-accent/5' : 'border-theme-border-light bg-theme-input-bg hover:border-theme-border'}`}
               >
                 <div className="w-full h-24 bg-white rounded-sm mb-4 border border-gray-200 shadow-inner flex items-center justify-center overflow-hidden">
                   <div className="w-3/4 space-y-2">
                     <div className="h-2 w-1/3 bg-gray-300 rounded-full"></div>
-                    <div className="h-2 w-1/2 bg-[#e5a00d] rounded-full"></div>
+                    <div className="h-2 w-1/2 bg-theme-accent rounded-full"></div>
                   </div>
                 </div>
                 <h5 className="text-sm font-bold text-theme-text mb-1">Professional White</h5>
@@ -552,7 +552,7 @@ const Settings = () => {
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <h4 className="text-sm font-bold text-theme-text flex items-center gap-2">
-                  <Lock size={16} className="text-[#e5a00d]" /> Two-Factor Authentication (2FA)
+                  <Lock size={16} className="text-theme-accent" /> Two-Factor Authentication (2FA)
                 </h4>
                 <p className="text-xs text-theme-text-muted max-w-md leading-relaxed">
                   Protect your production account with an extra security layer. Toggling this on requests a verification code via email whenever you sign in.
@@ -562,7 +562,7 @@ const Settings = () => {
                 type="button"
                 onClick={handle2FAToggle}
                 className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus:ring-0 ${
-                  is2FAEnabled ? 'bg-[#e5a00d]' : 'bg-theme-input-bg-hover'
+                  is2FAEnabled ? 'bg-theme-accent' : 'bg-theme-input-bg-hover'
                 }`}
               >
                 <span
@@ -587,7 +587,7 @@ const Settings = () => {
                     required
                     value={pwdData.currentPassword}
                     onChange={e => setPwdData({ ...pwdData, currentPassword: e.target.value })}
-                    className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                    className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -598,7 +598,7 @@ const Settings = () => {
                       required
                       value={pwdData.newPassword}
                       onChange={e => setPwdData({ ...pwdData, newPassword: e.target.value })}
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
                     />
                   </div>
                   <div className="space-y-2">
@@ -608,7 +608,7 @@ const Settings = () => {
                       required
                       value={pwdData.confirmPassword}
                       onChange={e => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -618,7 +618,7 @@ const Settings = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-3 bg-[#e5a00d] hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2"
+                  className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2"
                 >
                   {saving && <Loader2 className="animate-spin" size={14} />}
                   Change Password
@@ -644,7 +644,7 @@ const Settings = () => {
           <div className="space-y-6">
             <div className="space-y-1">
               <h4 className="text-sm font-bold text-theme-text flex items-center gap-2">
-                <Bell size={16} className="text-[#e5a00d]" /> Notification Preferences
+                <Bell size={16} className="text-theme-accent" /> Notification Preferences
               </h4>
               <p className="text-xs text-theme-text-muted leading-relaxed max-w-md">
                 Configure when and how you want to be alerted. Preference alterations save instantly to your vault.
@@ -662,7 +662,7 @@ const Settings = () => {
                   type="button"
                   onClick={() => handleNotifToggle('emailAlerts')}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus:ring-0 ${
-                    notifPrefs.emailAlerts ? 'bg-[#e5a00d]' : 'bg-theme-input-bg-hover'
+                    notifPrefs.emailAlerts ? 'bg-theme-accent' : 'bg-theme-input-bg-hover'
                   }`}
                 >
                   <span
@@ -683,7 +683,7 @@ const Settings = () => {
                   type="button"
                   onClick={() => handleNotifToggle('browserAlerts')}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus:ring-0 ${
-                    notifPrefs.browserAlerts ? 'bg-[#e5a00d]' : 'bg-theme-input-bg-hover'
+                    notifPrefs.browserAlerts ? 'bg-theme-accent' : 'bg-theme-input-bg-hover'
                   }`}
                 >
                   <span
@@ -704,7 +704,7 @@ const Settings = () => {
                   type="button"
                   onClick={() => handleNotifToggle('marketingEmails')}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus:ring-0 ${
-                    notifPrefs.marketingEmails ? 'bg-[#e5a00d]' : 'bg-theme-input-bg-hover'
+                    notifPrefs.marketingEmails ? 'bg-theme-accent' : 'bg-theme-input-bg-hover'
                   }`}
                 >
                   <span
@@ -725,7 +725,7 @@ const Settings = () => {
                   type="button"
                   onClick={() => handleNotifToggle('troubleshootingAlerts')}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus:ring-0 ${
-                    notifPrefs.troubleshootingAlerts ? 'bg-[#e5a00d]' : 'bg-theme-input-bg-hover'
+                    notifPrefs.troubleshootingAlerts ? 'bg-theme-accent' : 'bg-theme-input-bg-hover'
                   }`}
                 >
                   <span
@@ -755,7 +755,7 @@ const Settings = () => {
           <div className="space-y-6">
             <div className="space-y-1">
               <h4 className="text-sm font-bold text-theme-text flex items-center gap-2">
-                <Database size={16} className="text-[#e5a00d]" /> Troupe Configurations
+                <Database size={16} className="text-theme-accent" /> Troupe Configurations
               </h4>
               <p className="text-xs text-theme-text-muted leading-relaxed max-w-md">
                 Configure global settings, default categories, and directory options for the Ishya Production Management System.
@@ -788,7 +788,7 @@ const Settings = () => {
                       type="number"
                       step="1"
                       min="1"
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-[#e5a00d]/40 rounded-sm pl-4 pr-12 py-3 text-sm text-theme-text outline-none transition-colors font-sans"
+                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm pl-4 pr-12 py-3 text-sm text-theme-text outline-none transition-colors font-sans"
                       value={subPrice}
                       onChange={(e) => setSubPrice(e.target.value)}
                     />
@@ -799,7 +799,7 @@ const Settings = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-3 bg-[#e5a00d] hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
+                  className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
                 >
                   {saving && <Loader2 className="animate-spin" size={14} />}
                   Save Subscription Price

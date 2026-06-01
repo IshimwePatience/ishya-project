@@ -135,7 +135,7 @@ const Talents = () => {
               }))}
             />
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
               onClick={() => setIsFormOpen(true)}
             >
               <Plus size={16} /> Register talent
@@ -171,7 +171,7 @@ const Talents = () => {
                 return (
                   <div key={groupName} className="space-y-4">
                     <div 
-                      className="flex items-center gap-2 cursor-pointer text-theme-text hover:text-[#e5a00d] transition-colors border-b border-theme-border-light pb-2"
+                      className="flex items-center gap-2 cursor-pointer text-theme-text hover:text-theme-accent transition-colors border-b border-theme-border-light pb-2"
                       onClick={() => toggleGroup(groupName)}
                     >
                       <motion.div
@@ -215,7 +215,7 @@ const Talents = () => {
                               >
                                 <div className="relative group/card">
                                   <div 
-                                    className="rounded-full bg-theme-input-bg border border-theme-border-light overflow-hidden flex items-center justify-center group-hover/card:border-[#e5a00d]/50 transition-all duration-300"
+                                    className="rounded-full bg-theme-input-bg border border-theme-border-light overflow-hidden flex items-center justify-center group-hover/card:border-theme-accent/50 transition-all duration-300"
                                     style={{
                                       width: `${64 + (zoom - 50) * 0.8}px`,
                                       height: `${64 + (zoom - 50) * 0.8}px`
@@ -227,7 +227,7 @@ const Talents = () => {
                                       <User 
                                         size={32 + (zoom - 50) * 0.4} 
                                         strokeWidth={1.5} 
-                                        className="text-theme-text-muted-dark group-hover/card:text-[#e5a00d] transition-all duration-300" 
+                                        className="text-theme-text-muted-dark group-hover/card:text-theme-accent transition-all duration-300" 
                                       />
                                     )}
                                   </div>
@@ -250,7 +250,7 @@ const Talents = () => {
                                   </div>
                                 </div>
                                 <div className="space-y-1">
-                                  <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{talent.firstName} {talent.lastName}</div>
+                                  <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors truncate w-28 mx-auto">{talent.firstName} {talent.lastName}</div>
                                   <div className="text-[11px] text-theme-text-muted font-medium">
                                     {talent.specialty}
                                   </div>

@@ -103,7 +103,7 @@ const Expenses = () => {
                   }))}
                 />
                 <button 
-                  className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
                   onClick={() => setIsFormOpen(true)}
                 >
                   <Plus size={16} /> Record Expense
@@ -128,7 +128,7 @@ const Expenses = () => {
             </div>
             <div className="bg-theme-surface p-8 rounded-sm border border-theme-border-light group hover:bg-theme-input-bg transition-all">
               <div className="text-[11px] font-medium text-theme-text-muted mb-4">Top Category</div>
-              <div className="text-3xl font-bold text-[#e5a00d] tracking-tight">{topCatData.category}</div>
+              <div className="text-3xl font-bold text-theme-accent tracking-tight">{topCatData.category}</div>
               <div className="mt-4 text-[11px] font-medium text-theme-text-muted-dark">{topCatData.percent}% of total spend</div>
             </div>
           </div>
@@ -147,11 +147,11 @@ const Expenses = () => {
                   expenses.map((expense) => (
                     <div key={expense.id} className="group flex items-center justify-between py-4 border-b border-theme-border-light transition-all">
                       <div className="flex items-center gap-6">
-                        <div className="w-10 h-10 rounded-sm flex items-center justify-center text-theme-text-muted-dark group-hover:text-[#e5a00d] transition-colors border border-theme-border">
+                        <div className="w-10 h-10 rounded-sm flex items-center justify-center text-theme-text-muted-dark group-hover:text-theme-accent transition-colors border border-theme-border">
                           <DollarSign size={16} />
                         </div>
                         <div>
-                          <div className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors">
+                          <div className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors">
                             {expense.category} • {expense.production?.title || 'General'}
                           </div>
                           <div className="text-[11px] text-theme-text-muted font-medium flex items-center gap-4 mt-1">

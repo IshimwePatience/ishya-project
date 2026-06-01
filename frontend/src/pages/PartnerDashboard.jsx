@@ -75,7 +75,7 @@ const PartnerDashboard = () => {
       >
         {[
           { label: 'Active Licenses', value: stats.activeLicenses, icon: ShieldCheck, color: 'text-green-400' },
-          { label: 'Expiring Soon', value: stats.expiringSoon, icon: Clock, color: 'text-[#e5a00d]' },
+          { label: 'Expiring Soon', value: stats.expiringSoon, icon: Clock, color: 'text-theme-accent' },
           { label: 'Total Downloads', value: stats.totalDownloads, icon: Download, color: 'text-blue-400' }
         ].map((stat, i) => (
           <div 
@@ -101,7 +101,7 @@ const PartnerDashboard = () => {
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-theme-text flex items-center gap-2">
-              <Film size={20} className="text-[#e5a00d]" /> My Licensed Content
+              <Film size={20} className="text-theme-accent" /> My Licensed Content
             </h3>
             <Link to="/dashboard/library" className="text-xs font-bold text-theme-text-muted hover:text-theme-text transition-colors flex items-center gap-1">
               View All <ChevronRight size={14} />
@@ -136,7 +136,7 @@ const PartnerDashboard = () => {
                       )}
                     </div>
                     <div>
-                      <h4 className="font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors" style={{ fontSize: `${0.875 * (zoom / 50)}rem` }}>{item.title}</h4>
+                      <h4 className="font-bold text-theme-text group-hover:text-theme-accent transition-colors" style={{ fontSize: `${0.875 * (zoom / 50)}rem` }}>{item.title}</h4>
                       <p className="text-[10px] text-theme-text-muted mt-1 uppercase tracking-wider">{item.category?.name || 'Production'}</p>
                       <div className="flex items-center gap-4 mt-4">
                         <div className="flex items-center gap-1 text-[9px] text-green-400 font-bold bg-green-400/10 px-2 py-0.5 rounded-full uppercase">
@@ -148,7 +148,7 @@ const PartnerDashboard = () => {
                   <div className="flex flex-col gap-2 pr-4">
                     <button 
                       onClick={() => navigate('/dashboard/library')}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-[#e5a00d] text-black text-[10px] font-bold rounded-sm hover:bg-white transition-all"
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-theme-accent text-black text-[10px] font-bold rounded-sm hover:bg-white transition-all"
                     >
                       <Play size={12} fill="currentColor" /> Watch
                     </button>
@@ -161,7 +161,7 @@ const PartnerDashboard = () => {
             ) : (
               <div className="py-20 text-center">
                 <p className="text-theme-text-muted-dark text-sm">No active licenses found</p>
-                <Link to="/dashboard/media" className="text-[#e5a00d] text-xs font-bold mt-4 block hover:underline">Browse Catalog</Link>
+                <Link to="/dashboard/media" className="text-theme-accent text-xs font-bold mt-4 block hover:underline">Browse Catalog</Link>
               </div>
             )}
           </div>

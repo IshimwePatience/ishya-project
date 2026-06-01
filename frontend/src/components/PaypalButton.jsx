@@ -114,7 +114,7 @@ const PaypalButton = ({ amount, onSuccess, type = 'generic' }) => {
     <div className="space-y-4 w-full">
       {loading && (
         <div className="flex flex-col items-center justify-center py-6 space-y-2 text-theme-text-muted">
-          <Loader2 className="animate-spin text-[#e5a00d]" size={24} />
+          <Loader2 className="animate-spin text-theme-accent" size={24} />
           <span className="text-xs font-bold uppercase tracking-wider">Securing Connection...</span>
         </div>
       )}

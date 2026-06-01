@@ -190,12 +190,12 @@ const PartnerRequests = () => {
             setSearchTerm('');
           }}
           className={`pb-4 px-6 text-sm font-bold transition-all relative border-none bg-transparent cursor-pointer ${
-            activeTab === 'partners' ? 'text-[#e5a00d]' : 'text-theme-text-muted hover:text-theme-text'
+            activeTab === 'partners' ? 'text-theme-accent' : 'text-theme-text-muted hover:text-theme-text'
           }`}
         >
           Distributors Sign-up ({pendingPartners.length})
           {activeTab === 'partners' && (
-            <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#e5a00d]" />
+            <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-[2px] bg-theme-accent" />
           )}
         </button>
         <button
@@ -204,12 +204,12 @@ const PartnerRequests = () => {
             setSearchTerm('');
           }}
           className={`pb-4 px-6 text-sm font-bold transition-all relative border-none bg-transparent cursor-pointer ${
-            activeTab === 'licensing' ? 'text-[#e5a00d]' : 'text-theme-text-muted hover:text-theme-text'
+            activeTab === 'licensing' ? 'text-theme-accent' : 'text-theme-text-muted hover:text-theme-text'
           }`}
         >
           Movie License Requests ({pendingLicenses.length})
           {activeTab === 'licensing' && (
-            <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#e5a00d]" />
+            <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-[2px] bg-theme-accent" />
           )}
         </button>
       </div>
@@ -218,7 +218,7 @@ const PartnerRequests = () => {
         /* PARTNERS SIGN-UP TAB */
         <div className="space-y-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-theme-accent tracking-widest">
               <Clock size={14} />
               <span>Pending Organization Review ({pendingPartners.length})</span>
             </div>
@@ -245,7 +245,7 @@ const PartnerRequests = () => {
                           </div>
                           <div>
                             <h3 className="font-bold text-theme-text">{request.name}</h3>
-                            <p className="text-xs text-[#e5a00d] font-medium">{request.type}</p>
+                            <p className="text-xs text-theme-accent font-medium">{request.type}</p>
                           </div>
                         </div>
                       </div>
@@ -354,7 +354,7 @@ const PartnerRequests = () => {
         /* MOVIE LICENSE REQUESTS TAB */
         <div className="space-y-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#e5a00d] tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-bold text-theme-accent tracking-widest">
               <Clock size={14} />
               <span>Pending Movie Distribution Approvals ({pendingLicenses.length})</span>
             </div>
@@ -376,12 +376,12 @@ const PartnerRequests = () => {
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-sm bg-theme-input-bg flex items-center justify-center text-[#e5a00d]">
+                          <div className="w-12 h-12 rounded-sm bg-theme-input-bg flex items-center justify-center text-theme-accent">
                             <Film size={24} />
                           </div>
                           <div>
                             <h3 className="font-bold text-theme-text">{sale.production?.title || 'Unknown Asset'}</h3>
-                            <p className="text-xs text-[#e5a00d] font-semibold">{sale.buyer?.name || 'Partner'}</p>
+                            <p className="text-xs text-theme-accent font-semibold">{sale.buyer?.name || 'Partner'}</p>
                           </div>
                         </div>
                       </div>
@@ -401,7 +401,7 @@ const PartnerRequests = () => {
                         </div>
                         <div className="flex justify-between border-t border-theme-border-light pt-2 mt-2">
                           <span>Quoted License Price:</span>
-                          <span className="text-[#e5a00d] font-bold">
+                          <span className="text-theme-accent font-bold">
                             {Number(sale.amount) > 0 ? `${Number(sale.amount).toLocaleString()} RWF` : 'Not Quoted'}
                           </span>
                         </div>
@@ -413,7 +413,7 @@ const PartnerRequests = () => {
                             setPricingLicense(sale);
                             setLicensePrice(sale.amount || '');
                           }}
-                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-[#e5a00d] hover:bg-[#ffb414] text-black rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
+                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-theme-accent hover:bg-theme-accent-hover text-black rounded-sm text-xs font-bold transition-all cursor-pointer border-none"
                         >
                           <Check size={14} /> {Number(sale.amount) > 0 ? 'Update Price' : 'Set Price & Approve'}
                         </button>
@@ -462,7 +462,7 @@ const PartnerRequests = () => {
                       </td>
                       <td className="px-6 py-4 text-theme-text-muted">
                         <div>{sale.buyer?.name}</div>
-                        <div className="text-[11px] text-[#e5a00d]">{sale.buyer?.type}</div>
+                        <div className="text-[11px] text-theme-accent">{sale.buyer?.type}</div>
                       </td>
                       <td className="px-6 py-4">
                         <span className="px-2 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-500">
@@ -528,7 +528,7 @@ const PartnerRequests = () => {
                     required
                     type="number"
                     min="1"
-                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none text-theme-text text-sm font-sans"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none text-theme-text text-sm font-sans"
                     placeholder="e.g. 500000"
                     value={licensePrice}
                     onChange={(e) => setLicensePrice(e.target.value)}
@@ -541,7 +541,7 @@ const PartnerRequests = () => {
                 <div className="flex gap-4">
                   <button
                     type="submit"
-                    className="flex-1 py-3 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl font-sans"
+                    className="flex-1 py-3 bg-theme-accent text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl font-sans"
                   >
                     Confirm Quote & Notify
                   </button>

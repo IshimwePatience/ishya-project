@@ -79,7 +79,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Netflix, Rwanda TV"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -96,7 +96,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           >
@@ -116,7 +116,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Name of representative"
             value={formData.contactPerson}
             onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
@@ -132,7 +132,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input 
             type="email"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="partner@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -148,7 +148,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="+250..."
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -163,7 +163,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all min-h-[100px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[100px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Physical or office location..."
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -177,7 +177,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <button 
             type="submit"
             disabled={loading || !formData.name}
-            className="px-10 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
+            className="px-10 py-3 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
           >
             {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
           </button>

@@ -40,7 +40,7 @@ const SidebarLink = ({ to, icon: Icon, label, active }) => (
       : 'text-theme-text-muted hover:text-theme-text'
       }`}
   >
-    <Icon size={18} className={active ? 'text-[#e5a00d]' : 'group-hover:text-theme-text transition-colors'} />
+    <Icon size={18} className={active ? 'text-theme-accent' : 'group-hover:text-theme-text transition-colors'} />
     <span className={`text-sm ${active ? 'font-medium' : 'font-normal'}`}>{label}</span>
   </Link>
 );
@@ -451,9 +451,9 @@ const DashboardLayout = ({ children }) => {
   const getNotifIcon = (type) => {
     switch (type) {
       case 'partner_request':
-        return <Users size={14} className="text-[#E5A00D]" />;
+        return <Users size={14} className="text-theme-accent" />;
       case 'license_request':
-        return <Briefcase size={14} className="text-[#E5A00D]" />;
+        return <Briefcase size={14} className="text-theme-accent" />;
       case 'partner_approval':
       case 'license_approval':
         return <ShieldCheck size={14} className="text-green-400" />;
@@ -595,7 +595,7 @@ const DashboardLayout = ({ children }) => {
   const subDetails = getSubscriptionDetails();
 
   return (
-    <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
+    <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-black">
       {/* Top Navigation — Plex-style layout */}
       <header className="h-16 bg-theme-sidebar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-sidebar-text">
         {/* LEFT: Logo & Nav Links */}
@@ -640,7 +640,7 @@ const DashboardLayout = ({ children }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-theme-sidebar-text w-full caret-[#E5A00D] h-full p-0 placeholder-theme-sidebar-text-muted"
+              className="bg-transparent border-none outline-none text-sm text-theme-sidebar-text w-full caret-theme-accent h-full p-0 placeholder-theme-sidebar-text-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
@@ -670,7 +670,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Productions */}
                   {searchResults.productions?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Productions</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Productions</div>
                       <div className="space-y-1">
                         {searchResults.productions.map(item => (
                           <div
@@ -680,7 +680,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Film size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.genre} • {item.type} • {item.status}</div>
                             </div>
                           </div>
@@ -692,7 +692,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Scripts */}
                   {searchResults.scripts?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Scripts</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Scripts</div>
                       <div className="space-y-1">
                         {searchResults.scripts.map(item => (
                           <div
@@ -702,7 +702,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <FileText size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Version {item.version} • {item.fileType || 'Document'}</div>
                             </div>
                           </div>
@@ -714,7 +714,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Media Files */}
                   {searchResults.mediaFiles?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Media Catalog</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Media Catalog</div>
                       <div className="space-y-1">
                         {searchResults.mediaFiles.map(item => (
                           <div
@@ -724,7 +724,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Library size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.fileName}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.fileName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Type: {item.fileType || 'Asset'}</div>
                             </div>
                           </div>
@@ -736,7 +736,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Talents */}
                   {searchResults.talents?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Talent Roster</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Talent Roster</div>
                       <div className="space-y-1">
                         {searchResults.talents.map(item => (
                           <div
@@ -746,7 +746,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <UserIcon size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.firstName} {item.lastName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.specialty || 'Talent'} • {item.email}</div>
                             </div>
                           </div>
@@ -758,7 +758,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Buyers / Partners */}
                   {searchResults.buyers?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Partners</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Partners</div>
                       <div className="space-y-1">
                         {searchResults.buyers.map(item => (
                           <div
@@ -768,7 +768,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Briefcase size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.name}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.type} • Contact: {item.contactPerson}</div>
                             </div>
                           </div>
@@ -780,7 +780,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Partner Requests */}
                   {searchResults.buyerRequests?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Partner Requests</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Partner Requests</div>
                       <div className="space-y-1">
                         {searchResults.buyerRequests.map(item => (
                           <div
@@ -790,7 +790,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Bell size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.name}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.name}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Status: {item.status} • Representative: {item.contactPerson}</div>
                             </div>
                           </div>
@@ -802,7 +802,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Events */}
                   {searchResults.events?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Events</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Events</div>
                       <div className="space-y-1">
                         {searchResults.events.map(item => (
                           <div
@@ -812,7 +812,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Calendar size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.title}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.title}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
                             </div>
                           </div>
@@ -824,7 +824,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Expenses */}
                   {searchResults.expenses?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Expenses</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Expenses</div>
                       <div className="space-y-1">
                         {searchResults.expenses.map(item => (
                           <div
@@ -834,7 +834,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Receipt size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.description}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.description}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Category: {item.category} • Amount: ${Number(item.amount).toLocaleString()}</div>
                             </div>
                           </div>
@@ -846,7 +846,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Sales */}
                   {searchResults.sales?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Revenue / Sales</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Revenue / Sales</div>
                       <div className="space-y-1">
                         {searchResults.sales.map(item => (
                           <div
@@ -856,7 +856,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <Wallet size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">License: {item.production?.title || 'Production'}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">License: {item.production?.title || 'Production'}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">Type: {item.saleType} • Partner: {item.buyer?.name || 'Buyer'} • Amount: ${Number(item.amount).toLocaleString()}</div>
                             </div>
                           </div>
@@ -868,7 +868,7 @@ const DashboardLayout = ({ children }) => {
                   {/* Category: Users */}
                   {searchResults.users?.length > 0 && (
                     <div className="p-4">
-                      <div className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider mb-2">Users</div>
+                      <div className="text-[10px] font-bold text-theme-accent uppercase tracking-wider mb-2">Users</div>
                       <div className="space-y-1">
                         {searchResults.users.map(item => (
                           <div
@@ -878,7 +878,7 @@ const DashboardLayout = ({ children }) => {
                           >
                             <ShieldCheck size={14} className="text-theme-text/45 group-hover:text-theme-text" />
                             <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">{item.firstName} {item.lastName}</div>
+                              <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">{item.firstName} {item.lastName}</div>
                               <div className="text-[10px] text-theme-text-muted truncate">{item.email}</div>
                             </div>
                           </div>
@@ -895,7 +895,7 @@ const DashboardLayout = ({ children }) => {
             <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3 border-b border-theme-border-light pb-2">
-                  <span className="text-[10px] font-bold text-[#E5A00D] uppercase tracking-wider">Recent Searches</span>
+                  <span className="text-[10px] font-bold text-theme-accent uppercase tracking-wider">Recent Searches</span>
                   <button
                     onClick={clearSearchHistory}
                     className="bg-transparent border-none text-[10px] text-theme-text-muted hover:text-theme-text cursor-pointer transition-colors"
@@ -915,7 +915,7 @@ const DashboardLayout = ({ children }) => {
                           {getHistoryIcon(item.type)}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs font-semibold text-theme-text group-hover:text-[#E5A00D] truncate">
+                          <div className="text-xs font-semibold text-theme-text group-hover:text-theme-accent truncate">
                             {item.title}
                           </div>
                           <div className="text-[10px] text-theme-text-muted truncate">
@@ -965,7 +965,7 @@ const DashboardLayout = ({ children }) => {
             >
               <Bell size={17} />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E5A00D] ring-2 ring-[#121212] animate-pulse" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-theme-accent ring-2 ring-[#121212] animate-pulse" />
               )}
             </button>
 
@@ -976,7 +976,7 @@ const DashboardLayout = ({ children }) => {
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-theme-text">Notifications</span>
                     {unreadCount > 0 && (
-                      <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#E5A00D]/20 text-[#E5A00D] rounded-full">
+                      <span className="px-1.5 py-0.5 text-[10px] font-bold bg-theme-accent/20 text-theme-accent rounded-full">
                         {unreadCount} new
                       </span>
                     )}
@@ -984,7 +984,7 @@ const DashboardLayout = ({ children }) => {
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllAsRead}
-                      className="text-xs text-[#E5A00D] hover:underline bg-transparent border-none cursor-pointer p-0"
+                      className="text-xs text-theme-accent hover:underline bg-transparent border-none cursor-pointer p-0"
                     >
                       Mark all as read
                     </button>
@@ -1007,7 +1007,7 @@ const DashboardLayout = ({ children }) => {
                         key={notif.id}
                         onClick={() => !notif.isRead && markAsRead(notif.id)}
                         className={`px-4 py-3 flex gap-3 transition-colors duration-150 relative group cursor-pointer hover:bg-white/[0.03] ${
-                          !notif.isRead ? 'bg-[#E5A00D]/[0.02] border-l-2 border-[#E5A00D]' : 'border-l-2 border-transparent'
+                          !notif.isRead ? 'bg-theme-accent/[0.02] border-l-2 border-theme-accent' : 'border-l-2 border-transparent'
                         }`}
                       >
                         {/* Icon Column */}
@@ -1072,7 +1072,7 @@ const DashboardLayout = ({ children }) => {
           {/* Avatar + dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-sidebar-hover">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-theme-accent to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
                 {user?.profilePic ? (
                   <img src={user.profilePic} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (

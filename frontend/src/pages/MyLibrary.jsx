@@ -204,14 +204,14 @@ const MyLibrary = () => {
                       {/* Details */}
                       <div className="space-y-3">
                         <div>
-                          <h4 className="text-xl font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors tracking-tight flex items-center gap-2">
+                          <h4 className="text-xl font-bold text-theme-text group-hover:text-theme-accent transition-colors tracking-tight flex items-center gap-2">
                             {prod.title}
                             {isSeries ? (
                               <span className="text-[10px] bg-indigo-600/20 text-indigo-400 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-500/10">
                                 Series
                               </span>
                             ) : (
-                              <span className="text-[10px] bg-[#e5a00d]/10 text-[#e5a00d] font-semibold px-2.5 py-0.5 rounded-full border border-[#e5a00d]/10">
+                              <span className="text-[10px] bg-theme-accent/10 text-theme-accent font-semibold px-2.5 py-0.5 rounded-full border border-theme-accent/10">
                                 Movie
                               </span>
                             )}
@@ -239,7 +239,7 @@ const MyLibrary = () => {
                     <div className="flex flex-col gap-2 min-w-[180px] pr-4">
                       <button
                         onClick={() => handleOpenModal(prod)}
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black tracking-tight rounded-sm hover:bg-[#e5a00d] transition-all shadow-xl shadow-black/20 cursor-pointer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-black tracking-tight rounded-sm hover:bg-theme-accent transition-all shadow-xl shadow-black/20 cursor-pointer"
                       >
                         <Download size={14} /> Access Assets
                       </button>
@@ -291,7 +291,7 @@ const MyLibrary = () => {
                               <Tv size={10} /> Series
                             </div>
                           ) : (
-                            <div className="bg-[#e5a00d]/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-theme-accent/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Film size={10} /> Movie
                             </div>
                           )}
@@ -308,7 +308,7 @@ const MyLibrary = () => {
                     {/* Metadata & Title stacked cleanly below the card */}
                     <div className="space-y-2">
                       <div className="space-y-0.5">
-                        <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors leading-snug">
+                        <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors leading-snug">
                           {prod.title}
                         </div>
                         <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
@@ -329,7 +329,7 @@ const MyLibrary = () => {
                             e.stopPropagation();
                             handleOpenModal(prod);
                           }}
-                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-[#e5a00d] transition-all shadow-md shadow-black/20 cursor-pointer"
+                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-black text-[10px] font-bold rounded-sm hover:bg-theme-accent transition-all shadow-md shadow-black/20 cursor-pointer"
                         >
                           <Download size={11} /> Access Assets
                         </button>
@@ -354,7 +354,7 @@ const MyLibrary = () => {
             {/* ZIP Packaging Loader Overlay */}
             {zipProgress && (
               <div className="absolute inset-0 bg-black/85 backdrop-blur-md z-[110] flex flex-col items-center justify-center p-6 text-center space-y-6">
-                <div className="w-16 h-16 rounded-full border-4 border-theme-border-light border-t-[#e5a00d] animate-spin" />
+                <div className="w-16 h-16 rounded-full border-4 border-theme-border-light border-t-theme-accent animate-spin" />
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium text-theme-text">Packaging Assets</h3>
                   <p className="text-sm text-theme-text-muted max-w-sm">{zipProgress.text}</p>
@@ -362,7 +362,7 @@ const MyLibrary = () => {
                 {zipProgress.percent >= 0 && (
                   <div className="w-64 bg-theme-input-bg-hover h-1.5 rounded-full overflow-hidden">
                     <div
-                      className="bg-[#e5a00d] h-full transition-all duration-300"
+                      className="bg-theme-accent h-full transition-all duration-300"
                       style={{ width: `${zipProgress.percent}%` }}
                     />
                   </div>
@@ -375,7 +375,7 @@ const MyLibrary = () => {
               <div className="space-y-1">
                 <h2 className="text-2xl font-medium text-theme-text tracking-normal">{selectedProduction.title}</h2>
                 <div className="flex items-center gap-3">
-                  <p className="text-xs text-[#e5a00d] font-medium flex items-center gap-1.5">
+                  <p className="text-xs text-theme-accent font-medium flex items-center gap-1.5">
                     <ShieldCheck size={12} /> Master Asset Pool
                   </p>
                   <span className="text-theme-text-muted-dark">•</span>
@@ -424,14 +424,14 @@ const MyLibrary = () => {
                           {/* Column Header */}
                           <div className="flex items-center justify-between border-b border-theme-border-light pb-3">
                             <div className="flex items-center gap-2 text-theme-text font-semibold">
-                              <FileVideo size={18} className="text-[#e5a00d]" />
+                              <FileVideo size={18} className="text-theme-accent" />
                               <span>{isSeries ? 'Series Episodes' : 'Feature Movie Presentation'}</span>
                             </div>
                             {isSeries ? (
                               episodes.length > 0 && (
                                 <button
                                   onClick={() => handleDownloadZip(episodes, `${selectedProduction.title} - All Episodes`)}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all border border-[#e5a00d]/20 cursor-pointer"
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
                                 >
                                   <Download size={12} /> Download All Episodes (ZIP)
                                 </button>
@@ -440,7 +440,7 @@ const MyLibrary = () => {
                               movieMasters.length > 0 && (
                                 <button
                                   onClick={() => handleDownloadZip(movieMasters, `${selectedProduction.title} - All Masters`)}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all border border-[#e5a00d]/20 cursor-pointer"
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all border border-theme-accent/20 cursor-pointer"
                                 >
                                   <Download size={12} /> Download All Masters (ZIP)
                                 </button>
@@ -473,7 +473,7 @@ const MyLibrary = () => {
                                         <div className="flex items-center gap-2">
                                           <ChevronRight
                                             size={16}
-                                            className={`text-[#e5a00d] transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
+                                            className={`text-theme-accent transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
                                           />
                                           <span className="font-semibold text-theme-text">Season {seasonNum}</span>
                                           <span className="text-xs text-theme-text-muted font-normal">({seasonEpisodes.length} Episodes)</span>
@@ -483,7 +483,7 @@ const MyLibrary = () => {
                                             e.stopPropagation();
                                             handleDownloadZip(seasonEpisodes, `${selectedProduction.title} - Season ${seasonNum}`);
                                           }}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e5a00d]/10 hover:bg-[#e5a00d] text-[#e5a00d] hover:text-black text-[10px] font-bold rounded-sm transition-all cursor-pointer"
+                                          className="flex items-center gap-1.5 px-3 py-1.5 bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-black text-[10px] font-bold rounded-sm transition-all cursor-pointer"
                                         >
                                           <Download size={12} /> Download Season (ZIP)
                                         </button>
@@ -500,7 +500,7 @@ const MyLibrary = () => {
                                                     const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                                     if (id) navigate(`/watch/${id}`);
                                                   }}
-                                                  className="w-8 h-8 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all cursor-pointer"
+                                                  className="w-8 h-8 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-black transition-all cursor-pointer"
                                                 >
                                                   <Play size={14} fill="currentColor" className="ml-0.5" />
                                                 </button>
@@ -515,7 +515,7 @@ const MyLibrary = () => {
                                                     e.stopPropagation();
                                                     setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                                   }}
-                                                  className="p-1.5 bg-theme-input-bg text-theme-text-muted hover:bg-[#e5a00d] hover:text-black rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
+                                                  className="p-1.5 bg-theme-input-bg text-theme-text-muted hover:bg-theme-accent hover:text-black rounded-sm transition-colors cursor-pointer border-none flex items-center justify-center"
                                                 >
                                                   <Download size={14} />
                                                 </button>
@@ -560,12 +560,12 @@ const MyLibrary = () => {
                               // Movie Feature Presentation Block
                               <div className="space-y-3">
                                 {movieMasters.map((file, idx) => (
-                                  <div key={idx} className="bg-gradient-to-r from-[#e5a00d]/10 to-transparent p-6 rounded-sm border border-[#e5a00d]/20 space-y-4 shadow-lg shadow-black/20 hover:border-[#e5a00d]/40 transition-all">
+                                  <div key={idx} className="bg-gradient-to-r from-theme-accent/10 to-transparent p-6 rounded-sm border border-theme-accent/20 space-y-4 shadow-lg shadow-black/20 hover:border-theme-accent/40 transition-all">
                                     <div className="flex items-start justify-between">
                                       <div className="space-y-1">
                                         <div className="flex items-center gap-2">
-                                          <Film className="text-[#e5a00d]" size={20} />
-                                          <span className="text-[10px] bg-[#e5a00d]/20 text-[#e5a00d] font-bold tracking-normal px-2 py-0.5 rounded-sm">Feature Presentation</span>
+                                          <Film className="text-theme-accent" size={20} />
+                                          <span className="text-[10px] bg-theme-accent/20 text-theme-accent font-bold tracking-normal px-2 py-0.5 rounded-sm">Feature Presentation</span>
                                         </div>
                                         <h4 className="text-lg font-semibold text-theme-text pt-1">{file.fileName || 'Full Movie Master'}</h4>
                                         <p className="text-xs text-theme-text-muted">Digital Negative • 24.5GB • {file.format || 'ProRes/4K'}</p>
@@ -577,7 +577,7 @@ const MyLibrary = () => {
                                             e.stopPropagation();
                                             setOpenDownloadDropdown(openDownloadDropdown === file.id ? null : file.id);
                                           }}
-                                          className="p-3 bg-[#e5a00d] text-black hover:bg-white hover:text-black transition-colors rounded-sm shadow-md cursor-pointer border-none flex items-center justify-center"
+                                          className="p-3 bg-theme-accent text-black hover:bg-white hover:text-black transition-colors rounded-sm shadow-md cursor-pointer border-none flex items-center justify-center"
                                         >
                                           <Download size={20} />
                                         </button>
@@ -614,7 +614,7 @@ const MyLibrary = () => {
                                           const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                           if (id) navigate(`/watch/${id}`);
                                         }}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-theme-input-bg hover:bg-[#e5a00d]/20 text-theme-text font-semibold text-sm rounded-sm border border-theme-border hover:border-[#e5a00d]/30 transition-all cursor-pointer"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-theme-input-bg hover:bg-theme-accent/20 text-theme-text font-semibold text-sm rounded-sm border border-theme-border hover:border-theme-accent/30 transition-all cursor-pointer"
                                       >
                                         <Play size={16} fill="currentColor" /> Watch Full Feature Film
                                       </button>
@@ -632,7 +632,7 @@ const MyLibrary = () => {
                           {trailers.length > 0 && (
                             <div className="space-y-6 pt-6">
                               <div className="flex items-center gap-2 text-theme-text font-semibold border-b border-theme-border-light pb-3">
-                                <FileVideo size={18} className="text-[#e5a00d]" />
+                                <FileVideo size={18} className="text-theme-accent" />
                                 <span>Official Trailers</span>
                               </div>
                               <div className="grid grid-cols-1 gap-3 pt-2">
@@ -644,7 +644,7 @@ const MyLibrary = () => {
                                           const id = file.id || (file.url ? file.url.split('/').pop() : null);
                                           if (id) navigate(`/watch/${id}`);
                                         }}
-                                        className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-[#e5a00d] hover:text-black transition-all cursor-pointer"
+                                        className="w-10 h-10 bg-black/40 rounded-sm flex items-center justify-center hover:bg-theme-accent hover:text-black transition-all cursor-pointer"
                                       >
                                         <Play size={16} fill="currentColor" className="ml-0.5" />
                                       </button>
@@ -711,7 +711,7 @@ const MyLibrary = () => {
                       <>
                         <div className="flex items-center justify-between border-b border-theme-border-light pb-3">
                           <div className="flex items-center gap-2 text-theme-text font-semibold">
-                            <ImageIcon size={18} className="text-[#e5a00d]" />
+                            <ImageIcon size={18} className="text-theme-accent" />
                             <span>Marketing & Press Kit</span>
                           </div>
                           {marketingFiles.length > 0 && (
@@ -795,8 +795,8 @@ const MyLibrary = () => {
               </div>
 
               {/* License Info Section */}
-              <div className="bg-[#e5a00d]/5 border border-[#e5a00d]/20 p-6 rounded-sm space-y-4">
-                <div className="flex items-center gap-2 text-[#e5a00d] font-semibold">
+              <div className="bg-theme-accent/5 border border-theme-accent/20 p-6 rounded-sm space-y-4">
+                <div className="flex items-center gap-2 text-theme-accent font-semibold">
                   <ShieldCheck size={20} />
                   <h3>License Compliance</h3>
                 </div>

@@ -279,7 +279,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           className="hidden"
           onChange={(e) => handleUpload(e.target.files[0], type)}
         />
-        <label htmlFor={`upload-${type}`} className="px-6 py-2 bg-[#e5a00d] text-black text-xs font-semibold rounded-sm cursor-pointer hover:bg-[#ffb414] transition-all">
+        <label htmlFor={`upload-${type}`} className="px-6 py-2 bg-theme-accent text-black text-xs font-semibold rounded-sm cursor-pointer hover:bg-theme-accent-hover transition-all">
           Upload
         </label>
       </div>
@@ -303,7 +303,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
@@ -324,14 +324,14 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           <button
             type="button"
             onClick={() => setHasSeasons(false)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${!hasSeasons ? 'bg-theme-accent text-black border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Standalone Movie
           </button>
           <button
             type="button"
             onClick={() => setHasSeasons(true)}
-            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-[#e5a00d] text-black border-[#e5a00d]' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
+            className={`flex-1 py-3 border rounded-sm font-semibold text-xs transition-all ${hasSeasons ? 'bg-theme-accent text-black border-theme-accent' : 'bg-transparent text-theme-text-muted border-theme-border hover:border-theme-border'}`}
           >
             Has Seasons
           </button>
@@ -347,7 +347,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             type="text"
             placeholder="e.g. Action, Comedy, Drama..."
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           />
@@ -361,7 +361,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <textarea
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-[#e5a00d] outline-none transition-all text-theme-text h-32 resize-none"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text h-32 resize-none"
             placeholder="Tell us more about this media package..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -373,7 +373,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       <div className="py-8 px-4 space-y-6">
         <div className="flex items-center justify-between border-b border-theme-border-light pb-4">
           <h3 className="text-sm font-medium text-theme-text flex items-center gap-2">
-            <Play size={16} className="text-[#e5a00d]" />
+            <Play size={16} className="text-theme-accent" />
             {hasSeasons ? 'Series Episodes' : 'Main Content'}
           </h3>
           {hasSeasons && (
@@ -406,7 +406,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                   <input
                     type="text"
                     placeholder="e.g. Episode Title"
-                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-theme-accent outline-none transition-all text-theme-text"
                     value={ep.fileName}
                     onChange={(e) => {
                       const newEps = [...episodes];
@@ -421,7 +421,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                       <label className="text-[10px] font-medium text-theme-text-muted-dark">Season</label>
                       <input
                         type="number"
-                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-theme-accent outline-none transition-all text-theme-text"
                         value={ep.season}
                         onChange={(e) => {
                           const newEps = [...episodes];
@@ -434,7 +434,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                       <label className="text-[10px] font-medium text-theme-text-muted-dark">Episode</label>
                       <input
                         type="number"
-                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-[#e5a00d] outline-none transition-all text-theme-text"
+                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-sm focus:border-theme-accent outline-none transition-all text-theme-text"
                         value={ep.episodeNumber}
                         onChange={(e) => {
                           const newEps = [...episodes];
@@ -459,7 +459,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
                 />
                 <label
                   htmlFor={`upload-ep-${index}`}
-                  className="w-full md:w-auto px-8 py-3 bg-theme-input-bg hover:bg-[#e5a00d] hover:text-black text-theme-text-muted text-[10px] font-black rounded-sm cursor-pointer transition-all border border-theme-border uppercase text-center"
+                  className="w-full md:w-auto px-8 py-3 bg-theme-input-bg hover:bg-theme-accent hover:text-black text-theme-text-muted text-[10px] font-black rounded-sm cursor-pointer transition-all border border-theme-border uppercase text-center"
                 >
                   {ep.filePath ? 'Change Video' : 'Upload Video'}
                 </label>
@@ -470,10 +470,10 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* 4. Upload Poster */}
-      <UploadSlot label="Poster" type="poster" value={packageAssets.poster.url} icon={<ImageIcon size={16} className="text-[#e5a00d]" />} />
+      <UploadSlot label="Poster" type="poster" value={packageAssets.poster.url} icon={<ImageIcon size={16} className="text-theme-accent" />} />
 
       {/* 5. Upload Trailer */}
-      <UploadSlot label="Trailer" type="trailer" value={packageAssets.trailer.url} icon={<Play size={16} className="text-[#e5a00d]" />} />
+      <UploadSlot label="Trailer" type="trailer" value={packageAssets.trailer.url} icon={<Play size={16} className="text-theme-accent" />} />
 
       {/* 5. Visibility */}
 
@@ -486,7 +486,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, isPublic: !formData.isPublic })}
-            className={`flex items-center gap-3 px-6 py-3 rounded-sm border transition-all text-xs font-semibold ${formData.isPublic ? 'bg-[#e5a00d]/10 border-[#e5a00d]/20 text-[#e5a00d]' : 'bg-theme-input-bg border-theme-border text-theme-text-muted'}`}
+            className={`flex items-center gap-3 px-6 py-3 rounded-sm border transition-all text-xs font-semibold ${formData.isPublic ? 'bg-theme-accent/10 border-theme-accent/20 text-theme-accent' : 'bg-theme-input-bg border-theme-border text-theme-text-muted'}`}
           >
             {formData.isPublic ? <Globe size={14} /> : <Lock size={14} />}
             <span>{formData.isPublic ? 'Publicly Visible' : 'Private (Dashboard Only)'}</span>
@@ -499,7 +499,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-12 py-3 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-semibold text-sm shadow-xl shadow-[#e5a00d]/10 disabled:opacity-30"
+          className="px-12 py-3 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-semibold text-sm shadow-xl shadow-theme-accent/10 disabled:opacity-30"
         >
           {loading ? 'Processing...' : 'Save Package'}
         </button>

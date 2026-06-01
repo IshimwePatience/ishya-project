@@ -280,7 +280,7 @@ const MediaLibrary = () => {
                           e.stopPropagation();
                           setOpenDownloadDropdown(openDownloadDropdown === poster.id ? null : poster.id);
                         }}
-                        className="px-6 py-3 bg-[#e5a00d] text-black hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg border-none"
+                        className="px-6 py-3 bg-theme-accent text-black hover:bg-white text-xs font-bold rounded-sm transition-all flex items-center gap-2 cursor-pointer shadow-lg border-none"
                       >
                         <Download size={14} /> Download Poster
                       </button>
@@ -505,7 +505,7 @@ const MediaLibrary = () => {
                       You need to be an approved distributor before requesting a license.
                     </p>
                     <p className="text-xs text-theme-text-muted-dark max-w-sm mx-auto leading-relaxed">
-                      Submit your organization via the <span className="text-[#e5a00d] font-semibold">Distributors Sign-up</span> form and wait for admin approval. Once approved, you can request licenses for any production.
+                      Submit your organization via the <span className="text-theme-accent font-semibold">Distributors Sign-up</span> form and wait for admin approval. Once approved, you can request licenses for any production.
                     </p>
                   </div>
                 ) : hasPendingRequest ? (
@@ -514,7 +514,7 @@ const MediaLibrary = () => {
                     {Number(pendingRequest?.amount) > 0 ? (
                       /* Price Set: Partner can complete checkout to unlock */
                       <div className="space-y-6 bg-theme-input-bg border border-theme-border-light rounded-sm p-6 text-center shadow-xl animate-in fade-in duration-300">
-                        <div className="w-12 h-12 rounded-full bg-[#e5a00d]/10 border border-[#e5a00d]/20 text-[#e5a00d] flex items-center justify-center mx-auto">
+                        <div className="w-12 h-12 rounded-full bg-theme-accent/10 border border-theme-accent/20 text-theme-accent flex items-center justify-center mx-auto">
                           <Briefcase size={22} />
                         </div>
                         <div className="space-y-2">
@@ -525,7 +525,7 @@ const MediaLibrary = () => {
                         </div>
                         <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs font-sans">
                           <span className="text-theme-text/45">Licensing Fee:</span>
-                          <span className="text-lg font-black text-[#e5a00d]">{Number(pendingRequest.amount).toLocaleString()} RWF</span>
+                          <span className="text-lg font-black text-theme-accent">{Number(pendingRequest.amount).toLocaleString()} RWF</span>
                         </div>
                         <div className="pt-2">
                           <PaypalButton
@@ -545,9 +545,9 @@ const MediaLibrary = () => {
                           disabled
                           className="px-12 py-5 bg-[#222] text-theme-text-muted font-medium rounded-sm border border-theme-border-light flex items-center justify-center gap-3 mx-auto text-sm cursor-not-allowed font-sans"
                         >
-                          <Clock size={18} className="text-[#e5a00d] animate-pulse" /> License Pending Review
+                          <Clock size={18} className="text-theme-accent animate-pulse" /> License Pending Review
                         </button>
-                        <p className="text-xs text-[#e5a00d] font-semibold max-w-md mx-auto font-sans">
+                        <p className="text-xs text-theme-accent font-semibold max-w-md mx-auto font-sans">
                           ⏳ Verification in progress. Please allow 24–48 hours for contract generation and catalog unlock.
                         </p>
                       </div>
@@ -560,7 +560,7 @@ const MediaLibrary = () => {
                       Partner Access: Request a distribution license to unlock high-resolution masters and marketing kits.
                     </p>
                     <button
-                      className="px-12 py-5 bg-[#e5a00d] text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-[#e5a00d]/40 flex items-center justify-center gap-3 mx-auto text-sm"
+                      className="px-12 py-5 bg-theme-accent text-black font-medium rounded-sm hover:bg-white transition-all shadow-2xl shadow-theme-accent/40 flex items-center justify-center gap-3 mx-auto text-sm"
                       onClick={() => setShowLicenseModal(true)}
                     >
                       <Briefcase size={18} /> Request License
@@ -591,18 +591,18 @@ const MediaLibrary = () => {
                     {licenseSuccess ? (
                       /* SUCCESS */
                       <div className="text-center space-y-6 py-6">
-                        <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/30 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+                        <div className="w-16 h-16 bg-theme-accent/10 border border-theme-accent/30 text-theme-accent rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
                         <div className="space-y-3">
                           <h3 className="text-xl font-bold tracking-tight text-theme-text">License Request Logged</h3>
                           <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed">
-                            Your request for <span className="text-theme-text font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-[#e5a00d] font-semibold">{partnerProfile?.name}</span>.
+                            Your request for <span className="text-theme-text font-semibold">{selectedProduction.title}</span> has been logged under <span className="text-theme-accent font-semibold">{partnerProfile?.name}</span>.
                           </p>
                           <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-5 text-left max-w-sm mx-auto text-xs space-y-2 text-theme-text/70">
                             <div>• <span className="font-semibold text-theme-text">Distributor:</span> {partnerProfile?.name}</div>
                             <div>• <span className="font-semibold text-theme-text">Channel Type:</span> {partnerProfile?.type}</div>
                             <div>• <span className="font-semibold text-theme-text">Representative:</span> {partnerProfile?.contactPerson}</div>
-                            <div className="text-[#e5a00d] pt-1 font-semibold flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#e5a00d] animate-ping inline-block" />
+                            <div className="text-theme-accent pt-1 font-semibold flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-theme-accent animate-ping inline-block" />
                               Pending Admin Signoff & Contract Generation
                             </div>
                           </div>
@@ -617,7 +617,7 @@ const MediaLibrary = () => {
                     ) : (
                       /* CONFIRM REQUEST — only approved partners reach here */
                       <div className="space-y-6 text-center py-2">
-                        <Briefcase className="text-[#e5a00d] mx-auto" size={38} />
+                        <Briefcase className="text-theme-accent mx-auto" size={38} />
                         <div className="space-y-2">
                           <h3 className="text-xl font-bold tracking-tight text-theme-text">Request Distribution License</h3>
                           <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed">
@@ -628,7 +628,7 @@ const MediaLibrary = () => {
                         <div className="bg-theme-input-bg border border-theme-border-light rounded-sm p-6 text-left text-xs space-y-3 text-theme-text-muted max-w-sm mx-auto">
                           <div className="flex justify-between border-b border-theme-border-light pb-3.5 text-theme-text">
                             <span className="font-semibold tracking-normal text-[10px]">Verified Partner Identity</span>
-                            <span className="text-[#e5a00d] font-semibold flex items-center gap-1">
+                            <span className="text-theme-accent font-semibold flex items-center gap-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" /> Approved
                             </span>
                           </div>
@@ -649,7 +649,7 @@ const MediaLibrary = () => {
                         <div className="flex gap-4 max-w-sm mx-auto pt-4">
                           <button
                             onClick={handleRequestDirectLicense}
-                            className="flex-1 py-3 bg-[#e5a00d] text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl shadow-[#e5a00d]/10 cursor-pointer"
+                            className="flex-1 py-3 bg-theme-accent text-black hover:bg-white rounded-sm font-semibold transition-all text-xs tracking-normal shadow-xl shadow-theme-accent/10 cursor-pointer"
                           >
                             Confirm Request
                           </button>
@@ -710,7 +710,7 @@ const MediaLibrary = () => {
             actions={!isPartner && (
               <button
                 onClick={() => setIsFormOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#e5a00d] text-black rounded-sm font-semibold hover:bg-[#ffb414] transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-black rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
               >
                 <Plus size={16} />
                 <span>Add to Library</span>
@@ -787,7 +787,7 @@ const MediaLibrary = () => {
                               <Tv size={10} /> Series
                             </div>
                           ) : (
-                            <div className="bg-[#e5a00d]/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
+                            <div className="bg-theme-accent/95 text-black text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
                               <Film size={10} /> Movie
                             </div>
                           )}
@@ -819,7 +819,7 @@ const MediaLibrary = () => {
                     </div>
 
                     <div className="space-y-1">
-                      <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors leading-snug">
+                      <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors leading-snug">
                         {cardTitle}
                       </div>
                       <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
@@ -842,7 +842,7 @@ const MediaLibrary = () => {
               {!isPartner && (
                 <button
                   onClick={() => setIsFormOpen(true)}
-                  className="mt-6 text-[#e5a00d] text-xs font-bold hover:underline"
+                  className="mt-6 text-theme-accent text-xs font-bold hover:underline"
                 >
                   Add your first asset
                 </button>

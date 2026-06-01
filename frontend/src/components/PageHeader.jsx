@@ -27,7 +27,7 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
                 max="100" 
                 value={zoom || 50} 
                 onChange={(e) => setZoom?.(parseInt(e.target.value))}
-                className="w-20 h-[2px] bg-theme-input-bg-hover accent-[#e5a00d] cursor-pointer appearance-none rounded-full"
+                className="w-20 h-[2px] bg-theme-input-bg-hover accent-theme-accent cursor-pointer appearance-none rounded-full"
               />
             </div>
           )}
@@ -36,7 +36,7 @@ const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) =>
           {setViewMode && (
             <div 
               onClick={() => setViewMode?.(viewMode === 'grid' ? 'list' : 'grid')}
-              className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-[#e5a00d]' : 'text-theme-text-muted-dark hover:text-theme-text'}`}
+              className={`transition-colors cursor-pointer ${viewMode === 'grid' ? 'text-theme-accent' : 'text-theme-text-muted-dark hover:text-theme-text'}`}
             >
               <LayoutGrid size={18} strokeWidth={2.5} />
             </div>

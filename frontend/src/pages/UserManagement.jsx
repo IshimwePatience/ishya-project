@@ -206,15 +206,15 @@ const UserManagement = () => {
               ) : filteredUsers.map((user) => (
                 <div key={user.id} className="group flex items-center justify-between py-4 border-b border-theme-border-light transition-all">
                   <div className="flex items-center gap-6">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors border border-theme-border">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-theme-text group-hover:text-theme-accent transition-colors border border-theme-border">
                       {user.firstName[0]}{user.lastName[0]}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-theme-text group-hover:text-[#e5a00d] transition-colors">{user.firstName} {user.lastName}</div>
+                      <div className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors">{user.firstName} {user.lastName}</div>
                       <div className="text-[11px] text-theme-text-muted font-medium flex items-center gap-4 mt-1">
                         <span>{user.email}</span>
                         <span className="w-1 h-1 bg-theme-input-bg-hover rounded-full" />
-                        <span className={`${user.role?.name === 'Admin' ? 'text-[#e5a00d]' : ''}`}>{user.role?.name || 'No Role'}</span>
+                        <span className={`${user.role?.name === 'Admin' ? 'text-theme-accent' : ''}`}>{user.role?.name || 'No Role'}</span>
                       </div>
                     </div>
                   </div>

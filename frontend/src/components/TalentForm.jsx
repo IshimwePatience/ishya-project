@@ -182,7 +182,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
               checked={formData.createAccount || !!initialData?.userId} 
               onChange={(e) => setFormData({...formData, createAccount: e.target.checked})} 
             />
-            <div className="w-11 h-6 bg-theme-input-bg-hover rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#e5a00d]"></div>
+            <div className="w-11 h-6 bg-theme-input-bg-hover rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-accent"></div>
           </label>
         </div>
 
@@ -199,7 +199,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
                 <input 
                   required={formData.createAccount && !initialData?.userId}
                   type="text" 
-                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 text-theme-text text-sm focus:border-[#e5a00d] outline-none transition-all" 
+                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 text-theme-text text-sm focus:border-theme-accent outline-none transition-all" 
                   placeholder={initialData?.userId ? "Leave blank to keep current" : "Enter login password"} 
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -240,14 +240,14 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto no-scrollbar pr-2">
             {productionsList.map(prod => (
-              <label key={prod.id} className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition-all ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d]/10 border-[#e5a00d]/30 text-[#e5a00d]' : 'bg-theme-input-bg border-theme-border text-theme-text-muted hover:border-white/30 hover:text-theme-text'}`}>
+              <label key={prod.id} className={`flex items-center gap-3 p-3 rounded-sm border cursor-pointer transition-all ${formData.productions?.includes(prod.id) ? 'bg-theme-accent/10 border-theme-accent/30 text-theme-accent' : 'bg-theme-input-bg border-theme-border text-theme-text-muted hover:border-white/30 hover:text-theme-text'}`}>
                 <input 
                   type="checkbox" 
                   className="hidden" 
                   checked={formData.productions?.includes(prod.id)} 
                   onChange={() => toggleProduction(prod.id)}
                 />
-                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center ${formData.productions?.includes(prod.id) ? 'bg-[#e5a00d] border-[#e5a00d]' : 'border-theme-border'}`}>
+                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center ${formData.productions?.includes(prod.id) ? 'bg-theme-accent border-theme-accent' : 'border-theme-border'}`}>
                   {formData.productions?.includes(prod.id) && <Check size={12} className="text-black" />}
                 </div>
                 <span className="text-xs font-semibold truncate">{prod.title}</span>
@@ -259,7 +259,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
 
       {/* Actions */}
       <div className="pt-10 flex items-center justify-start gap-4 px-4 pb-20">
-        <button type="submit" disabled={loading || uploading} className="px-10 py-4 bg-[#e5a00d] text-black hover:bg-[#ffb414] rounded-sm transition-all font-bold flex items-center justify-center shadow-xl text-sm">
+        <button type="submit" disabled={loading || uploading} className="px-10 py-4 bg-theme-accent text-black hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl text-sm">
           {loading ? 'Processing...' : (initialData ? 'Update profile' : 'Register and grant access')}
         </button>
         <button type="button" onClick={onCancel} className="px-8 py-4 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-bold text-theme-text-muted hover:text-theme-text">Cancel</button>

@@ -104,11 +104,11 @@ const Buyers = () => {
                     <Building2 
                       size={84} 
                       strokeWidth={1.5} 
-                      className="text-theme-text-muted-dark group-hover:text-[#e5a00d] transition-all duration-300" 
+                      className="text-theme-text-muted-dark group-hover:text-theme-accent transition-all duration-300" 
                     />
                   </div>
                   <div className="space-y-1">
-                    <div className="text-sm font-semibold text-theme-text group-hover:text-[#e5a00d] transition-colors truncate w-28 mx-auto">{buyer.name}</div>
+                    <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors truncate w-28 mx-auto">{buyer.name}</div>
                     <div className="text-[11px] text-theme-text-muted font-medium">
                       {buyer.type || 'Partner'}
                     </div>

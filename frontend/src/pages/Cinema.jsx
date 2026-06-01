@@ -81,7 +81,7 @@ const Cinema = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-[#e5a00d] animate-spin" />
+        <Loader2 className="w-12 h-12 text-theme-accent animate-spin" />
       </div>
     );
   }
@@ -109,14 +109,14 @@ const Cinema = () => {
       {/* Immersive Header */}
       <div className="h-20 px-10 flex items-center justify-between bg-transparent fixed top-0 w-full z-50">
         <div className="flex flex-col">
-          <span className="text-[#e5a00d] text-[11px] font-black uppercase tracking-[0.2em]">
+          <span className="text-theme-accent text-[11px] font-black uppercase tracking-[0.2em]">
             Now Playing • {media.production?.title || media.fileName}
             {media.fileType === 'Episode' && ` • S${media.season || 1}:E${media.episodeNumber || 1}`}
           </span>
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-2 bg-[#e5a00d] hover:bg-[#e5a00d] text-black hover:text-black border border-theme-border rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
+          className="px-6 py-2 bg-theme-accent hover:bg-theme-accent text-black hover:text-black border border-theme-border rounded-sm transition-all flex items-center gap-3 text-xs font-semibold"
         >
           <X size={14} /> Exit
         </button>
@@ -127,20 +127,20 @@ const Cinema = () => {
         {user?.role?.toLowerCase().trim() === 'public visitor' && user?.subscriptionStatus !== 'active' ? (
           /* Lock Screen */
           <div className="w-full max-w-xl bg-black/60 border border-theme-border-light p-8 md:p-12 text-center rounded-sm relative group shadow-[0_0_100px_rgba(229,160,13,0.05)] space-y-6 animate-in zoom-in-95 duration-500">
-            <div className="w-16 h-16 bg-[#e5a00d]/10 border border-[#e5a00d]/20 text-[#e5a00d] rounded-full flex items-center justify-center mx-auto animate-pulse">
+            <div className="w-16 h-16 bg-theme-accent/10 border border-theme-accent/20 text-theme-accent rounded-full flex items-center justify-center mx-auto animate-pulse">
               <Lock size={28} />
             </div>
             
             <div className="space-y-2">
               <h3 className="text-2xl font-black text-theme-text font-sans tracking-tight">Subscription Required</h3>
               <p className="text-xs text-theme-text-muted max-w-sm mx-auto leading-relaxed font-sans">
-                This cinema title is exclusive to <span className="text-[#e5a00d] font-bold">Ishya Monthly</span> subscribers. Subscribe below to instantly unlock access.
+                This cinema title is exclusive to <span className="text-theme-accent font-bold">Ishya Monthly</span> subscribers. Subscribe below to instantly unlock access.
               </p>
             </div>
 
             <div className="p-4 bg-theme-input-bg border border-theme-border-light rounded-sm flex justify-between items-center text-xs max-w-sm mx-auto font-sans">
               <span className="text-theme-text/45">Monthly Membership Rate:</span>
-              <span className="text-base font-black text-[#e5a00d]">{Number(subPrice).toLocaleString()} RWF/mo</span>
+              <span className="text-base font-black text-theme-accent">{Number(subPrice).toLocaleString()} RWF/mo</span>
             </div>
 
             <div className="max-w-sm mx-auto pt-4 space-y-2">
@@ -150,7 +150,7 @@ const Cinema = () => {
                 </div>
               ) : (
                 <>
-                  <span className="text-[9px] font-black text-[#e5a00d] uppercase tracking-wider block text-left font-sans">Checkout via Secure PayPal Sandbox:</span>
+                  <span className="text-[9px] font-black text-theme-accent uppercase tracking-wider block text-left font-sans">Checkout via Secure PayPal Sandbox:</span>
                   <PaypalButton
                     amount={(parseFloat(subPrice) / 1300).toFixed(2)}
                     onSuccess={handleSubscribeSuccess}
@@ -182,7 +182,7 @@ const Cinema = () => {
 
       {/* Cinematic Ambient Backdrop */}
       <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#e5a00d]/5 blur-[120px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-theme-accent/5 blur-[120px] rounded-full" />
       </div>
     </motion.div>
   );
