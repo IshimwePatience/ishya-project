@@ -25,7 +25,7 @@ const Talents = () => {
   const fetchTalents = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -51,7 +51,7 @@ const Talents = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Remove this talent from the roster?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/talents/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

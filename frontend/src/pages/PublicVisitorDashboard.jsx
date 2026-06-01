@@ -36,7 +36,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
       const [prodRes, catRes, watchRes, priceRes] = await Promise.all([
@@ -82,7 +82,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   const handleSubscribeSuccess = async (paypalDetails) => {
     setSubmittingSub(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscribe`, {
         transactionId: paypalDetails.id
       }, {

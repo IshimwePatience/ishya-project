@@ -42,7 +42,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
   const fetchCategories = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/categories`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -54,7 +54,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
   const fetchProductions = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -81,7 +81,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
 
   const fetchPackageData = async (targetProductionId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -156,7 +156,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
       if (!window.confirm('Are you sure you want to permanently delete this media file?')) return;
       try {
         setLoading(true);
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${ep.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -176,7 +176,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     uploadData.append('file', file);
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
@@ -198,7 +198,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     uploadData.append('file', file);
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
@@ -218,7 +218,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const requests = [];
 
       // 1. Handle Poster/Trailer Updates

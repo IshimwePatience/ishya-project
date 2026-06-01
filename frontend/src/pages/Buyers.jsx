@@ -16,7 +16,7 @@ const Buyers = () => {
 
   const fetchBuyers = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers`, {
         headers: { Authorization: `Bearer ${token}` }
       });

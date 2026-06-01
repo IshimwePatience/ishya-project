@@ -31,7 +31,7 @@ import DashboardLayout from './components/DashboardLayout';
 
 function App() {
   React.useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = sessionStorage.getItem('user');
     if (user) {
       try {
         const parsed = JSON.parse(user);

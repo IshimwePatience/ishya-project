@@ -37,7 +37,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (initialData) {
         await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/${initialData.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }

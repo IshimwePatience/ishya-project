@@ -72,7 +72,7 @@ const Sales = () => {
 
   const fetchSalesData = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       const [salesRes, summaryRes] = await Promise.all([
         axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, { headers }),

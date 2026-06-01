@@ -18,7 +18,7 @@ const ActorSchedule = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });

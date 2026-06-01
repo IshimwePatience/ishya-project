@@ -137,7 +137,7 @@ const PublicNavbar = () => {
   const [productions, setProductions] = useState([]);
   const [events, setEvents] = useState([]);
   const location = useLocation();
-  const isLoggedIn = !!localStorage.getItem('token');
+  const isLoggedIn = !!sessionStorage.getItem('token');
 
   useEffect(() => {
     fetchProductions();

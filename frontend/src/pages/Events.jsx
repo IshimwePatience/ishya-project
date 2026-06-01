@@ -7,7 +7,7 @@ import PublicEvents from './PublicEvents';
 import ReportDropdown from '../components/ReportDropdown';
 
 const Events = () => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const isAdminOrStaff = user?.role === 'Admin' || user?.role === 'Staff';
   
   if (!isAdminOrStaff) {
@@ -31,7 +31,7 @@ const Events = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -46,7 +46,7 @@ const Events = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this event?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

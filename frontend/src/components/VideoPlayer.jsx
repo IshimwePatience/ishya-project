@@ -57,7 +57,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
 
   const saveProgress = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
 
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/watch-progress/update`, {
@@ -76,7 +76,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media-interactions/${mediaId}/stats`, { headers });
       setStats(res.data);
@@ -87,7 +87,7 @@ const VideoPlayer = ({ src, mediaId, productionId, initialTime }) => {
 
   const handleToggleLike = async (type) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media-interactions/toggle`, {
         mediaId,
         type

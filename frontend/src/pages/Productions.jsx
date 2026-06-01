@@ -27,7 +27,7 @@ const Productions = () => {
   const fetchProductions = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -55,7 +55,7 @@ const Productions = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this production?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

@@ -25,7 +25,7 @@ const Scripts = () => {
 
   useEffect(() => {
     fetchScripts();
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -38,7 +38,7 @@ const Scripts = () => {
   const fetchScripts = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -54,7 +54,7 @@ const Scripts = () => {
     setAiGenerating(true);
     setAiError('');
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${scriptId}/ai-review`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -92,7 +92,7 @@ const Scripts = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this script?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

@@ -22,7 +22,7 @@ const Cinema = () => {
   useEffect(() => {
     const fetchSessionAndMedia = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
         
         // 1. Fetch User Session
@@ -58,7 +58,7 @@ const Cinema = () => {
   const handleSubscribeSuccess = async (paypalDetails) => {
     setSubmittingSub(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscribe`, {
         transactionId: paypalDetails.id
       }, {

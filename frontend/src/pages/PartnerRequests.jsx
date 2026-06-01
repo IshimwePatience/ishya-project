@@ -18,7 +18,7 @@ const PartnerRequests = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
       // 1. Fetch Partner Account Signups
@@ -59,7 +59,7 @@ const PartnerRequests = () => {
   // prospective partner approvals
   const handleApprovePartner = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -71,7 +71,7 @@ const PartnerRequests = () => {
 
   const handleRejectPartner = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -84,7 +84,7 @@ const PartnerRequests = () => {
   const handleDeletePartner = async (id) => {
     if (!window.confirm('Delete this request permanently?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/partner-requests/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -97,7 +97,7 @@ const PartnerRequests = () => {
   // Movie license request approvals
   const handleApproveLicense = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -111,7 +111,7 @@ const PartnerRequests = () => {
     e.preventDefault();
     if (!pricingLicense || licensePrice <= 0) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${pricingLicense.id}/set-price`, {
         amount: parseFloat(licensePrice)
       }, {
@@ -128,7 +128,7 @@ const PartnerRequests = () => {
   const handleRejectLicense = async (id) => {
     if (!window.confirm('Reject and remove this licensing request?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });

@@ -22,9 +22,9 @@ const TwoFactorAuth = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/verify-2fa`, { email, code });
       const { user, accessToken, refreshToken } = response.data;
 
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem('token', accessToken);
+      sessionStorage.setItem('refreshToken', refreshToken);
+      sessionStorage.setItem('user', JSON.stringify(user));
       
       if (user.role === 'Actor/Talent') {
         navigate('/dashboard/scripts');

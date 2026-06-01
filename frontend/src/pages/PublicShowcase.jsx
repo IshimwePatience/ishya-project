@@ -72,7 +72,7 @@ const PublicShowcase = () => {
     return 0;
   });
 
-  const isLoggedIn = !!localStorage.getItem('token');
+  const isLoggedIn = !!sessionStorage.getItem('token');
 
   if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-theme-text font-medium">Initializing Ishya Hub...</div>;
 

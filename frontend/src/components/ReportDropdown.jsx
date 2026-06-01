@@ -41,16 +41,16 @@ const ReportDropdown = ({ title, columns, data }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#1f1f1f] border border-theme-border rounded-md shadow-2xl py-1 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-theme-surface border border-theme-border rounded-md shadow-2xl py-1 z-50">
           <button
             onClick={handleDownloadPDF}
-            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-theme-input-bg-hover flex items-center gap-2 transition-colors"
           >
             <FileText size={16} className="text-red-400" /> Download PDF
           </button>
           <button
             onClick={handleDownloadExcel}
-            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-[#2c2c2c] flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left text-sm text-theme-text hover:bg-theme-input-bg-hover flex items-center gap-2 transition-colors"
           >
             <FileSpreadsheet size={16} className="text-green-400" /> Download Excel
           </button>

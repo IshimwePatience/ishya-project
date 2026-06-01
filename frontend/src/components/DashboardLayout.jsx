@@ -118,7 +118,7 @@ const DashboardLayout = ({ children }) => {
 
       setIsSearching(true);
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/search?q=${encodeURIComponent(searchQuery)}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -272,7 +272,7 @@ const DashboardLayout = ({ children }) => {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         navigate('/login');
         return;
@@ -283,12 +283,12 @@ const DashboardLayout = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data.user);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
+        sessionStorage.setItem('user', JSON.stringify(res.data.user));
         document.documentElement.setAttribute('data-theme', res.data.user.theme || 'dark');
         setLoading(false);
       } catch (err) {
         console.error('Session error', err);
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         navigate('/login');
       }
     };
@@ -305,10 +305,10 @@ const DashboardLayout = ({ children }) => {
     if (user) {
       const updatedUser = { ...user, theme: newTheme };
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
       
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
           await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
             theme: newTheme
@@ -323,7 +323,7 @@ const DashboardLayout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     navigate('/login');
   };
 
@@ -333,7 +333,7 @@ const DashboardLayout = ({ children }) => {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const fetchNotifications = async () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return;
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications`, {
@@ -350,7 +350,7 @@ const DashboardLayout = ({ children }) => {
 
     fetchNotifications();
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const socket = io(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`, {
       auth: { token }
     });
@@ -392,7 +392,7 @@ const DashboardLayout = ({ children }) => {
   }, [isNotifDropdownOpen]);
 
   const markAsRead = async (id) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/${id}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
@@ -406,7 +406,7 @@ const DashboardLayout = ({ children }) => {
   };
 
   const markAllAsRead = async () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/read-all`, {}, {
         headers: { Authorization: `Bearer ${token}` }
@@ -421,7 +421,7 @@ const DashboardLayout = ({ children }) => {
 
   const deleteNotification = async (id, e) => {
     if (e) e.stopPropagation();
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -597,13 +597,13 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 sidebar-theme bg-theme-surface border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans">
+      <header className="h-16 bg-theme-sidebar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans text-theme-sidebar-text">
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden p-2 text-theme-text-muted hover:text-theme-text bg-transparent border-none"
+              className="md:hidden p-2 text-theme-sidebar-text-muted hover:text-theme-sidebar-text bg-transparent border-none"
             >
               <Menu size={24} />
             </button>
@@ -616,7 +616,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard' ? 'font-semibold text-theme-text' : 'font-normal text-theme-text/55 hover:text-theme-text'
+                  location.pathname === '/dashboard' ? 'font-semibold text-theme-sidebar-text' : 'font-normal text-theme-sidebar-text-muted hover:text-theme-sidebar-text'
                 }`}
               >
                 Catalog
@@ -624,7 +624,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard/events')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-text' : 'font-normal text-theme-text/55 hover:text-theme-text'
+                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-sidebar-text' : 'font-normal text-theme-sidebar-text-muted hover:text-theme-sidebar-text'
                 }`}
               >
                 Events
@@ -635,12 +635,12 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
-          <div className="flex items-center gap-2 bg-theme-input-bg rounded-full px-3.5 h-10 w-full shrink-0 cursor-text hover:bg-theme-input-bg-hover transition-all focus-within:bg-theme-input-bg-hover">
-            <Search size={15} color="rgba(255,255,255,0.4)" className="shrink-0" />
+          <div className="flex items-center gap-2 bg-theme-sidebar-hover rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all focus-within:bg-theme-sidebar-hover/80">
+            <Search size={15} color="currentColor" className="shrink-0 opacity-50" />
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-theme-text w-full caret-[#E5A00D] h-full p-0 placeholder-white/40"
+              className="bg-transparent border-none outline-none text-sm text-theme-sidebar-text w-full caret-[#E5A00D] h-full p-0 placeholder-theme-sidebar-text-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
@@ -648,7 +648,7 @@ const DashboardLayout = ({ children }) => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="bg-transparent border-none text-theme-text-muted hover:text-theme-text text-xs cursor-pointer p-0 shrink-0 font-bold"
+                className="bg-transparent border-none text-theme-sidebar-text-muted hover:text-theme-sidebar-text text-xs cursor-pointer p-0 shrink-0 font-bold"
               >
                 ✕
               </button>
@@ -656,7 +656,7 @@ const DashboardLayout = ({ children }) => {
           </div>
 
           {showSearchResults && searchQuery.trim() && (
-            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-theme-bg backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans text-theme-text">
               {isSearching ? (
                 <div className="p-8 text-center text-xs text-theme-text-muted font-medium animate-pulse">
                   Searching secure vault...
@@ -948,7 +948,7 @@ const DashboardLayout = ({ children }) => {
           {/* Theme Toggle Button */}
           <button
             onClick={handleThemeToggle}
-            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text/55 hover:text-theme-text hover:bg-theme-input-bg transition-all duration-150"
+            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover transition-all duration-150"
             title="Toggle Theme"
           >
             {user?.theme === 'light' || document.documentElement.getAttribute('data-theme') === 'light' ? (
@@ -961,7 +961,7 @@ const DashboardLayout = ({ children }) => {
           <div className="notif-container relative">
             <button
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text/55 hover:text-theme-text hover:bg-theme-input-bg transition-all duration-150"
+              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover transition-all duration-150"
             >
               <Bell size={17} />
               {unreadCount > 0 && (
@@ -970,7 +970,7 @@ const DashboardLayout = ({ children }) => {
             </button>
 
             {isNotifDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-96 bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-hidden z-50 flex flex-col max-h-[480px]">
+              <div className="absolute right-0 top-full mt-2 w-96 bg-theme-bg backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-hidden z-50 flex flex-col max-h-[480px]">
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-theme-border-light flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
@@ -1071,7 +1071,7 @@ const DashboardLayout = ({ children }) => {
 
           {/* Avatar + dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-input-bg">
+            <button className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-1.5 rounded-md transition-all duration-150 hover:bg-theme-sidebar-hover">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E5A00D] to-[#f5c842] border border-white/15 flex items-center justify-center shrink-0 overflow-hidden">
                 {user?.profilePic ? (
                   <img src={user.profilePic} alt="Avatar" className="w-full h-full object-cover" />

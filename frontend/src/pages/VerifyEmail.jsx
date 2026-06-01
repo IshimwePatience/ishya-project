@@ -29,9 +29,9 @@ const VerifyEmail = () => {
         setTimeout(() => navigate('/login'), 2000);
       } else {
         // Flow from Login: Save data and go to dashboard
-        localStorage.setItem('token', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('token', accessToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
+        sessionStorage.setItem('user', JSON.stringify(user));
 
         setSuccess('Account activated! Logging you in...');
         window.dispatchEvent(new Event('storage'));

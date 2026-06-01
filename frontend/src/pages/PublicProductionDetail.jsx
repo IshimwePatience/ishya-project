@@ -59,7 +59,7 @@ const PublicProductionDetail = () => {
 
   const fetchDetail = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions/${id}`, { headers });
       setProduction(res.data);

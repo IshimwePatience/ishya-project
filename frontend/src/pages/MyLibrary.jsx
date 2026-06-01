@@ -40,7 +40,7 @@ const MyLibrary = () => {
   }, []);
 
   const triggerDownload = (fileId, format = '') => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     let url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download/${fileId}?token=${token}`;
     if (format) {
       url += `&format=${format}`;
@@ -77,7 +77,7 @@ const MyLibrary = () => {
     setZipProgress({ text: 'Connecting to packaging vault...', percent: 10 });
     try {
       const fileIds = files.map(f => f.id).join(',');
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download-zip?ids=${fileIds}&name=${encodeURIComponent(folderName)}&token=${token}`;
 
       setZipProgress({ text: 'Streaming ZIP download...', percent: 50 });
@@ -103,7 +103,7 @@ const MyLibrary = () => {
 
   const fetchLibrary = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/partner/library`, {
         headers: { Authorization: `Bearer ${token}` }
       });

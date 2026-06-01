@@ -29,7 +29,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
       if (initialData) {
@@ -50,7 +50,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/buyers/${initialData.id}`, { headers });
       onSuccess();

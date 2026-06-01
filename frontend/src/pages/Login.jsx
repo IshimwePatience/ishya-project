@@ -36,7 +36,7 @@ const Login = () => {
     const errorParam = searchParams.get('error');
 
     if (token) {
-      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
       navigate('/dashboard');
     }
 
@@ -60,8 +60,8 @@ const Login = () => {
       if (response.data.requires2FA) {
         navigate('/verify-2fa', { state: { email } });
       } else {
-        localStorage.setItem('token', response.data.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        sessionStorage.setItem('token', response.data.accessToken);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
         document.documentElement.setAttribute('data-theme', response.data.user.theme || 'dark');
         
         if (response.data.user.role === 'Partner') {

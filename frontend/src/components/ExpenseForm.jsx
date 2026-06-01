@@ -28,7 +28,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
   useEffect(() => {
     const fetchProductions = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -46,7 +46,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       
       if (initialData) {

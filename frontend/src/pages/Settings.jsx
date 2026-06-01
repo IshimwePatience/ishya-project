@@ -66,7 +66,7 @@ const Settings = () => {
 
   const fetchProfile = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -103,7 +103,7 @@ const Settings = () => {
     setSaving(true);
     setSaveStatus(null);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -126,7 +126,7 @@ const Settings = () => {
     setSaving(true);
     setSaveStatus(null);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/change-password`, {
         currentPassword: pwdData.currentPassword,
         newPassword: pwdData.newPassword
@@ -147,7 +147,7 @@ const Settings = () => {
     const updated = { ...notifPrefs, [key]: !notifPrefs[key] };
     setNotifPrefs(updated);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         notificationPrefs: updated
       }, {
@@ -162,7 +162,7 @@ const Settings = () => {
     const updatedState = !is2FAEnabled;
     setIs2FAEnabled(updatedState);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         isTwoFactorEnabled: updatedState
       }, {
@@ -179,7 +179,7 @@ const Settings = () => {
     setThemePref(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
         theme: newTheme
       }, {
@@ -187,10 +187,10 @@ const Settings = () => {
       });
       
       // Update local storage user object
-      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const storedUser = JSON.parse(sessionStorage.getItem('user'));
       if (storedUser) {
         storedUser.theme = newTheme;
-        localStorage.setItem('user', JSON.stringify(storedUser));
+        sessionStorage.setItem('user', JSON.stringify(storedUser));
       }
       
       showStatus('success', 'Display theme updated successfully!');
@@ -211,7 +211,7 @@ const Settings = () => {
     uploadForm.append('file', file);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       // Upload using platform asset uploader
       const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload/media`, uploadForm, {
         headers: {
@@ -263,7 +263,7 @@ const Settings = () => {
     setSaving(true);
     setSaveStatus(null);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/subscription-price`, { price: parseFloat(subPrice) }, {
         headers: { Authorization: `Bearer ${token}` }
       });

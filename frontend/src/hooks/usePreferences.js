@@ -9,7 +9,7 @@ const usePreferences = (pageKey) => {
   useEffect(() => {
     const fetchPreferences = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (!token) return;
 
         const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/user-preferences`, {
@@ -33,7 +33,7 @@ const usePreferences = (pageKey) => {
 
   const savePreference = async (newZoom, newViewMode) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
 
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/user-preferences`, {

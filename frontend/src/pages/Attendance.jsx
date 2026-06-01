@@ -24,7 +24,7 @@ const Attendance = () => {
 
   const fetchLogs = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const meRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -91,7 +91,7 @@ const Attendance = () => {
   const handleCheckIn = async () => {
     setIsDetecting(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async (position) => {
           const { latitude, longitude } = position.coords;
@@ -125,7 +125,7 @@ const Attendance = () => {
   const handleUpdateLocation = async () => {
     setIsDetecting(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async (position) => {
           const { latitude, longitude } = position.coords;
@@ -155,7 +155,7 @@ const Attendance = () => {
 
   const handleCheckOut = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/check-out/${id || activeAttendance?.id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -168,7 +168,7 @@ const Attendance = () => {
   const handleSaveRule = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/attendance/rule`, ruleForm, {
         headers: { Authorization: `Bearer ${token}` }
       });

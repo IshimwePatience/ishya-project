@@ -28,7 +28,7 @@ const MediaLibrary = () => {
   }, []);
 
   const triggerDownload = (fileId, format = '') => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     let url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/download/${fileId}?token=${token}`;
     if (format) {
       url += `&format=${format}`;
@@ -53,7 +53,7 @@ const MediaLibrary = () => {
   // Only approved partners (buyerId set by admin) can request a license
   const handleRequestDirectLicense = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales`, {
         amount: 0,
         saleType: 'Licensing',
@@ -82,7 +82,7 @@ const MediaLibrary = () => {
 
   const handleActivateLicense = async (saleId, paypalDetails) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales/${saleId}/approve`, {
         transactionId: paypalDetails.id
       }, {
@@ -127,7 +127,7 @@ const MediaLibrary = () => {
 
   const fetchSession = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
       const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -151,7 +151,7 @@ const MediaLibrary = () => {
 
   const fetchProductions = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/productions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -164,7 +164,7 @@ const MediaLibrary = () => {
   const fetchAssets = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
 
       const endpoint = isPartner ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/partner/catalog` : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media`;
 
@@ -206,7 +206,7 @@ const MediaLibrary = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this asset from the library? This cannot be undone.')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/media/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
