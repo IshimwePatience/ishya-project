@@ -161,7 +161,7 @@ const PublicAttendanceCheckIn = () => {
           <p className="text-theme-text-muted text-sm">Secure Geofenced Attendance</p>
         </div>
 
-        {status === 'error' && (
+        {errorMsg && status !== 'checked-out' && (
           <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg flex items-start gap-3 mb-6 text-red-400">
             <XCircle size={20} className="shrink-0 mt-0.5" />
             <p className="text-sm font-medium leading-snug">{errorMsg}</p>
