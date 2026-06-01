@@ -1,5 +1,4 @@
 const { Script, Production, Talent } = require('../models');
-const axios = require('axios');
 const pdfParse = require('pdf-parse');
 const { GoogleGenAI } = require('@google/genai');
 
@@ -92,8 +91,9 @@ exports.generateAiReview = async (req, res) => {
     
     let buffer;
     try {
-      const response = await axios.get(fullUrl, { responseType: 'arraybuffer' });
-      buffer = Buffer.from(response.data);
+      const response = await fetch(fullUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      buffer = Buffer.from(arrayBuffer);
     } catch (err) {
       return res.status(400).json({ message: 'Failed to download PDF for analysis.' });
     }
