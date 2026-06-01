@@ -39,7 +39,7 @@ const TwoFactorAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-theme-surface text-theme-text flex flex-col items-center pt-20 px-4">
+    <div className="min-h-screen bg-[#111] text-white flex flex-col items-center pt-20 px-4">
       {/* Header */}
       <div className="flex flex-col items-center mb-20 text-center">
         <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -50,12 +50,12 @@ const TwoFactorAuth = () => {
 
       <div className="w-full max-w-sm text-center">
         <div className="w-16 h-16 bg-brown/30 rounded-full flex items-center justify-center mx-auto mb-8 border border-brown-light">
-          <ShieldCheck className="text-theme-text" size={32} />
+          <ShieldCheck className="text-white" size={32} />
         </div>
 
         <h2 className="text-3xl font-bold mb-4">Verify Access</h2>
         <p className="text-gray-500 text-sm mb-12 font-medium leading-relaxed px-4">
-          A secure verification code has been sent to <span className="text-theme-text font-bold">{email}</span>. Please enter it below.
+          A secure verification code has been sent to <span className="text-white font-bold">{email}</span>. Please enter it below.
         </p>
 
         {error && (
@@ -68,7 +68,7 @@ const TwoFactorAuth = () => {
           <div className="space-y-4">
             <label className="text-xs font-medium text-gray-500 ml-1">6-digit verification code</label>
             <input
-              className="w-full bg-[#1c1c1c] border border-theme-border rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-theme-text text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-5 focus:outline-none focus:border-brown-light transition-all text-white text-center text-3xl font-black tracking-[0.5em] placeholder-gray-800"
               placeholder="000000"
               maxLength={6}
               value={code}
@@ -80,7 +80,7 @@ const TwoFactorAuth = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-white text-black font-medium rounded-sm hover:bg-brown hover:text-theme-text transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl text-sm group"
+            className="w-full py-5 bg-white text-black font-medium rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl text-sm group"
           >
             {loading ? 'Validating...' : 'Confirm access'}
             {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
