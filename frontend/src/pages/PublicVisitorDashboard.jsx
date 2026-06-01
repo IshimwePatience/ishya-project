@@ -323,22 +323,25 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="space-y-4 sticky top-16 z-30 py-4 -mx-8 px-8 bg-theme-bg/95 backdrop-blur-md border-b border-theme-border-light shadow-sm">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-          {genres.map(genre => (
-            <button
-              key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${selectedGenre === genre
-                  ? 'bg-white text-black border-white'
-                  : 'bg-theme-input-bg text-theme-text-muted border-theme-border-light hover:border-theme-border hover:text-theme-text hover:bg-theme-input-bg-hover'
-                }`}
-            >
-              {genre}
-            </button>
-          ))}
+      <section className="fixed top-16 left-0 right-0 z-30 py-4 px-8 bg-[#0c0c0c] border-b border-theme-border-light shadow-xl flex justify-center">
+        <div className="w-full max-w-[1600px]">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            {genres.map(genre => (
+              <button
+                key={genre}
+                onClick={() => setSelectedGenre(genre)}
+                className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${selectedGenre === genre
+                    ? 'bg-white text-black border-white'
+                    : 'bg-theme-input-bg text-theme-text-muted border-theme-border-light hover:border-theme-border hover:text-theme-text hover:bg-theme-input-bg-hover'
+                  }`}
+              >
+                {genre}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
+      <div className="h-16" /> {/* Spacer for fixed header */}
 
       {/* Content Section */}
       <div className="space-y-16">
