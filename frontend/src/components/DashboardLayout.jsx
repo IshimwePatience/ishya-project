@@ -597,7 +597,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-[#e5a00d] selection:text-black">
       {/* Top Navigation — Plex-style layout */}
-      <header className="h-16 bg-theme-surface border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans">
+      <header className="h-16 sidebar-theme bg-theme-surface border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 w-full z-40 gap-3 font-sans">
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
@@ -1116,7 +1116,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Shared Sidebar */}
         {!isPublic && (
-          <aside className={`w-72 bg-theme-surface flex flex-col pt-6 fixed md:top-16 top-0 h-[100dvh] md:h-[calc(100vh-64px)] z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <aside className={`w-72 sidebar-theme bg-theme-surface flex flex-col pt-6 fixed md:top-16 top-0 h-[100dvh] md:h-[calc(100vh-64px)] z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
               <span className="font-bold text-theme-text">Menu</span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="text-theme-text-muted hover:text-theme-text">

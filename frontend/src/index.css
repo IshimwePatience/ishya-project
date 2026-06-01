@@ -12,11 +12,17 @@
   --theme-border-light: rgba(255, 255, 255, 0.05);
   --theme-input-bg: rgba(255, 255, 255, 0.05);
   --theme-input-bg-hover: rgba(255, 255, 255, 0.1);
+
+  /* Sidebar Specific (Dark Mode Defaults) */
+  --theme-sidebar-bg: var(--theme-surface);
+  --theme-sidebar-text: var(--theme-text);
+  --theme-sidebar-text-muted: var(--theme-text-muted);
+  --theme-sidebar-hover: var(--theme-input-bg);
 }
 
 [data-theme="light"] {
-  --theme-bg: #f9fafb;
-  --theme-surface: #ffffff;
+  --theme-bg: #ffffff;
+  --theme-surface: #f9fafb;
   --theme-surface-hover: #f3f4f6;
   --theme-text: #111827;
   --theme-text-muted: rgba(0, 0, 0, 0.5);
@@ -25,6 +31,12 @@
   --theme-border-light: rgba(0, 0, 0, 0.08);
   --theme-input-bg: rgba(0, 0, 0, 0.04);
   --theme-input-bg-hover: rgba(0, 0, 0, 0.08);
+
+  /* Sidebar Specific (Custom Slate for Light Mode) */
+  --theme-sidebar-bg: #4d5e6d;
+  --theme-sidebar-text: #ffffff;
+  --theme-sidebar-text-muted: rgba(255, 255, 255, 0.6);
+  --theme-sidebar-hover: rgba(255, 255, 255, 0.1);
 }
 
 @theme {
@@ -47,6 +59,22 @@
   --color-theme-border-light: var(--theme-border-light);
   --color-theme-input-bg: var(--theme-input-bg);
   --color-theme-input-bg-hover: var(--theme-input-bg-hover);
+
+  --color-theme-sidebar-bg: var(--theme-sidebar-bg);
+  --color-theme-sidebar-text: var(--theme-sidebar-text);
+  --color-theme-sidebar-text-muted: var(--theme-sidebar-text-muted);
+  --color-theme-sidebar-hover: var(--theme-sidebar-hover);
+}
+
+.sidebar-theme {
+  --theme-surface: var(--theme-sidebar-bg);
+  --theme-text: var(--theme-sidebar-text);
+  --theme-text-muted: var(--theme-sidebar-text-muted);
+  --theme-text-muted-dark: rgba(255, 255, 255, 0.4);
+  --theme-input-bg: var(--theme-sidebar-hover);
+  --theme-input-bg-hover: rgba(255, 255, 255, 0.15);
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
 }
 
 @utility plex-heading {
