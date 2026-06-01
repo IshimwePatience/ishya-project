@@ -341,10 +341,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
           </div>
         </div>
       </section>
-      <div className="h-16" /> {/* Spacer for fixed header */}
+      <div className="h-8" /> {/* Spacer for fixed header */}
 
       {/* Content Section */}
-      <div className="space-y-16">
+      <div className="space-y-6">
         {selectedGenre === 'All' ? (
           <>
             {/* Continue Watching (Landscape) */}
