@@ -48,7 +48,7 @@ exports.checkIn = async (req, res) => {
       include: [{ model: Role, as: 'role' }]
     });
 
-    if (!user || user.role?.name !== 'Talent') {
+    if (!user || user.role?.name !== 'Actor/Talent') {
       return res.status(403).json({ message: 'Access denied: Only registered Talent can use this check-in.' });
     }
 
