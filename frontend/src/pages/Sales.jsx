@@ -170,7 +170,7 @@ const Sales = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-[#0e0e0e] border border-theme-border-light rounded-sm px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="bg-theme-surface border border-theme-border-light rounded-sm px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
             <div>
               <div className="text-[11px] font-bold text-theme-text-muted-dark mb-2">Total Gross Revenue</div>
