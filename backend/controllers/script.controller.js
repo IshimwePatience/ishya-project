@@ -118,7 +118,6 @@ Consider the following context about the production:
 
 The JSON must have the following keys:
 {
-  "summary": "A 2-3 sentence summary of the plot",
   "tone": "The overall tone and how well it fits the intended genre",
   "audience_fit": "An analysis of how well this script fits its intended target audience",
   "characters": [

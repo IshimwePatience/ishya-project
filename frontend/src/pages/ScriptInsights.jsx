@@ -126,14 +126,7 @@ const ScriptInsights = () => {
 
       {script.aiReview ? (
         <div className="space-y-8">
-          <div>
-            <h4 className="text-sm font-bold text-indigo-400 mb-3 flex items-center gap-2">
-              <FileText size={16}/> Summary
-            </h4>
-            <p className="text-base text-theme-text leading-relaxed bg-theme-input-bg p-6 rounded-lg border border-theme-border-light shadow-sm">
-              {script.aiReview.summary}
-            </p>
-          </div>
+          {/* Summary removed per user request */}
             <div className="mb-8">
               <h4 className="text-sm font-bold text-theme-text-muted-dark uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Activity size={16} className="text-indigo-400" /> Tone & Genre
