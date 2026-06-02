@@ -640,7 +640,7 @@ const DashboardLayout = ({ children }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-theme-navbar-text w-full caret-theme-accent h-full p-0 placeholder-theme-sidebar-text-muted"
+              className="bg-transparent border-none outline-none text-sm text-theme-navbar-text w-full caret-theme-accent h-full p-0 placeholder-theme-text-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
