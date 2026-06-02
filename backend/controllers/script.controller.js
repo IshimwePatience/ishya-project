@@ -81,7 +81,7 @@ exports.generateAiReview = async (req, res) => {
     });
     if (!script) return res.status(404).json({ message: 'Script not found' });
     
-    if (script.aiReview) {
+    if (script.aiReview && !req.body.force) {
       return res.json({ message: 'Review already exists', review: script.aiReview });
     }
 

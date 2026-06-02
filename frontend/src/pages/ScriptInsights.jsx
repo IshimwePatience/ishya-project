@@ -46,12 +46,12 @@ const ScriptInsights = () => {
     }
   };
 
-  const handleGenerateAiReview = async () => {
+  const handleGenerateAiReview = async (force = false) => {
     setAiGenerating(true);
     setAiError('');
     try {
       const token = sessionStorage.getItem('token');
-      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${id}/ai-review`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/scripts/${id}/ai-review`, { force }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Update local state
@@ -98,12 +98,28 @@ const ScriptInsights = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8 pb-6 border-b border-theme-border-light">
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+          {script.aiReview && isManagement && (
+            <button 
+              onClick={() => handleGenerateAiReview(true)}
+              disabled={aiGenerating}
+              className="flex items-center gap-2 px-4 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 disabled:cursor-not-allowed border border-theme-border-light text-theme-text rounded-sm text-sm font-medium transition-colors"
+            >
+              {aiGenerating ? (
+                <div className="w-4 h-4 border-2 border-theme-text/30 border-t-theme-text rounded-full animate-spin" />
+              ) : (
+                <Sparkles size={16} />
+              )}
+              {aiGenerating ? 'Regenerating...' : 'Regenerate Insights'}
+            </button>
+          )}
           <button 
             onClick={() => navigate('/dashboard/scripts')}
-            className="p-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-full transition-colors text-theme-text"
+            className="flex items-center gap-2 px-4 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover border border-theme-border-light text-theme-text rounded-sm text-sm font-medium transition-colors"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={16} /> Back
           </button>
+        </div>
           <div>
             <h2 className="text-2xl font-bold text-theme-text flex items-center gap-2">
               <Sparkles className="text-indigo-400" size={24} /> 
