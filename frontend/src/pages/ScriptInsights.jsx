@@ -128,8 +128,8 @@ const ScriptInsights = () => {
         <div className="space-y-8">
           {/* Summary removed per user request */}
             <div className="mb-8">
-              <h4 className="text-sm font-bold text-theme-text-muted-dark uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Activity size={16} className="text-indigo-400" /> Tone & Genre
+              <h4 className="text-base font-bold text-theme-text mb-3">
+                Tone & Genre
               </h4>
               <div className="inline-block bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 px-4 py-2 rounded-full text-sm font-bold border border-indigo-500/20 shadow-sm">
                 {script.aiReview.tone}
@@ -137,16 +137,16 @@ const ScriptInsights = () => {
             </div>
 
             <div className="mb-8">
-              <h4 className="text-sm font-bold text-theme-text-muted-dark uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Users size={16} className="text-pink-400" /> Audience Fit
+              <h4 className="text-base font-bold text-theme-text mb-3">
+                Audience Fit
               </h4>
               <p className="text-base text-theme-text leading-relaxed bg-theme-input-bg p-6 rounded-lg border border-theme-border-light shadow-sm">
-                {script.aiReview.audience_fit || "Audience fit analysis not available."}
+                {script.aiReview.audience_fit || "Audience fit analysis not available in this generated review. Please clear the review and generate a new one to see audience fit."}
               </p>
             </div>
           <div>
-            <h4 className="text-sm font-bold text-indigo-400 mb-3 flex items-center gap-2">
-              <UserIcon size={16}/> Characters
+            <h4 className="text-base font-bold text-theme-text mb-3">
+              Characters
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {script.aiReview.characters?.map((char, idx) => (
@@ -158,8 +158,8 @@ const ScriptInsights = () => {
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-bold text-indigo-400 mb-3 flex items-center gap-2">
-              <Sparkles size={16}/> AI Feedback
+            <h4 className="text-base font-bold text-theme-text mb-3">
+              AI Feedback
             </h4>
             <p className="text-base text-theme-text leading-relaxed bg-theme-input-bg p-6 rounded-lg border border-theme-border-light italic shadow-sm">
               "{script.aiReview.feedback}"
