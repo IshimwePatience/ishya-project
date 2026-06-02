@@ -323,7 +323,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
       ) : null}
 
       {/* Genre Filter Bar */}
-      <section className="fixed top-16 left-0 right-0 z-30 py-3 px-4 md:px-10 bg-theme-surface flex justify-center">
+      <section className="fixed top-16 left-0 right-0 z-30 pt-1 pb-3 px-4 md:px-10 bg-theme-surface flex justify-center">
         <div className="w-full max-w-[1600px]">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
             {genres.map(genre => (
@@ -332,7 +332,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 onClick={() => setSelectedGenre(genre)}
                 className={`flex-shrink-0 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${selectedGenre === genre
                   ? 'bg-theme-text text-theme-surface'
-                  : 'bg-white dark:bg-[#272727] text-theme-text hover:bg-gray-100 dark:hover:bg-[#3f3f3f]'
+                  : 'bg-theme-bg text-theme-text hover:bg-theme-input-bg-hover'
                   }`}
               >
                 {genre}
