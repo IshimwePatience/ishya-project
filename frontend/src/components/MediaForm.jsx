@@ -309,7 +309,7 @@ const MediaForm = ({ onSuccess, onCancel, initialData }) => {
           >
             <option value="">Link to production...</option>
             {productions.map(prod => (
-              <option key={prod.id} value={prod.id} className="bg-[#111111]">{prod.title}</option>
+              <option key={prod.id} value={prod.id} className="bg-theme-surface">{prod.title}</option>
             ))}
           </select>
         </div>

@@ -186,9 +186,9 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
-            <option value="" className="bg-[#111111]">Select project...</option>
+            <option value="" className="bg-theme-surface">Select project...</option>
             {productions.map(prod => (
-              <option key={prod.id} value={prod.id} className="bg-[#111111]">{prod.title}</option>
+              <option key={prod.id} value={prod.id} className="bg-theme-surface">{prod.title}</option>
             ))}
           </select>
         </div>
@@ -240,9 +240,9 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.status}
             onChange={(e) => setFormData({...formData, status: e.target.value})}
           >
-            <option value="Draft" className="bg-[#111111]">Draft</option>
-            <option value="Under Review" className="bg-[#111111]">Under Review</option>
-            <option value="Approved" className="bg-[#111111]">Approved</option>
+            <option value="Draft" className="bg-theme-surface">Draft</option>
+            <option value="Under Review" className="bg-theme-surface">Under Review</option>
+            <option value="Approved" className="bg-theme-surface">Approved</option>
           </select>
         </div>
       </div>

@@ -123,9 +123,9 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
               value={formData.roleId || ''}
               onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
             >
-              <option value="" disabled className="bg-[#111111]">Select role</option>
+              <option value="" disabled className="bg-theme-surface">Select role</option>
               {roles.map(role => (
-                <option key={role.id} value={role.id} className="bg-[#111111]">{role.name}</option>
+                <option key={role.id} value={role.id} className="bg-theme-surface">{role.name}</option>
               ))}
             </select>
         </div>
@@ -142,8 +142,8 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
           >
-            <option value="active" className="bg-[#111111]">Active</option>
-            <option value="inactive" className="bg-[#111111]">Inactive/Blocked</option>
+            <option value="active" className="bg-theme-surface">Active</option>
+            <option value="inactive" className="bg-theme-surface">Inactive/Blocked</option>
           </select>
         </div>
       </div>

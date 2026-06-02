@@ -129,7 +129,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
             {['Rehearsal', 'Performance', 'Meeting', 'Filming'].map(t => (
-              <option key={t} value={t} className="bg-[#111111]">{t}</option>
+              <option key={t} value={t} className="bg-theme-surface">{t}</option>
             ))}
           </select>
           <div className="flex items-center gap-2 mt-2">
@@ -226,9 +226,9 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
-            <option value="" className="bg-[#111111]">Select project...</option>
+            <option value="" className="bg-theme-surface">Select project...</option>
             {productions.map(prod => (
-              <option key={prod.id} value={prod.id} className="bg-[#111111]">{prod.title}</option>
+              <option key={prod.id} value={prod.id} className="bg-theme-surface">{prod.title}</option>
             ))}
           </select>
         </div>

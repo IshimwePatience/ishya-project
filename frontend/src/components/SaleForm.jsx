@@ -89,9 +89,9 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
-            <option value="" className="bg-[#111111]">Select production...</option>
+            <option value="" className="bg-theme-surface">Select production...</option>
             {productions.map(prod => (
-              <option key={prod.id} value={prod.id} className="bg-[#111111]">{prod.title}</option>
+              <option key={prod.id} value={prod.id} className="bg-theme-surface">{prod.title}</option>
             ))}
           </select>
         </div>
@@ -110,9 +110,9 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.buyerId}
             onChange={(e) => setFormData({ ...formData, buyerId: e.target.value })}
           >
-            <option value="" className="bg-[#111111]">Select partner...</option>
+            <option value="" className="bg-theme-surface">Select partner...</option>
             {buyers.map(buyer => (
-              <option key={buyer.id} value={buyer.id} className="bg-[#111111]">{buyer.name}</option>
+              <option key={buyer.id} value={buyer.id} className="bg-theme-surface">{buyer.name}</option>
             ))}
           </select>
         </div>
@@ -131,7 +131,7 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({ ...formData, saleType: e.target.value })}
           >
             {saleTypes.map(type => (
-              <option key={type} value={type} className="bg-[#111111]">{type}</option>
+              <option key={type} value={type} className="bg-theme-surface">{type}</option>
             ))}
           </select>
         </div>
@@ -183,7 +183,7 @@ const SaleForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value })}
           >
             {paymentStatuses.map(status => (
-              <option key={status} value={status} className="bg-[#111111]">{status}</option>
+              <option key={status} value={status} className="bg-theme-surface">{status}</option>
             ))}
           </select>
         </div>

@@ -102,11 +102,11 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
               });
             }}
           >
-            <option value="" disabled className="bg-[#111111]">Select category</option>
+            <option value="" disabled className="bg-theme-surface">Select category</option>
             {categories
               .filter(cat => !['Radio Drama', 'Journal/Paper', 'Script'].includes(cat?.name))
               .map(cat => (
-                <option key={cat.id} value={cat.id} className="bg-[#111111]">{cat.name}</option>
+                <option key={cat.id} value={cat.id} className="bg-theme-surface">{cat.name}</option>
               ))}
           </select>
         </div>

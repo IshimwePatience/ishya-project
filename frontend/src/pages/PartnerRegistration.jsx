@@ -152,11 +152,11 @@ const PartnerRegistration = () => {
                 onChange={handleChange}
                 className="w-full bg-white/5 border border-white/5 rounded-sm px-4 py-3 text-sm text-white focus:outline-none focus:border-[#e5a00d]/50 transition-all appearance-none"
               >
-                <option value="TV Channel" className="bg-black">TV Channel</option>
-                <option value="Radio Station" className="bg-black">Radio Station</option>
-                <option value="Streaming Platform" className="bg-black">Streaming Platform</option>
-                <option value="Individual" className="bg-black">Individual</option>
-                <option value="Production Company" className="bg-black">Production Company</option>
+                <option value="TV Channel" className="bg-theme-surface">TV Channel</option>
+                <option value="Radio Station" className="bg-theme-surface">Radio Station</option>
+                <option value="Streaming Platform" className="bg-theme-surface">Streaming Platform</option>
+                <option value="Individual" className="bg-theme-surface">Individual</option>
+                <option value="Production Company" className="bg-theme-surface">Production Company</option>
               </select>
             </div>
 

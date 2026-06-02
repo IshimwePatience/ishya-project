@@ -217,7 +217,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
         </div>
         <div className="w-full md:w-2/3">
           <select required className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text appearance-none" value={formData.specialty} onChange={(e) => setFormData({...formData, specialty: e.target.value})}>
-            {specialties.map(spec => <option key={spec} value={spec} className="bg-[#111111]">{spec}</option>)}
+            {specialties.map(spec => <option key={spec} value={spec} className="bg-theme-surface">{spec}</option>)}
           </select>
         </div>
       </div>

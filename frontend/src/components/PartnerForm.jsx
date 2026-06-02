@@ -101,7 +101,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           >
             {partnerTypes.map(type => (
-              <option key={type} value={type} className="bg-[#111111]">{type}</option>
+              <option key={type} value={type} className="bg-theme-surface">{type}</option>
             ))}
           </select>
         </div>

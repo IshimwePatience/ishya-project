@@ -102,7 +102,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           >
             {categories.map(cat => (
-              <option key={cat} value={cat} className="bg-[#111111]">{cat}</option>
+              <option key={cat} value={cat} className="bg-theme-surface">{cat}</option>
             ))}
           </select>
         </div>
@@ -121,9 +121,9 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
-            <option value="" className="bg-[#111111]">Select production...</option>
+            <option value="" className="bg-theme-surface">Select production...</option>
             {productions.map(prod => (
-              <option key={prod.id} value={prod.id} className="bg-[#111111]">{prod.title}</option>
+              <option key={prod.id} value={prod.id} className="bg-theme-surface">{prod.title}</option>
             ))}
           </select>
         </div>
