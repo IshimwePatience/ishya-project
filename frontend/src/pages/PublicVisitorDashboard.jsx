@@ -330,9 +330,9 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               <button
                 key={genre}
                 onClick={() => setSelectedGenre(genre)}
-                className={`flex-shrink-0 px-5 py-2 rounded-full text-[11px] font-bold transition-all border ${selectedGenre === genre
-                  ? 'bg-white text-black border-white'
-                  : 'bg-theme-input-bg text-theme-text-muted border-theme-border-light hover:border-theme-border hover:text-theme-text hover:bg-theme-input-bg-hover'
+                className={`flex-shrink-0 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${selectedGenre === genre
+                  ? 'bg-theme-text text-theme-surface'
+                  : 'bg-white dark:bg-[#272727] text-theme-text hover:bg-gray-100 dark:hover:bg-[#3f3f3f]'
                   }`}
               >
                 {genre}

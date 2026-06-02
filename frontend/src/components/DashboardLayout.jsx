@@ -597,7 +597,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-theme-accent-text">
       {/* Top Navigation — Plex-style layout */}
-      <header className={`h-16 bg-theme-navbar-bg border-b border-theme-border-light flex items-center px-4 md:px-10 fixed top-0 right-0 z-40 gap-3 font-sans text-theme-navbar-text ${isPublic ? 'w-full' : 'w-full md:w-[calc(100%-18rem)]'}`}>
+      <header className={`h-16 bg-theme-navbar-bg flex items-center px-4 md:px-10 fixed top-0 right-0 z-40 gap-3 font-sans text-theme-navbar-text ${isPublic ? 'w-full' : 'w-full md:w-[calc(100%-18rem)]'}`}>
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
