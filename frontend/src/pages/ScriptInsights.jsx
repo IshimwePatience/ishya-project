@@ -147,9 +147,9 @@ const ScriptInsights = () => {
               <h4 className="text-base font-bold text-theme-text mb-3">
                 Tone & Genre
               </h4>
-              <div className="inline-block bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 px-4 py-2 rounded-full text-sm font-bold border border-indigo-500/20 shadow-sm">
+              <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed">
                 {script.aiReview.tone}
-              </div>
+              </p>
             </div>
 
             <div className="mb-8">
