@@ -109,7 +109,7 @@ const Scripts = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center mb-10 pb-6 border-b border-theme-border-light">
+          <div className="flex items-center mb-10">
             <div>
               <h2 className="text-2xl font-bold text-theme-text">
                 {editingScript ? "Edit script" : "New script"}

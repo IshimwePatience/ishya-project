@@ -676,7 +676,7 @@ const MediaLibrary = () => {
     <div className="space-y-6 pb-20">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center gap-4 mb-10 pb-6 border-b border-theme-border-light">
+          <div className="flex items-center gap-4 mb-10">
             <div>
               <h2 className="text-2xl font-semibold text-theme-text">
                 {editingAsset ? "Edit Asset" : "Add to Library"}

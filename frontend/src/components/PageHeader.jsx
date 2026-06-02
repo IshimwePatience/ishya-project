@@ -3,7 +3,7 @@ import { LayoutGrid } from 'lucide-react';
 
 const PageHeader = ({ title, actions, zoom, setZoom, viewMode, setViewMode }) => {
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-theme-border-light pb-6 mb-10">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-medium text-theme-text/90 tracking-tight">{title}</h2>
       </div>

@@ -89,7 +89,7 @@ const Talents = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center mb-10 pb-6 border-b border-theme-border-light">
+          <div className="flex items-center mb-10">
             <div>
               <h2 className="text-2xl font-semibold text-theme-text">
                 {editingTalent ? `Edit ${editingTalent.firstName} ${editingTalent.lastName}` : "Register new talent"}

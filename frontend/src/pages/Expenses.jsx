@@ -66,7 +66,7 @@ const Expenses = () => {
     <div className="space-y-6">
       {isFormOpen ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex flex-col gap-2 mb-10 pb-6 border-b border-theme-border-light">
+          <div className="flex flex-col gap-2 mb-10">
             <nav className="flex items-center gap-2 text-xs font-medium text-theme-text-muted">
               <button onClick={() => setIsFormOpen(false)} className="hover:text-theme-text transition-colors">Expenses</button>
               <span className="text-theme-text-muted-dark">/</span>
