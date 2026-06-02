@@ -525,10 +525,10 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
           gridTemplateColumns: `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2.5}px, 1fr))`
         }}
       >
-        <StatCard label="Total revenue" value={`${Number(stats.totalRevenue || 0).toLocaleString()} RWF`} zoom={zoom} onClick={() => navigate('/dashboard/sales')} />
-        <StatCard label="Productions" value={stats.productionsCount} zoom={zoom} onClick={() => navigate('/dashboard/productions')} />
-        <StatCard label="Troupe members" value={stats.talentsCount} zoom={zoom} onClick={() => navigate('/dashboard/talents')} />
-        <StatCard label="System users" value={stats.usersCount || 0} zoom={zoom} onClick={() => navigate('/dashboard/users')} />
+        <StatCard label="Total revenue" value={`${Number(stats.totalRevenue || 0).toLocaleString()} RWF`} zoom={zoom} to="/dashboard/sales" />
+        <StatCard label="Productions" value={stats.productionsCount} zoom={zoom} to="/dashboard/productions" />
+        <StatCard label="Troupe members" value={stats.talentsCount} zoom={zoom} to="/dashboard/talents" />
+        <StatCard label="System users" value={stats.usersCount || 0} zoom={zoom} to="/dashboard/users" />
       </div>
 
       {/* 📊 TWO-COLUMN LAYOUT: CHARTS & EVENTS */}
@@ -591,17 +591,23 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
 };
 
 // Simple Stat Card Renderer
-const StatCard = ({ label, value, zoom, onClick }) => (
-  <div
-    onClick={onClick}
-    role={onClick ? "button" : undefined}
-    className={`bg-theme-surface rounded-sm border border-theme-border-light group hover:bg-theme-input-bg transition-all p-6 ${onClick ? 'cursor-pointer hover:border-theme-accent hover:shadow-lg' : ''}`}
-    style={{ padding: `${1.5 * (zoom / 50)}rem` }}
-  >
-    <div className="text-xs font-semibold text-theme-text-muted-dark mb-1.5">{label}</div>
-    <div className="text-3xl font-black text-theme-text tabular-nums tracking-tight group-hover:text-theme-accent transition-colors">{value}</div>
-  </div>
-);
+const StatCard = ({ label, value, zoom, to }) => {
+  const content = (
+    <div
+      className={`bg-theme-surface rounded-sm border border-theme-border-light group hover:bg-theme-input-bg transition-all p-6 ${to ? 'cursor-pointer hover:border-theme-accent hover:shadow-lg' : ''}`}
+      style={{ padding: `${1.5 * (zoom / 50)}rem` }}
+    >
+      <div className="text-xs font-semibold text-theme-text-muted-dark mb-1.5">{label}</div>
+      <div className="text-3xl font-black text-theme-text tabular-nums tracking-tight group-hover:text-theme-accent transition-colors">{value}</div>
+    </div>
+  );
+
+  return to ? (
+    <Link to={to} className="block no-underline">
+      {content}
+    </Link>
+  ) : content;
+};
 
 // 🏯 Dynamic Controller & Fetch Loader
 const Dashboard = () => {
