@@ -1117,9 +1117,9 @@ const DashboardLayout = ({ children }) => {
         {/* Shared Sidebar */}
         {!isPublic && (
           <aside className={`w-72 sidebar-theme bg-theme-sidebar-bg text-theme-sidebar-text flex flex-col pt-6 md:pt-0 fixed top-0 h-[100dvh] md:h-screen z-[200] md:z-50 border-r border-theme-border-light transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-            <div className="hidden md:flex items-center justify-center h-20 mb-4 mt-2">
+            <div className="hidden md:flex items-center justify-start px-6 h-20 mb-2 mt-2">
               <Link to="/dashboard" className="flex items-center gap-1.5 no-underline">
-                <img src={logoImg} alt="Ishya" className="h-16 w-auto object-contain" />
+                <img src={logoImg} alt="Ishya" className="h-28 w-auto object-contain scale-125 origin-left" />
               </Link>
             </div>
             <div className="flex items-center justify-between px-6 pb-4 md:hidden border-b border-theme-border-light mb-2">
