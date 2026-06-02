@@ -76,7 +76,9 @@ exports.deleteScript = async (req, res) => {
 
 exports.generateAiReview = async (req, res) => {
   try {
-    const script = await Script.findByPk(req.params.id);
+    const script = await Script.findByPk(req.params.id, {
+      include: [{ model: Production, as: 'production' }]
+    });
     if (!script) return res.status(404).json({ message: 'Script not found' });
     
     if (script.aiReview) {
@@ -110,10 +112,15 @@ exports.generateAiReview = async (req, res) => {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const prompt = `
 Please analyze the following movie/play script excerpt and provide a structured JSON response.
+Consider the following context about the production:
+- Intended Genre: ${script.production?.genre || 'Unknown'}
+- Production Details / Audience: ${script.production?.description || 'General Audience'}
+
 The JSON must have the following keys:
 {
   "summary": "A 2-3 sentence summary of the plot",
-  "tone": "The overall tone and genre (e.g. Dark Comedy, Thriller)",
+  "tone": "The overall tone and how well it fits the intended genre",
+  "audience_fit": "An analysis of how well this script fits its intended target audience",
   "characters": [
     { "name": "Character Name", "description": "Brief description of the character" }
   ],
