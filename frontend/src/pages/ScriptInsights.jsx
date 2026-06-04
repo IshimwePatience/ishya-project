@@ -3,6 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FileText, Activity, User as UserIcon, Sparkles, AlertTriangle, ArrowLeft, Users } from 'lucide-react';
 import axios from 'axios';
 
+const TypewriterText = ({ text }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  
+  useEffect(() => {
+    setDisplayedText('');
+    if (!text) return;
+    
+    let i = 0;
+    const interval = setInterval(() => {
+      i += 3;
+      if (i >= text.length) {
+        setDisplayedText(text);
+        clearInterval(interval);
+      } else {
+        setDisplayedText(text.substring(0, i));
+      }
+    }, 10);
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <span>{displayedText}</span>;
+};
+
 const ScriptInsights = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -147,8 +170,8 @@ const ScriptInsights = () => {
               <h4 className="text-base font-bold text-theme-text mb-3">
                 Tone & Genre
               </h4>
-              <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed">
-                {script.aiReview.tone}
+              <p className="text-base text-theme-text-muted leading-relaxed">
+                <TypewriterText text={script.aiReview.tone} />
               </p>
             </div>
 
@@ -156,29 +179,29 @@ const ScriptInsights = () => {
               <h4 className="text-base font-bold text-theme-text mb-3">
                 Audience Fit
               </h4>
-              <p className="text-base text-theme-text leading-relaxed bg-theme-input-bg p-6 rounded-lg border border-theme-border-light shadow-sm">
-                {script.aiReview.audience_fit || "Audience fit analysis not available in this generated review. Please clear the review and generate a new one to see audience fit."}
+              <p className="text-base text-theme-text-muted leading-relaxed">
+                <TypewriterText text={script.aiReview.audience_fit || "Audience fit analysis not available in this generated review. Please clear the review and generate a new one to see audience fit."} />
               </p>
             </div>
           <div>
             <h4 className="text-base font-bold text-theme-text mb-3">
               Characters
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {script.aiReview.characters?.map((char, idx) => (
-                <div key={idx} className="bg-theme-input-bg p-4 rounded-lg border border-theme-border-light shadow-sm">
-                  <div className="font-bold text-base text-theme-text mb-2">{char.name}</div>
-                  <div className="text-sm text-theme-text-muted leading-relaxed">{char.description}</div>
+                <div key={idx} className="space-y-1">
+                  <div className="font-bold text-base text-theme-text"><TypewriterText text={char.name} /></div>
+                  <div className="text-sm text-theme-text-muted leading-relaxed"><TypewriterText text={char.description} /></div>
                 </div>
               ))}
             </div>
           </div>
-          <div>
+          <div className="mt-8">
             <h4 className="text-base font-bold text-theme-text mb-3">
               AI Feedback
             </h4>
-            <p className="text-base text-theme-text leading-relaxed bg-theme-input-bg p-6 rounded-lg border border-theme-border-light italic shadow-sm">
-              "{script.aiReview.feedback}"
+            <p className="text-base text-theme-text-muted leading-relaxed">
+              <TypewriterText text={`"${script.aiReview.feedback}"`} />
             </p>
           </div>
         </div>
