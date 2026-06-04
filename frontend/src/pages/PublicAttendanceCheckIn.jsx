@@ -156,12 +156,12 @@ const PublicAttendanceCheckIn = () => {
     };
 
     mediaRecorder.start();
-    // Record for exactly 3 seconds
+    // Record for exactly 5 seconds
     setTimeout(() => {
       if (mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
       }
-    }, 3000);
+    }, 5000);
   };
 
   const startGeofencing = (initialLat, initialLng, attendanceId) => {
@@ -277,7 +277,7 @@ const PublicAttendanceCheckIn = () => {
               )}
             </button>
             <p className="text-[11px] text-gray-400 text-center pt-2">
-              A 3-second video will be recorded to verify your identity.
+              A 5-second video will be recorded to verify your identity.
             </p>
           </form>
         )}

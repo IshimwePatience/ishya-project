@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight, Settings, Copy, Check } from 'lucide-react';
+import { Calendar, Clock, MapPin, CheckCircle2, LogOut as LogOutIcon, ArrowRight, Settings, Copy, Check, ChevronLeft, ChevronRight, Video } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/PageHeader';
@@ -12,6 +12,8 @@ const Attendance = () => {
   const [userRole, setUserRole] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
   const [activeRule, setActiveRule] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const [showRuleForm, setShowRuleForm] = useState(false);
   const [copied, setCopied] = useState(false);
   const [ruleForm, setRuleForm] = useState({
@@ -407,39 +409,79 @@ const Attendance = () => {
             {[1, 2, 3].map(i => <div key={i} className="h-16 bg-theme-input-bg animate-pulse rounded-sm" />)}
           </div>
         ) : logs.length > 0 ? (
-          <div className="space-y-2">
-            {logs.map((log) => (
-              <div key={log.id} className="flex items-center justify-between p-6 bg-theme-surface border border-theme-border-light rounded-sm group hover:bg-theme-input-bg transition-all">
-                <div className="flex items-center gap-6">
-                  <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-theme-input-bg-hover' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
-                  <div>
-                    <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors">
-                      {isManagement ? `${log.user?.firstName} ${log.user?.lastName}` : new Date(log.checkIn).toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' })}
+          <div className="space-y-4">
+            <div className="space-y-2">
+              {logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((log) => (
+                <div key={log.id} className="flex items-center justify-between p-6 bg-theme-surface border border-theme-border-light rounded-sm group hover:bg-theme-input-bg transition-all">
+                  <div className="flex items-center gap-6">
+                    <div className={`w-1 h-8 rounded-full ${log.checkOut ? 'bg-theme-input-bg-hover' : 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)]'}`} />
+                    <div>
+                      <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors">
+                        {isManagement ? `${log.user?.firstName} ${log.user?.lastName}` : new Date(log.checkIn).toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </div>
+                      <div className="text-[11px] text-theme-text-muted-dark font-medium mt-1 flex items-center gap-2">
+                        {isManagement && `${new Date(log.checkIn).toLocaleDateString()} • `} {formatLocation(log.location)} • {log.event?.title || 'Production call'}
+                        {log.videoUrl && (
+                          <>
+                            <span className="opacity-50">•</span>
+                            <a 
+                              href={log.videoUrl.startsWith('http') ? log.videoUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${log.videoUrl}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              download
+                              className="text-theme-accent hover:underline flex items-center gap-1 font-bold"
+                            >
+                              <Video size={10} /> Verify Video
+                            </a>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-[11px] text-theme-text-muted-dark font-medium mt-1 flex items-center gap-2">
-                      {isManagement && `${new Date(log.checkIn).toLocaleDateString()} • `} {formatLocation(log.location)} • {log.event?.title || 'Production call'}
+                  </div>
+                  <div className="flex items-center gap-12 text-right">
+                    <div className="space-y-1">
+                      <div className="text-[10px] font-medium text-theme-text-muted-dark mb-1">In / Out</div>
+                      <div className="text-xs font-semibold text-theme-text-muted tabular-nums">
+                        {new Date(log.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {log.checkOut ? ` — ${new Date(log.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ' — Present'}
+                      </div>
                     </div>
+                    {isManagement && !log.checkOut && (
+                      <button
+                        onClick={() => handleCheckOut(log.id)}
+                        className="text-[10px] font-bold text-red-500 hover:underline"
+                      >
+                        Force end
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-12 text-right">
-                  <div className="space-y-1">
-                    <div className="text-[10px] font-medium text-theme-text-muted-dark mb-1">In / Out</div>
-                    <div className="text-xs font-semibold text-theme-text-muted tabular-nums">
-                      {new Date(log.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      {log.checkOut ? ` — ${new Date(log.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ' — Present'}
-                    </div>
-                  </div>
-                  {isManagement && !log.checkOut && (
-                    <button
-                      onClick={() => handleCheckOut(log.id)}
-                      className="text-[10px] font-bold text-red-500 hover:underline"
-                    >
-                      Force end
-                    </button>
-                  )}
+              ))}
+            </div>
+            
+            {logs.length > itemsPerPage && (
+              <div className="flex items-center justify-between pt-4 border-t border-theme-border-light">
+                <span className="text-xs font-medium text-theme-text-muted">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, logs.length)} of {logs.length} entries
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 border border-theme-border-light rounded-sm hover:bg-theme-input-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    disabled={currentPage * itemsPerPage >= logs.length}
+                    className="p-2 border border-theme-border-light rounded-sm hover:bg-theme-input-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         ) : (
           <div className="py-20 text-center">
