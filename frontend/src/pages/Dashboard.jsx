@@ -258,40 +258,38 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   );
 };
 
-// 📊 Custom High-End SVG Bar Chart for Production Budgets
+// 📊 Tableau-style Vertical Bar Chart
 const BarChart = ({ data, zoom }) => {
-  const maxVal = Math.max(...data.map(d => d.value), 100);
+  const chartData = data.length > 0 ? data : [
+    { label: 'Prod A', value: 100 }, { label: 'Prod B', value: 200 }, { label: 'Prod C', value: 150 }, { label: 'Prod D', value: 50 }, { label: 'Prod E', value: 180 }
+  ];
+  const maxVal = Math.max(...chartData.map(d => d.value), 10);
+  const colors = ['#ea580c', '#c2410c', '#9a3412', '#78350f', '#3b82f6', '#2563eb'];
+
   return (
     <TableauCard title="Production Budgets" subtitle="Budget overview for top 5 productions" noPadding>
-      <div className="h-44 flex items-end gap-5 w-full">
-        {data.length === 0 ? (
-          <div className="w-full h-full flex items-center justify-center text-xs text-theme-text-muted-dark italic">No budget data available</div>
-        ) : (
-          data.map((d, i) => {
-            const pct = Math.max((d.value / maxVal) * 100, 4); // Min 4% height to be visible
-            return (
-              <motion.div 
-                key={i} 
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="flex-1 flex flex-col items-center gap-2.5 group relative h-full justify-end cursor-pointer"
-              >
-                <div className="w-full bg-theme-surface hover:bg-theme-input-bg transition-all rounded-sm relative flex items-end h-full shadow-sm">
-                  <motion.div 
-                    initial={{ height: 0 }}
-                    animate={{ height: `${pct}%` }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
-                    className="w-full bg-gradient-to-t from-theme-accent to-[#f5c842] rounded-sm shadow-[0_0_12px_rgba(229,160,13,0.2)]"
-                  />
-                  {/* Glassmorphic interactive Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-theme-surface border border-theme-border-light text-[9px] font-bold text-theme-text px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
-                    {Number(d.value).toLocaleString()} RWF
+      <div className="w-full h-[250px] bg-theme-surface flex items-end justify-between px-6 pt-8 pb-2 relative">
+        {chartData.map((d, i) => {
+          const pct = Math.max((d.value / maxVal) * 100, 5);
+          return (
+            <div key={i} className="flex flex-col items-center gap-2 group flex-1">
+              <div className="w-full px-1 h-36 flex items-end">
+                <motion.div 
+                  initial={{ height: 0 }}
+                  animate={{ height: `${pct}%` }}
+                  transition={{ duration: 1 }}
+                  className="w-full relative group-hover:opacity-80 transition-opacity rounded-sm shadow-sm"
+                  style={{ backgroundColor: colors[i % colors.length] }}
+                >
+                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 text-[8px] text-theme-text-muted font-mono opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    {Number(d.value).toLocaleString()}
                   </div>
-                </div>
-                <span className="text-[9px] font-semibold text-theme-text-muted group-hover:text-theme-text transition-colors truncate w-14 text-center">{d.label}</span>
-              </motion.div>
-            );
-          })
-        )}
+                </motion.div>
+              </div>
+              <span className="text-[8px] font-bold text-theme-text-muted uppercase truncate w-12 text-center">{d.label}</span>
+            </div>
+          );
+        })}
       </div>
     </TableauCard>
   );
@@ -317,14 +315,21 @@ const DoughnutChart = ({ data }) => {
 
   return (
     <TableauCard title="Talent Specialty Forecast" subtitle="Trending specialty distribution" noPadding>
-      <div className="w-full h-[200px] bg-[#6c757d] relative overflow-hidden flex items-end">
-        {/* Top right trending tag (like screenshot) */}
-        <div className="absolute top-0 right-0 bg-[#3b82f6] text-white text-[9px] font-bold px-2 py-1 flex items-center gap-1">
-          <TrendingUp size={10} /> Trending
-        </div>
+      <div className="w-full h-[200px] bg-theme-bg/50 relative overflow-hidden flex items-end">
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full drop-shadow-md">
-          <path d={generatePath(chartData, 0)} fill="none" stroke="#2563eb" strokeWidth="1.5" />
-          <path d={generatePath(chartData, maxVal * 0.5)} fill="none" stroke="#ea580c" strokeWidth="1.5" opacity="0.7" />
+          <path d={generatePath(chartData, 0)} fill="none" stroke="#2563eb" strokeWidth="2" />
+          <path d={generatePath(chartData, maxVal * 0.5)} fill="none" stroke="#ea580c" strokeWidth="2" opacity="0.7" />
+          {chartData.map((d, i) => {
+            const x = (i / (chartData.length - 1 || 1)) * width;
+            const y1 = height - (d.count / (maxVal * 2)) * height - 20;
+            const y2 = height - ((d.count + maxVal * 0.5) / (maxVal * 2)) * height - 20;
+            return (
+              <g key={i}>
+                <circle cx={x} cy={y1} r="3" fill="#2563eb" />
+                <circle cx={x} cy={y2} r="3" fill="#ea580c" />
+              </g>
+            );
+          })}
         </svg>
       </div>
     </TableauCard>
