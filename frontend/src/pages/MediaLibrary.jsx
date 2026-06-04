@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv, ShieldCheck, ArrowDownToLine, MoreVertical } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import MediaForm from '../components/MediaForm';
@@ -757,17 +757,17 @@ const MediaLibrary = () => {
                     }}
                   >
                     {/* Poster Card Container with stacked cards effect for Series */}
-                    <div className="relative mb-4 group/card w-full aspect-[2/3]">
+                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl overflow-hidden shadow-sm">
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
-                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3.5 group-hover/card:-translate-y-3.5 shadow-xl" />
+                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-xl translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
                           {/* Layer 1: middle */}
-                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
+                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-xl translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
                         </>
                       )}
                       {/* Main Poster Card */}
-                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border">
+                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-xl overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border z-10">
                         {a.filePath ? (
                           <img
                             src={a.filePath}
@@ -793,23 +793,23 @@ const MediaLibrary = () => {
                           )}
                         </div>
 
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
-                            <Play size={20} className="text-theme-text fill-white ml-1" />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center z-20">
+                          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center shadow-lg">
+                            <Play size={24} className="text-theme-text fill-white ml-1" />
                           </div>
                         </div>
 
                         {!isPartner && (
-                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity z-30">
                             <button
                               onClick={(e) => { e.stopPropagation(); handleEdit(a); }}
-                              className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-theme-text rounded-sm transition-all"
+                              className="p-1.5 bg-black/60 hover:bg-white hover:text-black text-white rounded-sm transition-all"
                             >
                               <Edit2 size={12} />
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDelete(a.id); }}
-                              className="p-1.5 bg-black/60 hover:bg-red-500 text-theme-text rounded-sm transition-all"
+                              className="p-1.5 bg-black/60 hover:bg-red-500 text-white rounded-sm transition-all"
                             >
                               <Trash2 size={12} />
                             </button>
@@ -818,17 +818,29 @@ const MediaLibrary = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors leading-snug">
-                        {cardTitle}
+                    {/* Metadata & Title layout in YouTube style */}
+                    <div className="flex gap-3 pr-2">
+                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
+                        {cardTitle.charAt(0)}
                       </div>
-                      <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
-                        {isSeries ? (
-                          <span className="text-indigo-400 font-semibold">Series • Multi-Season</span>
-                        ) : (
-                          <span>Movie • {prod?.genre || 'Drama'}</span>
-                        )}
-                      </p>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                          {cardTitle}
+                        </h4>
+                        <div className="text-[12px] text-theme-text-muted mt-1 truncate">
+                          {isSeries ? (
+                            <span className="text-indigo-400 font-semibold">Series • Multi-Season</span>
+                          ) : (
+                            <span>Movie • {prod?.genre || 'Drama'}</span>
+                          )}
+                        </div>
+                        <div className="text-[12px] text-theme-text-muted truncate">
+                          {prod ? new Date(prod.createdAt).getFullYear() : new Date().getFullYear()} • Vault
+                        </div>
+                      </div>
+                      <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
+                      </div>
                     </div>
                   </motion.div>
                 );

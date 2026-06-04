@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
-import { Play, Info, Film, Globe, X, Lock as LockIcon, Search, MessageSquare, ArrowLeft, Users, Calendar } from 'lucide-react';
+import { Play, Info, Film, Globe, X, Lock as LockIcon, Search, MessageSquare, ArrowLeft, Users, Calendar, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
@@ -204,18 +204,40 @@ const PublicShowcase = () => {
                       }}
                       className="relative group cursor-pointer"
                     >
-                      <span className="absolute -left-6 sm:-left-8 md:-left-12 bottom-[-5px] md:bottom-[-10px] text-[70px] sm:text-[100px] md:text-[150px] font-black leading-none select-none text-transparent transition-all group-hover:text-white/5"
-                        style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)', fontFamily: 'system-ui' }}>
-                        {index + 1}
-                      </span>
-                      <div className="relative aspect-[2/3] ml-4 sm:ml-6 md:ml-12 overflow-hidden rounded-md border border-white/5 group-hover:border-white/40 transition-all shadow-2xl">
+                      <div className="relative aspect-video overflow-hidden rounded-xl bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-all shadow-sm">
                         <img
                           src={getPoster(prod.id)}
                           alt={prod.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 rounded-sm text-[10px] font-semibold text-white/80 z-10 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all">
+                        <div className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-black/80 backdrop-blur-md rounded text-[11px] font-medium text-white z-10">
                           {prod.type}
+                        </div>
+                        
+                        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-0">
+                          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center shadow-lg">
+                            <Play size={24} className="text-white fill-white ml-1" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 flex gap-3 pr-2">
+                        <div className="shrink-0 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-white/10 text-white font-bold text-xs uppercase">
+                          {prod.title.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
+                            {prod.title}
+                          </h4>
+                          <div className="text-[12px] text-gray-400 mt-1 truncate">
+                            Ishya Studios
+                          </div>
+                          <div className="text-[12px] text-gray-400 truncate">
+                            {prod.genre} • Featured
+                          </div>
+                        </div>
+                        <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <MoreVertical size={16} className="text-gray-400 hover:text-white" />
                         </div>
                       </div>
                     </motion.div>

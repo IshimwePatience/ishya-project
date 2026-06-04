@@ -12,7 +12,8 @@ import {
   Tv,
   AlertTriangle,
   CheckCircle,
-  X
+  X,
+  MoreVertical
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -181,10 +182,9 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               return (
                 <div
                   key={isContinue ? item.id : prod.id}
-                  className={`flex-shrink-0 ${isVertical ? 'w-[40vw] sm:w-44' : 'w-[80vw] sm:w-80'} group cursor-pointer`}
+                  className={`flex-shrink-0 ${isVertical ? 'w-[60vw] sm:w-64' : 'w-[80vw] sm:w-80'} group cursor-pointer`}
                   style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
-                    // Only Bypass Detail Page if we are explicitly in the "Continue Watching" row
                     if (isContinue) {
                       const finalMediaId = item.mediaId || item.media_id;
                       navigate(`/watch/${finalMediaId}?resume=${item.currentTime}`);
@@ -193,43 +193,65 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     }
                   }}
                 >
-                  <div className={`${isVertical ? 'aspect-[2/3]' : 'aspect-video'} bg-theme-surface rounded-sm overflow-hidden relative shadow-xl border border-theme-border-light`}>
+                  <div className="aspect-video bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
                     <img
                       src={getPoster(prod)}
                       alt={prod.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
 
-                    {/* Real Progress Bar - ONLY for Continue Watching row */}
+                    {/* Duration / Status badge at bottom right */}
+                    <div className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[11px] font-medium px-1.5 py-0.5 rounded flex items-center gap-1 backdrop-blur-sm z-10">
+                      {isContinue ? (
+                        `${Math.floor((item.duration - item.currentTime) / 60)}m left`
+                      ) : isLive ? (
+                        <><div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" /> LIVE</>
+                      ) : (
+                        prod.type || 'Movie'
+                      )}
+                    </div>
+                    
+                    {/* Progress Bar (Continue Watching) */}
                     {isContinue && actualProgress > 0 && (
-                      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20">
+                      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/20 z-10">
                         <div
-                          className="h-full bg-theme-accent shadow-[0_0_8px_rgba(229,160,13,0.8)]"
+                          className="h-full bg-red-600"
                           style={{ width: `${actualProgress}%` }}
                         />
                       </div>
                     )}
-
-                    {isLive && (
-                      <div className="absolute top-3 right-3 bg-red-600 text-theme-text text-[9px] font-black px-1.5 py-0.5 rounded-sm flex items-center gap-1 shadow-lg">
-                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" /> LIVE
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg">
-                        {isContinue ? <Play size={20} fill="currentColor" className="ml-1" /> : <Play size={20} fill="currentColor" className="ml-1" />}
+                    
+                    {/* Hover play button */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 z-0">
+                      <div className="w-12 h-12 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-lg">
+                        <Play size={24} fill="currentColor" className="ml-1" />
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 space-y-1">
-                    <h4 className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors truncate">{prod.title}</h4>
-                    <p className="text-[10px] text-theme-text-muted font-medium">
-                      {isContinue
-                        ? `${Math.floor((item.duration - item.currentTime) / 60)}m left`
-                        : `${new Date(prod.releaseDate).getFullYear()} • ${prod.type || 'Movie'}`
-                      }
-                    </p>
+
+                  <div className="mt-3 flex gap-3 pr-2">
+                    {/* Avatar */}
+                    <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light">
+                      <img src={logoImg} alt="Ishya" className="w-6 h-6 object-contain" />
+                    </div>
+                    
+                    {/* Text Content */}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                        {prod.title}
+                      </h4>
+                      <div className="text-[12px] text-theme-text-muted mt-1 truncate">
+                        Ishya Studios
+                      </div>
+                      <div className="text-[12px] text-theme-text-muted truncate">
+                        {new Date(prod.releaseDate).getFullYear()} • 1.2M views
+                      </div>
+                    </div>
+
+                    {/* Menu dots */}
+                    <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
+                    </div>
                   </div>
                 </div>
               );
@@ -427,26 +449,52 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 .map((prod) => (
                   <div
                     key={prod.id}
-                    className="group cursor-pointer space-y-3"
+                    className="group cursor-pointer"
                     onClick={() => navigate(`/dashboard/production/${prod.id}`)}
                   >
-                    <div className="aspect-[2/3] bg-theme-surface rounded-sm overflow-hidden relative shadow-xl border border-theme-border-light">
+                    <div className="aspect-video bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
                       <img
                         src={getPoster(prod)}
                         alt={prod.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg">
-                          <Play size={20} fill="currentColor" className="ml-1" />
+                      
+                      {/* Duration / Status badge at bottom right */}
+                      <div className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[11px] font-medium px-1.5 py-0.5 rounded flex items-center gap-1 backdrop-blur-sm z-10">
+                        {prod.type || 'Movie'}
+                      </div>
+
+                      {/* Hover play button */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 z-0">
+                        <div className="w-12 h-12 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-lg">
+                          <Play size={24} fill="currentColor" className="ml-1" />
                         </div>
                       </div>
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors truncate">{prod.title}</h4>
-                      <p className="text-[10px] text-theme-text-muted font-medium">
-                        {new Date(prod.releaseDate).getFullYear()} • {prod.type || 'Movie'}
-                      </p>
+
+                    <div className="mt-3 flex gap-3 pr-2">
+                      {/* Avatar */}
+                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light">
+                        <img src={logoImg} alt="Ishya" className="w-6 h-6 object-contain" />
+                      </div>
+                      
+                      {/* Text Content */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                          {prod.title}
+                        </h4>
+                        <div className="text-[12px] text-theme-text-muted mt-1 truncate">
+                          Ishya Studios
+                        </div>
+                        <div className="text-[12px] text-theme-text-muted truncate">
+                          {new Date(prod.releaseDate).getFullYear()} • 1.2M views
+                        </div>
+                      </div>
+
+                      {/* Menu dots */}
+                      <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
+                      </div>
                     </div>
                   </div>
                 ))}

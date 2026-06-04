@@ -11,7 +11,8 @@ import {
   Image as ImageIcon,
   ChevronRight,
   ExternalLink,
-  Tv
+  Tv,
+  MoreVertical
 } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
@@ -261,22 +262,22 @@ const MyLibrary = () => {
                   /* --- GRID VIEW MODE (Differentiated and without uppercase) --- */
                   <div className="flex flex-col cursor-pointer" onClick={() => handleOpenModal(prod)}>
                     {/* Poster Card Container with stacked cards effect for Series */}
-                    <div className="relative mb-4 group/card w-full aspect-[2/3]">
+                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl overflow-hidden shadow-sm">
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
-                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-sm translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
+                          <div className="absolute inset-0 bg-theme-surface/50 border border-theme-border-light rounded-xl translate-x-2 -translate-y-2 scale-[0.98] transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3 shadow-xl" />
                           {/* Layer 1: middle */}
-                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-sm translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
+                          <div className="absolute inset-0 bg-theme-surface/80 border border-theme-border-light rounded-xl translate-x-1 -translate-y-1 scale-[0.99] transition-transform duration-500 group-hover/card:translate-x-1.5 group-hover/card:-translate-y-1.5 shadow-lg" />
                         </>
                       )}
                       {/* Main Poster Card */}
-                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border">
+                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-xl overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border z-10">
                         {prod.poster ? (
                           <img
                             src={prod.poster}
                             alt={prod.title}
-                            className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-700"
+                            className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-transform duration-500"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">
@@ -297,42 +298,48 @@ const MyLibrary = () => {
                           )}
                         </div>
 
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
-                            <Play size={20} className="text-theme-text fill-white ml-1" />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center z-20">
+                          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center shadow-lg">
+                            <Play size={24} className="text-theme-text fill-white ml-1" />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Metadata & Title stacked cleanly below the card */}
-                    <div className="space-y-2">
-                      <div className="space-y-0.5">
-                        <div className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors leading-snug">
-                          {prod.title}
-                        </div>
-                        <p className="text-[10px] text-theme-text-muted font-medium tracking-normal">
-                          {isSeries ? (
-                            <span className="text-indigo-400 font-semibold">
-                              {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
-                            </span>
-                          ) : (
-                            <span>Movie • {prod.genre || 'Drama'}</span>
-                          )}
-                        </p>
+                    {/* Metadata & Title layout in YouTube style */}
+                    <div className="flex gap-3 pr-2">
+                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
+                        {prod.title.charAt(0)}
                       </div>
-
-                      {/* Active Status Badge & Download Button (word down) */}
-                      <div className="flex flex-col gap-2 pt-1">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenModal(prod);
-                          }}
-                          className="flex items-center justify-center gap-2 w-full py-2 bg-white text-theme-accent-text text-[10px] font-bold rounded-sm hover:bg-theme-accent transition-all shadow-md shadow-black/20 cursor-pointer"
-                        >
-                          <Download size={11} /> Access Assets
-                        </button>
+                      <div className="flex-1 min-w-0 flex flex-col justify-between">
+                        <div>
+                          <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                            {prod.title}
+                          </h4>
+                          <div className="text-[12px] text-theme-text-muted mt-1 truncate">
+                            {isSeries ? (
+                              <span className="text-indigo-400 font-semibold">
+                                {seasonsCount} Season{seasonsCount !== 1 ? 's' : ''} • {episodes.length} Episode{episodes.length !== 1 ? 's' : ''}
+                              </span>
+                            ) : (
+                              <span>Movie • {prod.genre || 'Drama'}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenModal(prod);
+                            }}
+                            className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-theme-input-bg hover:bg-theme-accent text-theme-text hover:text-white text-[10px] font-bold rounded flex-1 transition-all border border-theme-border-light hover:border-transparent cursor-pointer"
+                          >
+                            <Download size={11} /> Access
+                          </button>
+                          <div className="shrink-0 ml-2">
+                            <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
