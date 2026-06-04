@@ -833,11 +833,12 @@ const Settings = () => {
                   <button
                     type="submit"
                     disabled={saving}
-                  className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-theme-accent-text text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
-                >
-                  {saving && <Loader2 className="animate-spin" size={14} />}
-                  Save Subscription Price
-                </button>
+                    className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-theme-accent-text text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
+                  >
+                    {saving && <Loader2 className="animate-spin" size={14} />}
+                    Save Subscription Price
+                  </button>
+                </div>
               </form>
             </div>
           </div>

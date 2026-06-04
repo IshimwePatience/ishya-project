@@ -621,6 +621,7 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
               )}
             </div>
           </TableauCard>
+        </div>
       </div>
     </div>
     </div>
