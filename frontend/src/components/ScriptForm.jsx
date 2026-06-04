@@ -124,7 +124,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Title Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Script title</label>
         </div>
@@ -132,7 +132,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Sinamenye - Final Draft"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -141,7 +141,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* File Upload Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Script File</label>
           <p className="text-[10px] text-theme-text-muted-dark mt-1 uppercase tracking-widest">PDF, DOCX, TXT</p>
@@ -175,14 +175,14 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Linked Production Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Linked project</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
@@ -195,7 +195,7 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Actor Assignment */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-4 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors flex items-center gap-2">
             <Users size={16} /> Assigned Actors
@@ -223,20 +223,20 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Version & Status */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Version & status</label>
         </div>
         <div className="w-full md:w-2/3 flex gap-4">
           <input 
             type="text"
-            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark font-mono"
+            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark font-mono"
             placeholder="v1.0"
             value={formData.version}
             onChange={(e) => setFormData({...formData, version: e.target.value})}
           />
           <select 
-            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.status}
             onChange={(e) => setFormData({...formData, status: e.target.value})}
           >
@@ -248,13 +248,13 @@ const ScriptForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Copyright Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Copyright info</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text text-xs leading-relaxed"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text text-xs leading-relaxed"
             placeholder="Legal ownership details..."
             value={formData.copyrightInfo}
             onChange={(e) => setFormData({...formData, copyrightInfo: e.target.value})}

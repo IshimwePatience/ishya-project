@@ -141,24 +141,24 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Basic Info */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Full name</label>
         </div>
         <div className="w-full md:w-2/3 flex gap-4">
-          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="First name" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
-          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Last name" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text" placeholder="First name" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+          <input required type="text" className="w-1/2 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text" placeholder="Last name" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
         </div>
       </div>
 
       {/* Email & Phone */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contact Info</label>
         </div>
         <div className="w-full md:w-2/3 flex gap-4">
-          <input required type="email" className="w-2/3 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="Email (Unique)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-          <input required type="tel" className="w-1/3 bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text" placeholder="+250..." value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+          <input required type="email" className="w-2/3 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text" placeholder="Email (Unique)" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+          <input required type="tel" className="w-1/3 bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text" placeholder="+250..." value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
         </div>
       </div>
 
@@ -199,7 +199,7 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
                 <input 
                   required={formData.createAccount && !initialData?.userId}
                   type="text" 
-                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 text-theme-text text-sm focus:border-theme-accent outline-none transition-all" 
+                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-2 text-theme-text text-sm focus:border-theme-accent outline-none transition-all" 
                   placeholder={initialData?.userId ? "Leave blank to keep current" : "Enter login password"} 
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -211,28 +211,28 @@ const TalentForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Role & Bio */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Primary role</label>
         </div>
         <div className="w-full md:w-2/3">
-          <select required className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text appearance-none" value={formData.specialty} onChange={(e) => setFormData({...formData, specialty: e.target.value})}>
+          <select required className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text appearance-none" value={formData.specialty} onChange={(e) => setFormData({...formData, specialty: e.target.value})}>
             {specialties.map(spec => <option key={spec} value={spec} className="bg-theme-surface">{spec}</option>)}
           </select>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Biography</label>
         </div>
         <div className="w-full md:w-2/3">
-          <textarea className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 text-theme-text min-h-[100px] resize-none text-xs" placeholder="Professional background..." value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} />
+          <textarea className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 text-theme-text min-h-[100px] resize-none text-xs" placeholder="Professional background..." value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} />
         </div>
       </div>
 
       {/* Assigned Productions */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Assigned Productions</label>
           <p className="text-[10px] text-theme-text-muted-dark mt-1">Select all projects this talent is part of</p>

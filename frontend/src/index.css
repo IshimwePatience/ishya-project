@@ -131,7 +131,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   background-color: var(--theme-bg);
 }
 
@@ -143,7 +142,7 @@ html {
 
 @layer components {
   .btn-primary {
-    @apply flex items-center justify-center gap-2 px-6 py-2.5 bg-[#e5a00d] hover:bg-[#cc8e0b] text-black rounded-sm transition-all duration-200 font-bold text-sm;
+    @apply flex items-center justify-center gap-2 px-4 py-2 bg-[#e5a00d] hover:bg-[#cc8e0b] text-black rounded-sm transition-all duration-200 font-bold text-sm;
   }
   
   .glass-card {

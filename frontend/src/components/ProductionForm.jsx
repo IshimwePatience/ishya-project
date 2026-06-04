@@ -64,7 +64,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Title Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Project title</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">The official name of this production</p>
@@ -73,7 +73,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Arena Village"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -82,7 +82,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Category Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Category</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Classification for organization</p>
@@ -90,7 +90,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.categoryId}
             onChange={(e) => {
               const catId = e.target.value;
@@ -113,7 +113,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Budget Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Budget (RWF)</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Estimated production cost</p>
@@ -121,7 +121,7 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input
             type="number"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="0.00"
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
@@ -130,14 +130,14 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Description Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Description</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Detailed overview or synopsis</p>
         </div>
         <div className="w-full md:w-2/3">
           <textarea
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[120px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Brief overview of the project..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -146,14 +146,14 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Genre Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Genre</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Drama, Musical, Documentary"
             value={formData.genre}
             onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
@@ -162,14 +162,14 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Language Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Language</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             value={formData.language}
             onChange={(e) => setFormData({ ...formData, language: e.target.value })}
           />
@@ -177,14 +177,14 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Expected Release Date Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Expected release</label>
         </div>
         <div className="w-full md:w-2/3">
           <input
             type="date"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text appearance-none cursor-pointer"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text appearance-none cursor-pointer"
             value={formData.releaseDate}
             onChange={(e) => setFormData({ ...formData, releaseDate: e.target.value })}
           />
@@ -196,14 +196,14 @@ const ProductionForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="submit"
           disabled={loading || !formData.categoryId}
-          className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {loading ? 'Processing...' : (initialData ? 'Save changes' : 'Create production')}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
+          className="px-5 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

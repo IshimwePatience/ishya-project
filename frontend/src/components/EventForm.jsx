@@ -99,7 +99,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Title Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event title</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">The name of the rehearsal or show</p>
@@ -108,7 +108,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Final Rehearsal - Act 1"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -117,14 +117,14 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Event Type Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event type</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
@@ -144,7 +144,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
 
       {/* Ticket Prices Fields (Only shown for Performance) */}
       {formData.type === 'Performance' && (
-        <div className="py-6 border-b border-theme-border-light px-4 animate-in slide-in-from-top-2 duration-300 space-y-4">
+        <div className="py-2 border-b border-theme-border-light px-4 animate-in slide-in-from-top-2 duration-300 space-y-4">
           <div className="mb-2">
             <h4 className="text-xs font-bold text-theme-accent uppercase tracking-wider">Performance Ticket Pricing</h4>
             <p className="text-[11px] text-theme-text-muted-dark mt-1">Configure admission rates for each class level. Set to 0.00 for free admission.</p>
@@ -215,14 +215,14 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Linked Project Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Linked project</label>
         </div>
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({...formData, productionId: e.target.value})}
           >
@@ -235,7 +235,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Start Time Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Start time</label>
         </div>
@@ -243,7 +243,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="datetime-local"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.startTime}
             onChange={(e) => setFormData({...formData, startTime: e.target.value})}
           />
@@ -251,7 +251,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* End Time Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">End time</label>
         </div>
@@ -259,7 +259,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="datetime-local"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.endTime}
             onChange={(e) => setFormData({...formData, endTime: e.target.value})}
           />
@@ -267,7 +267,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Venue Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Venue</label>
         </div>
@@ -276,7 +276,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" size={16} />
             <input 
               type="text"
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+              className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-12 pr-4 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
               placeholder="e.g. Ishya Theatre Hall"
               value={formData.venue}
               onChange={(e) => setFormData({...formData, venue: e.target.value})}
@@ -286,7 +286,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Event Picture Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4 animate-in slide-in-from-top-2 duration-300">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4 animate-in slide-in-from-top-2 duration-300">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Event Picture / Banner</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Upload an image for public display or ticketing display</p>
@@ -321,7 +321,7 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="px-6 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover border border-theme-border rounded-sm text-xs font-bold text-theme-text transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-6 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover border border-theme-border rounded-sm text-xs font-bold text-theme-text transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {uploading ? (
                   <>
@@ -352,13 +352,13 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Description Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Description</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none placeholder:text-theme-text-muted-dark text-theme-text"
             placeholder="What needs to happen..."
             value={formData.description}
             onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -371,14 +371,14 @@ const EventForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="submit"
           disabled={loading}
-          className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {loading ? 'Processing...' : (initialData ? 'Update event' : 'Schedule event')}
         </button>
         <button 
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
+          className="px-5 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

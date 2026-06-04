@@ -71,7 +71,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Amount Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Amount (RWF)</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Total cost of the item or service</p>
@@ -80,7 +80,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="number"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="0"
             value={formData.amount}
             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -89,7 +89,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Category Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Category</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Expense classification</p>
@@ -97,7 +97,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           >
@@ -109,7 +109,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Production Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Production</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Link this expense to a project</p>
@@ -117,7 +117,7 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.productionId}
             onChange={(e) => setFormData({ ...formData, productionId: e.target.value })}
           >
@@ -130,14 +130,14 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Date Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Date</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="date"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text appearance-none cursor-pointer"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text appearance-none cursor-pointer"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           />
@@ -145,14 +145,14 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Description Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Description</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Details about this expenditure</p>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[120px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all min-h-[80px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Camera rental for day 1 filming"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -165,14 +165,14 @@ const ExpenseForm = ({ onSuccess, onCancel, initialData }) => {
         <button 
           type="submit"
           disabled={loading || !formData.productionId}
-          className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {loading ? 'Processing...' : (initialData ? 'Update expense' : 'Log expense')}
         </button>
         <button 
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
+          className="px-5 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

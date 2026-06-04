@@ -65,7 +65,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Name Fields */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">First name</label>
         </div>
@@ -73,14 +73,14 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.firstName}
             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
           />
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Last name</label>
         </div>
@@ -88,7 +88,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.lastName}
             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
           />
@@ -96,7 +96,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Email Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Email address</label>
         </div>
@@ -104,7 +104,7 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
           <input
             required
             type="email"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -112,14 +112,14 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Role Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">User role</label>
         </div>
         <div className="w-full md:w-2/3">
             <select
               required
-              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+              className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
               value={formData.roleId || ''}
               onChange={(e) => setFormData({ ...formData, roleId: e.target.value })}
             >
@@ -132,13 +132,13 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Status Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-bold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Account status</label>
         </div>
         <div className="w-full md:w-2/3">
           <select
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
           >
@@ -153,14 +153,14 @@ const UserForm = ({ onSuccess, onCancel, initialData }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl disabled:opacity-30"
+          className="px-6 py-2 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-bold flex items-center justify-center shadow-xl disabled:opacity-30"
         >
           {loading ? 'Processing...' : (initialData ? 'Update user' : 'Create user')}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-bold text-theme-text-muted hover:text-theme-text"
+          className="px-5 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm font-bold text-theme-text-muted hover:text-theme-text"
         >
           Cancel
         </button>

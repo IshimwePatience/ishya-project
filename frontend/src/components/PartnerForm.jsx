@@ -70,7 +70,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       )}
 
       {/* Name Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Partner name</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Official business or individual name</p>
@@ -79,7 +79,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <input 
             required
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="e.g. Netflix, Rwanda TV"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -88,7 +88,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Type Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Partner type</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Classification for licensing</p>
@@ -96,7 +96,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <select 
             required
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all appearance-none cursor-pointer text-theme-text"
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           >
@@ -108,7 +108,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Contact Person Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Contact person</label>
           <p className="text-[11px] text-theme-text-muted-dark mt-1">Primary point of contact</p>
@@ -116,7 +116,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Name of representative"
             value={formData.contactPerson}
             onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
@@ -125,14 +125,14 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Email Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Email address</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="email"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="partner@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -141,14 +141,14 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Phone Field */}
-      <div className="flex flex-col md:flex-row md:items-center py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Phone number</label>
         </div>
         <div className="w-full md:w-2/3">
           <input 
             type="text"
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="+250..."
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -157,13 +157,13 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
       </div>
 
       {/* Address Field */}
-      <div className="flex flex-col md:flex-row py-6 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+      <div className="flex flex-col md:flex-row py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
         <div className="w-full md:w-1/3 mb-2 md:mb-0">
           <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Business address</label>
         </div>
         <div className="w-full md:w-2/3">
           <textarea 
-            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-4 py-3 focus:border-theme-accent outline-none transition-all min-h-[100px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
+            className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all min-h-[100px] resize-none text-theme-text placeholder:text-theme-text-muted-dark"
             placeholder="Physical or office location..."
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -177,14 +177,14 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
           <button 
             type="submit"
             disabled={loading || !formData.name}
-            className="px-10 py-3 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
+            className="px-6 py-2 bg-theme-accent text-theme-accent-text hover:bg-theme-accent-hover rounded-sm transition-all font-semibold flex items-center justify-center gap-2 shadow-xl shadow-theme-accent/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
           >
             {loading ? 'Processing...' : (initialData ? 'Update Partner' : 'Register Partner')}
           </button>
           <button 
             type="button"
             onClick={onCancel}
-            className="px-8 py-3 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text cursor-pointer"
+            className="px-5 py-2 bg-theme-input-bg hover:bg-theme-input-bg-hover rounded-sm border border-theme-border transition-all text-sm text-theme-text-muted hover:text-theme-text cursor-pointer"
           >
             Cancel
           </button>
@@ -195,7 +195,7 @@ const PartnerForm = ({ onSuccess, onCancel, initialData }) => {
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="px-6 py-3 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-sm text-sm font-semibold border border-red-500/20 transition-all flex items-center gap-2 cursor-pointer"
+            className="px-6 py-2 bg-red-600/10 hover:bg-red-600/20 text-red-500 rounded-sm text-sm font-semibold border border-red-500/20 transition-all flex items-center gap-2 cursor-pointer"
           >
             <Trash2 size={16} /> Delete Partner
           </button>
