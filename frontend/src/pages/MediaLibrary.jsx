@@ -777,7 +777,7 @@ const MediaLibrary = () => {
                         </>
                       )}
                       {/* Main Poster Card */}
-                      <div className="relative w-full h-full bg-theme-surface border border-theme-border-light rounded-xl overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border z-10">
+                      <div className="absolute inset-0 bg-theme-surface border border-theme-border-light rounded-xl overflow-hidden shadow-2xl transition-all duration-300 group-hover/card:border-theme-border z-10">
                         {a.filePath ? (
                           <img
                             src={a.filePath}
