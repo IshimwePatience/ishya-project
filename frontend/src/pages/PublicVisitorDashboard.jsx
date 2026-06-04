@@ -231,8 +231,8 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
 
                   <div className="mt-3 flex gap-3 pr-2">
                     {/* Avatar */}
-                    <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light">
-                      <img src={logoImg} alt="Ishya" className="w-6 h-6 object-contain" />
+                    <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
+                      {prod.title.charAt(0)}
                     </div>
                     
                     {/* Text Content */}
@@ -474,8 +474,8 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
 
                     <div className="mt-3 flex gap-3 pr-2">
                       {/* Avatar */}
-                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light">
-                        <img src={logoImg} alt="Ishya" className="w-6 h-6 object-contain" />
+                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
+                        {prod.title.charAt(0)}
                       </div>
                       
                       {/* Text Content */}
