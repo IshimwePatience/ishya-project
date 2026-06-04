@@ -23,31 +23,18 @@ import PublicVisitorDashboard from './PublicVisitorDashboard';
 import PartnerDashboard from './PartnerDashboard';
 import ReportDropdown from '../components/ReportDropdown';
 
-const TableauCard = ({ title, subtitle, children, icon: Icon = TrendingUp, className = '' }) => {
+const TableauCard = ({ title, subtitle, children, className = '', noPadding = false }) => {
   return (
     <div className={`bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden flex flex-col group ${className}`}>
       {/* Top Visualization Area */}
-      <div className="bg-theme-bg/50 p-6 flex-1 relative flex flex-col justify-center overflow-hidden">
-        <div className="absolute top-2 right-2 p-1.5 bg-theme-accent text-theme-accent-text rounded-sm shadow-sm opacity-80 group-hover:opacity-100 transition-opacity">
-          <Icon size={14} />
-        </div>
+      <div className={`bg-theme-bg/50 ${noPadding ? '' : 'p-6'} flex-1 relative flex flex-col justify-center overflow-hidden`}>
         {children}
       </div>
 
       {/* Bottom Footer Area */}
-      <div className="border-t border-theme-border-light bg-theme-surface p-3 flex items-center justify-between z-10 relative shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
-        <div className="flex flex-col">
-          <h4 className="text-xs font-bold text-theme-text">{title}</h4>
-          {subtitle && <span className="text-[10px] font-medium text-theme-text-muted-dark mt-0.5">{subtitle}</span>}
-        </div>
-        <div className="flex items-center gap-2.5 text-theme-text-muted-dark">
-          <div className="flex items-center gap-1 hover:text-theme-text transition-colors cursor-pointer">
-            <Eye size={12} />
-            <span className="text-[10px] font-mono">{Math.floor(Math.random() * 900) + 100}</span>
-          </div>
-          <Star size={12} className="hover:text-theme-accent hover:fill-theme-accent transition-colors cursor-pointer" />
-          <MoreHorizontal size={14} className="hover:text-theme-text transition-colors cursor-pointer" />
-        </div>
+      <div className="border-t border-theme-border-light bg-theme-surface p-3 flex flex-col justify-center z-10 relative shadow-[0_-4px_10px_rgba(0,0,0,0.02)] min-h-[50px]">
+        <h4 className="text-xs font-bold text-theme-text">{title}</h4>
+        {subtitle && <span className="text-[10px] font-medium text-theme-text-muted-dark mt-0.5">{subtitle}</span>}
       </div>
     </div>
   );
@@ -275,7 +262,7 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 const BarChart = ({ data, zoom }) => {
   const maxVal = Math.max(...data.map(d => d.value), 100);
   return (
-    <TableauCard title="Production Budgets" subtitle="Budget overview for top 5 productions">
+    <TableauCard title="Production Budgets" subtitle="Budget overview for top 5 productions" noPadding>
       <div className="h-44 flex items-end gap-5 w-full">
         {data.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center text-xs text-theme-text-muted-dark italic">No budget data available</div>
@@ -324,10 +311,10 @@ const DoughnutChart = ({ data }) => {
   const chartTotal = data.length > 0 ? total : 4;
 
   return (
-    <TableauCard title="Talent Specialty Roster" subtitle="Breakdown of troupe roles">
+    <TableauCard title="Talent Specialty Roster" subtitle="Breakdown of troupe roles" noPadding>
       <motion.div 
         whileHover={{ scale: 1.02 }}
-        className="flex items-center gap-6 cursor-pointer"
+        className="flex items-center justify-center gap-8 cursor-pointer h-[200px]"
       >
         <div className="relative w-24 h-24 shrink-0">
           <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
@@ -428,12 +415,12 @@ const AreaChart = ({ data }) => {
     : '';
 
   return (
-    <TableauCard title="System Role Allocation" subtitle="User distribution across roles">
+    <TableauCard title="System Role Allocation" subtitle="User distribution across roles" noPadding>
       <motion.div 
         whileHover={{ scale: 1.02 }}
-        className="relative w-full cursor-pointer"
+        className="w-full h-[200px] cursor-pointer"
       >
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible drop-shadow-xl">
           <defs>
             <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="var(--theme-accent)" stopOpacity="0.25" />
@@ -582,7 +569,7 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
 
         {/* Right Column: Upcoming Troupe Meetings & Schedules */}
         <div className="flex flex-col h-full">
-          <TableauCard title="Upcoming Meetings & Calls" subtitle="Schedule overview" icon={Calendar} className="h-full min-h-[400px]">
+          <TableauCard title="Upcoming Meetings & Calls" subtitle="Schedule overview" className="h-full min-h-[400px]" noPadding>
             <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1 no-scrollbar pt-2 w-full">
               {events.length === 0 ? (
                 <div className="text-center py-16 text-theme-text-muted-dark text-xs italic">
