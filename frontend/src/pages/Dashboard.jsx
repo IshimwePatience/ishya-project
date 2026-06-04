@@ -297,209 +297,67 @@ const BarChart = ({ data, zoom }) => {
   );
 };
 
-// 📊 Custom High-End SVG Doughnut Chart for Talent Specialties
+// 📊 Tableau-style Forecast Line Chart (Replacing Doughnut)
 const DoughnutChart = ({ data }) => {
-  const total = data.reduce((acc, curr) => acc + curr.count, 0) || 1;
-  let accumulatedAngle = 0;
-
-  // Fallback if data is empty
   const chartData = data.length > 0 ? data : [
-    { label: 'Actors', count: 2 },
-    { label: 'Directors', count: 1 },
-    { label: 'Crew', count: 1 }
+    { label: 'Actors', count: 2 }, { label: 'Directors', count: 5 }, { label: 'Crew', count: 3 }
   ];
-  const chartTotal = data.length > 0 ? total : 4;
+  const maxVal = Math.max(...chartData.map(d => d.count), 1);
+  const width = 300;
+  const height = 150;
+  
+  // Generate squiggly line path
+  const generatePath = (data, offset) => {
+    return data.map((d, i) => {
+      const x = (i / (data.length - 1 || 1)) * width;
+      const y = height - ((d.count + offset) / (maxVal * 2)) * height - 20;
+      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+    }).join(' ');
+  };
 
   return (
-    <TableauCard title="Talent Specialty Roster" subtitle="Breakdown of troupe roles" noPadding>
-      <motion.div 
-        whileHover={{ scale: 1.02 }}
-        className="flex items-center justify-center gap-8 cursor-pointer h-[200px]"
-      >
-        <div className="relative w-24 h-24 shrink-0">
-          <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
-            {chartData.map((d, i) => {
-              const percentage = (d.count / chartTotal) * 100;
-              const strokeDash = `${percentage} ${100 - percentage}`;
-              const strokeOffset = 100 - accumulatedAngle;
-              accumulatedAngle += percentage;
-              
-              const colors = ['var(--theme-accent)', '#f5c842', '#3b82f6', '#10b981', '#ec4899'];
-              const color = colors[i % colors.length];
-              
-              return (
-                <motion.circle
-                  key={i}
-                  cx="18"
-                  cy="18"
-                  r="15.915"
-                  fill="transparent"
-                  stroke={color}
-                  strokeWidth="3.2"
-                  strokeDashoffset={strokeOffset}
-                  initial={{ strokeDasharray: "0 100" }}
-                  animate={{ strokeDasharray: strokeDash }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="hover:stroke-[4px] transition-all"
-                />
-              );
-            })}
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <motion.span 
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-lg font-black text-theme-text"
-            >
-              {chartTotal}
-            </motion.span>
-            <span className="text-[8px] text-theme-text-muted font-bold uppercase tracking-wider">Troupe</span>
-          </div>
+    <TableauCard title="Talent Specialty Forecast" subtitle="Trending specialty distribution" noPadding>
+      <div className="w-full h-[200px] bg-[#6c757d] relative overflow-hidden flex items-end">
+        {/* Top right trending tag (like screenshot) */}
+        <div className="absolute top-0 right-0 bg-[#3b82f6] text-white text-[9px] font-bold px-2 py-1 flex items-center gap-1">
+          <TrendingUp size={10} /> Trending
         </div>
-        
-        <div className="flex-1 space-y-2.5 min-w-0">
-          {chartData.map((d, i) => {
-            const colors = ['var(--theme-accent)', '#f5c842', '#3b82f6', '#10b981', '#ec4899'];
-            const color = colors[i % colors.length];
-            return (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="flex items-center justify-between text-[10px] gap-2 hover:bg-theme-bg p-1 rounded-sm transition-colors"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                  <span className="truncate text-theme-text-muted font-semibold">{d.label || 'Other'}</span>
-                </div>
-                <span className="text-theme-text font-mono shrink-0">{d.count} ({Math.round((d.count / chartTotal) * 100)}%)</span>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full drop-shadow-md">
+          <path d={generatePath(chartData, 0)} fill="none" stroke="#2563eb" strokeWidth="1.5" />
+          <path d={generatePath(chartData, maxVal * 0.5)} fill="none" stroke="#ea580c" strokeWidth="1.5" opacity="0.7" />
+        </svg>
+      </div>
     </TableauCard>
   );
 };
 
-// 📊 Custom High-End SVG Glowing Area Chart for User Roles
+// 📊 Tableau-style Horizontal Bar Chart (Replacing Area)
 const AreaChart = ({ data }) => {
-  const maxVal = Math.max(...data.map(d => d.count), 1);
-  const width = 400;
-  const height = 150;
-  const padding = 20;
-  const chartWidth = width - padding * 2;
-  const chartHeight = height - padding * 2;
-  
   const chartData = data.length > 0 ? data : [
-    { label: 'Admin', count: 2 },
-    { label: 'Partner', count: 2 },
-    { label: 'Talent', count: 1 },
-    { label: 'Public', count: 2 }
+    { label: 'Admin', count: 5 }, { label: 'Partner', count: 3 }, { label: 'Public', count: 8 }
   ];
-  
-  const points = chartData.map((d, i) => {
-    const x = padding + (i / (chartData.length - 1 || 1)) * chartWidth;
-    const y = height - padding - (d.count / maxVal) * chartHeight;
-    return { x, y };
-  });
-  
-  const pathD = points.length > 0 
-    ? `M ${points[0].x} ${points[0].y} ` + points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
-    : '';
-    
-  const areaD = points.length > 0
-    ? `${pathD} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`
-    : '';
+  const maxVal = Math.max(...chartData.map(d => d.count), 1);
 
   return (
     <TableauCard title="System Role Allocation" subtitle="User distribution across roles" noPadding>
-      <motion.div 
-        whileHover={{ scale: 1.02 }}
-        className="w-full h-[200px] cursor-pointer"
-      >
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible drop-shadow-xl">
-          <defs>
-            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--theme-accent)" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="var(--theme-accent)" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          
-          {/* Horizontal Gridlines */}
-          {[0, 0.5, 1].map((p, i) => {
-            const y = padding + p * chartHeight;
-            return (
-              <line 
-                key={i} 
-                x1={padding} 
-                y1={y} 
-                x2={width - padding} 
-                y2={y} 
-                stroke="rgba(128,128,128,0.2)" 
-                strokeDasharray="2 4" 
+      <div className="w-full h-[200px] bg-white p-4 flex flex-col justify-center gap-3">
+        {chartData.map((d, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="text-[9px] font-semibold text-gray-500 w-12 truncate text-right">{d.label}</span>
+            <div className="flex-1 h-3 bg-gray-100 rounded-sm overflow-hidden relative flex items-center">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${(d.count / maxVal) * 100}%` }}
+                transition={{ duration: 1, delay: i * 0.1 }}
+                className="h-full bg-[#3b82f6]"
               />
-            );
-          })}
-          
-          {/* Area Fill */}
-          {areaD && (
-            <motion.path 
-              d={areaD} 
-              fill="url(#areaGrad)" 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 1 }}
-            />
-          )}
-          
-          {/* Glowing Path Line */}
-          {pathD && (
-            <motion.path 
-              d={pathD} 
-              fill="transparent" 
-              stroke="var(--theme-accent)" 
-              strokeWidth="2.5" 
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            />
-          )}
-          
-          {/* Line Vertex Anchors */}
-          {points.map((p, i) => (
-            <g key={i} className="group/vertex cursor-pointer">
-              <motion.circle 
-                cx={p.x} 
-                cy={p.y} 
-                r="4.5" 
-                fill="#121212" 
-                stroke="var(--theme-accent)" 
-                strokeWidth="2.5" 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.0 + i * 0.15, type: "spring", stiffness: 150 }}
-              />
-              <circle 
-                cx={p.x} 
-                cy={p.y} 
-                r="10" 
-                fill="transparent" 
-                className="hover:fill-theme-accent/30 transition-all duration-300"
-              />
-            </g>
-          ))}
-        </svg>
-        
-        {/* X Axis Labels */}
-        <div className="flex justify-between px-2.5 pt-1">
-          {chartData.map((d, i) => (
-            <span key={i} className="text-[9px] font-black text-theme-text-muted tracking-wider uppercase truncate max-w-[60px] text-center" title={d.label}>{d.label}</span>
-          ))}
-        </div>
-      </motion.div>
+              {/* Add a red target line like the screenshot */}
+              <div className="absolute right-[20%] top-0 bottom-0 w-0.5 bg-red-500 z-10" />
+            </div>
+            <span className="text-[9px] text-gray-400 font-mono w-4">{d.count}</span>
+          </div>
+        ))}
+      </div>
     </TableauCard>
   );
 };
