@@ -180,10 +180,10 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               const actualProgress = watchItem ? (watchItem.currentTime / watchItem.duration) * 100 : 0;
 
               return (
-                <div
-                  key={isContinue ? item.id : prod.id}
-                  className={`flex-shrink-0 ${isVertical ? 'w-[60vw] sm:w-64' : 'w-[80vw] sm:w-80'} group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2`}
-                  style={{ scrollSnapAlign: 'start' }}
+                  <div
+                    key={isContinue ? item.id : prod.id}
+                    className={`flex-shrink-0 ${isVertical ? 'w-[80vw] sm:w-[400px]' : 'w-[85vw] sm:w-[440px]'} group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2`}
+                    style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
                     if (isContinue) {
                       const finalMediaId = item.mediaId || item.media_id;
@@ -193,11 +193,11 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     }
                   }}
                 >
-                  <div className="aspect-video bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
+                  <div className="pt-[56.25%] bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
                     <img
                       src={getPoster(prod)}
                       alt={prod.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
 
                     {/* Duration / Status badge at bottom right */}
@@ -232,20 +232,12 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                   <div className="mt-3 flex gap-3 pr-2">
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                      <h4 className="text-base font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
                         {prod.title}
                       </h4>
-                      <div className="text-[12px] text-theme-text-muted mt-1 truncate">
-                        Ishya Studios
+                      <div className="text-[13px] text-theme-text-muted mt-1 truncate">
+                        {prod.genre}
                       </div>
-                      <div className="text-[12px] text-theme-text-muted truncate">
-                        {new Date(prod.releaseDate).getFullYear()} • 1.2M views
-                      </div>
-                    </div>
-
-                    {/* Menu dots */}
-                    <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
                     </div>
                   </div>
                 </div>
@@ -277,8 +269,8 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             <div className="h-8 w-48 bg-theme-input-bg animate-pulse rounded-sm ml-2" />
             <div className="flex gap-4 overflow-hidden">
               {[1, 2, 3, 4].map(j => (
-                <div key={j} className="flex-shrink-0 w-80">
-                  <div className="w-full aspect-video bg-theme-input-bg animate-pulse rounded-xl" />
+                <div key={j} className="flex-shrink-0 w-[440px]">
+                  <div className="w-full pt-[56.25%] bg-theme-input-bg animate-pulse rounded-xl" />
                   <div className="mt-3 space-y-2">
                     <div className="h-4 w-3/4 bg-theme-input-bg animate-pulse rounded" />
                     <div className="h-3 w-1/2 bg-theme-input-bg animate-pulse rounded" />
@@ -441,7 +433,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 md:gap-x-6 gap-y-8 md:gap-y-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-10 md:gap-y-12">
               {productions
                 .filter(p =>
                   p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
@@ -453,11 +445,11 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     className="group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2"
                     onClick={() => navigate(`/dashboard/production/${prod.id}`)}
                   >
-                    <div className="aspect-video bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
+                    <div className="w-full pt-[56.25%] bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
                       <img
                         src={getPoster(prod)}
                         alt={prod.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       
                       {/* Duration / Status badge at bottom right */}
@@ -476,20 +468,12 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     <div className="mt-3 flex gap-3 pr-2">
                       {/* Text Content */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
+                        <h4 className="text-base font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
                           {prod.title}
                         </h4>
-                        <div className="text-[12px] text-theme-text-muted mt-1 truncate">
-                          Ishya Studios
+                        <div className="text-[13px] text-theme-text-muted mt-1 truncate">
+                          {prod.genre}
                         </div>
-                        <div className="text-[12px] text-theme-text-muted truncate">
-                          {new Date(prod.releaseDate).getFullYear()} • 1.2M views
-                        </div>
-                      </div>
-
-                      {/* Menu dots */}
-                      <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
                       </div>
                     </div>
                   </div>

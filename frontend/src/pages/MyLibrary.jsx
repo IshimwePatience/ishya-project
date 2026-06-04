@@ -160,7 +160,7 @@ const MyLibrary = () => {
           className="grid gap-6"
           style={{
             gridTemplateColumns: viewMode === 'grid'
-              ? `repeat(auto-fill, minmax(${220 + (zoom - 50) * 2}px, 1fr))`
+              ? `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))`
               : '1fr'
           }}
         >
@@ -262,7 +262,7 @@ const MyLibrary = () => {
                   /* --- GRID VIEW MODE (Differentiated and without uppercase) --- */
                   <div className="flex flex-col cursor-pointer" onClick={() => handleOpenModal(prod)}>
                     {/* Poster Card Container with stacked cards effect for Series */}
-                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl shadow-sm">
+                    <div className="relative mb-3 group/card w-full pt-[56.25%] rounded-xl shadow-sm">
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
@@ -320,9 +320,6 @@ const MyLibrary = () => {
                           >
                             <Download size={11} /> Access
                           </button>
-                          <div className="shrink-0 ml-2">
-                            <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </div>
                         </div>
                       </div>
                     </div>

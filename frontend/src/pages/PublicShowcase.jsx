@@ -192,7 +192,7 @@ const PublicShowcase = () => {
           >
             <div className="max-w-7xl mx-auto space-y-12">
               <h2 className="text-2xl font-black tracking-tight">Featured Premieres</h2>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-y-16 md:gap-y-24 gap-x-6 md:gap-x-12 pt-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {releasedProductions.length > 0 ? (
                   releasedProductions.slice(0, 10).map((prod, index) => (
                     <motion.div
@@ -204,11 +204,11 @@ const PublicShowcase = () => {
                       }}
                       className="relative group cursor-pointer p-2 hover:bg-white/5 rounded-2xl transition-colors -m-2"
                     >
-                      <div className="relative aspect-video overflow-hidden rounded-xl bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-all shadow-sm">
+                      <div className="relative pt-[56.25%] overflow-hidden rounded-xl bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-all shadow-sm">
                         <img
                           src={getPoster(prod.id)}
                           alt={prod.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-black/80 backdrop-blur-md rounded text-[11px] font-medium text-white z-10">
                           {prod.type}
@@ -223,18 +223,12 @@ const PublicShowcase = () => {
 
                       <div className="mt-3 flex gap-3 pr-2">
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
+                          <h4 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
                             {prod.title}
                           </h4>
-                          <div className="text-[12px] text-gray-400 mt-1 truncate">
-                            Ishya Studios
+                          <div className="text-[13px] text-gray-400 mt-1 truncate">
+                            {prod.genre}
                           </div>
-                          <div className="text-[12px] text-gray-400 truncate">
-                            {prod.genre} • Featured
-                          </div>
-                        </div>
-                        <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreVertical size={16} className="text-gray-400 hover:text-white" />
                         </div>
                       </div>
                     </motion.div>

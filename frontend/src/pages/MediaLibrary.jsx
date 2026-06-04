@@ -740,7 +740,7 @@ const MediaLibrary = () => {
           ) : posters.length > 0 ? (
             <div
               className="grid gap-6"
-              style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))` }}
+              style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))` }}
             >
 {posters.map((a) => {
                 const prod = productions.find(p => p.id === a.productionId);
@@ -767,7 +767,7 @@ const MediaLibrary = () => {
                     }}
                   >
                     {/* Poster Card Container with stacked cards effect for Series */}
-                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl shadow-sm">
+                    <div className="relative mb-3 group/card w-full pt-[56.25%] rounded-xl shadow-sm">
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
@@ -831,9 +831,6 @@ const MediaLibrary = () => {
                         <div className="text-[12px] text-theme-text-muted truncate">
                           {prod ? new Date(prod.createdAt).getFullYear() : new Date().getFullYear()} • Vault
                         </div>
-                      </div>
-                      <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <MoreVertical size={16} className="text-theme-text-muted hover:text-theme-text" />
                       </div>
                     </div>
                   </motion.div>
