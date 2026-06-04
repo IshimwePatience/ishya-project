@@ -202,7 +202,7 @@ const PublicShowcase = () => {
                         navigate(`/showcase/${prod.id}`);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="relative group cursor-pointer"
+                      className="relative group cursor-pointer p-2 hover:bg-white/5 rounded-2xl transition-colors -m-2"
                     >
                       <div className="relative aspect-video overflow-hidden rounded-xl bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-all shadow-sm">
                         <img
@@ -222,9 +222,6 @@ const PublicShowcase = () => {
                       </div>
 
                       <div className="mt-3 flex gap-3 pr-2">
-                        <div className="shrink-0 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-white/10 text-white font-bold text-xs uppercase">
-                          {prod.title.charAt(0)}
-                        </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
                             {prod.title}

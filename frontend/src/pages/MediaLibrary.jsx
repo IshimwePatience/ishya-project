@@ -728,7 +728,13 @@ const MediaLibrary = () => {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="aspect-[2/3] bg-theme-input-bg animate-pulse rounded-sm" />
+                <div key={i} className="flex flex-col gap-3">
+                  <div className="w-full aspect-video bg-theme-input-bg animate-pulse rounded-xl" />
+                  <div className="space-y-2">
+                    <div className="h-4 w-3/4 bg-theme-input-bg animate-pulse rounded" />
+                    <div className="h-3 w-1/2 bg-theme-input-bg animate-pulse rounded" />
+                  </div>
+                </div>
               ))}
             </div>
           ) : posters.length > 0 ? (
@@ -736,7 +742,7 @@ const MediaLibrary = () => {
               className="grid gap-6"
               style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${200 + (zoom - 50) * 2}px, 1fr))` }}
             >
-              {posters.map((a) => {
+{posters.map((a) => {
                 const prod = productions.find(p => p.id === a.productionId);
                 const cleanName = a.fileName.replace(' - Poster', '').replace(' - Trailer', '');
                 const cardTitle = cleanName || (prod ? prod.title : 'Untitled');
@@ -745,19 +751,23 @@ const MediaLibrary = () => {
                 return (
                   <motion.div
                     key={a.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="group cursor-pointer"
-                    onClick={() => {
-                      if (a.productionId && prod) {
-                        navigate(`/dashboard/media/${a.productionId}`);
-                      } else {
-                        handleEdit(a);
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="flex flex-col cursor-pointer group p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2"
+                    onClick={(e) => {
+                      if (!e.target.closest('button')) {
+                        if (a.productionId && prod) {
+                          navigate(`/dashboard/media/${a.productionId}`);
+                        } else {
+                          handleEdit(a);
+                        }
                       }
                     }}
                   >
                     {/* Poster Card Container with stacked cards effect for Series */}
-                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl overflow-hidden shadow-sm">
+                    <div className="relative mb-3 group/card w-full aspect-video rounded-xl shadow-sm">
                       {isSeries && (
                         <>
                           {/* Layer 2: backmost */}
@@ -776,22 +786,9 @@ const MediaLibrary = () => {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">
-                            {getIcon(a.fileType)}
+                            <Film size={40} />
                           </div>
                         )}
-
-                        {/* Type tag (Series or Movie) */}
-                        <div className="absolute top-3 left-3 z-10">
-                          {isSeries ? (
-                            <div className="bg-indigo-600/90 text-theme-text text-[9px] font-semibold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
-                              <Tv size={10} /> Series
-                            </div>
-                          ) : (
-                            <div className="bg-theme-accent/95 text-theme-accent-text text-[9px] font-bold tracking-normal px-2 py-0.5 rounded-sm shadow-md flex items-center gap-1">
-                              <Film size={10} /> Movie
-                            </div>
-                          )}
-                        </div>
 
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center z-20">
                           <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center shadow-lg">
@@ -820,9 +817,6 @@ const MediaLibrary = () => {
 
                     {/* Metadata & Title layout in YouTube style */}
                     <div className="flex gap-3 pr-2">
-                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
-                        {cardTitle.charAt(0)}
-                      </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
                           {cardTitle}

@@ -182,7 +182,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
               return (
                 <div
                   key={isContinue ? item.id : prod.id}
-                  className={`flex-shrink-0 ${isVertical ? 'w-[60vw] sm:w-64' : 'w-[80vw] sm:w-80'} group cursor-pointer`}
+                  className={`flex-shrink-0 ${isVertical ? 'w-[60vw] sm:w-64' : 'w-[80vw] sm:w-80'} group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2`}
                   style={{ scrollSnapAlign: 'start' }}
                   onClick={() => {
                     if (isContinue) {
@@ -230,11 +230,6 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                   </div>
 
                   <div className="mt-3 flex gap-3 pr-2">
-                    {/* Avatar */}
-                    <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
-                      {prod.title.charAt(0)}
-                    </div>
-                    
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
@@ -282,7 +277,13 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             <div className="h-8 w-48 bg-theme-input-bg animate-pulse rounded-sm ml-2" />
             <div className="flex gap-4 overflow-hidden">
               {[1, 2, 3, 4].map(j => (
-                <div key={j} className="flex-shrink-0 w-80 aspect-video bg-theme-input-bg animate-pulse rounded-sm" />
+                <div key={j} className="flex-shrink-0 w-80">
+                  <div className="w-full aspect-video bg-theme-input-bg animate-pulse rounded-xl" />
+                  <div className="mt-3 space-y-2">
+                    <div className="h-4 w-3/4 bg-theme-input-bg animate-pulse rounded" />
+                    <div className="h-3 w-1/2 bg-theme-input-bg animate-pulse rounded" />
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -449,7 +450,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                 .map((prod) => (
                   <div
                     key={prod.id}
-                    className="group cursor-pointer"
+                    className="group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2"
                     onClick={() => navigate(`/dashboard/production/${prod.id}`)}
                   >
                     <div className="aspect-video bg-theme-surface rounded-xl overflow-hidden relative shadow-sm">
@@ -473,11 +474,6 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                     </div>
 
                     <div className="mt-3 flex gap-3 pr-2">
-                      {/* Avatar */}
-                      <div className="shrink-0 w-9 h-9 rounded-full bg-theme-input-bg flex items-center justify-center overflow-hidden border border-theme-border-light text-theme-text font-bold text-xs uppercase">
-                        {prod.title.charAt(0)}
-                      </div>
-                      
                       {/* Text Content */}
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
