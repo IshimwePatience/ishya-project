@@ -10,7 +10,11 @@ import {
   Download,
   ExternalLink,
   Play,
-  Users
+  Users,
+  MoreHorizontal,
+  TrendingUp,
+  Star,
+  Eye
 } from 'lucide-react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
@@ -18,6 +22,36 @@ import usePreferences from '../hooks/usePreferences';
 import PublicVisitorDashboard from './PublicVisitorDashboard';
 import PartnerDashboard from './PartnerDashboard';
 import ReportDropdown from '../components/ReportDropdown';
+
+const TableauCard = ({ title, subtitle, children, icon: Icon = TrendingUp, className = '' }) => {
+  return (
+    <div className={`bg-theme-surface border border-theme-border-light rounded-sm overflow-hidden flex flex-col group ${className}`}>
+      {/* Top Visualization Area */}
+      <div className="bg-theme-bg/50 p-6 flex-1 relative flex flex-col justify-center overflow-hidden">
+        <div className="absolute top-2 right-2 p-1.5 bg-theme-accent text-theme-accent-text rounded-sm shadow-sm opacity-80 group-hover:opacity-100 transition-opacity">
+          <Icon size={14} />
+        </div>
+        {children}
+      </div>
+
+      {/* Bottom Footer Area */}
+      <div className="border-t border-theme-border-light bg-theme-surface p-3 flex items-center justify-between z-10 relative shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
+        <div className="flex flex-col">
+          <h4 className="text-xs font-bold text-theme-text">{title}</h4>
+          {subtitle && <span className="text-[10px] font-medium text-theme-text-muted-dark mt-0.5">{subtitle}</span>}
+        </div>
+        <div className="flex items-center gap-2.5 text-theme-text-muted-dark">
+          <div className="flex items-center gap-1 hover:text-theme-text transition-colors cursor-pointer">
+            <Eye size={12} />
+            <span className="text-[10px] font-mono">{Math.floor(Math.random() * 900) + 100}</span>
+          </div>
+          <Star size={12} className="hover:text-theme-accent hover:fill-theme-accent transition-colors cursor-pointer" />
+          <MoreHorizontal size={14} className="hover:text-theme-text transition-colors cursor-pointer" />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
   const [scripts, setScripts] = useState([]);
@@ -241,22 +275,20 @@ const ActorDashboard = ({ user, zoom, setZoom, viewMode, setViewMode }) => {
 const BarChart = ({ data, zoom }) => {
   const maxVal = Math.max(...data.map(d => d.value), 100);
   return (
-    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
-      <div className="flex items-center justify-between">
-        <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
-          Production Budgets
-        </h4>
-        <span className="text-[10px] text-theme-text-muted-dark font-bold uppercase font-mono">Budget (RWF)</span>
-      </div>
-      <div className="h-44 flex items-end gap-5 pt-6 border-b border-theme-border-light pb-2">
+    <TableauCard title="Production Budgets" subtitle="Budget overview for top 5 productions">
+      <div className="h-44 flex items-end gap-5 w-full">
         {data.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center text-xs text-theme-text-muted-dark italic">No budget data available</div>
         ) : (
           data.map((d, i) => {
             const pct = Math.max((d.value / maxVal) * 100, 4); // Min 4% height to be visible
             return (
-              <div key={i} className="flex-1 flex flex-col items-center gap-2.5 group relative h-full justify-end">
-                <div className="w-full bg-theme-surface hover:bg-theme-input-bg transition-all rounded-sm relative flex items-end h-full">
+              <motion.div 
+                key={i} 
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="flex-1 flex flex-col items-center gap-2.5 group relative h-full justify-end cursor-pointer"
+              >
+                <div className="w-full bg-theme-surface hover:bg-theme-input-bg transition-all rounded-sm relative flex items-end h-full shadow-sm">
                   <motion.div 
                     initial={{ height: 0 }}
                     animate={{ height: `${pct}%` }}
@@ -264,17 +296,17 @@ const BarChart = ({ data, zoom }) => {
                     className="w-full bg-gradient-to-t from-theme-accent to-[#f5c842] rounded-sm shadow-[0_0_12px_rgba(229,160,13,0.2)]"
                   />
                   {/* Glassmorphic interactive Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-theme-input-bg border border-theme-border text-[9px] font-bold text-theme-accent px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-theme-surface border border-theme-border-light text-[9px] font-bold text-theme-text px-2 py-1 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 font-mono tracking-wider">
                     {Number(d.value).toLocaleString()} RWF
                   </div>
                 </div>
                 <span className="text-[9px] font-semibold text-theme-text-muted group-hover:text-theme-text transition-colors truncate w-14 text-center">{d.label}</span>
-              </div>
+              </motion.div>
             );
           })
         )}
       </div>
-    </div>
+    </TableauCard>
   );
 };
 
@@ -292,11 +324,11 @@ const DoughnutChart = ({ data }) => {
   const chartTotal = data.length > 0 ? total : 4;
 
   return (
-    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
-      <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
-        Talent Specialty Roster
-      </h4>
-      <div className="flex items-center gap-6 pt-3">
+    <TableauCard title="Talent Specialty Roster" subtitle="Breakdown of troupe roles">
+      <motion.div 
+        whileHover={{ scale: 1.02 }}
+        className="flex items-center gap-6 cursor-pointer"
+      >
         <div className="relative w-24 h-24 shrink-0">
           <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
             {chartData.map((d, i) => {
@@ -321,11 +353,12 @@ const DoughnutChart = ({ data }) => {
                   initial={{ strokeDasharray: "0 100" }}
                   animate={{ strokeDasharray: strokeDash }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
+                  className="hover:stroke-[4px] transition-all"
                 />
               );
             })}
           </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <motion.span 
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -348,7 +381,7 @@ const DoughnutChart = ({ data }) => {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="flex items-center justify-between text-[10px] gap-2"
+                className="flex items-center justify-between text-[10px] gap-2 hover:bg-theme-bg p-1 rounded-sm transition-colors"
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
@@ -359,8 +392,8 @@ const DoughnutChart = ({ data }) => {
             );
           })}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </TableauCard>
   );
 };
 
@@ -395,11 +428,11 @@ const AreaChart = ({ data }) => {
     : '';
 
   return (
-    <div className="bg-theme-surface border border-theme-border-light p-6 rounded-sm space-y-4 shadow-lg shadow-black/10">
-      <h4 className="text-[11px] font-bold text-theme-text uppercase tracking-widest">
-        System Role Allocation
-      </h4>
-      <div className="relative pt-3">
+    <TableauCard title="System Role Allocation" subtitle="User distribution across roles">
+      <motion.div 
+        whileHover={{ scale: 1.02 }}
+        className="relative w-full cursor-pointer"
+      >
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
           <defs>
             <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -418,7 +451,7 @@ const AreaChart = ({ data }) => {
                 y1={y} 
                 x2={width - padding} 
                 y2={y} 
-                stroke="rgba(255,255,255,0.05)" 
+                stroke="rgba(128,128,128,0.2)" 
                 strokeDasharray="2 4" 
               />
             );
@@ -450,7 +483,7 @@ const AreaChart = ({ data }) => {
           
           {/* Line Vertex Anchors */}
           {points.map((p, i) => (
-            <g key={i} className="group cursor-pointer">
+            <g key={i} className="group/vertex cursor-pointer">
               <motion.circle 
                 cx={p.x} 
                 cy={p.y} 
@@ -467,20 +500,20 @@ const AreaChart = ({ data }) => {
                 cy={p.y} 
                 r="10" 
                 fill="transparent" 
-                className="hover:fill-theme-accent/15 transition-all duration-300"
+                className="hover:fill-theme-accent/30 transition-all duration-300"
               />
             </g>
           ))}
         </svg>
         
         {/* X Axis Labels */}
-        <div className="flex justify-between px-2.5 pt-3">
+        <div className="flex justify-between px-2.5 pt-1">
           {chartData.map((d, i) => (
-            <span key={i} className="text-[9px] font-black text-theme-text-muted tracking-wider uppercase">{d.label}</span>
+            <span key={i} className="text-[9px] font-black text-theme-text-muted tracking-wider uppercase truncate max-w-[60px] text-center" title={d.label}>{d.label}</span>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </TableauCard>
   );
 };
 
@@ -532,7 +565,11 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
       </div>
 
       {/* 📊 TWO-COLUMN LAYOUT: CHARTS & EVENTS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="space-y-4">
+        <h3 className="text-sm font-semibold text-theme-text flex items-center gap-2 border-b border-theme-border-light pb-2">
+          Recommendations
+        </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Column: Visual Analytics Charts */}
         <div className="lg:col-span-2 space-y-8">
@@ -544,21 +581,21 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
         </div>
 
         {/* Right Column: Upcoming Troupe Meetings & Schedules */}
-        <div className="space-y-6">
-          <div className="p-6 space-y-6">
-            <h3 className="text-xs font-bold text-theme-text uppercase tracking-widest border-b border-theme-border-light pb-3">
-              Upcoming Meetings & Calls
-            </h3>
-            
-            <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
+        <div className="flex flex-col h-full">
+          <TableauCard title="Upcoming Meetings & Calls" subtitle="Schedule overview" icon={Calendar} className="h-full min-h-[400px]">
+            <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1 no-scrollbar pt-2 w-full">
               {events.length === 0 ? (
                 <div className="text-center py-16 text-theme-text-muted-dark text-xs italic">
                   No upcoming meetings scheduled.
                 </div>
               ) : (
                 events.map((event) => (
-                  <div key={event.id} className="p-4 bg-theme-surface border border-theme-border-light rounded-sm flex items-start gap-4 hover:bg-theme-input-bg transition-colors relative group">
-                    <div className="w-10 h-10 bg-theme-bg flex flex-col items-center justify-center text-theme-accent rounded-sm shrink-0 border border-theme-border-light">
+                  <motion.div 
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    key={event.id} 
+                    className="p-4 bg-theme-surface border border-theme-border-light rounded-sm flex items-start gap-4 hover:bg-theme-bg transition-colors relative cursor-pointer shadow-sm"
+                  >
+                    <div className="w-10 h-10 bg-theme-bg flex flex-col items-center justify-center text-theme-accent rounded-sm shrink-0 border border-theme-border-light shadow-inner">
                       <span className="text-[8px] font-black uppercase tracking-wider">
                         {new Date(event.startTime).toLocaleString('default', { month: 'short' })}
                       </span>
@@ -579,13 +616,13 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
                       <h4 className="text-xs font-bold text-theme-text group-hover:text-theme-accent transition-colors truncate">{event.title}</h4>
                       <p className="text-[9px] text-theme-text-muted leading-normal truncate">{event.description || 'No overview provided.'}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))
               )}
             </div>
-          </div>
-        </div>
+          </TableauCard>
       </div>
+    </div>
     </div>
   );
 };
@@ -593,17 +630,19 @@ const StaffDashboard = ({ stats, events, loading, zoom, setZoom, viewMode, setVi
 // Simple Stat Card Renderer
 const StatCard = ({ label, value, zoom, to }) => {
   const content = (
-    <div
-      className={`bg-theme-surface rounded-sm border border-theme-border-light group hover:bg-theme-input-bg transition-all p-6 ${to ? 'cursor-pointer hover:border-theme-accent hover:shadow-lg' : ''}`}
-      style={{ padding: `${1.5 * (zoom / 50)}rem` }}
-    >
-      <div className="text-xs font-semibold text-theme-text-muted-dark mb-1.5">{label}</div>
-      <div className="text-3xl font-black text-theme-text tabular-nums tracking-tight group-hover:text-theme-accent transition-colors">{value}</div>
-    </div>
+    <TableauCard title={label} subtitle="Key Metric">
+      <motion.div 
+        whileHover={{ scale: 1.05 }}
+        className="flex items-center justify-center w-full h-full min-h-[100px] cursor-pointer"
+        style={{ padding: `${1.5 * (zoom / 50)}rem` }}
+      >
+        <div className="text-3xl font-black text-theme-text tabular-nums tracking-tight group-hover:text-theme-accent transition-colors drop-shadow-md">{value}</div>
+      </motion.div>
+    </TableauCard>
   );
 
   return to ? (
-    <Link to={to} className="block no-underline">
+    <Link to={to} className="block no-underline h-full">
       {content}
     </Link>
   ) : content;
