@@ -596,7 +596,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-accent selection:text-theme-accent-text">
       {/* Top Navigation — Plex-style layout */}
-      <header className={`h-16 bg-theme-navbar-bg ${isPublic ? '' : 'border-b border-theme-border-light'} flex items-center px-4 md:px-10 fixed top-0 right-0 z-40 gap-3 font-sans text-theme-navbar-text ${isPublic ? 'w-full' : 'w-full md:w-[calc(100%-18rem)]'}`}>
+      <header className={`h-16 ${isPublic ? 'bg-theme-sidebar-bg text-theme-sidebar-text' : 'bg-theme-navbar-bg text-theme-navbar-text border-b border-theme-border-light'} flex items-center px-4 md:px-10 fixed top-0 right-0 z-40 gap-3 font-sans ${isPublic ? 'w-full' : 'w-full md:w-[calc(100%-18rem)]'}`}>
         {/* LEFT: Logo & Nav Links */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           {!isPublic && (
@@ -615,7 +615,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard' ? 'font-semibold text-theme-navbar-text' : 'font-normal text-theme-text-muted hover:text-theme-navbar-text'
+                  location.pathname === '/dashboard' ? 'font-semibold text-current' : 'font-normal text-current opacity-60 hover:opacity-100'
                 }`}
               >
                 Catalog
@@ -623,7 +623,7 @@ const DashboardLayout = ({ children }) => {
               <button
                 onClick={() => navigate('/dashboard/events')}
                 className={`px-3.5 py-1.5 text-sm bg-transparent border-none cursor-pointer transition-colors duration-150 whitespace-nowrap ${
-                  location.pathname === '/dashboard/events' ? 'font-semibold text-theme-navbar-text' : 'font-normal text-theme-text-muted hover:text-theme-navbar-text'
+                  location.pathname === '/dashboard/events' ? 'font-semibold text-current' : 'font-normal text-current opacity-60 hover:opacity-100'
                 }`}
               >
                 Events
@@ -634,12 +634,12 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
-          <div className="flex items-center gap-2 bg-theme-input-bg rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all focus-within:bg-theme-input-bg/80">
+          <div className={`flex items-center gap-2 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all ${isPublic ? 'bg-theme-sidebar-hover focus-within:bg-white/10' : 'bg-theme-input-bg focus-within:bg-theme-input-bg-hover'}`}>
             <Search size={15} color="currentColor" className="shrink-0 opacity-50" />
             <input
               type="text"
               placeholder="Search..."
-              className="bg-transparent border-none outline-none text-sm text-theme-navbar-text w-full caret-theme-accent h-full p-0 placeholder-theme-text-muted"
+              className={`bg-transparent border-none outline-none text-sm w-full caret-theme-accent h-full p-0 ${isPublic ? 'text-theme-sidebar-text placeholder-theme-sidebar-text-muted' : 'text-theme-navbar-text placeholder-theme-text-muted'}`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowSearchResults(true)}
@@ -647,7 +647,7 @@ const DashboardLayout = ({ children }) => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="bg-transparent border-none text-theme-text-muted hover:text-theme-navbar-text text-xs cursor-pointer p-0 shrink-0 font-bold"
+                className={`bg-transparent border-none text-xs cursor-pointer p-0 shrink-0 font-bold ${isPublic ? 'text-theme-sidebar-text-muted hover:text-theme-sidebar-text' : 'text-theme-text-muted hover:text-theme-navbar-text'}`}
               >
                 ✕
               </button>
@@ -891,7 +891,7 @@ const DashboardLayout = ({ children }) => {
           )}
 
           {showSearchResults && !searchQuery.trim() && recentSearches.length > 0 && (
-            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-gradient-to-b from-[#181818]/95 to-[#121212]/95 backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans">
+            <div className="absolute top-12 left-0 right-0 max-h-[480px] bg-theme-bg backdrop-blur-lg border border-theme-border shadow-2xl rounded-lg overflow-y-auto z-[60] flex flex-col no-scrollbar font-sans text-theme-text">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3 border-b border-theme-border-light pb-2">
                   <span className="text-[10px] font-bold text-theme-accent uppercase tracking-wider">Recent Searches</span>
@@ -947,7 +947,7 @@ const DashboardLayout = ({ children }) => {
           {/* Theme Toggle Button */}
           <button
             onClick={handleThemeToggle}
-            className="bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg transition-all duration-150"
+            className={`bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center transition-all duration-150 ${isPublic ? 'text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover' : 'text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg'}`}
             title="Toggle Theme"
           >
             {user?.theme === 'light' || document.documentElement.getAttribute('data-theme') === 'light' ? (
@@ -960,7 +960,7 @@ const DashboardLayout = ({ children }) => {
           <div className="notif-container relative">
             <button
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className="relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg transition-all duration-150"
+              className={`relative bg-transparent border-none cursor-pointer p-2.5 rounded-md flex items-center justify-center transition-all duration-150 ${isPublic ? 'text-theme-sidebar-text-muted hover:text-theme-sidebar-text hover:bg-theme-sidebar-hover' : 'text-theme-text-muted hover:text-theme-navbar-text hover:bg-theme-input-bg'}`}
             >
               <Bell size={17} />
               {unreadCount > 0 && (
