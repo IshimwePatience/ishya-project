@@ -378,34 +378,36 @@ const Settings = () => {
             <span className="text-[10px] font-black bg-theme-accent/10 text-theme-accent px-2.5 py-1 rounded-full uppercase tracking-widest">{user?.role}</span>
           </div>
 
-          <form onSubmit={handleProfileSubmit} className="space-y-8">
+          <form onSubmit={handleProfileSubmit} className="space-y-0 text-theme-text max-w-4xl">
             {/* Avatar Section */}
-            <div className="flex items-center gap-6">
-              <div className="relative group w-24 h-24 rounded-full overflow-hidden bg-theme-input-bg border border-theme-border flex items-center justify-center shadow-lg shadow-black/40">
-                {formData.profilePic ? (
-                  <img src={formData.profilePic} alt="Avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="text-3xl font-black text-theme-accent">
-                    {user?.firstName?.[0]?.toUpperCase() || 'U'}
-                  </div>
-                )}
-                {uploadingAvatar ? (
-                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <Loader2 className="animate-spin text-theme-accent" size={20} />
-                  </div>
-                ) : (
-                  <div
-                    onClick={triggerFileSelect}
-                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[9px] font-black text-theme-text/80 hover:text-theme-text transition-all cursor-pointer gap-1"
-                  >
-                    <Camera size={16} />
-                    <span>CHANGE PHOTO</span>
-                  </div>
-                )}
+            <div className="flex flex-col md:flex-row md:items-center py-4 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+              <div className="w-full md:w-1/3 mb-4 md:mb-0">
+                <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Profile Avatar</label>
+                <p className="text-[11px] text-theme-text-muted-dark mt-1">JPEG, PNG or WebP. Max 5MB file size.</p>
               </div>
-              <div className="space-y-1.5">
-                <h4 className="text-sm font-bold text-theme-text">Profile Avatar</h4>
-                <p className="text-xs text-theme-text-muted">JPEG, PNG or WebP. Max 5MB file size.</p>
+              <div className="w-full md:w-2/3 flex items-center gap-6">
+                <div className="relative group/avatar w-24 h-24 rounded-full overflow-hidden bg-theme-input-bg border border-theme-border flex items-center justify-center shadow-lg shadow-black/40 shrink-0">
+                  {formData.profilePic ? (
+                    <img src={formData.profilePic} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-3xl font-black text-theme-accent">
+                      {user?.firstName?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  {uploadingAvatar ? (
+                    <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                      <Loader2 className="animate-spin text-theme-accent" size={20} />
+                    </div>
+                  ) : (
+                    <div
+                      onClick={triggerFileSelect}
+                      className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 flex flex-col items-center justify-center text-[9px] font-black text-theme-text/80 hover:text-theme-text transition-all cursor-pointer gap-1"
+                    >
+                      <Camera size={16} />
+                      <span>CHANGE PHOTO</span>
+                    </div>
+                  )}
+                </div>
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -417,49 +419,66 @@ const Settings = () => {
             </div>
 
             {/* Profile Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">First Name</label>
+            <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+              <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">First Name</label>
+              </div>
+              <div className="w-full md:w-2/3">
                 <input
                   type="text"
                   required
                   value={formData.firstName}
                   onChange={e => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">Last Name</label>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+              <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Last Name</label>
+              </div>
+              <div className="w-full md:w-2/3">
                 <input
                   type="text"
                   required
                   value={formData.lastName}
                   onChange={e => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                  className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">Phone Number</label>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+              <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Phone Number</label>
+              </div>
+              <div className="w-full md:w-2/3">
                 <div className="relative">
-                  <Smartphone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" />
+                  <Smartphone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" />
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm pl-11 pr-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm pl-9 pr-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text placeholder:text-theme-text-muted-dark"
                     placeholder="+1 (555) 000-0000"
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">Secure Email</label>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+              <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Secure Email</label>
+              </div>
+              <div className="w-full md:w-2/3">
                 <div className="relative">
-                  <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" />
+                  <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-muted-dark" />
                   <input
                     type="email"
                     disabled
                     value={user?.email || ''}
-                    className="w-full bg-theme-surface border border-theme-border-light rounded-sm pl-11 pr-4 py-3 text-sm text-theme-text-muted cursor-not-allowed outline-none"
+                    className="w-full bg-theme-surface border border-theme-border-light rounded-sm pl-9 pr-3 py-2 text-theme-text-muted cursor-not-allowed outline-none"
                   />
                 </div>
               </div>
@@ -578,43 +597,53 @@ const Settings = () => {
           <div className="bg-theme-surface border border-theme-border-light p-8 rounded-sm space-y-6 shadow-xl shadow-black/10">
             <h4 className="text-sm font-bold text-theme-text border-b border-theme-border-light pb-4">Update Access Password</h4>
             
-            <form onSubmit={handlePasswordSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">Current Password</label>
+            <form onSubmit={handlePasswordSubmit} className="space-y-0 text-theme-text max-w-4xl">
+              <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+                <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                  <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Current Password</label>
+                </div>
+                <div className="w-full md:w-2/3">
                   <input
                     type="password"
                     required
                     value={pwdData.currentPassword}
                     onChange={e => setPwdData({ ...pwdData, currentPassword: e.target.value })}
-                    className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
                   />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">New Password</label>
-                    <input
-                      type="password"
-                      required
-                      value={pwdData.newPassword}
-                      onChange={e => setPwdData({ ...pwdData, newPassword: e.target.value })}
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest">Confirm New Password</label>
-                    <input
-                      type="password"
-                      required
-                      value={pwdData.confirmPassword}
-                      onChange={e => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm px-4 py-3 text-sm text-theme-text outline-none transition-colors"
-                    />
-                  </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-theme-border-light flex justify-end">
+              <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+                <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                  <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">New Password</label>
+                </div>
+                <div className="w-full md:w-2/3">
+                  <input
+                    type="password"
+                    required
+                    value={pwdData.newPassword}
+                    onChange={e => setPwdData({ ...pwdData, newPassword: e.target.value })}
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+                <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                  <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors">Confirm New Password</label>
+                </div>
+                <div className="w-full md:w-2/3">
+                  <input
+                    type="password"
+                    required
+                    value={pwdData.confirmPassword}
+                    onChange={e => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
+                    className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 focus:border-theme-accent outline-none transition-all text-theme-text"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-theme-border-light flex justify-end px-4">
                 <button
                   type="submit"
                   disabled={saving}
@@ -779,26 +808,31 @@ const Settings = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSaveSubPrice} className="space-y-4 max-w-md">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-theme-text-muted uppercase tracking-widest block font-sans">Monthly Rate (RWF)</label>
-                  <div className="relative">
-                    <input
-                      required
-                      type="number"
-                      step="1"
-                      min="1"
-                      className="w-full bg-theme-input-bg border border-theme-border focus:border-theme-accent/40 rounded-sm pl-4 pr-12 py-3 text-sm text-theme-text outline-none transition-colors font-sans"
-                      value={subPrice}
-                      onChange={(e) => setSubPrice(e.target.value)}
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-theme-text-muted-dark text-xs font-bold font-sans">RWF</span>
+              <form onSubmit={handleSaveSubPrice} className="space-y-0 text-theme-text max-w-4xl">
+                <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-theme-border-light group transition-colors hover:bg-theme-input-bg px-4">
+                  <div className="w-full md:w-1/3 mb-2 md:mb-0">
+                    <label className="text-sm font-semibold text-theme-text-muted group-hover:text-theme-text/80 transition-colors font-sans">Monthly Rate (RWF)</label>
+                  </div>
+                  <div className="w-full md:w-2/3">
+                    <div className="relative">
+                      <input
+                        required
+                        type="number"
+                        step="1"
+                        min="1"
+                        className="w-full bg-theme-input-bg border border-theme-border rounded-sm px-3 py-2 pr-12 focus:border-theme-accent outline-none transition-all text-theme-text font-sans"
+                        value={subPrice}
+                        onChange={(e) => setSubPrice(e.target.value)}
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-text-muted-dark text-xs font-bold font-sans">RWF</span>
+                    </div>
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={saving}
+                <div className="pt-4 flex justify-end px-4">
+                  <button
+                    type="submit"
+                    disabled={saving}
                   className="px-6 py-3 bg-theme-accent hover:bg-[#c98c0b] text-theme-accent-text text-xs font-black uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center gap-2 font-sans"
                 >
                   {saving && <Loader2 className="animate-spin" size={14} />}
