@@ -74,10 +74,10 @@ const PublicShowcase = () => {
 
   const isLoggedIn = !!sessionStorage.getItem('token');
 
-  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white font-medium">Initializing Ishya Hub...</div>;
+  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-theme-text font-medium">Initializing Ishya Hub...</div>;
 
   return (
-    <div className="min-h-screen bg-[#111] text-white font-sans selection:bg-white selection:text-black overflow-x-hidden">
+    <div className="min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-text selection:text-theme-bg overflow-x-hidden">
       <style>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -96,11 +96,11 @@ const PublicShowcase = () => {
             <div className="flex items-center justify-between w-full">
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="flex items-center gap-3 text-xs font-semibold text-white hover:text-gray-400 transition-all"
+                className="flex items-center gap-3 text-xs font-semibold text-theme-text hover:text-theme-text-muted transition-all"
               >
                 <X size={20} strokeWidth={3} /> CLOSE
               </button>
-              <div className="text-xs font-medium text-gray-500">
+              <div className="text-xs font-medium text-theme-text-muted-dark">
                 ISHYA STUDIOS
               </div>
             </div>
@@ -111,7 +111,7 @@ const PublicShowcase = () => {
                   autoFocus
                   type="text"
                   placeholder="SEARCH..."
-                  className="w-full bg-transparent border-b-2 border-white/10 py-10 text-4xl md:text-7xl font-bold tracking-tighter focus:border-white outline-none transition-all placeholder:text-white/5"
+                  className="w-full bg-transparent border-b-2 border-theme-border py-10 text-4xl md:text-7xl font-bold tracking-tighter focus:border-theme-accent outline-none transition-all placeholder:text-theme-text/5"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsSearchOpen(false)}
@@ -124,12 +124,12 @@ const PublicShowcase = () => {
 
       {/* Netflix-Style Angled Hero Section - Only show on catalog grid */}
       {!selectedProduction && (
-        <section className="relative h-screen w-full flex items-center justify-center overflow-hidden border-b border-white/5">
+        <section className="relative h-screen w-full flex items-center justify-center overflow-hidden border-b border-theme-border-light">
           {/* Background Angled Poster Grid */}
           <div className="absolute inset-0 z-0 opacity-75 pointer-events-none">
             <div className="grid grid-cols-4 md:grid-cols-6 gap-4 rotate-[15deg] scale-150 -translate-y-20">
               {[...Array(24)].map((_, i) => (
-                <div key={i} className="aspect-[2/3] bg-white/5 rounded-md overflow-hidden">
+                <div key={i} className="aspect-[2/3] bg-theme-surface rounded-md overflow-hidden">
                   {releasedProductions[i % releasedProductions.length] && (
                     <img
                       src={getPoster(releasedProductions[i % releasedProductions.length].id)}
@@ -156,7 +156,7 @@ const PublicShowcase = () => {
               <h1 className="text-4xl md:text-8xl font-black tracking-tight leading-[0.9]">
                 Premium Cinema, <br className="hidden md:block" /> Tailored for You
               </h1>
-              <p className="text-sm md:text-xl text-white font-normal">
+              <p className="text-sm md:text-xl text-theme-text font-normal">
                 Access the full Ishya library for 3,000 RWF month. Cancel anytime.
               </p>
             </motion.div>
@@ -169,7 +169,7 @@ const PublicShowcase = () => {
             >
               <button
                 onClick={() => window.location.href = '/register'}
-                className="px-12 py-5 bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-all shadow-2xl"
+                className="px-12 py-5 bg-theme-text text-theme-bg font-semibold text-sm hover:bg-gray-200 transition-all shadow-2xl"
               >
                 Get Started
               </button>
@@ -202,31 +202,31 @@ const PublicShowcase = () => {
                         navigate(`/showcase/${prod.id}`);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="relative group cursor-pointer p-2 hover:bg-white/5 rounded-2xl transition-colors -m-2"
+                      className="relative group cursor-pointer p-2 hover:bg-theme-surface rounded-2xl transition-colors -m-2"
                     >
-                      <div className="relative pt-[56.25%] overflow-hidden rounded-xl bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-all shadow-sm">
+                      <div className="relative pt-[56.25%] overflow-hidden rounded-xl bg-theme-surface border border-theme-border-light group-hover:border-theme-border transition-all shadow-sm">
                         <img
                           src={getPoster(prod.id)}
                           alt={prod.title}
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-black/80 backdrop-blur-md rounded text-[11px] font-medium text-white z-10">
+                        <div className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-theme-surface border border-theme-border-light backdrop-blur-md rounded text-[11px] font-medium text-theme-text z-10">
                           {prod.type}
                         </div>
                         
                         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-0">
-                          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center shadow-lg">
-                            <Play size={24} className="text-white fill-white ml-1" />
+                          <div className="w-12 h-12 rounded-full bg-theme-surface backdrop-blur-md flex items-center justify-center shadow-lg">
+                            <Play size={24} className="text-theme-text fill-theme-text ml-1" />
                           </div>
                         </div>
                       </div>
 
                       <div className="mt-3 flex gap-3 pr-2">
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
+                          <h4 className="text-base font-semibold text-theme-text group-hover:text-theme-accent transition-colors line-clamp-2 leading-tight">
                             {prod.title}
                           </h4>
-                          <div className="text-[13px] text-gray-400 mt-1 truncate">
+                          <div className="text-[13px] text-theme-text-muted mt-1 truncate">
                             {prod.genre}
                           </div>
                         </div>
@@ -235,7 +235,7 @@ const PublicShowcase = () => {
                   ))
                 ) : (
                   <div className="col-span-full py-40 text-center">
-                    <p className="text-gray-500 text-sm font-medium italic">No productions match your search criteria.</p>
+                    <p className="text-theme-text-muted-dark text-sm font-medium italic">No productions match your search criteria.</p>
                   </div>
                 )}
               </div>
@@ -248,7 +248,7 @@ const PublicShowcase = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="relative px-6 md:px-20 pt-32 pb-20 z-30 min-h-screen bg-[#050505] text-white"
+            className="relative px-6 md:px-20 pt-32 pb-20 z-30 min-h-screen bg-theme-bg text-theme-text"
           >
             {(() => {
               const prodMedia = media.filter(m => m.productionId == selectedProduction.id);
@@ -257,20 +257,20 @@ const PublicShowcase = () => {
 
               return (
                 <div className="max-w-5xl mx-auto mb-12 text-left">
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
-                    <span className="cursor-pointer hover:text-white transition-all" onClick={() => navigate('/showcase')}>Catalog</span>
+                  <div className="flex items-center gap-2 text-sm font-medium text-theme-text-muted">
+                    <span className="cursor-pointer hover:text-theme-text transition-all" onClick={() => navigate('/showcase')}>Catalog</span>
                     <span className="text-[10px] opacity-20">/</span>
-                    <span className="text-gray-400">{displayTitle}</span>
+                    <span className="text-theme-text-muted">{displayTitle}</span>
                   </div>
 
-                  <h2 className="text-3xl sm:text-4xl md:text-7xl font-black text-white tracking-tighter mt-4">
+                  <h2 className="text-3xl sm:text-4xl md:text-7xl font-black text-theme-text tracking-tighter mt-4">
                     {displayTitle}
                   </h2>
                 </div>
               );
             })()}
 
-            <div className="mt-12 relative max-w-sm mx-auto  border border-white/5">
+            <div className="mt-12 relative max-w-sm mx-auto  border border-theme-border-light">
               <img
                 src={getPoster(selectedProduction.id)}
                 alt={selectedProduction.title}
@@ -279,12 +279,12 @@ const PublicShowcase = () => {
             </div>
 
             <div className="max-w-4xl mx-auto space-y-6 py-6">
-              <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              <p className="text-base md:text-lg text-theme-text-muted leading-relaxed">
                 {selectedProduction.description}
               </p>
 
               <div className="space-y-3">
-                <div className="text-sm md:text-base font-bold text-white/80">
+                <div className="text-sm md:text-base font-bold text-theme-text/80">
                   Genre: {selectedProduction.genre}
                 </div>
 
@@ -292,7 +292,7 @@ const PublicShowcase = () => {
                   {getTrailer(selectedProduction.id) && (
                     <button
                       onClick={() => navigate(`/watch/${getTrailer(selectedProduction.id).id}`)}
-                      className="px-8 py-3 border-2 border-white/10 text-white font-black text-xs hover:bg-white hover:text-black transition-all mb-4"
+                      className="px-8 py-3 border-2 border-theme-border text-theme-text font-black text-xs hover:bg-theme-text hover:text-theme-bg transition-all mb-4"
                     >
                       Watch Trailer
                     </button>
@@ -301,7 +301,7 @@ const PublicShowcase = () => {
                   {selectedProduction.type === 'Series' ? (
                     /* EPISODE LIST FOR SERIES */
                     <div className="w-full max-w-2xl mx-auto space-y-4">
-                      <h3 className="text-xl font-bold text-white border-b border-white/10 pb-2 mb-6 text-left">Episodes</h3>
+                      <h3 className="text-xl font-bold text-theme-text border-b border-theme-border pb-2 mb-6 text-left">Episodes</h3>
                       <div className="grid gap-3">
                         {media
                           .filter(m => m.productionId == selectedProduction.id && (m.fileType === 'Full Movie' || m.fileType === 'Episode'))
@@ -309,15 +309,15 @@ const PublicShowcase = () => {
                           .map((episode, idx) => (
                             <div
                               key={episode.id}
-                              className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all group border border-white/5"
+                              className="flex items-center justify-between p-4 bg-theme-surface hover:bg-theme-input-bg rounded-lg transition-all group border border-theme-border-light"
                             >
                               <div className="flex items-center gap-4">
-                                <span className="text-gray-500 font-black italic">{String(idx + 1).padStart(2, '0')}</span>
+                                <span className="text-theme-text-muted-dark font-black italic">{String(idx + 1).padStart(2, '0')}</span>
                                 <div className="text-left">
-                                  <div className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
+                                  <div className="text-sm font-bold text-theme-text group-hover:text-theme-accent transition-colors">
                                     {episode.fileName}
                                   </div>
-                                  <div className="text-[11px] text-gray-400 font-medium">
+                                  <div className="text-[11px] text-theme-text-muted font-medium">
                                     Season {episode.season || 1} • Episode {episode.episodeNumber || idx + 1}
                                   </div>
                                 </div>
@@ -330,7 +330,7 @@ const PublicShowcase = () => {
                                     window.location.href = '/login';
                                   }
                                 }}
-                                className="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-all shadow-lg shadow-blue-900/20"
+                                className="p-2 bg-blue-600 hover:bg-blue-500 text-theme-text rounded-full transition-all shadow-lg shadow-blue-900/20"
                               >
                                 <Play size={16} fill="currentColor" />
                               </button>
@@ -363,7 +363,7 @@ const PublicShowcase = () => {
 
       {/* Simple Footer - Only show on catalog grid */}
       {!selectedProduction && (
-        <footer className="px-10 md:px-20 py-12 text-center text-xs text-gray-400 font-normal font-sans tracking-wide">
+        <footer className="px-10 md:px-20 py-12 text-center text-xs text-theme-text-muted font-normal font-sans tracking-wide">
           © {new Date().getFullYear()} Ishya Studios. All rights reserved.
         </footer>
       )}
