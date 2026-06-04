@@ -30,7 +30,7 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
           animate={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="fixed inset-0 z-[200] bg-black text-white px-6 md:px-10 pt-6 overflow-y-auto pb-20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="fixed inset-0 z-[200] bg-theme-bg text-theme-text px-6 md:px-10 pt-6 overflow-y-auto pb-20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           <div className="flex justify-between items-center mb-12">
             <button onClick={onClose} className="flex items-center gap-4 group">
@@ -46,7 +46,7 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
               <input
                 type="text"
                 placeholder="Search movies, events, venues..."
-                className="flex-1 bg-transparent border-b-2 border-white/10 px-0 text-2xl md:text-3xl font-bold tracking-tighter focus:outline-none focus:border-white transition-colors placeholder:text-gray-500"
+                className="flex-1 bg-transparent border-b-2 border-theme-border px-0 text-2xl md:text-3xl font-bold tracking-tighter focus:outline-none focus:border-theme-text transition-colors placeholder:text-theme-text-muted-dark"
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -57,8 +57,8 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
               <div className="space-y-10">
                 {/* Movies / Productions */}
                 <div>
-                  <h2 className="text-[11px] font-bold text-gray-500 mb-5 uppercase tracking-widest">
-                    Movies & Productions <span className="text-gray-500">({filteredMovies.length})</span>
+                  <h2 className="text-[11px] font-bold text-theme-text-muted mb-5 uppercase tracking-widest">
+                    Movies & Productions <span className="text-theme-text-muted">({filteredMovies.length})</span>
                   </h2>
                   {filteredMovies.length > 0 ? (
                     <div className="space-y-3">
@@ -67,25 +67,25 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
                           key={p.id}
                           href={`/showcase/${p.id}`}
                           onClick={onClose}
-                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/[0.08] transition-all gap-4"
+                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-theme-input-bg border border-theme-border-light hover:border-theme-border hover:bg-theme-input-bg-hover transition-all gap-4 rounded-sm"
                         >
                           <div>
-                            <div className="text-lg md:text-xl font-bold tracking-tight">{p.title}</div>
-                            <div className="text-[11px] font-medium text-gray-400 mt-1">{[p.genre, p.type].filter(Boolean).join(' • ')}</div>
+                            <div className="text-lg md:text-xl font-bold tracking-tight text-theme-text">{p.title}</div>
+                            <div className="text-[11px] font-medium text-theme-text-muted mt-1">{[p.genre, p.type].filter(Boolean).join(' • ')}</div>
                           </div>
-                          <ChevronRight size={20} className="text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all hidden md:block" />
+                          <ChevronRight size={20} className="text-theme-text-muted group-hover:text-theme-text group-hover:translate-x-1 transition-all hidden md:block" />
                         </a>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm font-medium text-gray-500 italic">No movies match your search.</div>
+                    <div className="text-sm font-medium text-theme-text-muted italic">No movies match your search.</div>
                   )}
                 </div>
 
                 {/* Live Events / Performances */}
                 <div>
-                  <h2 className="text-[11px] font-bold text-gray-500 mb-5 uppercase tracking-widest">
-                    Live Events & Performances <span className="text-gray-500">({filteredEvents.length})</span>
+                  <h2 className="text-[11px] font-bold text-theme-text-muted mb-5 uppercase tracking-widest">
+                    Live Events & Performances <span className="text-theme-text-muted">({filteredEvents.length})</span>
                   </h2>
                   {filteredEvents.length > 0 ? (
                     <div className="space-y-3">
@@ -94,34 +94,34 @@ const SearchOverlay = ({ isOpen, onClose, productions, events, isLoggedIn }) => 
                           key={e.id}
                           href="/events"
                           onClick={onClose}
-                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/[0.08] transition-all gap-4"
+                          className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-theme-input-bg border border-theme-border-light hover:border-theme-border hover:bg-theme-input-bg-hover transition-all gap-4 rounded-sm"
                         >
                           <div>
-                            <div className="text-lg md:text-xl font-bold tracking-tight">{e.title}</div>
-                            <div className="text-[11px] font-medium text-gray-400 mt-1">
+                            <div className="text-lg md:text-xl font-bold tracking-tight text-theme-text">{e.title}</div>
+                            <div className="text-[11px] font-medium text-theme-text-muted mt-1">
                               {e.type} • {e.venue} • {e.startTime ? new Date(e.startTime).toLocaleDateString() : ''}
                             </div>
                           </div>
-                          <ChevronRight size={20} className="text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all hidden md:block" />
+                          <ChevronRight size={20} className="text-theme-text-muted group-hover:text-theme-text group-hover:translate-x-1 transition-all hidden md:block" />
                         </a>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm font-medium text-gray-500 italic">No events match your search.</div>
+                    <div className="text-sm font-medium text-theme-text-muted italic">No events match your search.</div>
                   )}
                 </div>
 
                 {!hasResults && (
-                  <div className="text-2xl font-bold opacity-20">No results found for "{query}"</div>
+                  <div className="text-2xl font-bold opacity-20 text-theme-text">No results found for "{query}"</div>
                 )}
               </div>
             )}
 
             {!query && (
               <div className="flex items-center gap-6 pt-2">
-                <span className="text-[11px] text-gray-500 uppercase tracking-widest font-bold">Quick links:</span>
-                <a href="/" onClick={onClose} className="text-[11px] text-gray-400 hover:text-white transition-colors font-semibold uppercase tracking-widest">Movies</a>
-                <a href="/events" onClick={onClose} className="text-[11px] text-gray-400 hover:text-white transition-colors font-semibold uppercase tracking-widest">Live Events</a>
+                <span className="text-[11px] text-theme-text-muted uppercase tracking-widest font-bold">Quick links:</span>
+                <a href="/" onClick={onClose} className="text-[11px] text-theme-text-muted hover:text-theme-text transition-colors font-semibold uppercase tracking-widest">Movies</a>
+                <a href="/events" onClick={onClose} className="text-[11px] text-theme-text-muted hover:text-theme-text transition-colors font-semibold uppercase tracking-widest">Live Events</a>
               </div>
             )}
           </div>
