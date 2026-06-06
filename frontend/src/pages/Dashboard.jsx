@@ -295,42 +295,36 @@ const BarChart = ({ data, zoom }) => {
   );
 };
 
-// 📊 Tableau-style Forecast Line Chart (Replacing Doughnut)
+// 📊 Vertical Bar Chart for Specialty Distribution
 const DoughnutChart = ({ data }) => {
   const chartData = data.length > 0 ? data : [
     { label: 'Actors', count: 2 }, { label: 'Directors', count: 5 }, { label: 'Crew', count: 3 }
   ];
   const maxVal = Math.max(...chartData.map(d => d.count), 1);
-  const width = 300;
-  const height = 150;
-  
-  // Generate squiggly line path
-  const generatePath = (data, offset) => {
-    return data.map((d, i) => {
-      const x = (i / (data.length - 1 || 1)) * width;
-      const y = height - ((d.count + offset) / (maxVal * 2)) * height - 20;
-      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-    }).join(' ');
-  };
 
   return (
-    <TableauCard title="Talent Specialty Forecast" subtitle="Trending specialty distribution" noPadding>
-      <div className="w-full h-[200px] bg-theme-bg/50 relative overflow-hidden flex items-end">
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full drop-shadow-md">
-          <path d={generatePath(chartData, 0)} fill="none" stroke="#2563eb" strokeWidth="2" />
-          <path d={generatePath(chartData, maxVal * 0.5)} fill="none" stroke="#ea580c" strokeWidth="2" opacity="0.7" />
-          {chartData.map((d, i) => {
-            const x = (i / (chartData.length - 1 || 1)) * width;
-            const y1 = height - (d.count / (maxVal * 2)) * height - 20;
-            const y2 = height - ((d.count + maxVal * 0.5) / (maxVal * 2)) * height - 20;
-            return (
-              <g key={i}>
-                <circle cx={x} cy={y1} r="3" fill="#2563eb" />
-                <circle cx={x} cy={y2} r="3" fill="#ea580c" />
-              </g>
-            );
-          })}
-        </svg>
+    <TableauCard title="Talent Specialty Distribution" subtitle="Registered specialties across troupe" noPadding>
+      <div className="w-full h-[200px] bg-theme-bg/50 relative overflow-hidden flex items-end justify-around px-4 pb-6 pt-10">
+        {chartData.map((d, i) => {
+          const heightPct = (d.count / maxVal) * 100;
+          return (
+            <div key={i} className="flex flex-col items-center justify-end h-full gap-2 w-full max-w-[40px]">
+              {/* Tooltip-like count on top */}
+              <span className="text-[10px] font-bold text-theme-text-muted">{d.count}</span>
+              {/* The actual Bar */}
+              <motion.div 
+                initial={{ height: 0 }}
+                animate={{ height: `${heightPct}%` }}
+                transition={{ duration: 1, delay: i * 0.1 }}
+                className="w-full bg-theme-accent rounded-t-sm"
+              />
+              {/* Label below the bar */}
+              <span className="text-[9px] font-semibold text-theme-text-muted truncate w-full text-center absolute bottom-1">
+                {d.label}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </TableauCard>
   );
