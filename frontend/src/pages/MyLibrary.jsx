@@ -137,11 +137,18 @@ const MyLibrary = () => {
     }
   };
 
-  const genres = ['All', ...new Set(productions.map(p => p.genre).filter(Boolean))];
+  const normalizeGenre = (g) => {
+    if (!g || !g.trim()) return null;
+    const trimmed = g.trim();
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
 
-  const filteredProductions = productions.filter(prod => 
-    selectedGenre === 'All' || prod.genre === selectedGenre
-  );
+  const genres = ['All', ...new Set(productions.map(p => normalizeGenre(p.genre)).filter(Boolean))];
+
+  const filteredProductions = productions.filter(prod => {
+    if (selectedGenre === 'All') return true;
+    return normalizeGenre(prod.genre) === selectedGenre;
+  });
 
   const totalPages = Math.ceil(filteredProductions.length / itemsPerPage) || 1;
   const displayedProductions = filteredProductions.slice(

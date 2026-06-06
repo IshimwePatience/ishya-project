@@ -59,13 +59,19 @@ const PublicShowcase = () => {
     return media.find(m => m.productionId == prodId && m.fileType === 'Full Movie');
   };
 
-  const genres = ['All', ...new Set(productions.map(p => p.genre))];
+  const normalizeGenre = (g) => {
+    if (!g || !g.trim()) return null;
+    const trimmed = g.trim();
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
+
+  const genres = ['All', ...new Set(productions.map(p => normalizeGenre(p.genre)).filter(Boolean))];
 
   const releasedProductions = productions.filter(prod => {
     const hasPublicMedia = media.some(m => m.productionId == prod.id && m.isPublic);
     const matchesSearch = prod.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGenre = selectedGenre === 'All' || prod.genre === selectedGenre;
+    const matchesGenre = selectedGenre === 'All' || normalizeGenre(prod.genre) === selectedGenre;
     return hasPublicMedia && matchesSearch && matchesGenre;
   }).sort((a, b) => {
     if (a.status === 'Released' && b.status !== 'Released') return -1;

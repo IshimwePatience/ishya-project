@@ -238,12 +238,18 @@ const MediaLibrary = () => {
 
   const allPosters = filteredAssets.filter(a => a.fileType === 'Poster');
 
-  const genres = ['All', ...new Set(productions.map(p => p.genre).filter(Boolean))];
+  const normalizeGenre = (g) => {
+    if (!g || !g.trim()) return null;
+    const trimmed = g.trim();
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
+
+  const genres = ['All', ...new Set(productions.map(p => normalizeGenre(p.genre)).filter(Boolean))];
 
   const filteredPostersByGenre = allPosters.filter(poster => {
     if (selectedGenre === 'All') return true;
     const prod = productions.find(p => p.id === poster.productionId);
-    return prod && prod.genre === selectedGenre;
+    return prod && normalizeGenre(prod.genre) === selectedGenre;
   });
 
   const totalPages = Math.ceil(filteredPostersByGenre.length / itemsPerPage) || 1;

@@ -259,14 +259,20 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
     );
   };
 
+  const normalizeGenre = (g) => {
+    if (!g || !g.trim()) return null;
+    const trimmed = g.trim();
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
+
   const dynamicGenres = Array.from(new Set(
-    productions.flatMap(p => p.mediaFiles?.map(m => m.category)).filter(c => c && c.trim().length > 0)
+    productions.flatMap(p => p.mediaFiles?.map(m => normalizeGenre(m.category))).filter(Boolean)
   ));
   const genres = ['All', ...dynamicGenres];
 
   const filteredCatalogProductions = productions.filter(p =>
     selectedGenre === 'All' ||
-    p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
+    p.mediaFiles?.some(m => normalizeGenre(m.category) === selectedGenre) ||
     (selectedGenre === 'Movies' && (!p.mediaFiles || p.mediaFiles.every(m => !m.category)))
   );
 
