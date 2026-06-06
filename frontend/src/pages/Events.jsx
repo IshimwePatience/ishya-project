@@ -128,7 +128,7 @@ const Events = () => {
               />
               {isAdminOrStaff && (
                 <button
-                  className="bg-[#3ea6ff] hover:bg-[#3ea6ff]/90 text-black px-4 py-2 text-[13px] font-bold rounded-sm flex items-center gap-2 transition-all shadow-md"
+                  className="bg-theme-accent hover:bg-theme-accent/90 text-black px-4 py-2 text-[13px] font-bold rounded-sm flex items-center gap-2 transition-all shadow-md"
                   onClick={() => setIsFormOpen(true)}
                 >
                   <Plus size={16} strokeWidth={3} /> CREATE EVENT
@@ -138,38 +138,38 @@ const Events = () => {
           </div>
 
           {/* YouTube Studio Styled Layout */}
-          <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative">
+          <div className="bg-theme-surface border border-theme-border rounded-lg overflow-hidden flex flex-col min-h-[600px] shadow-2xl relative">
             
             {/* Tabs */}
-            <div className="flex items-center gap-6 px-6 border-b border-theme-border bg-[#282828] overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-6 px-6 border-b border-theme-border bg-theme-input-bg overflow-x-auto no-scrollbar">
               {tabs.map(tab => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-4 text-[13px] font-semibold transition-all relative flex-shrink-0 ${activeTab === tab ? 'text-[#3ea6ff]' : 'text-[#aaaaaa] hover:text-theme-text'}`}
+                  className={`py-4 text-[13px] font-semibold transition-all relative flex-shrink-0 ${activeTab === tab ? 'text-theme-accent' : 'text-theme-text-muted hover:text-theme-text'}`}
                 >
                   {tab}
                   {activeTab === tab && (
-                    <motion.div layoutId="activetab" className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#3ea6ff]" />
+                    <motion.div layoutId="activetab" className="absolute bottom-0 left-0 right-0 h-[2px] bg-theme-accent" />
                   )}
                 </button>
               ))}
             </div>
 
             {/* Filter Bar */}
-            <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
-              <ListFilter size={18} className="text-[#aaaaaa]" />
+            <div className="flex items-center px-6 py-3 border-b border-theme-border bg-theme-input-bg gap-4">
+              <ListFilter size={18} className="text-theme-text-muted" />
               <input 
                 type="text" 
                 placeholder="Filter events..." 
-                className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-[#aaaaaa] font-medium"
+                className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-theme-text-muted font-medium"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
             {/* Table Header */}
-            <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-[#aaaaaa]">
+            <div className="grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-3 border-b border-theme-border text-[12px] font-bold text-theme-text-muted">
               <div>Event</div>
               <div>Type</div>
               <div>Status</div>
@@ -177,20 +177,20 @@ const Events = () => {
             </div>
 
             {/* Table Body */}
-            <div className="flex-1 overflow-y-auto bg-[#1f1f1f]">
+            <div className="flex-1 overflow-y-auto bg-theme-surface">
               {loading ? (
-                <div className="flex flex-col items-center justify-center h-full text-[#aaaaaa] space-y-3 opacity-50 p-20">
-                  <div className="w-8 h-8 border-2 border-t-[#3ea6ff] border-theme-border rounded-full animate-spin"></div>
+                <div className="flex flex-col items-center justify-center h-full text-theme-text-muted space-y-3 opacity-50 p-20">
+                  <div className="w-8 h-8 border-2 border-t-theme-accent border-theme-border rounded-full animate-spin"></div>
                   <span className="text-[13px] font-medium">Loading events...</span>
                 </div>
               ) : filteredEvents.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[400px] text-[#aaaaaa] space-y-4 opacity-50 p-20">
+                <div className="flex flex-col items-center justify-center h-[400px] text-theme-text-muted space-y-4 opacity-50 p-20">
                   <Play size={48} strokeWidth={1} />
                   <span className="text-[14px] font-medium">No events found matching your filter</span>
                 </div>
               ) : (
                 filteredEvents.map(event => (
-                  <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-start">
+                  <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-theme-input-bg-hover transition-colors items-start">
                     
                     {/* Event Column with Image & Hover Actions */}
                     <div className="flex items-start gap-4 pr-4 overflow-hidden">
@@ -198,8 +198,8 @@ const Events = () => {
                         {event.posterUrl ? (
                           <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover" />
                         ) : event.type === 'Performance' ? (
-                          <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
-                            <Play size={24} className="text-[#3ea6ff]/50" />
+                          <div className="absolute inset-0 bg-theme-accent/10 flex items-center justify-center">
+                            <Play size={24} className="text-theme-accent/50" />
                           </div>
                         ) : event.type === 'Rehearsal' ? (
                           <div className="absolute inset-0 bg-orange-500/10 flex items-center justify-center">
@@ -215,17 +215,17 @@ const Events = () => {
                         <h3 className="text-[14px] font-medium text-theme-text truncate w-full leading-tight" title={event.title}>
                           {event.title}
                         </h3>
-                        <p className="text-[12px] text-[#aaaaaa] truncate w-full mt-1 flex items-center gap-1">
+                        <p className="text-[12px] text-theme-text-muted truncate w-full mt-1 flex items-center gap-1">
                           <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{event.venue || 'TBA'}</span>
                         </p>
                         
                         {/* Hover Actions (YouTube Style) */}
                         {isAdminOrStaff && (
                           <div className="mt-auto flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => handleEdit(event)} className="text-[#aaaaaa] hover:text-theme-text transition-colors" title="Edit">
+                            <button onClick={() => handleEdit(event)} className="text-theme-text-muted hover:text-theme-text transition-colors" title="Edit">
                               <Edit2 size={16} />
                             </button>
-                            <button onClick={() => handleDelete(event.id)} className="text-[#aaaaaa] hover:text-red-400 transition-colors" title="Delete">
+                            <button onClick={() => handleDelete(event.id)} className="text-theme-text-muted hover:text-red-400 transition-colors" title="Delete">
                               <Trash2 size={16} />
                             </button>
                           </div>
@@ -235,7 +235,7 @@ const Events = () => {
 
                     {/* Type Column */}
                     <div className="flex items-center h-[68px]">
-                       <span className={`text-[12px] px-2 py-0.5 rounded-sm font-medium ${event.type === 'Performance' ? 'bg-[#3ea6ff]/10 text-[#3ea6ff]' : event.type === 'Rehearsal' ? 'bg-orange-500/10 text-orange-400' : 'bg-theme-input-bg-hover text-theme-text/70'}`}>
+                       <span className={`text-[12px] px-2 py-0.5 rounded-sm font-medium ${event.type === 'Performance' ? 'bg-theme-accent/10 text-theme-accent' : event.type === 'Rehearsal' ? 'bg-orange-500/10 text-orange-400' : 'bg-theme-input-bg-hover text-theme-text/70'}`}>
                          {event.type}
                        </span>
                     </div>
@@ -243,11 +243,11 @@ const Events = () => {
                     {/* Status Column */}
                     <div className="flex items-center h-[68px]">
                       {event.status === 'Completed' ? (
-                        <span className="flex items-center gap-1.5 text-[13px] text-[#aaaaaa] font-medium">
+                        <span className="flex items-center gap-1.5 text-[13px] text-theme-text-muted font-medium">
                           <CheckCircle2 size={14} className="text-green-400" /> Finished
                         </span>
                       ) : event.status === 'Cancelled' ? (
-                        <span className="flex items-center gap-1.5 text-[13px] text-[#aaaaaa] font-medium">
+                        <span className="flex items-center gap-1.5 text-[13px] text-theme-text-muted font-medium">
                           <AlertTriangle size={14} className="text-red-400" /> Cancelled
                         </span>
                       ) : (
@@ -262,7 +262,7 @@ const Events = () => {
                        <span className="text-[13px] text-theme-text font-medium">
                          {new Date(event.startTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                        </span>
-                       <span className="text-[12px] text-[#aaaaaa] flex items-center gap-1 mt-0.5">
+                       <span className="text-[12px] text-theme-text-muted flex items-center gap-1 mt-0.5">
                          <Clock size={12} /> {new Date(event.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                        </span>
                     </div>
@@ -272,7 +272,7 @@ const Events = () => {
             </div>
             
             {/* Table Footer */}
-            <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-[#aaaaaa]">
+            <div className="px-6 py-4 border-t border-theme-border bg-theme-input-bg flex items-center justify-end text-[12px] font-medium text-theme-text-muted">
               Rows per page: {filteredEvents.length}
             </div>
           </div>

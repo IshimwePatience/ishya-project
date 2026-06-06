@@ -257,13 +257,13 @@ const PublicEvents = ({ isDashboard }) => {
                 {/* Left side: Featured First Event */}
                 {firstEvent && (
                   <div className="w-full lg:w-1/3 flex flex-col shrink-0">
-                    <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl">
+                    <div className="bg-theme-surface border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl">
                       <div className="w-full aspect-video bg-black/50 relative overflow-hidden">
                         {firstEvent.posterUrl ? (
                           <img src={firstEvent.posterUrl.startsWith('http') ? firstEvent.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${firstEvent.posterUrl}`} alt={firstEvent.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                         ) : (
-                          <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
-                            <Play size={48} className="text-[#3ea6ff]/50" />
+                          <div className="absolute inset-0 bg-theme-accent/10 flex items-center justify-center">
+                            <Play size={48} className="text-theme-accent/50" />
                           </div>
                         )}
                       </div>
@@ -309,9 +309,9 @@ const PublicEvents = ({ isDashboard }) => {
 
                 {/* Right side: Remaining Events Table */}
                 <div className={`w-full ${firstEvent ? 'lg:w-2/3' : ''} flex flex-col`}>
-                  <div className="bg-[#1f1f1f] border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
+                  <div className="bg-theme-surface border border-theme-border rounded-lg overflow-hidden flex flex-col shadow-2xl relative">
                     {/* Filter Bar */}
-                    <div className="flex items-center px-6 py-3 border-b border-theme-border bg-[#282828] gap-4">
+                    <div className="flex items-center px-6 py-3 border-b border-theme-border bg-theme-input-bg gap-4">
                       <ListFilter size={18} className="text-theme-text-muted-dark" />
                       <input 
                         type="text" 
@@ -333,7 +333,7 @@ const PublicEvents = ({ isDashboard }) => {
                     </div>
 
                     {/* Table Body */}
-                    <div className="flex-1 overflow-y-auto bg-[#1f1f1f] max-h-[500px]">
+                    <div className="flex-1 overflow-y-auto bg-theme-surface max-h-[500px]">
                       {otherEvents.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-[300px] text-theme-text-muted-dark space-y-4 opacity-50 p-20">
                           <Play size={48} strokeWidth={1} />
@@ -341,7 +341,7 @@ const PublicEvents = ({ isDashboard }) => {
                         </div>
                       ) : (
                         otherEvents.map(event => (
-                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-[#2c2c2c] transition-colors items-center">
+                          <div key={event.id} className="group grid grid-cols-[3fr_1fr_1.5fr_1fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-theme-input-bg-hover transition-colors items-center">
                             
                             {/* Event Column */}
                             <div className="flex items-center gap-4 pr-4 overflow-hidden">
@@ -349,8 +349,8 @@ const PublicEvents = ({ isDashboard }) => {
                                 {event.posterUrl ? (
                                   <img src={event.posterUrl.startsWith('http') ? event.posterUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${event.posterUrl}`} alt={event.title} className="w-full h-full object-cover" />
                                 ) : (
-                                  <div className="absolute inset-0 bg-[#3ea6ff]/10 flex items-center justify-center">
-                                    <Play size={24} className="text-[#3ea6ff]/50" />
+                                  <div className="absolute inset-0 bg-theme-accent/10 flex items-center justify-center">
+                                    <Play size={24} className="text-theme-accent/50" />
                                   </div>
                                 )}
                               </div>
@@ -407,7 +407,7 @@ const PublicEvents = ({ isDashboard }) => {
                   </div>
                     
                     {/* Table Footer */}
-                    <div className="px-6 py-4 border-t border-theme-border bg-[#282828] flex items-center justify-end text-[12px] font-medium text-theme-text-muted-dark">
+                    <div className="px-6 py-4 border-t border-theme-border bg-theme-input-bg flex items-center justify-end text-[12px] font-medium text-theme-text-muted-dark">
                       Events
                     </div>
                   </div>
