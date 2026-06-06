@@ -128,10 +128,10 @@ const Events = () => {
               />
               {isAdminOrStaff && (
                 <button
-                  className="bg-theme-accent hover:bg-theme-accent/90 text-black px-4 py-2 text-[13px] font-bold rounded-sm flex items-center gap-2 transition-all shadow-md"
+                  className="flex items-center gap-2 px-4 py-2 bg-theme-accent text-theme-accent-text rounded-sm font-semibold hover:bg-theme-accent-hover transition-all"
                   onClick={() => setIsFormOpen(true)}
                 >
-                  <Plus size={16} strokeWidth={3} /> CREATE EVENT
+                  <Plus size={16} /> Create event
                 </button>
               )}
             </div>
