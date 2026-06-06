@@ -239,11 +239,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                         {prod.genre}
                       </div>
                     </div>
-                    {isShortsStyle && (
-                      <div className="flex-shrink-0 text-theme-text hover:text-theme-accent transition-colors cursor-pointer mt-1">
-                        <MoreVertical size={16} />
-                      </div>
-                    )}
+
                   </div>
                 </div>
               );
