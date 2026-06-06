@@ -169,7 +169,7 @@ const PublicShowcase = () => {
             >
               <button
                 onClick={() => window.location.href = '/register'}
-                className="px-12 py-5 bg-theme-text text-theme-bg font-semibold text-sm hover:bg-gray-200 transition-all shadow-2xl"
+                className="px-8 py-3 bg-theme-text text-theme-bg font-semibold text-sm hover:bg-gray-200 transition-all shadow-2xl rounded-full"
               >
                 Get Started
               </button>

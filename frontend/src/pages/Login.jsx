@@ -84,7 +84,7 @@ const Login = () => {
   const SocialButton = ({ icon: Icon, children, onClick, className = "" }) => (
     <button
       onClick={onClick}
-      className={`w-full py-4 px-6 border border-white/10 rounded-sm flex items-center justify-center gap-3 font-medium hover:bg-white/5 transition-all mb-4 ${className}`}
+      className={`w-full py-3 px-6 border border-white/10 rounded-full flex items-center justify-center gap-3 font-medium hover:bg-white/5 transition-all mb-4 ${className}`}
     >
       {Icon && <Icon size={20} />}
       <span>{children}</span>
@@ -115,7 +115,7 @@ const Login = () => {
               {/* Google Button */}
               <button
                 onClick={handleGoogleLogin}
-                className="w-full py-4 px-6 rounded-sm flex items-center justify-center gap-3 font-medium transition-all mb-4 bg-white text-black hover:bg-gray-200"
+                className="w-full py-3 px-6 rounded-full flex items-center justify-center gap-3 font-medium transition-all mb-4 bg-white text-black hover:bg-gray-200"
               >
                 <GoogleIcon />
                 <span className="text-black">Continue with Google</span>
@@ -212,7 +212,7 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-primary text-black font-medium rounded-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-2xl shadow-primary/20"
+                  className="w-full py-3 bg-primary text-black font-medium rounded-full hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-2xl shadow-primary/20"
                 >
                   {loading ? 'Logging in...' : 'Log in'}
                   {!loading && <ArrowRight size={18} />}
