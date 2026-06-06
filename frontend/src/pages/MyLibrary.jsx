@@ -10,6 +10,7 @@ import {
   FileVideo,
   Image as ImageIcon,
   ChevronRight,
+  ChevronLeft,
   ExternalLink,
   Tv,
   MoreVertical
@@ -27,6 +28,10 @@ const MyLibrary = () => {
   const [activeSeason, setActiveSeason] = useState({});
   const [zipProgress, setZipProgress] = useState(null);
   const [openDownloadDropdown, setOpenDownloadDropdown] = useState(null);
+
+  const [selectedGenre, setSelectedGenre] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   const { zoom, setZoom, viewMode, setViewMode } = usePreferences('my-library');
 
@@ -132,6 +137,18 @@ const MyLibrary = () => {
     }
   };
 
+  const genres = ['All', ...new Set(productions.map(p => p.genre).filter(Boolean))];
+
+  const filteredProductions = productions.filter(prod => 
+    selectedGenre === 'All' || prod.genre === selectedGenre
+  );
+
+  const totalPages = Math.ceil(filteredProductions.length / itemsPerPage) || 1;
+  const displayedProductions = filteredProductions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40 space-y-4">
@@ -156,15 +173,33 @@ const MyLibrary = () => {
           <p className="text-sm font-medium text-theme-text-muted-dark">No active licenses found</p>
         </div>
       ) : (
-        <div
-          className="grid gap-6"
-          style={{
-            gridTemplateColumns: viewMode === 'grid'
-              ? `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))`
-              : '1fr'
-          }}
-        >
-          {productions.map((prod) => {
+        <div className="space-y-6">
+          {/* Genre Filters */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {genres.map(genre => (
+              <button
+                key={genre}
+                onClick={() => { setSelectedGenre(genre); setCurrentPage(1); }}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                  selectedGenre === genre
+                    ? 'bg-theme-text text-theme-bg'
+                    : 'bg-theme-input-bg text-theme-text hover:bg-theme-input-bg-hover border border-theme-border'
+                }`}
+              >
+                {genre}
+              </button>
+            ))}
+          </div>
+
+          <div
+            className="grid gap-6"
+            style={{
+              gridTemplateColumns: viewMode === 'grid'
+                ? `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))`
+                : '1fr'
+            }}
+          >
+          {displayedProductions.map((prod) => {
             const isSeries = prod.type === 'Series' || prod.type === 'TV Show';
             const episodes = prod.mediaFiles?.filter(f => (f.fileType || f.type) === 'Episode') || [];
             const seasonsCount = new Set(episodes.map(e => e.season || 1)).size;
@@ -328,6 +363,44 @@ const MyLibrary = () => {
               </motion.div>
             );
           })}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-8">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              
+              <div className="flex items-center gap-1">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                      currentPage === i + 1
+                        ? 'bg-theme-accent text-white'
+                        : 'text-theme-text-muted hover:bg-theme-input-bg-hover hover:text-theme-text'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          )}
         </div>
       )}
 

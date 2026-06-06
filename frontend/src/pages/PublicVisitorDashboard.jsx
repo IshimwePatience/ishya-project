@@ -26,6 +26,8 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   const [continueWatching, setContinueWatching] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
   const [subPrice, setSubPrice] = useState('10000');
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [subSuccess, setSubSuccess] = useState(false);
@@ -262,6 +264,18 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
   ));
   const genres = ['All', ...dynamicGenres];
 
+  const filteredCatalogProductions = productions.filter(p =>
+    selectedGenre === 'All' ||
+    p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
+    (selectedGenre === 'Movies' && (!p.mediaFiles || p.mediaFiles.every(m => !m.category)))
+  );
+
+  const totalPages = Math.ceil(filteredCatalogProductions.length / itemsPerPage) || 1;
+  const displayedCatalogProductions = filteredCatalogProductions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) {
     return (
       <div className="space-y-12 py-10">
@@ -345,7 +359,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             {genres.map(genre => (
               <button
                 key={genre}
-                onClick={() => setSelectedGenre(genre)}
+                onClick={() => { setSelectedGenre(genre); setCurrentPage(1); }}
                 className={`flex-shrink-0 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${selectedGenre === genre
                   ? 'bg-white text-black shadow-sm'
                   : 'bg-transparent text-theme-sidebar-text-muted hover:bg-theme-sidebar-hover hover:text-theme-sidebar-text'
@@ -435,12 +449,7 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-10 md:gap-y-12">
-              {productions
-                .filter(p =>
-                  p.mediaFiles?.some(m => m.category?.toLowerCase() === selectedGenre.toLowerCase()) ||
-                  (selectedGenre === 'Movies' && (!p.mediaFiles || p.mediaFiles.every(m => !m.category)))
-                )
-                .map((prod) => (
+              {displayedCatalogProductions.map((prod) => (
                   <div
                     key={prod.id}
                     className="group cursor-pointer p-2 hover:bg-theme-input-bg rounded-2xl transition-colors -m-2"
@@ -480,6 +489,43 @@ const PublicVisitorDashboard = ({ user, onRefreshUser }) => {
                   </div>
                 ))}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-12">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                
+                <div className="flex items-center gap-1">
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                        currentPage === i + 1
+                          ? 'bg-theme-accent text-white'
+                          : 'text-theme-text-muted hover:bg-theme-input-bg-hover hover:text-theme-text'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
-import { Play, Info, Film, Globe, X, Lock as LockIcon, Search, MessageSquare, ArrowLeft, Users, Calendar, MoreVertical } from 'lucide-react';
+import { Play, Info, Film, Globe, X, Lock as LockIcon, Search, MessageSquare, ArrowLeft, Users, Calendar, MoreVertical, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
@@ -15,7 +15,8 @@ const PublicShowcase = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('All');
-  const [visibleCount, setVisibleCount] = useState(12);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -71,6 +72,12 @@ const PublicShowcase = () => {
     if (a.status !== 'Released' && b.status === 'Released') return 1;
     return 0;
   });
+
+  const totalPages = Math.ceil(releasedProductions.length / itemsPerPage) || 1;
+  const displayedProductions = releasedProductions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const isLoggedIn = !!sessionStorage.getItem('token');
 
@@ -190,11 +197,31 @@ const PublicShowcase = () => {
             id="catalog"
             className="relative px-6 md:px-20 -mt-20 z-30 pb-20"
           >
-            <div className="max-w-7xl mx-auto space-y-12">
-              <h2 className="text-2xl font-black tracking-tight">Featured Premieres</h2>
+            <div className="max-w-7xl mx-auto space-y-8">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <h2 className="text-2xl font-black tracking-tight">Featured Premieres</h2>
+                
+                {/* Genre Filters */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-xl">
+                  {genres.map(genre => (
+                    <button
+                      key={genre}
+                      onClick={() => { setSelectedGenre(genre); setCurrentPage(1); }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                        selectedGenre === genre
+                          ? 'bg-theme-text text-theme-bg'
+                          : 'bg-theme-surface text-theme-text hover:bg-theme-input-bg border border-theme-border'
+                      }`}
+                    >
+                      {genre}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {releasedProductions.length > 0 ? (
-                  releasedProductions.slice(0, 10).map((prod, index) => (
+                  displayedProductions.map((prod, index) => (
                     <motion.div
                       key={prod.id}
                       whileHover={{ scale: 1.05 }}
@@ -239,6 +266,43 @@ const PublicShowcase = () => {
                   </div>
                 )}
               </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 pt-8">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-full bg-theme-surface hover:bg-theme-input-bg disabled:opacity-50 text-theme-text transition-all border border-theme-border"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  
+                  <div className="flex items-center gap-1">
+                    {[...Array(totalPages)].map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                          currentPage === i + 1
+                            ? 'bg-theme-accent text-white'
+                            : 'text-theme-text-muted hover:bg-theme-surface hover:text-theme-text border border-transparent hover:border-theme-border'
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-full bg-theme-surface hover:bg-theme-input-bg disabled:opacity-50 text-theme-text transition-all border border-theme-border"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              )}
             </div>
           </motion.section>
         ) : (

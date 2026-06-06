@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, ListFilter, Play, CheckCircle2, AlertTriangle, Users } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, ListFilter, Play, CheckCircle2, AlertTriangle, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import EventForm from '../components/EventForm';
 import PublicEvents from './PublicEvents';
@@ -81,6 +81,15 @@ const Events = () => {
     }
   }).sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  const totalPages = Math.ceil(filteredEvents.length / itemsPerPage) || 1;
+  const displayedEvents = filteredEvents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="space-y-6">
       {isFormOpen ? (
@@ -145,7 +154,7 @@ const Events = () => {
               {tabs.map(tab => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
                   className={`py-4 text-[13px] font-semibold transition-all relative flex-shrink-0 ${activeTab === tab ? 'text-theme-accent' : 'text-theme-text-muted hover:text-theme-text'}`}
                 >
                   {tab}
@@ -164,7 +173,7 @@ const Events = () => {
                 placeholder="Filter events..." 
                 className="bg-transparent border-none outline-none text-[13px] text-theme-text w-full placeholder:text-theme-text-muted font-medium"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
               />
             </div>
 
@@ -189,7 +198,7 @@ const Events = () => {
                   <span className="text-[14px] font-medium">No events found matching your filter</span>
                 </div>
               ) : (
-                filteredEvents.map(event => (
+                displayedEvents.map(event => (
                   <div key={event.id} className="group grid grid-cols-[3fr_1fr_1fr_1.5fr] gap-4 px-6 py-4 border-b border-theme-border-light hover:bg-theme-input-bg-hover transition-colors items-start">
                     
                     {/* Event Column with Image & Hover Actions */}
@@ -271,10 +280,45 @@ const Events = () => {
               )}
             </div>
             
-            {/* Table Footer */}
-            <div className="px-6 py-4 border-t border-theme-border bg-theme-input-bg flex items-center justify-end text-[12px] font-medium text-theme-text-muted">
-              Rows per page: {filteredEvents.length}
-            </div>
+            {/* Table Footer - Pagination */}
+            {totalPages > 1 && (
+              <div className="px-6 py-4 border-t border-theme-border bg-theme-input-bg flex items-center justify-between text-[12px] font-medium text-theme-text-muted">
+                <div>
+                  Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredEvents.length)} - {Math.min(currentPage * itemsPerPage, filteredEvents.length)} of {filteredEvents.length} events
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-1 rounded-sm hover:bg-theme-border disabled:opacity-50 transition-all text-theme-text"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {[...Array(totalPages)].map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`w-6 h-6 rounded-sm flex items-center justify-center transition-all ${
+                          currentPage === i + 1
+                            ? 'bg-theme-accent text-white'
+                            : 'hover:bg-theme-border text-theme-text'
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="p-1 rounded-sm hover:bg-theme-border disabled:opacity-50 transition-all text-theme-text"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

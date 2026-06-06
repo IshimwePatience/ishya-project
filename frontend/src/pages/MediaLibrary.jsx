@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv, ShieldCheck, ArrowDownToLine, MoreVertical } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink, Folder, ChevronRight, ChevronLeft, Film, Image as ImageIcon, Music, File, LayoutGrid, List, Globe, Lock, Play, MapPin, Clock, Library, Briefcase, Download, Tv, ShieldCheck, ArrowDownToLine, MoreVertical } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import MediaForm from '../components/MediaForm';
@@ -20,6 +20,10 @@ const MediaLibrary = () => {
   const [error, setError] = useState('');
   const [user, setUser] = useState(null);
   const [openDownloadDropdown, setOpenDownloadDropdown] = useState(null);
+
+  const [selectedGenre, setSelectedGenre] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const handleOutsideClick = () => setOpenDownloadDropdown(null);
@@ -232,7 +236,21 @@ const MediaLibrary = () => {
 
   const filteredAssets = assets;
 
-  const posters = filteredAssets.filter(a => a.fileType === 'Poster');
+  const allPosters = filteredAssets.filter(a => a.fileType === 'Poster');
+
+  const genres = ['All', ...new Set(productions.map(p => p.genre).filter(Boolean))];
+
+  const filteredPostersByGenre = allPosters.filter(poster => {
+    if (selectedGenre === 'All') return true;
+    const prod = productions.find(p => p.id === poster.productionId);
+    return prod && prod.genre === selectedGenre;
+  });
+
+  const totalPages = Math.ceil(filteredPostersByGenre.length / itemsPerPage) || 1;
+  const displayedPosters = filteredPostersByGenre.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const pendingRequest = selectedProduction && partnerProfile && sales.find(s =>
     s.productionId === selectedProduction.id &&
@@ -737,12 +755,28 @@ const MediaLibrary = () => {
                 </div>
               ))}
             </div>
-          ) : posters.length > 0 ? (
-            <div
-              className="grid gap-6"
-              style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))` }}
-            >
-{posters.map((a) => {
+          ) : filteredPostersByGenre.length > 0 ? (
+            <div className="space-y-6">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {genres.map(genre => (
+                  <button
+                    key={genre}
+                    onClick={() => { setSelectedGenre(genre); setCurrentPage(1); }}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                      selectedGenre === genre
+                        ? 'bg-theme-text text-theme-bg'
+                        : 'bg-theme-input-bg text-theme-text hover:bg-theme-input-bg-hover border border-theme-border'
+                    }`}
+                  >
+                    {genre}
+                  </button>
+                ))}
+              </div>
+              <div
+                className="grid gap-6"
+                style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${320 + (zoom - 50) * 3}px, 1fr))` }}
+              >
+{displayedPosters.map((a) => {
                 const prod = productions.find(p => p.id === a.productionId);
                 const cleanName = a.fileName.replace(' - Poster', '').replace(' - Trailer', '');
                 const cardTitle = cleanName || (prod ? prod.title : 'Untitled');
@@ -837,6 +871,44 @@ const MediaLibrary = () => {
                 );
               })}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-8">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                
+                <div className="flex items-center gap-1">
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`w-8 h-8 rounded-full text-sm font-medium transition-all ${
+                        currentPage === i + 1
+                          ? 'bg-theme-accent text-white'
+                          : 'text-theme-text-muted hover:bg-theme-input-bg-hover hover:text-theme-text'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-full bg-theme-input-bg hover:bg-theme-input-bg-hover disabled:opacity-50 text-theme-text transition-all"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
+          </div>
           ) : (
             <div className="py-32 text-center">
               <p className="text-theme-text-muted-dark text-sm font-medium">
