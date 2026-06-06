@@ -634,7 +634,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* CENTER: Absolutely Centered Search Bar */}
         <div ref={searchRef} className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
-          <div className={`flex items-center gap-2 rounded-full px-3.5 h-10 w-full shrink-0 cursor-text transition-all ${isPublic ? 'bg-theme-sidebar-hover focus-within:bg-white/10' : 'bg-theme-input-bg focus-within:bg-theme-input-bg-hover'}`}>
+          <div className={`flex items-center gap-2 rounded-md px-3.5 h-10 w-full shrink-0 cursor-text transition-all ${isPublic ? 'bg-theme-sidebar-hover focus-within:bg-white/10' : 'bg-theme-input-bg focus-within:bg-theme-input-bg-hover'}`}>
             <Search size={15} color="currentColor" className="shrink-0 opacity-50" />
             <input
               type="text"
