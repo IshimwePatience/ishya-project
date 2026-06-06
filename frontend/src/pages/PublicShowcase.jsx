@@ -126,7 +126,7 @@ const PublicShowcase = () => {
       {!selectedProduction && (
         <section className="relative h-screen w-full flex items-center justify-center overflow-hidden border-b border-theme-border-light">
           {/* Background Angled Poster Grid */}
-          <div className="absolute inset-0 z-0 opacity-75 pointer-events-none">
+          <div className="absolute inset-0 z-0 opacity-90 pointer-events-none">
             <div className="grid grid-cols-4 md:grid-cols-6 gap-4 rotate-[15deg] scale-150 -translate-y-20">
               {[...Array(24)].map((_, i) => (
                 <div key={i} className="aspect-[2/3] bg-theme-surface rounded-md overflow-hidden">
@@ -143,8 +143,8 @@ const PublicShowcase = () => {
           </div>
 
           {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/15 to-transparent z-10" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#121212_75%)] z-10 opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/10 to-transparent z-10" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#121212_75%)] z-10 opacity-50" />
 
           <div className="relative z-20 text-center space-y-8 px-6 max-w-5xl">
             <motion.div
