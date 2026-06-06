@@ -782,7 +782,7 @@ const MediaLibrary = () => {
                           <img
                             src={a.filePath}
                             alt={cardTitle}
-                            className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-700"
+                            className="w-full h-full object-cover group-hover/card:scale-105 transition-all duration-700"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">

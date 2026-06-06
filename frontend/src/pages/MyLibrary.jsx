@@ -190,7 +190,7 @@ const MyLibrary = () => {
                           <img
                             src={prod.poster}
                             alt=""
-                            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                            className="w-full h-full object-cover transition-opacity duration-500"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
@@ -277,7 +277,7 @@ const MyLibrary = () => {
                           <img
                             src={prod.poster}
                             alt={prod.title}
-                            className="w-full h-full object-cover opacity-85 group-hover/card:opacity-100 group-hover/card:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-black/20 text-theme-text-muted-dark group-hover/card:text-theme-text-muted transition-all">
