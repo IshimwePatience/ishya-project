@@ -132,17 +132,8 @@ const Login = () => {
               </SocialButton>
 
               <div className="mt-12 text-center space-y-6">
-                <a href="#" className="text-sm text-gray-400 hover:text-white underline underline-offset-4 decoration-gray-600">
-                  Continue with your work mail - SSO login
-                </a>
-
                 <div className="text-sm text-gray-400">
                   Don’t you have an account? <Link to="/register" className="text-primary font-bold">Sign up</Link>
-                </div>
-
-                <div className="pt-2 text-sm text-gray-400">
-                  Are you a TV channel or distributor? <br />
-                  <Link to="/partner-join" className="text-white hover:text-primary font-bold underline underline-offset-4 decoration-gray-700">Partner with us</Link>
                 </div>
 
                 <div className="pt-8">
