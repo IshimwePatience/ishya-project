@@ -19,7 +19,7 @@ const CustomDropdown = ({ options, selected, onSelect }) => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 flex items-center justify-between text-white hover:border-brown-light transition-all"
+        className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 flex items-center justify-between text-white hover:border-brown-light transition-all"
       >
         <span className={selected ? "text-white" : "text-gray-600"}>
           {selected || "Select a role"}
@@ -125,7 +125,7 @@ const Register = ({ isInternal = false }) => {
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-400 ml-1">First name</label>
             <input
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
               placeholder="Enter first name"
               value={formData.firstName}
               onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -136,7 +136,7 @@ const Register = ({ isInternal = false }) => {
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-400 ml-1">Last name</label>
             <input
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
               placeholder="Enter last name"
               value={formData.lastName}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
@@ -148,7 +148,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Email address</label>
             <input
               type="email"
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
               placeholder="email@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -169,7 +169,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Password</label>
             <input
               type="password"
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -181,7 +181,7 @@ const Register = ({ isInternal = false }) => {
             <label className="text-sm font-bold text-gray-400 ml-1">Confirm password</label>
             <input
               type="password"
-              className="w-full bg-[#1c1c1c] border border-white/10 rounded-sm px-4 py-4 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
+              className="w-full bg-[#1c1c1c] border border-white/10 rounded-full px-4 py-3 focus:outline-none focus:border-brown-light transition-all text-white placeholder-gray-700"
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
@@ -192,7 +192,7 @@ const Register = ({ isInternal = false }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-white text-black font-medium rounded-sm hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl mt-12 text-sm group"
+            className="w-full py-3 bg-white text-black font-medium rounded-full hover:bg-brown hover:text-white transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl mt-12 text-sm group"
           >
             {loading ? 'Creating account...' : 'Create account'}
             {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
