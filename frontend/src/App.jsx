@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import PublicShowcase from './pages/PublicShowcase';
 import PublicEvents from './pages/PublicEvents';
 import PublicProductionDetail from './pages/PublicProductionDetail';
@@ -30,26 +30,42 @@ import PartnerRequests from './pages/PartnerRequests';
 import ActorSchedule from './pages/ActorSchedule';
 import DashboardLayout from './components/DashboardLayout';
 
-function App() {
+// Inner component so we can access the router's location
+function ThemeApplier() {
+  const location = useLocation();
+
   React.useEffect(() => {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-      try {
-        const parsed = JSON.parse(user);
-        if (parsed.theme) {
-          document.documentElement.setAttribute('data-theme', parsed.theme);
-        }
-      } catch (e) { }
-    } else {
-      const guestTheme = localStorage.getItem('guest_theme');
-      if (guestTheme) {
-        document.documentElement.setAttribute('data-theme', guestTheme);
+    const isDashboardRoute = location.pathname.startsWith('/dashboard') ||
+      location.pathname.startsWith('/watch/');
+
+    if (isDashboardRoute) {
+      // Dashboard routes: apply the logged-in user's saved theme
+      const user = sessionStorage.getItem('user');
+      if (user) {
+        try {
+          const parsed = JSON.parse(user);
+          if (parsed.theme) {
+            document.documentElement.setAttribute('data-theme', parsed.theme);
+            return;
+          }
+        } catch (e) { }
       }
+      // Fall back to dark if no user theme is found
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      // Public pages (landing, events, login, register, etc.) always use dark
+      document.documentElement.setAttribute('data-theme', 'dark');
     }
-  }, []);
+  }, [location.pathname]);
+
+  return null;
+}
+
+function App() {
 
   return (
     <Router>
+      <ThemeApplier />
       <Routes>
         <Route path="/" element={<PublicShowcase />} />
         <Route path="/showcase" element={<PublicShowcase />} />
