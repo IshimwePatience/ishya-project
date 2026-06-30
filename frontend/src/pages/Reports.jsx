@@ -1,107 +1,190 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageHeader from '../components/PageHeader';
 import ReportDropdown from '../components/ReportDropdown';
 import { motion } from 'framer-motion';
 
+// Robust date parser
+const parseDate = (d) => {
+  const parsed = new Date(d);
+  return isNaN(parsed.getTime()) ? new Date() : parsed; // Fallback to now if invalid to prevent crashes, though shouldn't happen.
+};
+
 const REPORT_TYPES = [
   { id: 'sales', label: 'Sales & Revenue', endpoint: '/api/sales', 
     columns: ['Transaction', 'Client', 'Amount', 'Status', 'Date'],
+    filters: [
+      { key: 'Status', label: 'Status', options: ['All', 'completed', 'pending', 'failed'] }
+    ],
     mapFn: s => ({
       Transaction: s.saleType,
       Client: s.user?.name || s.user?.email || 'Guest',
-      Amount: `${Number(s.amount).toLocaleString()} RWF`,
+      Amount: `${Number(s.amount || 0).toLocaleString()} RWF`,
       Status: s.paymentStatus,
-      Date: new Date(s.createdAt).toLocaleDateString(),
-      _rawDate: new Date(s.createdAt)
+      Date: parseDate(s.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(s.createdAt)
     })
   },
   { id: 'users', label: 'Users & Partners', endpoint: '/api/users',
     columns: ['Name', 'Email', 'Role', 'Status', 'Phone', 'Date'],
+    filters: [
+      { key: 'Role', label: 'Role', options: ['All', 'Admin', 'Staff', 'Actor/Talent', 'User', 'Partner'] },
+      { key: 'Status', label: 'Status', options: ['All', 'Active', 'Inactive', 'Pending'] }
+    ],
     mapFn: u => ({
       Name: `${u.firstName || ''} ${u.lastName || ''}`.trim(),
       Email: u.email,
       Role: u.role?.name || 'User',
       Status: u.status,
       Phone: u.phone || '-',
-      Date: new Date(u.createdAt).toLocaleDateString(),
-      _rawDate: new Date(u.createdAt)
+      Date: parseDate(u.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(u.createdAt)
     })
   },
   { id: 'talents', label: 'Talent Roster', endpoint: '/api/talents',
     columns: ['Name', 'Email', 'Role', 'Status', 'Productions', 'Date'],
+    filters: [
+      { key: 'Status', label: 'Status', options: ['All', 'Active', 'Inactive'] }
+    ],
     mapFn: t => ({
       Name: `${t.firstName || ''} ${t.lastName || ''}`.trim(),
       Email: t.email,
       Role: t.role?.name || 'Talent',
       Status: t.status,
       Productions: t.productions?.map(p => p.title).join(', ') || '-',
-      Date: new Date(t.createdAt).toLocaleDateString(),
-      _rawDate: new Date(t.createdAt)
+      Date: parseDate(t.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(t.createdAt)
     })
   },
   { id: 'productions', label: 'Productions', endpoint: '/api/productions',
     columns: ['Title', 'Type', 'Status', 'Start Date', 'Budget', 'Date'],
+    filters: [
+      { key: 'Status', label: 'Status', options: ['All', 'Pre-production', 'Filming', 'Post-production', 'Released'] }
+    ],
     mapFn: p => ({
       Title: p.title,
       Type: p.type,
       Status: p.status,
-      'Start Date': p.startDate ? new Date(p.startDate).toLocaleDateString() : '-',
+      'Start Date': p.startDate ? parseDate(p.startDate).toLocaleDateString() : '-',
       Budget: p.budget ? `${Number(p.budget).toLocaleString()} RWF` : '-',
-      Date: new Date(p.createdAt).toLocaleDateString(),
-      _rawDate: new Date(p.createdAt)
+      Date: parseDate(p.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(p.createdAt)
     })
   },
   { id: 'partner_requests', label: 'Partners & Licensing', endpoint: '/api/partner-requests',
     columns: ['Company', 'Contact', 'Type', 'Status', 'Date'],
+    filters: [
+      { key: 'Status', label: 'Status', options: ['All', 'pending', 'approved', 'rejected'] }
+    ],
     mapFn: r => ({
       Company: r.companyName || r.user?.firstName || 'Unknown',
       Contact: r.user?.email || 'Unknown',
       Type: r.requestType === 'partner' ? 'Partnership' : `License: ${r.production?.title || ''}`,
       Status: r.status,
-      Date: new Date(r.createdAt).toLocaleDateString(),
-      _rawDate: new Date(r.createdAt)
+      Date: parseDate(r.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(r.createdAt)
     })
   },
   { id: 'expenses', label: 'Expenses', endpoint: '/api/expenses',
     columns: ['Category', 'Description', 'Amount', 'Date'],
+    filters: [
+      { key: 'Category', label: 'Category', options: ['All', 'Equipment', 'Location', 'Talent', 'Marketing', 'Other'] }
+    ],
     mapFn: e => ({
       Category: e.category,
       Description: e.description,
-      Amount: `${Number(e.amount).toLocaleString()} RWF`,
-      Date: new Date(e.expenseDate || e.createdAt).toLocaleDateString(),
-      _rawDate: new Date(e.expenseDate || e.createdAt)
+      Amount: `${Number(e.amount || 0).toLocaleString()} RWF`,
+      Date: parseDate(e.expenseDate || e.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(e.expenseDate || e.createdAt)
     })
   },
   { id: 'events', label: 'Events', endpoint: '/api/events',
     columns: ['Title', 'Type', 'Location', 'Date'],
+    filters: [
+      { key: 'Type', label: 'Event Type', options: ['All', 'Audition', 'Rehearsal', 'Shoot', 'Meeting'] }
+    ],
     mapFn: e => ({
       Title: e.title,
       Type: e.eventType,
       Location: e.location,
-      Date: new Date(e.date || e.createdAt).toLocaleDateString(),
-      _rawDate: new Date(e.date || e.createdAt)
+      Date: parseDate(e.date || e.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(e.date || e.createdAt)
     })
   },
   { id: 'attendance', label: 'Attendance', endpoint: '/api/attendance',
     columns: ['User', 'Event', 'Status', 'Date'],
+    filters: [
+      { key: 'Status', label: 'Status', options: ['All', 'Present', 'Absent', 'Late', 'Excused'] }
+    ],
     mapFn: a => ({
       User: a.user ? `${a.user.firstName || ''} ${a.user.lastName || ''}`.trim() : 'Unknown',
       Event: a.event?.title || '-',
       Status: a.status,
-      Date: new Date(a.date || a.createdAt).toLocaleDateString(),
-      _rawDate: new Date(a.date || a.createdAt)
+      Date: parseDate(a.date || a.createdAt).toLocaleDateString(),
+      _rawDate: parseDate(a.date || a.createdAt)
     })
   }
 ];
+
+// Helper to format date for input[type=date]
+const formatDateForInput = (date) => {
+  const d = new Date(date);
+  const month = `0${d.getMonth() + 1}`.slice(-2);
+  const day = `0${d.getDate()}`.slice(-2);
+  return `${d.getFullYear()}-${month}-${day}`;
+};
 
 const Reports = () => {
   const [selectedType, setSelectedType] = useState('sales');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [activeFilters, setActiveFilters] = useState({});
+  
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState(null);
   const [error, setError] = useState('');
+
+  // Update available filters when report type changes
+  const activeTypeConfig = REPORT_TYPES.find(t => t.id === selectedType);
+
+  useEffect(() => {
+    // Reset extra filters on type change
+    setActiveFilters({});
+    setReportData(null);
+  }, [selectedType]);
+
+  const handleDatePreset = (preset) => {
+    const today = new Date();
+    let start = new Date();
+    let end = new Date();
+    
+    switch (preset) {
+      case 'today':
+        break;
+      case 'yesterday':
+        start.setDate(today.getDate() - 1);
+        end.setDate(today.getDate() - 1);
+        break;
+      case 'last7':
+        start.setDate(today.getDate() - 7);
+        break;
+      case 'last30':
+        start.setDate(today.getDate() - 30);
+        break;
+      case 'thisMonth':
+        start = new Date(today.getFullYear(), today.getMonth(), 1);
+        break;
+      case 'allTime':
+        setStartDate('');
+        setEndDate('');
+        return;
+      default:
+        return;
+    }
+    
+    setStartDate(formatDateForInput(start));
+    setEndDate(formatDateForInput(end));
+  };
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -126,9 +209,21 @@ const Reports = () => {
       
       let mappedData = rawData.map(typeConfig.mapFn);
       
+      // Filter by dynamic fields
+      Object.keys(activeFilters).forEach(key => {
+        const filterVal = activeFilters[key];
+        if (filterVal && filterVal !== 'All') {
+          // Case insensitive comparison for robustness
+          mappedData = mappedData.filter(item => 
+            String(item[key]).toLowerCase() === String(filterVal).toLowerCase()
+          );
+        }
+      });
+
       // Filter by date
       if (startDate) {
         const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
         mappedData = mappedData.filter(item => item._rawDate >= start);
       }
       if (endDate) {
@@ -156,20 +251,9 @@ const Reports = () => {
 
   return (
     <div className="p-4 md:p-10 space-y-6">
-      <PageHeader 
-        title="Unified Reports" 
-        actions={
-          reportData && (
-            <ReportDropdown 
-              title={reportData.title}
-              columns={reportData.columns}
-              data={reportData.data}
-            />
-          )
-        }
-      />
+      <PageHeader title="Unified Reports" />
       
-      <div className="bg-theme-surface border border-theme-border-light rounded-sm p-6 max-w-3xl shadow-sm">
+      <div className="bg-theme-surface border border-theme-border-light rounded-sm p-6 max-w-4xl shadow-sm">
         <h2 className="text-xl font-black text-theme-text mb-6">Generate Custom Report</h2>
         
         {error && (
@@ -183,10 +267,7 @@ const Reports = () => {
             <label className="text-[11px] font-bold text-theme-text-muted-dark uppercase tracking-wider">Report Type</label>
             <select 
               value={selectedType}
-              onChange={(e) => {
-                setSelectedType(e.target.value);
-                setReportData(null);
-              }}
+              onChange={(e) => setSelectedType(e.target.value)}
               className="w-full bg-theme-input-bg border border-theme-border-light text-theme-text p-3 rounded-sm text-sm focus:border-theme-accent outline-none hover:bg-white/[0.02] transition-colors"
               style={{ colorScheme: 'dark' }}
             >
@@ -220,12 +301,59 @@ const Reports = () => {
           </div>
         </div>
 
+        {/* Date Presets */}
+        <div className="mb-6">
+          <label className="text-[11px] font-bold text-theme-text-muted-dark uppercase tracking-wider block mb-2">Quick Dates</label>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: 'today', label: 'Today' },
+              { id: 'yesterday', label: 'Yesterday' },
+              { id: 'last7', label: 'Last 7 Days' },
+              { id: 'last30', label: 'Last 30 Days' },
+              { id: 'thisMonth', label: 'This Month' },
+              { id: 'allTime', label: 'All Time' }
+            ].map(preset => (
+              <button
+                key={preset.id}
+                onClick={() => handleDatePreset(preset.id)}
+                className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider bg-theme-bg border border-theme-border-light text-theme-text-muted hover:text-theme-text hover:bg-theme-border-light/50 rounded-full transition-colors"
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dynamic Filters */}
+        {activeTypeConfig?.filters && activeTypeConfig.filters.length > 0 && (
+          <div className="mb-6 border-t border-theme-border-light/50 pt-6">
+            <h3 className="text-[11px] font-bold text-theme-text-muted-dark uppercase tracking-wider mb-4">Additional Filters</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {activeTypeConfig.filters.map(filter => (
+                <div key={filter.key} className="space-y-2">
+                  <label className="text-[11px] font-bold text-theme-text-muted-dark uppercase tracking-wider">{filter.label}</label>
+                  <select
+                    value={activeFilters[filter.key] || 'All'}
+                    onChange={(e) => setActiveFilters({ ...activeFilters, [filter.key]: e.target.value })}
+                    className="w-full bg-theme-input-bg border border-theme-border-light text-theme-text p-2.5 rounded-sm text-sm focus:border-theme-accent outline-none hover:bg-white/[0.02] transition-colors"
+                    style={{ colorScheme: 'dark' }}
+                  >
+                    {filter.options.map(opt => (
+                      <option key={opt} value={opt} className="bg-[#1a1a1a] text-white">{opt}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={handleGenerate}
           disabled={loading}
           className="flex items-center justify-center gap-2 w-full md:w-auto px-6 py-3 bg-theme-accent text-theme-accent-text font-bold rounded-sm hover:bg-theme-accent-hover transition-colors disabled:opacity-50"
         >
-          {loading ? 'Fetching...' : 'Fetch Data'}
+          {loading ? 'Fetching...' : 'Fetch Data & Generate Table'}
         </button>
       </div>
 
@@ -263,7 +391,7 @@ const Reports = () => {
                 ))}
                 {reportData.data.length === 0 && (
                   <tr>
-                    <td colSpan={reportData.columns.length} className="p-8 text-center text-sm font-medium text-theme-text-muted">No data available for the selected date range.</td>
+                    <td colSpan={reportData.columns.length} className="p-8 text-center text-sm font-medium text-theme-text-muted">No data available for the selected filters.</td>
                   </tr>
                 )}
               </tbody>
