@@ -28,7 +28,7 @@ const REPORT_TYPES = [
   { id: 'users', label: 'Users & Partners', endpoint: '/api/users',
     columns: ['Name', 'Email', 'Role', 'Status', 'Phone', 'Date'],
     filters: [
-      { key: 'Role', label: 'Role', options: ['All', 'Admin', 'Staff', 'Actor/Talent', 'User', 'Partner'] },
+      { key: 'Role', label: 'Role', options: ['All', 'Admin', 'Partner', 'Public', 'Talent'] },
       { key: 'Status', label: 'Status', options: ['All', 'Active', 'Inactive', 'Pending'] }
     ],
     mapFn: u => ({
