@@ -88,7 +88,7 @@ const REPORT_TYPES = [
   { id: 'expenses', label: 'Expenses', endpoint: '/api/expenses',
     columns: ['Category', 'Description', 'Amount', 'Date'],
     filters: [
-      { key: 'Category', label: 'Category', options: ['All', 'Equipment', 'Location', 'Talent', 'Marketing', 'Other'] }
+      { key: 'Category', label: 'Category', options: ['All', 'Equipment', 'Transport', 'Actor payment', 'Venue', 'Editing', 'Marketing', 'Other'] }
     ],
     mapFn: e => ({
       Category: e.category,
@@ -111,7 +111,7 @@ const REPORT_TYPES = [
       _rawDate: parseDate(e.date || e.createdAt)
     })
   },
-  { id: 'attendance', label: 'Attendance', endpoint: '/api/attendance',
+  { id: 'attendance', label: 'Attendance', endpoint: '/api/attendance/all',
     columns: ['User', 'Event', 'Status', 'Date'],
     filters: [
       { key: 'Status', label: 'Status', options: ['All', 'Present', 'Absent', 'Late', 'Excused'] }
