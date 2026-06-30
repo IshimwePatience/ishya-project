@@ -20,13 +20,17 @@ const ReportDropdown = ({ title, columns, data }) => {
     if (!data || data.length === 0) return alert("No data available for report");
     // Format data into 2D array matching columns
     const tableData = data.map(item => columns.map(col => item[col] || '-'));
-    generatePDF(title, columns, tableData);
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Admin';
+    generatePDF(title, columns, tableData, userName);
     setIsOpen(false);
   };
 
   const handleDownloadExcel = () => {
     if (!data || data.length === 0) return alert("No data available for report");
-    generateExcel(title, data);
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Admin';
+    generateExcel(title, data, userName);
     setIsOpen(false);
   };
 

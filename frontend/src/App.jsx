@@ -28,6 +28,7 @@ import Attendance from './pages/Attendance';
 import PartnerRegistration from './pages/PartnerRegistration';
 import PartnerRequests from './pages/PartnerRequests';
 import ActorSchedule from './pages/ActorSchedule';
+import Reports from './pages/Reports';
 import DashboardLayout from './components/DashboardLayout';
 
 // Inner component so we can access the router's location
@@ -101,6 +102,7 @@ function App() {
         <Route path="/dashboard/media/:prodId" element={<DashboardLayout><MediaLibrary /></DashboardLayout>} />
         <Route path="/dashboard/library" element={<DashboardLayout><MyLibrary /></DashboardLayout>} />
         <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+        <Route path="/dashboard/reports" element={<DashboardLayout><Reports /></DashboardLayout>} />
         <Route path="/dashboard/attendance" element={<DashboardLayout><Attendance /></DashboardLayout>} />
         <Route path="/dashboard/production/:id" element={<PublicProductionDetail />} />
       </Routes>

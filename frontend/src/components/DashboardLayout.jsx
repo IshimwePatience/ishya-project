@@ -515,6 +515,7 @@ const DashboardLayout = ({ children }) => {
         items: [
           { to: '/dashboard/events', icon: Calendar, label: 'Events' },
           { to: '/dashboard/users', icon: ShieldCheck, label: 'Users' },
+          ...(user?.role === 'Admin' ? [{ to: '/dashboard/reports', icon: FileText, label: 'Reports' }] : []),
           { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
         ]
       }
