@@ -188,9 +188,10 @@ const Reports = () => {
                 setReportData(null);
               }}
               className="w-full bg-theme-input-bg border border-theme-border-light text-theme-text p-3 rounded-sm text-sm focus:border-theme-accent outline-none hover:bg-white/[0.02] transition-colors"
+              style={{ colorScheme: 'dark' }}
             >
               {REPORT_TYPES.map(type => (
-                <option key={type.id} value={type.id}>{type.label}</option>
+                <option key={type.id} value={type.id} className="bg-[#1a1a1a] text-white py-2">{type.label}</option>
               ))}
             </select>
           </div>
