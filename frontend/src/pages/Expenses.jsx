@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Receipt, Search, Plus, TrendingDown, DollarSign, ExternalLink } from 'lucide-react';
+import { Receipt, Search, Plus, TrendingDown, DollarSign, ExternalLink, Edit2, Trash2 } from 'lucide-react';
 import axios from 'axios';
 import ExpenseForm from '../components/ExpenseForm';
 import PageHeader from '../components/PageHeader';
